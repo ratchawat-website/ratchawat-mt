@@ -1,21 +1,21 @@
 import type { Metadata } from "next";
-import { Outfit, Plus_Jakarta_Sans } from "next/font/google";
+import { Barlow_Condensed, Inter } from "next/font/google";
 
 import "@/styles/globals.css";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 
-const outfit = Outfit({
+const barlowCondensed = Barlow_Condensed({
   subsets: ["latin", "latin-ext"],
   display: "swap",
-  variable: "--font-outfit",
+  variable: "--font-barlow-condensed",
   weight: ["400", "500", "600", "700"],
 });
 
-const plusJakartaSans = Plus_Jakarta_Sans({
+const inter = Inter({
   subsets: ["latin", "latin-ext"],
   display: "swap",
-  variable: "--font-jakarta",
+  variable: "--font-inter",
   weight: ["400", "500", "600", "700"],
 });
 
@@ -57,7 +57,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${outfit.variable} ${plusJakartaSans.variable}`}>
+    <html lang="en" className={`${barlowCondensed.variable} ${inter.variable}`}>
       <body className="bg-[#0a0a0a]">
         <Navigation />
         <main className="pt-20">{children}</main>

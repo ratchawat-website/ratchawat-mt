@@ -281,6 +281,8 @@ ratchawat-mt/
 | 2026-04-02 | Created /booking page: 4-step BookingWidget (package > camp > date > confirm), reads ?package= and ?camp= query params, graceful Stripe fallback with WhatsApp/email contact. |
 | 2026-04-02 | Created /booking/confirmed page: success confirmation with next steps (email, directions, what to bring). |
 | 2026-04-02 | Connected pricing page links: each "Book X" button now passes ?package=ID to /booking (drop-in, weekly, monthly, private-single, private-10). |
+| 2026-04-02 | Font change: replaced Outfit + Plus Jakarta Sans with Barlow Condensed (titles) + Inter (body). Updated layout.tsx, globals.css, CLAUDE.md. Removed font-preview page. |
+| 2026-04-02 | Typography scale bump: H1 hero +1 step (36/48/60px), H1 pages +1 step (24/30/36px), H2 sections added lg:text-3xl (30px desktop). 22 pages + 2 components updated. |
 
 ---
 

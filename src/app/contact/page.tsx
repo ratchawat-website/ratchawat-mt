@@ -113,7 +113,7 @@ export default function ContactPage() {
       {/* Page Header */}
       <section className="py-12 sm:py-16 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface">
+          <h1 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-semibold text-on-surface">
             Contact Us
           </h1>
           <p className="mt-4 text-on-surface-variant text-lg max-w-2xl mx-auto">

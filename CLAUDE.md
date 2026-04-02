@@ -72,8 +72,8 @@ public/
 
 | Role          | Font              | Notes                         |
 | ------------- | ----------------- | ----------------------------- |
-| Display/Titles| Outfit            | Bold weight, uppercase for hero headings |
-| Body          | Plus Jakarta Sans | Regular 400 / Medium 500      |
+| Display/Titles| Barlow Condensed  | Bold weight, uppercase for hero headings |
+| Body          | Inter             | Regular 400 / Medium 500      |
 
 ### Bold/Modern Rules
 

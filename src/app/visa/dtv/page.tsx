@@ -120,7 +120,7 @@ export default function DTVVisaPage() {
       {/* Page Header */}
       <section className="py-12 sm:py-16 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface">
+          <h1 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-semibold text-on-surface">
             Destination Thailand Visa (DTV) for Muay Thai
           </h1>
           <p className="mt-4 text-on-surface-variant text-lg max-w-2xl mx-auto">
@@ -132,7 +132,7 @@ export default function DTVVisaPage() {
       {/* What is DTV */}
       <section className="pb-16 sm:pb-20 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-4xl mx-auto">
-          <h2 className="font-serif text-xl sm:text-2xl font-semibold text-on-surface mb-6">
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface mb-6">
             What is the DTV Visa?
           </h2>
           <div className="space-y-4 text-on-surface-variant text-base sm:text-lg leading-relaxed">
@@ -152,7 +152,7 @@ export default function DTVVisaPage() {
       {/* Requirements */}
       <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20 bg-surface-lowest/50">
         <div className="max-w-6xl mx-auto">
-          <h2 className="font-serif text-xl sm:text-2xl font-semibold text-on-surface mb-8">
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface mb-8">
             Requirements
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -174,7 +174,7 @@ export default function DTVVisaPage() {
       {/* How to Apply */}
       <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-4xl mx-auto">
-          <h2 className="font-serif text-xl sm:text-2xl font-semibold text-on-surface mb-8">
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface mb-8">
             How to Apply with Ratchawat
           </h2>
           <div className="space-y-6">
@@ -200,7 +200,7 @@ export default function DTVVisaPage() {
       {/* Training Packages */}
       <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20 bg-surface-lowest/50">
         <div className="max-w-4xl mx-auto">
-          <h2 className="font-serif text-xl sm:text-2xl font-semibold text-on-surface mb-6">
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface mb-6">
             Training Packages for DTV Holders
           </h2>
           <div className="space-y-4 text-on-surface-variant text-base sm:text-lg leading-relaxed">
@@ -223,7 +223,7 @@ export default function DTVVisaPage() {
       {/* FAQ */}
       <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-3xl mx-auto">
-          <h2 className="font-serif text-xl sm:text-2xl font-semibold text-on-surface mb-8">
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface mb-8">
             Frequently Asked Questions
           </h2>
           <FAQAccordion items={faqs} />

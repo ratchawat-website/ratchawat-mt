@@ -241,7 +241,7 @@ export default function HomePage() {
               <div className="flex items-center gap-3">
                 <DollarSign className="w-8 h-8 text-primary shrink-0" strokeWidth={1.5} />
                 <div>
-                  <h2 className="font-serif text-xl sm:text-2xl font-semibold text-on-surface">
+                  <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface">
                     Training Prices
                   </h2>
                   <p className="text-on-surface-variant text-sm mt-1">

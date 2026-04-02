@@ -79,7 +79,7 @@ export default function ProgramsPage() {
       {/* Page Header */}
       <section className="py-12 sm:py-16 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface">
+          <h1 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-semibold text-on-surface">
             Training Programs
           </h1>
           <p className="mt-4 text-on-surface-variant text-lg max-w-2xl mx-auto">
@@ -100,7 +100,7 @@ export default function ProgramsPage() {
       {/* Info Section */}
       <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20 bg-surface-lowest/50">
         <div className="max-w-4xl mx-auto">
-          <h2 className="font-serif text-xl sm:text-2xl font-semibold text-on-surface mb-6">
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface mb-6">
             How It Works
           </h2>
           <div className="space-y-4 text-on-surface-variant text-base sm:text-lg leading-relaxed">

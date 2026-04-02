@@ -19,7 +19,7 @@ export default function HeroSection({ title, subtitle, imageSrc, imageAlt, ctaTe
       )}
       <div className="absolute inset-0 bg-black/50" />
       <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
-        <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight tracking-tight uppercase">{title}</h1>
+        <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight tracking-tight uppercase">{title}</h1>
         {subtitle && <p className="mt-5 text-base sm:text-lg text-white/70 font-sans max-w-2xl mx-auto">{subtitle}</p>}
         {ctaText && ctaHref && (
           <div className="mt-8">
