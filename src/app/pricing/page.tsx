@@ -109,7 +109,7 @@ export default function PricingPage() {
                 </li>
               </ul>
               <Link
-                href="/booking"
+                href="/booking?package=drop-in"
                 className="inline-flex items-center gap-2 bg-primary text-on-primary font-semibold px-6 py-3 rounded-[0.5rem] hover:bg-primary-dim transition-colors shrink-0"
               >
                 Book Now <ArrowRight size={16} />
@@ -154,7 +154,7 @@ export default function PricingPage() {
                 </li>
               </ul>
               <Link
-                href="/booking"
+                href="/booking?package=weekly"
                 className="inline-flex items-center gap-2 bg-primary text-on-primary font-semibold px-6 py-3 rounded-[0.5rem] hover:bg-primary-dim transition-colors w-full justify-center"
               >
                 Book Weekly <ArrowRight size={16} />
@@ -196,7 +196,7 @@ export default function PricingPage() {
                 </li>
               </ul>
               <Link
-                href="/booking"
+                href="/booking?package=monthly"
                 className="inline-flex items-center gap-2 bg-primary text-on-primary font-semibold px-6 py-3 rounded-[0.5rem] hover:bg-primary-dim transition-colors w-full justify-center"
               >
                 Book Monthly <ArrowRight size={16} />
@@ -241,7 +241,7 @@ export default function PricingPage() {
                 </li>
               </ul>
               <Link
-                href="/booking"
+                href="/booking?package=private-single"
                 className="inline-flex items-center gap-2 bg-primary text-on-primary font-semibold px-6 py-3 rounded-[0.5rem] hover:bg-primary-dim transition-colors w-full justify-center"
               >
                 Book Private <ArrowRight size={16} />
@@ -279,7 +279,7 @@ export default function PricingPage() {
                 </li>
               </ul>
               <Link
-                href="/booking"
+                href="/booking?package=private-10"
                 className="inline-flex items-center gap-2 bg-primary text-on-primary font-semibold px-6 py-3 rounded-[0.5rem] hover:bg-primary-dim transition-colors w-full justify-center"
               >
                 Book 10-Pack <ArrowRight size={16} />

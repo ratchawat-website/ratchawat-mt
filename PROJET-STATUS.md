@@ -104,7 +104,7 @@ ratchawat-mt/
 | `/programs/group-kids` | Group Classes (Kids) | **Done** | Yes | Course + Organization | Benefits (6 cards) + parent info + GEO + CTA |
 | `/programs/private` | Private Lessons | **Done** | Yes | Course + Offer + Organization | 4 reasons + 3 trainer previews + pricing + GEO + CTA |
 | `/programs/fighter` | Fighter Program | **Done** | Yes | Course + Organization | Training day (4 blocks) + prerequisites (3) + pricing/accommodation + GEO + CTA |
-| `/booking` | Booking | Planned | -- | -- | Stripe integration |
+| `/booking` | Booking | **Done** | Yes | WebPage + ReserveAction + Organization | 4-step widget (package > camp > date > confirm), reads query params, graceful Stripe fallback |
 | `/contact` | Contact | **Done** | Yes | ContactPage + LocalBusiness x2 + Organization | Form + 2 location cards + maps + contact info |
 | `/camps/bo-phut` | Bo Phut Camp | **Done** | Yes | SportsActivityLocation + Organization | Hero + gym description + schedule table + equipment + location card + GEO + CTA |
 | `/camps/plai-laem` | Plai Laem Camp | **Done** | Yes | SportsActivityLocation + Organization | Hero + gym description + schedule table + equipment (8 items) + location card + GEO + CTA |
@@ -278,6 +278,9 @@ ratchawat-mt/
 | 2026-04-02 | Rebuilt Navigation: glassmorphism style, detached from top (pt-3), centered (max-w-6xl), rounded-2xl, backdrop-blur-xl, scroll-aware opacity. Added About + Camps submenu. |
 | 2026-04-02 | Rebuilt Footer: 5 columns (Training, Camps, Info, Contact + brand), all 20+ pages now accessible. |
 | 2026-04-02 | Revised font pairing: reduced H1/H2/Hero sizes by one step, H2 now font-semibold without uppercase, added letter-spacing -0.01em for elegance. |
+| 2026-04-02 | Created /booking page: 4-step BookingWidget (package > camp > date > confirm), reads ?package= and ?camp= query params, graceful Stripe fallback with WhatsApp/email contact. |
+| 2026-04-02 | Created /booking/confirmed page: success confirmation with next steps (email, directions, what to bring). |
+| 2026-04-02 | Connected pricing page links: each "Book X" button now passes ?package=ID to /booking (drop-in, weekly, monthly, private-single, private-10). |
 
 ---
 
