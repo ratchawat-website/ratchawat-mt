@@ -14,10 +14,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
     /* ── Programs ── */
     { url: `${BASE_URL}/programs`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
-    { url: `${BASE_URL}/programs/group-classes`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
-    { url: `${BASE_URL}/programs/private-training`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
-    { url: `${BASE_URL}/programs/kids`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
-    { url: `${BASE_URL}/programs/fighter-training`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${BASE_URL}/programs/group-adults`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${BASE_URL}/programs/private`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${BASE_URL}/programs/group-kids`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${BASE_URL}/programs/fighter`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
 
     /* ── Camps ── */
     { url: `${BASE_URL}/camps/bo-phut`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
@@ -30,10 +30,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     /* ── Services ── */
     { url: `${BASE_URL}/accommodation`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
     { url: `${BASE_URL}/visa/dtv`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
-    { url: `${BASE_URL}/visa/90-day`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
+    { url: `${BASE_URL}/visa/90-days`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
+
+    /* ── Services ── */
+    { url: `${BASE_URL}/services`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
 
     /* ── Social proof ── */
+    { url: `${BASE_URL}/team`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${BASE_URL}/reviews`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
+    { url: `${BASE_URL}/faq`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
     { url: `${BASE_URL}/gallery`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
 
     /* ── Legal ── */

@@ -96,16 +96,16 @@ ratchawat-mt/
 
 | Route | Title | Status | SEO Meta | JSON-LD | Notes |
 |-------|-------|--------|:--------:|:-------:|-------|
-| `/` | Homepage | **Done** | Yes | Organization + WebSite | Hero + features + programs + CTA |
+| `/` | Homepage | **Done** | Yes | Organization + WebSite + AggregateRating | Hero + features + camps + programs + pricing preview + testimonials + team + GEO + CTA |
 | `/about` | About | Planned | -- | -- | |
-| `/pricing` | Pricing | Planned | -- | -- | Critical: prices visible |
+| `/pricing` | Pricing | **Done** | Yes | Course + OfferCatalog + Organization | Full pricing grid: drop-in, weekly, monthly, private, fighter |
 | `/programs` | Programs Overview | Planned | -- | -- | |
 | `/programs/group-adults` | Group Classes (Adults) | Planned | -- | -- | |
 | `/programs/group-kids` | Group Classes (Kids) | Planned | -- | -- | |
 | `/programs/private` | Private Lessons | Planned | -- | -- | |
 | `/programs/fighter` | Fighter Program | Planned | -- | -- | |
 | `/booking` | Booking | Planned | -- | -- | Stripe integration |
-| `/contact` | Contact | Planned | -- | -- | Google Maps + form |
+| `/contact` | Contact | **Done** | Yes | ContactPage + LocalBusiness x2 + Organization | Form + 2 location cards + maps + contact info |
 | `/camps/bo-phut` | Bo Phut Camp | Planned | -- | -- | + integrated schedule |
 | `/camps/plai-laem` | Plai Laem Camp | Planned | -- | -- | + integrated schedule |
 | `/accommodation` | Accommodation | Planned | -- | -- | |
@@ -132,7 +132,9 @@ ratchawat-mt/
 | FAQAccordion | `src/components/ui/` | Expandable Q&A with chevron |
 | ImagePlaceholder | `src/components/ui/` | 6 category gradients for dark mode |
 | JsonLd | `src/components/seo/` | Generic JSON-LD script injector |
-| SchemaOrg | `src/components/seo/` | 8 schema builders (org, website, breadcrumb, faq, article, sportsLocation, course, rating) |
+| SchemaOrg | `src/components/seo/` | 10 schema builders (org, website, breadcrumb, faq, article, sportsLocation, course, rating, localBusiness, offerCatalog) |
+| ContactForm | `src/components/ui/` | Client form with status states, submits to /api/contact |
+| LocationCard | `src/components/ui/` | Map embed + address/phone/email/hours + camp page link |
 
 **Planned (project-specific, to build when needed):**
 
@@ -141,8 +143,6 @@ ratchawat-mt/
 | ScheduleTable | HTML schedule by location (replaces image-based schedule) | /camps/* |
 | TrainerCard | Trainer profile with photo, bio, specialty | /team |
 | TestimonialCarousel | Google reviews carousel | /reviews |
-| LocationCard | Google Maps embed + directions | /contact, /camps/* |
-| PricingTable | Price grid by formula (drop-in, packages, monthly) | /pricing |
 | BookingWidget | Booking form with date/program selection + Stripe | /booking |
 | LanguageSwitcher | EN/FR/ES language toggle | layout.tsx (later) |
 | ProgramCard | Program card with level, duration, description | /programs |
@@ -251,6 +251,12 @@ ratchawat-mt/
 | 2026-04-02 | Fixed layout.tsx imports (components/layout/ path) |
 | 2026-04-02 | Fixed Resend lazy initialization (build without API keys) |
 | 2026-04-02 | Fixed middleware to gracefully skip Supabase without keys |
+| 2026-04-02 | Homepage enriched: added camps, pricing preview, testimonials, team, visa sections. Fixed program links. Added AggregateRating schema. |
+| 2026-04-02 | Created /pricing page with full price grid (drop-in, weekly, monthly, private, fighter). OfferCatalog + Course schemas. |
+| 2026-04-02 | Created /contact page with ContactForm, 2 LocationCards, ContactPage + LocalBusiness x2 schemas. |
+| 2026-04-02 | Added localBusinessSchema + offerCatalogSchema to SchemaOrg.tsx (10 total builders). |
+| 2026-04-02 | Created ContactForm + LocationCard components in src/components/ui/. |
+| 2026-04-02 | Fixed sitemap.ts routes to match actual page slugs (group-adults, private, group-kids, fighter, 90-days). Added /team, /faq, /services routes. |
 
 ---
 

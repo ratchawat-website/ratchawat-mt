@@ -190,6 +190,79 @@ export function courseSchema(options: {
   };
 }
 
+/* ─── LocalBusiness ─── */
+export function localBusinessSchema(options: {
+  name: string;
+  description?: string;
+  address: {
+    streetAddress: string;
+    addressLocality: string;
+    addressRegion: string;
+    postalCode: string;
+    addressCountry: string;
+  };
+  geo: { latitude: number; longitude: number };
+  telephone: string;
+  email?: string;
+  openingHours?: string[];
+  image?: string;
+  url?: string;
+  priceRange?: string;
+}): Record<string, unknown> {
+  return {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    name: options.name,
+    description: options.description,
+    url: options.url ?? SITE_URL,
+    image: options.image,
+    telephone: options.telephone,
+    email: options.email,
+    priceRange: options.priceRange ?? "$$",
+    address: {
+      "@type": "PostalAddress",
+      ...options.address,
+    },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: options.geo.latitude,
+      longitude: options.geo.longitude,
+    },
+    ...(options.openingHours && {
+      openingHoursSpecification: options.openingHours,
+    }),
+  };
+}
+
+/* ─── OfferCatalog ─── */
+export function offerCatalogSchema(options: {
+  name: string;
+  description?: string;
+  offers: {
+    name: string;
+    price: number;
+    priceCurrency?: string;
+    description?: string;
+    url?: string;
+  }[];
+}): Record<string, unknown> {
+  return {
+    "@context": "https://schema.org",
+    "@type": "OfferCatalog",
+    name: options.name,
+    description: options.description,
+    itemListElement: options.offers.map((offer) => ({
+      "@type": "Offer",
+      name: offer.name,
+      price: offer.price,
+      priceCurrency: offer.priceCurrency ?? "THB",
+      description: offer.description,
+      url: offer.url ?? `${SITE_URL}/pricing`,
+      availability: "https://schema.org/InStock",
+    })),
+  };
+}
+
 /* ─── AggregateRating ─── */
 export function aggregateRatingSchema(options: {
   ratingValue: number;
