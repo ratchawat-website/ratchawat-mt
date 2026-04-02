@@ -161,32 +161,106 @@ Blog is planned for a later phase. The route `/blog` is reserved. Do not build b
 
 ---
 
-## Workflow -- Page Creation Checklist
+## Workflow: Page creation or modification
 
-When creating a new page, follow this checklist:
+### Required skills
 
-1. Create folder under `src/app/<route>/` with `page.tsx`
-2. Export `metadata` with title, description, openGraph, alternates
-3. Add JSON-LD structured data (appropriate schema type)
-4. Include at least one GEO citable passage
-5. Ensure all images use `next/image` with alt text
-6. Test dark mode rendering (it is the default)
-7. Verify mobile responsiveness (375px minimum)
-8. Run `npm run lint` -- zero errors
-9. Run `npm run build` -- zero errors
-10. Lighthouse audit: Performance >= 90, Accessibility >= 95, Best Practices >= 90, SEO = 100
-11. Update `PROJET-STATUS.md` with new page status
+Activate the relevant skills systematically when creating or modifying any page:
+
+| Skill | When to use |
+|-------|-------------|
+| `/humanizer` | After writing or modifying any visible text |
+| `/ui-ux-pro-max` | UI/UX design decisions, component choices, layout |
+| `/frontend-design` | Building frontend components and pages |
+| `/tailwindcss-mobile-first` | Responsive design, breakpoints, mobile-first patterns |
+| `/web-design-guidelines` | Accessibility audit, UX review, best practices |
+| `/seo` (and sub-skills) | Technical SEO, schemas, content quality |
+| `/seo-schema` | Detect, validate, generate Schema.org JSON-LD |
+| `/seo-content` | Content quality, E-E-A-T, readability, thin content |
+| `/seo-page` | Deep single-page SEO analysis |
+| `/seo-technical` | Crawlability, indexability, Core Web Vitals |
+| `/seo-geo` | AI Overviews, GEO optimization, llms.txt |
+| `/seo-local` | Local SEO for both gym locations |
+| `/seo-hreflang` | Hreflang validation for EN/FR/ES |
+| `/seo-sitemap` | Sitemap validation and generation |
+| `/seo-images` | Image alt text, sizes, formats, lazy loading |
+| `/seo-performance` | Core Web Vitals measurement |
+| `/context7` | Up-to-date library documentation (Next.js, React, Tailwind, Supabase, Stripe) |
+| `/performance` | Lighthouse optimization, Core Web Vitals, lazy loading, bundle |
+| `/accessibility` | Accessibility audit (target >= 95), ARIA, contrast, keyboard navigation |
+| `/nextjs-app-router-patterns` | Advanced App Router patterns, SSG/SSR, metadata, caching |
+| `/supabase-postgres-best-practices` | Supabase connection, tables, RLS, migrations, queries |
+| `/stripe-best-practices` | Stripe Checkout configuration, webhooks, products/prices |
+| `/prd` | Generate Product Requirements Documents when needed |
+| `/find-skills` | Search and install new skills from the ecosystem |
+
+All skills listed above are pre-installed globally in `~/.claude/skills/`. No per-project installation needed.
+
+**Marketplace plugins** (auto-detected, no installation):
+- `/ui-ux-pro-max` -- UI/UX design intelligence (50+ styles, 161 palettes, 57 font pairings)
+- `/frontend-design` -- Production-grade frontend interfaces
+- `/context7` -- Up-to-date library documentation (MCP server)
+
+Do not hesitate to use other skills if the situation requires it.
+
+### Content audit workflow
+
+When auditing existing pages, follow this mandatory order:
+
+1. **Read** `PROJET-STATUS.md` (reference facts) + the page to audit
+2. **Read** `AUDIT-SEO.md` for that page's SEO strategy (keywords, meta, schemas, GEO passage)
+3. **Run `/seo`** (or sub-skills) **BEFORE any modification**. This is mandatory, not optional.
+4. **Fix** section by section (content, schemas, metadata, internal links)
+5. **Run `/humanizer`** on all modified text
+6. **Verify**: `npm run lint` (0 errors) + `npm run build` (0 errors)
+7. **Document**: update `PROJET-STATUS.md` (mark page as Done, add correction history entry)
+8. **Commit** with descriptive message
+
+### Visual consistency
+
+- **Always study existing pages** before creating new ones. Read 2-3 similar pages to understand the patterns.
+- Reuse existing components (`HeroSection`, `GlassCard`, `CTABanner`, `ImagePlaceholder`, `FAQAccordion`, etc.) -- do not create new ones unless truly necessary.
+- Respect the "Ratchawat Bold" design system: CSS tokens in `src/styles/globals.css`, typography Outfit + Plus Jakarta Sans, no 1px borders, dark mode default.
+- Mobile-first: test at 375px minimum, use Tailwind breakpoints (`sm:`, `md:`, `lg:`).
+
+### Page creation checklist
+
+Each new page MUST include:
+
+1. **SEO Metadata** -- via `generatePageMeta()` from `src/lib/seo/meta.ts` (title <= 60 chars, description <= 155 chars, from AUDIT-SEO.md)
+2. **Breadcrumbs** -- `<Breadcrumbs>` component with automatic JSON-LD
+3. **Schema.org JSON-LD** -- at minimum `breadcrumbSchema`, plus relevant schemas (see AUDIT-SEO.md for each page's schema type) via `src/components/seo/SchemaOrg.tsx`
+4. **GEO citable passage** -- exact text provided in AUDIT-SEO.md per page
+5. **Internal linking** -- each page must contain at least 3 links to other site pages (targets specified in AUDIT-SEO.md)
+6. **CTA** -- each page ends with a `<CTABanner>` pushing toward /booking or /pricing
+7. **Sitemap** -- verify the route is included in `src/app/sitemap.ts`
+8. **Navigation** -- add to `Navigation.tsx` and/or `Footer.tsx` if the page is important
+9. **`llms.txt` / `llms-full.txt`** -- update if the page adds significant content
+10. **Images** -- use `ImagePlaceholder` with the correct category if no real image, or place the image in `public/images/`
 
 ---
 
 ## Lighthouse Targets
 
-| Metric          | Target |
-| --------------- | ------ |
-| Performance     | >= 90  |
-| Accessibility   | >= 95  |
-| Best Practices  | >= 90  |
-| SEO             | = 100  |
+| Metric | Target |
+|--------|--------|
+| Performance | >= 90 |
+| Accessibility | >= 95 |
+| Best Practices | >= 90 |
+| SEO | = 100 |
+
+---
+
+## MANDATORY RULE: Documentation of changes
+
+**Each agent MUST, after completing a task or significant step:**
+
+1. **Update `PROJET-STATUS.md`** -- mark pages as Done, add correction history entry, update known issues
+2. **Update `CLAUDE.md`** if workflow, architecture, or conventions changed
+3. **Update `AUDIT-SEO.md`** if SEO strategy was modified
+4. **Commit** with a descriptive message
+
+Never consider a task complete until documentation is updated. This allows any future agent to resume work without loss of context.
 
 ---
 
@@ -194,13 +268,18 @@ When creating a new page, follow this checklist:
 
 Before marking any page as "Done":
 
-- [ ] Metadata complete (title, description, OG)
-- [ ] JSON-LD present and valid
-- [ ] GEO citable passage included
-- [ ] All images optimized with next/image
+- [ ] Metadata complete (title, description, OG) from AUDIT-SEO.md
+- [ ] JSON-LD present and valid (schema type from AUDIT-SEO.md)
+- [ ] GEO citable passage included (text from AUDIT-SEO.md)
+- [ ] Breadcrumbs component present
+- [ ] Internal links (minimum 3)
+- [ ] CTABanner at page bottom
+- [ ] All images optimized with next/image + alt text
 - [ ] Dark mode renders correctly
 - [ ] Mobile responsive (375px+)
-- [ ] Lint passes
-- [ ] Build passes
+- [ ] `/humanizer` run on all text
+- [ ] `npm run lint` passes (0 errors)
+- [ ] `npm run build` passes (0 errors)
 - [ ] Lighthouse targets met
-- [ ] PROJET-STATUS.md updated
+- [ ] `PROJET-STATUS.md` updated (page marked Done, history entry added)
+- [ ] Committed with descriptive message
