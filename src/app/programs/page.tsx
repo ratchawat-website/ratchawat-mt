@@ -79,7 +79,8 @@ export default function ProgramsPage() {
       {/* Page Header */}
       <section className="py-12 sm:py-16 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-semibold text-on-surface">
+          <div className="flex items-center justify-center gap-3 mb-4"><span className="w-8 h-[2px] bg-primary" /><span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">PROGRAMS</span><span className="w-8 h-[2px] bg-primary" /></div>
+          <h1 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-on-surface">
             Training Programs
           </h1>
           <p className="mt-4 text-on-surface-variant text-lg max-w-2xl mx-auto">
@@ -91,8 +92,8 @@ export default function ProgramsPage() {
       {/* Program Cards */}
       <section className="pb-16 sm:pb-20 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-6">
-          {programs.map((program) => (
-            <ProgramCard key={program.href} {...program} />
+          {programs.map((program, i) => (
+            <ProgramCard key={program.href} {...program} number={String(i + 1).padStart(2, "0")} />
           ))}
         </div>
       </section>
@@ -100,7 +101,8 @@ export default function ProgramsPage() {
       {/* Info Section */}
       <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20 bg-surface-lowest/50">
         <div className="max-w-4xl mx-auto">
-          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface mb-6">
+          <div className="flex items-center gap-3 mb-4"><span className="w-8 h-[2px] bg-primary" /><span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">GETTING STARTED</span><span className="w-8 h-[2px] bg-primary" /></div>
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface mb-6">
             How It Works
           </h2>
           <div className="space-y-4 text-on-surface-variant text-base sm:text-lg leading-relaxed">
@@ -136,6 +138,8 @@ export default function ProgramsPage() {
         description="Drop-in from 500 THB. No commitment, just show up and train."
         buttonText="Book Now"
         href="/booking"
+        ghostText="View Pricing"
+        ghostHref="/pricing"
       />
     </>
   );

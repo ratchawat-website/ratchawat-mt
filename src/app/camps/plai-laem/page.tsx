@@ -148,16 +148,21 @@ export default function PlaiLaemCampPage() {
 
       {/* Hero */}
       <HeroSection
-        title="Ratchawat Plai Laem"
+        kicker="Plai Laem, Koh Samui"
+        title="RATCHAWAT"
+        titleLine2="PLAI LAEM"
         subtitle="Full gym and bodyweight training near Big Buddha, Koh Samui"
         ctaText="Book a Session"
         ctaHref="/booking"
+        ghostText="View Pricing"
+        ghostHref="/pricing"
       />
 
       {/* The Gym */}
       <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-6xl mx-auto">
-          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface mb-8">
+          <div className="flex items-center justify-center gap-3 mb-4"><span className="w-8 h-[2px] bg-primary" /><span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">OUR SPACE</span><span className="w-8 h-[2px] bg-primary" /></div>
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface mb-8">
             The Gym
           </h2>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
@@ -193,7 +198,8 @@ export default function PlaiLaemCampPage() {
       {/* Schedule */}
       <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20 bg-surface-lowest/50">
         <div className="max-w-6xl mx-auto">
-          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface mb-4">
+          <div className="flex items-center justify-center gap-3 mb-4"><span className="w-8 h-[2px] bg-primary" /><span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">TIMETABLE</span><span className="w-8 h-[2px] bg-primary" /></div>
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface mb-4">
             Schedule
           </h2>
           <p className="text-on-surface-variant text-base sm:text-lg mb-8">
@@ -216,17 +222,18 @@ export default function PlaiLaemCampPage() {
       {/* Equipment & Facilities */}
       <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-6xl mx-auto">
-          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface mb-8">
+          <div className="flex items-center justify-center gap-3 mb-4"><span className="w-8 h-[2px] bg-primary" /><span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">GEAR</span><span className="w-8 h-[2px] bg-primary" /></div>
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface mb-8">
             Equipment & Facilities
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {equipment.map((item) => (
-              <GlassCard key={item.name}>
+            {equipment.map((item, i) => (
+              <GlassCard key={item.name} number={String(i + 1).padStart(2, "0")}>
                 <item.icon size={28} className="text-primary mb-3" />
                 <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-2">
                   {item.name}
                 </h3>
-                <p className="text-on-surface-variant text-sm">
+                <p className="text-on-surface-variant text-xs leading-relaxed">
                   {item.description}
                 </p>
               </GlassCard>
@@ -248,7 +255,8 @@ export default function PlaiLaemCampPage() {
       {/* How to Get Here */}
       <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20 bg-surface-lowest/50">
         <div className="max-w-6xl mx-auto">
-          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface mb-8">
+          <div className="flex items-center justify-center gap-3 mb-4"><span className="w-8 h-[2px] bg-primary" /><span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">DIRECTIONS</span><span className="w-8 h-[2px] bg-primary" /></div>
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface mb-8">
             How to Get Here
           </h2>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
@@ -297,6 +305,8 @@ export default function PlaiLaemCampPage() {
         description="Drop-in from 500 THB. No commitment, just show up and train."
         buttonText="Book Now"
         href="/booking"
+        ghostText="View Pricing"
+        ghostHref="/pricing"
       />
     </>
   );

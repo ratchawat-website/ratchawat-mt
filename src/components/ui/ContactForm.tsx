@@ -1,13 +1,16 @@
 "use client";
 
 import { useState, FormEvent } from "react";
-import { Send, Loader2, CheckCircle, AlertCircle } from "lucide-react";
+import { Loader2, CheckCircle, AlertCircle } from "lucide-react";
 import GlassCard from "./GlassCard";
 
 type FormStatus = "idle" | "sending" | "success" | "error";
 
 const inputClasses =
-  "w-full bg-surface-low border-2 border-outline rounded-[var(--radius-input)] px-4 py-3 text-on-surface placeholder:text-on-surface-variant/50 focus:border-primary focus:outline-none transition-colors text-sm";
+  "w-full bg-[#111] border-2 border-outline-variant rounded-[6px] px-4 py-3 text-on-surface placeholder:text-on-surface-variant/50 focus:border-primary focus:shadow-[0_0_0_1px_rgba(255,102,0,0.1)] focus:outline-none transition-all text-sm";
+
+const labelClasses =
+  "block text-[10px] uppercase tracking-[0.125em] text-[#666] mb-1.5 font-medium";
 
 const subjects = [
   "General Inquiry",
@@ -59,7 +62,7 @@ export default function ContactForm() {
           </p>
           <button
             onClick={() => setStatus("idle")}
-            className="mt-2 text-primary text-sm font-semibold hover:text-primary-dim transition-colors"
+            className="mt-2 btn-link"
           >
             Send another message
           </button>
@@ -70,12 +73,20 @@ export default function ContactForm() {
 
   return (
     <GlassCard hover={false}>
-      <h3 className="font-serif text-xl font-bold text-on-surface uppercase mb-6">
+      {/* Kicker */}
+      <div className="flex items-center gap-3 mb-2">
+        <span className="w-8 h-[2px] bg-primary" />
+        <span className="text-xs uppercase tracking-[0.25em] text-primary font-semibold">
+          Get in touch
+        </span>
+      </div>
+
+      <h3 className="font-serif text-2xl font-bold text-on-surface uppercase mb-6">
         Send Us a Message
       </h3>
 
       {status === "error" && (
-        <div className="flex items-center gap-2 mb-4 p-3 bg-red-900/20 border-2 border-red-900/40 rounded-[var(--radius-input)] text-sm text-red-400">
+        <div className="flex items-center gap-2 mb-4 p-3 bg-red-900/20 border-2 border-red-900/40 rounded-[6px] text-sm text-red-400">
           <AlertCircle size={16} className="shrink-0" />
           Something went wrong. Please try again or contact us directly.
         </div>
@@ -83,9 +94,7 @@ export default function ContactForm() {
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label htmlFor="name" className="block text-sm text-on-surface-variant mb-1.5">
-            Name
-          </label>
+          <label htmlFor="name" className={labelClasses}>Name</label>
           <input
             id="name"
             type="text"
@@ -98,9 +107,7 @@ export default function ContactForm() {
         </div>
 
         <div>
-          <label htmlFor="email" className="block text-sm text-on-surface-variant mb-1.5">
-            Email
-          </label>
+          <label htmlFor="email" className={labelClasses}>Email</label>
           <input
             id="email"
             type="email"
@@ -113,9 +120,7 @@ export default function ContactForm() {
         </div>
 
         <div>
-          <label htmlFor="subject" className="block text-sm text-on-surface-variant mb-1.5">
-            Subject
-          </label>
+          <label htmlFor="subject" className={labelClasses}>Subject</label>
           <select
             id="subject"
             value={formData.subject}
@@ -123,17 +128,13 @@ export default function ContactForm() {
             className={inputClasses}
           >
             {subjects.map((s) => (
-              <option key={s} value={s}>
-                {s}
-              </option>
+              <option key={s} value={s}>{s}</option>
             ))}
           </select>
         </div>
 
         <div>
-          <label htmlFor="message" className="block text-sm text-on-surface-variant mb-1.5">
-            Message
-          </label>
+          <label htmlFor="message" className={labelClasses}>Message</label>
           <textarea
             id="message"
             required
@@ -148,16 +149,14 @@ export default function ContactForm() {
         <button
           type="submit"
           disabled={status === "sending"}
-          className="inline-flex items-center justify-center gap-2 bg-primary text-on-primary font-semibold px-6 py-3 rounded-[0.5rem] hover:bg-primary-dim transition-colors w-full disabled:opacity-60 disabled:cursor-not-allowed"
+          className="btn-primary w-full justify-center disabled:opacity-60 disabled:cursor-not-allowed"
         >
           {status === "sending" ? (
             <>
               <Loader2 size={18} className="animate-spin" /> Sending...
             </>
           ) : (
-            <>
-              <Send size={18} /> Send Message
-            </>
+            <>Send Message <span className="btn-arrow">&rarr;</span></>
           )}
         </button>
       </form>

@@ -68,7 +68,8 @@ export default function TeamPage() {
       {/* Page Header */}
       <section className="py-12 sm:py-16 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-semibold text-on-surface">
+          <div className="flex items-center justify-center gap-3 mb-4"><span className="w-8 h-[2px] bg-primary" /><span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">THE TEAM</span><span className="w-8 h-[2px] bg-primary" /></div>
+          <h1 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-on-surface">
             Our Team
           </h1>
           <p className="mt-4 text-on-surface-variant text-lg max-w-2xl mx-auto">
@@ -91,11 +92,11 @@ export default function TeamPage() {
                 <ImagePlaceholder category="team" aspectRatio="aspect-[4/5]" />
               </div>
               <div className={index % 2 === 1 ? "lg:order-1" : ""}>
-                <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface mb-1">
+                <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface mb-2">
                   {trainer.name}
                 </h2>
-                <p className="text-primary text-sm font-semibold uppercase tracking-wider mb-4">
-                  {trainer.jobTitle}
+                <p className="mb-4">
+                  <span className="badge-underline badge-orange">{trainer.jobTitle}</span>
                 </p>
                 <p className="text-on-surface-variant text-base sm:text-lg leading-relaxed mb-4">
                   {trainer.bio}
@@ -104,7 +105,7 @@ export default function TeamPage() {
                   {trainer.specialties.map((s) => (
                     <span
                       key={s}
-                      className="text-xs font-semibold uppercase tracking-wider text-primary bg-primary/10 px-2 py-1 rounded"
+                      className="badge-underline badge-neutral"
                     >
                       {s}
                     </span>
@@ -119,7 +120,8 @@ export default function TeamPage() {
       {/* Train With Them */}
       <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20 bg-surface-lowest/50">
         <div className="max-w-4xl mx-auto">
-          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface mb-6">
+          <div className="flex items-center justify-center gap-3 mb-4"><span className="w-8 h-[2px] bg-primary" /><span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">NEXT STEPS</span><span className="w-8 h-[2px] bg-primary" /></div>
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface mb-6">
             Train With Them
           </h2>
           <div className="space-y-4 text-on-surface-variant text-base sm:text-lg leading-relaxed">
@@ -153,6 +155,8 @@ export default function TeamPage() {
         description="Group classes or private 1-on-1 sessions. Your pick."
         buttonText="Book Now"
         href="/booking"
+        ghostText="View Pricing"
+        ghostHref="/pricing"
       />
     </>
   );

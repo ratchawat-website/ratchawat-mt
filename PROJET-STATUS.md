@@ -4,7 +4,7 @@
 > Each agent must read it at the start of a conversation and update it after each modification.
 
 **Last updated:** 2026-04-02
-**Current commit:** (initial setup, not yet committed)
+**Current commit:** component-elegance-redesign
 **Rebuilt from:** https://ratchawatmuaythai.com/
 
 ---
@@ -50,20 +50,24 @@ ratchawat-mt/
 │   │   │   ├── checkout/route.ts      # Stripe checkout session
 │   │   │   ├── contact/route.ts       # Resend contact form
 │   │   │   └── webhooks/stripe/route.ts # Stripe webhook handler
-│   │   ├── layout.tsx                 # Root layout (Outfit + Plus Jakarta Sans)
+│   │   ├── layout.tsx                 # Root layout (Barlow Condensed + Inter)
 │   │   ├── page.tsx                   # Homepage
 │   │   ├── not-found.tsx              # Custom 404
 │   │   └── sitemap.ts                 # Dynamic sitemap (20 routes)
 │   ├── components/
 │   │   ├── layout/
-│   │   │   ├── Navigation.tsx         # Fixed dark header + mobile menu
-│   │   │   ├── Footer.tsx             # 4-column footer
-│   │   │   └── Breadcrumbs.tsx        # Breadcrumbs + JSON-LD
+│   │   │   ├── Navigation.tsx         # Floating nav, diamond logo, Camps dropdown, gradient line
+│   │   │   ├── Footer.tsx             # Brand header row, gradient accent, 4 columns, orange headers
+│   │   │   └── Breadcrumbs.tsx        # Accent line, uppercase, slash separator + JSON-LD
 │   │   ├── ui/
-│   │   │   ├── HeroSection.tsx        # Full-height hero with CTA
-│   │   │   ├── GlassCard.tsx          # Dark card component
-│   │   │   ├── CTABanner.tsx          # Call-to-action banner
-│   │   │   ├── FAQAccordion.tsx       # Expandable FAQ
+│   │   │   ├── HeroSection.tsx        # Centered bold + outline hero, kicker, dual buttons
+│   │   │   ├── GlassCard.tsx          # Card with top glow line, left border, filigree number, hover lift
+│   │   │   ├── CTABanner.tsx          # Warm glow CTA with accent lines, kicker, dual buttons
+│   │   │   ├── FAQAccordion.tsx       # Numbered FAQ with +/- toggle, left border transitions
+│   │   │   ├── ProgramCard.tsx        # Extends GlassCard with underline badges, bottom separator
+│   │   │   ├── ContactForm.tsx        # System card with kicker, uppercase labels, focus glow
+│   │   │   ├── LocationCard.tsx       # Media card with map, "Open Now" badge, bottom link
+│   │   │   ├── ScheduleTable.tsx      # Dual render: desktop table + mobile day list
 │   │   │   ├── ImagePlaceholder.tsx   # Gradient placeholder
 │   │   │   └── index.ts              # Barrel export
 │   │   └── seo/
@@ -76,8 +80,10 @@ ratchawat-mt/
 │   │       ├── client.ts              # Browser client
 │   │       ├── server.ts              # Server client
 │   │       └── middleware.ts          # Auth session refresh
+│   ├── hooks/
+│   │   └── useScrollAnimation.ts      # Intersection Observer hook (fade-in, slide-up, stagger)
 │   ├── middleware.ts                  # Root middleware (graceful without Supabase keys)
-│   ├── styles/globals.css             # Design system "Ratchawat Bold" (Tailwind v4)
+│   ├── styles/globals.css             # Design system "Ratchawat Bold" + Elegance tokens (Tailwind v4)
 │   └── types/index.ts                # Core types (NavItem, Booking, Trainer, etc.)
 ├── public/
 │   ├── images/                        # (empty, needs real photos)
@@ -123,20 +129,21 @@ ratchawat-mt/
 
 | Component | Location | Description |
 |-----------|---------|-------------|
-| Navigation | `src/components/layout/` | Fixed dark header, 6 nav links + Book Now CTA, mobile hamburger |
-| Footer | `src/components/layout/` | 4-column (brand, training, info, contact/social) |
-| Breadcrumbs | `src/components/layout/` | With JSON-LD BreadcrumbList |
-| HeroSection | `src/components/ui/` | Full-height, gradient overlay, optional image + CTA |
-| GlassCard | `src/components/ui/` | Dark card with hover shadow |
-| CTABanner | `src/components/ui/` | Centered CTA with primary button |
-| FAQAccordion | `src/components/ui/` | Expandable Q&A with chevron |
-| ImagePlaceholder | `src/components/ui/` | 6 category gradients for dark mode |
+| Navigation | `src/components/layout/` | Floating nav, diamond logo mark, Camps dropdown on hover, gradient top line, Book Now CTA |
+| Footer | `src/components/layout/` | Brand header row with social links, gradient accent line, 4 columns with orange headers |
+| Breadcrumbs | `src/components/layout/` | Leading accent line, uppercase tracking, slash separators, JSON-LD BreadcrumbList |
+| HeroSection | `src/components/ui/` | Centered bold + outline text, kicker, warm glow gradient bg, grid overlay, dual buttons (primary + ghost), established line |
+| GlassCard | `src/components/ui/` | Top glow line (gradient, intensifies on hover), left border accent, bottom border, filigree number, hover lift + shadow |
+| CTABanner | `src/components/ui/` | Warm glow gradient bg, top/bottom accent lines, kicker label, dual buttons (primary + ghost) |
+| FAQAccordion | `src/components/ui/` | Numbered with filigree numbers, +/- toggle icon, left border color transitions, answer padding aligned |
+| ProgramCard | `src/components/ui/` | Extends GlassCard, underline badges (level + duration), bottom separator with link arrow |
+| ContactForm | `src/components/ui/` | System card with kicker label, uppercase labels (10px tracking), focus glow on inputs |
+| LocationCard | `src/components/ui/` | Media card with map zone, "Open Now" overlay badge, bottom separator link |
+| ScheduleTable | `src/components/ui/` | Dual render: desktop pill table with legend + mobile day list with typed badges |
+| ImagePlaceholder | `src/components/ui/` | 6 category gradients for dark mode (unchanged) |
 | JsonLd | `src/components/seo/` | Generic JSON-LD script injector |
 | SchemaOrg | `src/components/seo/` | 10 schema builders (org, website, breadcrumb, faq, article, sportsLocation, course, rating, localBusiness, offerCatalog) |
-| ContactForm | `src/components/ui/` | Client form with status states, submits to /api/contact |
-| LocationCard | `src/components/ui/` | Map embed + address/phone/email/hours + camp page link |
-| ScheduleTable | `src/components/ui/` | Responsive HTML schedule table (time x days), replaces image-based schedule |
-| ProgramCard | `src/components/ui/` | Program card with icon, title, level badge, duration badge, description, link |
+| useScrollAnimation | `src/hooks/` | Intersection Observer hook: fade-in + slide-up with stagger delay, respects prefers-reduced-motion |
 
 **Planned (project-specific, to build when needed):**
 
@@ -159,11 +166,18 @@ ratchawat-mt/
 | Surface-lowest (cards) | `#1a1a1a` |
 | Text | `#f5f5f5` |
 | Text secondary | `#999999` |
-| Display font | Outfit (bold, uppercase titles) |
-| Body font | Plus Jakarta Sans |
+| Display font | Barlow Condensed (bold, uppercase titles) |
+| Body font | Inter (400/500) |
 | Border-radius | card 0.5rem, btn 0.5rem, banner 0.75rem |
 | Glass effects | No |
-| Shadows | Orange-tinted, low opacity |
+| Shadows | card: tight dark, hover: 0 8px 30px, glow: 0 0 30px orange 6% |
+| Border accents | Left 2px #ff660040 (hover #ff6600), bottom 2px #222 (hover #ff6600) |
+| Top line | Gradient from-transparent via-#ff660040 to-transparent, intensifies on hover |
+| Filigree numbers | Barlow Condensed 48px, opacity 0.12 (hover 0.2) |
+| Badges | Underline style (no background): orange, green, neutral |
+| Buttons | Primary (uppercase, tracking, arrow), Ghost (border, transparent bg), Link (small, orange) |
+| Category labels | 32px orange line + uppercase text, tracking 3px |
+| Steps/Process | Timeline vertical: gradient line + orange dots + content right |
 
 ### 2.5 Infrastructure
 
@@ -283,6 +297,8 @@ ratchawat-mt/
 | 2026-04-02 | Connected pricing page links: each "Book X" button now passes ?package=ID to /booking (drop-in, weekly, monthly, private-single, private-10). |
 | 2026-04-02 | Font change: replaced Outfit + Plus Jakarta Sans with Barlow Condensed (titles) + Inter (body). Updated layout.tsx, globals.css, CLAUDE.md. Removed font-preview page. |
 | 2026-04-02 | Typography scale bump: H1 hero +1 step (36/48/60px), H1 pages +1 step (24/30/36px), H2 sections added lg:text-3xl (30px desktop). 22 pages + 2 components updated. |
+| 2026-04-02 | **Component Elegance Redesign** (spec: docs/superpowers/specs/2026-04-02-component-elegance-redesign.md). Full visual refinement of all 12 components + 21 pages. Added: CSS tokens (shadow-card-glow, border-accent, filigree-opacity), btn-ghost/btn-link/badge-underline utilities, scrollbar-hide. GlassCard: top glow line, left border, bottom border, filigree number, hover lift. HeroSection: centered bold+outline, kicker, warm glow gradient, grid overlay, dual buttons, "Est. 2018". CTABanner: warm glow gradient bg, accent lines, kicker, dual buttons. FAQAccordion: numbered, +/- toggle, left border transitions. ProgramCard: underline badges, bottom separator. ContactForm: kicker label, uppercase labels, focus glow. LocationCard: "Open Now" overlay, bottom separator. ScheduleTable: dual render (desktop table + mobile day list). Navigation: diamond logo, Camps dropdown on hover, gradient top line. Footer: brand header row, gradient accent, 4 columns with orange headers. Breadcrumbs: accent line, uppercase, slash separator. All 21 pages: category labels on sections, filigree numbers, underline badges, btn-link/btn-primary, ghost buttons on CTAs, text-xs in cards. Visa steps: timeline vertical with dots. New hook: useScrollAnimation (Intersection Observer). |
+| 2026-04-02 | Navigation: moved Camps first, added hover dropdown (Bo Phut / Plai Laem) instead of direct link. Pricing badges (Most Popular, Save 20%) repositioned inside card flow to avoid top line overlap. |
 
 ---
 

@@ -117,24 +117,25 @@ export default function AccommodationPage() {
       {/* Bo Phut Area */}
       <section className="pb-16 sm:pb-20 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-6xl mx-auto">
-          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface mb-8">
+          <div className="flex items-center gap-3 mb-4"><span className="w-8 h-[2px] bg-primary" /><span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">BO PHUT</span><span className="w-8 h-[2px] bg-primary" /></div>
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface mb-8">
             Near{" "}
             <Link href="/camps/bo-phut" className="text-primary hover:text-primary-dim transition-colors">Bo Phut Camp</Link>
           </h2>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
             <div className="grid grid-cols-1 gap-4">
-              {boPhutOptions.map((opt) => (
-                <GlassCard key={opt.title}>
+              {boPhutOptions.map((opt, i) => (
+                <GlassCard key={opt.title} number={String(i + 1).padStart(2, "0")}>
                   <div className="flex gap-4 items-start">
                     <opt.icon size={24} className="text-primary shrink-0 mt-1" />
                     <div>
                       <h3 className="font-serif text-lg font-bold text-on-surface mb-1">
                         {opt.title}
                       </h3>
-                      <p className="text-on-surface-variant text-sm mb-2">
+                      <p className="text-on-surface-variant text-xs leading-relaxed mb-2">
                         {opt.description}
                       </p>
-                      <p className="text-primary text-sm font-semibold">
+                      <p className="text-primary text-xs font-semibold">
                         {opt.price}
                       </p>
                     </div>
@@ -150,25 +151,26 @@ export default function AccommodationPage() {
       {/* Plai Laem Area */}
       <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20 bg-surface-lowest/50">
         <div className="max-w-6xl mx-auto">
-          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface mb-8">
+          <div className="flex items-center gap-3 mb-4"><span className="w-8 h-[2px] bg-primary" /><span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">PLAI LAEM</span><span className="w-8 h-[2px] bg-primary" /></div>
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface mb-8">
             Near{" "}
             <Link href="/camps/plai-laem" className="text-primary hover:text-primary-dim transition-colors">Plai Laem Camp</Link>
           </h2>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
             <ImagePlaceholder category="accommodation" aspectRatio="aspect-[3/4]" className="lg:order-2" />
             <div className="grid grid-cols-1 gap-4 lg:order-1">
-              {plaiLaemOptions.map((opt) => (
-                <GlassCard key={opt.title}>
+              {plaiLaemOptions.map((opt, i) => (
+                <GlassCard key={opt.title} number={String(i + 1).padStart(2, "0")}>
                   <div className="flex gap-4 items-start">
                     <opt.icon size={24} className="text-primary shrink-0 mt-1" />
                     <div>
                       <h3 className="font-serif text-lg font-bold text-on-surface mb-1">
                         {opt.title}
                       </h3>
-                      <p className="text-on-surface-variant text-sm mb-2">
+                      <p className="text-on-surface-variant text-xs leading-relaxed mb-2">
                         {opt.description}
                       </p>
-                      <p className="text-primary text-sm font-semibold">
+                      <p className="text-primary text-xs font-semibold">
                         {opt.price}
                       </p>
                     </div>
@@ -183,17 +185,18 @@ export default function AccommodationPage() {
       {/* Tips */}
       <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-4xl mx-auto">
-          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface mb-6">
+          <div className="flex items-center gap-3 mb-4"><span className="w-8 h-[2px] bg-primary" /><span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">TIPS</span><span className="w-8 h-[2px] bg-primary" /></div>
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface mb-6">
             Tips
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {tips.map((tip) => (
-              <GlassCard key={tip.title}>
+            {tips.map((tip, i) => (
+              <GlassCard key={tip.title} number={String(i + 1).padStart(2, "0")}>
                 <tip.icon size={24} className="text-primary mb-3" />
                 <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-2">
                   {tip.title}
                 </h3>
-                <p className="text-on-surface-variant text-sm">
+                <p className="text-on-surface-variant text-xs leading-relaxed">
                   {tip.description}
                 </p>
               </GlassCard>
@@ -221,6 +224,8 @@ export default function AccommodationPage() {
         description="We can help with accommodation once you have your dates."
         buttonText="Book Now"
         href="/booking"
+        ghostText="View Pricing"
+        ghostHref="/pricing"
       />
     </>
   );

@@ -41,7 +41,7 @@ export default function BookingConfirmedPage() {
 
       <section className="pb-16 sm:pb-20 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-2xl mx-auto space-y-4">
-          <h2 className="font-serif text-xl font-semibold text-on-surface mb-4">
+          <h2 className="font-serif text-xl font-bold text-on-surface mb-4">
             What Happens Next
           </h2>
           <GlassCard hover={false}>
@@ -50,7 +50,7 @@ export default function BookingConfirmedPage() {
                 <Mail size={20} className="text-primary shrink-0 mt-0.5" />
                 <div>
                   <p className="text-on-surface font-medium text-sm">Check your email</p>
-                  <p className="text-on-surface-variant text-sm">
+                  <p className="text-on-surface-variant text-xs leading-relaxed">
                     You will receive a confirmation email with your booking details and a receipt.
                   </p>
                 </div>
@@ -59,11 +59,11 @@ export default function BookingConfirmedPage() {
                 <MapPin size={20} className="text-primary shrink-0 mt-0.5" />
                 <div>
                   <p className="text-on-surface font-medium text-sm">Find the gym</p>
-                  <p className="text-on-surface-variant text-sm">
+                  <p className="text-on-surface-variant text-xs leading-relaxed">
                     Check the{" "}
-                    <Link href="/camps/bo-phut" className="text-primary hover:text-primary-dim transition-colors">Bo Phut</Link>
+                    <Link href="/camps/bo-phut" className="btn-link">Bo Phut</Link>
                     {" "}or{" "}
-                    <Link href="/camps/plai-laem" className="text-primary hover:text-primary-dim transition-colors">Plai Laem</Link>
+                    <Link href="/camps/plai-laem" className="btn-link">Plai Laem</Link>
                     {" "}page for directions and a map.
                   </p>
                 </div>
@@ -72,7 +72,7 @@ export default function BookingConfirmedPage() {
                 <Clock size={20} className="text-primary shrink-0 mt-0.5" />
                 <div>
                   <p className="text-on-surface font-medium text-sm">Show up 10 minutes early</p>
-                  <p className="text-on-surface-variant text-sm">
+                  <p className="text-on-surface-variant text-xs leading-relaxed">
                     Bring shorts and a t-shirt. Gloves and shin guards are available at the gym.
                   </p>
                 </div>
@@ -83,7 +83,7 @@ export default function BookingConfirmedPage() {
           <div className="flex flex-col sm:flex-row gap-3 pt-4">
             <Link
               href="/programs"
-              className="text-center text-sm text-primary font-semibold hover:text-primary-dim transition-colors border-2 border-primary/30 rounded-lg px-6 py-3"
+              className="btn-primary text-center text-sm"
             >
               Browse Programs
             </Link>

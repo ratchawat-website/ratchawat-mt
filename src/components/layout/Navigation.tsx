@@ -1,14 +1,18 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react";
 
 const navItems = [
+  {
+    label: "Camps",
+    href: "#",
+    children: [
+      { label: "Bo Phut", href: "/camps/bo-phut" },
+      { label: "Plai Laem", href: "/camps/plai-laem" },
+    ],
+  },
   { label: "Programs", href: "/programs" },
-  { label: "Camps", href: "/camps/bo-phut", children: [
-    { label: "Bo Phut", href: "/camps/bo-phut" },
-    { label: "Plai Laem", href: "/camps/plai-laem" },
-  ]},
   { label: "Pricing", href: "/pricing" },
   { label: "About", href: "/about" },
   { label: "Visa", href: "/visa/dtv" },
@@ -29,31 +33,63 @@ export default function Navigation() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 flex justify-center px-4 sm:px-6 pt-3">
       <nav
-        className={`w-full max-w-6xl rounded-2xl border transition-all duration-300 ${
+        className={`relative w-full max-w-6xl rounded-2xl border transition-all duration-300 ${
           scrolled
             ? "border-white/10 bg-surface-lowest/70 backdrop-blur-xl shadow-lg shadow-black/20"
             : "border-white/5 bg-surface-lowest/50 backdrop-blur-lg"
         }`}
       >
+        {/* Top gradient line */}
+        <div className="absolute top-0 left-[20%] right-[20%] h-[1px] bg-gradient-to-r from-transparent via-[#ff660030] to-transparent" />
+
         <div className="flex items-center justify-between px-5 sm:px-6 h-14">
           <Link
             href="/"
-            className="font-serif text-base font-semibold text-on-surface tracking-tight"
+            className="font-serif text-base font-semibold text-on-surface tracking-tight flex items-center gap-2"
           >
-            Ratchawat
+            <span className="inline-block w-1.5 h-1.5 bg-primary rotate-45" />
+            RATCHAWAT
           </Link>
 
           {/* Desktop nav */}
           <div className="hidden md:flex items-center gap-7">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="text-[11px] font-sans font-medium uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors"
-              >
-                {item.label}
-              </Link>
-            ))}
+            {navItems.map((item) =>
+              item.children ? (
+                <div key={item.label} className="relative group">
+                  <button className="flex items-center gap-1 text-[11px] font-sans font-medium uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors">
+                    {item.label}
+                    <ChevronDown
+                      size={12}
+                      className="transition-transform duration-200 group-hover:rotate-180"
+                    />
+                  </button>
+                  {/* Dropdown */}
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 pt-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                    <div className="bg-surface-lowest border border-white/10 rounded-lg shadow-lg shadow-black/30 py-2 min-w-[160px]">
+                      {/* Top accent */}
+                      <div className="absolute top-3 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#ff660030] to-transparent rounded-t-lg" />
+                      {item.children.map((child) => (
+                        <Link
+                          key={child.href}
+                          href={child.href}
+                          className="block px-4 py-2.5 text-[11px] font-sans font-medium uppercase tracking-widest text-on-surface-variant hover:text-primary hover:bg-white/5 transition-colors"
+                        >
+                          {child.label}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="text-[11px] font-sans font-medium uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors"
+                >
+                  {item.label}
+                </Link>
+              )
+            )}
             <Link
               href="/booking"
               className="bg-primary text-on-primary text-[11px] font-semibold uppercase tracking-widest px-4 py-2 rounded-lg hover:bg-primary-dim transition-colors"

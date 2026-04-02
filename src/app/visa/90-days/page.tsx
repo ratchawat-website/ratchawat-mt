@@ -12,6 +12,16 @@ import {
 import { FileText, Clock, CheckCircle, BookOpen, Dumbbell, RefreshCw } from "lucide-react";
 import Link from "next/link";
 
+function SectionLabel({ label }: { label: string }) {
+  return (
+    <div className="flex items-center justify-center gap-3 mb-4">
+      <span className="w-8 h-[2px] bg-primary" />
+      <span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">{label}</span>
+      <span className="w-8 h-[2px] bg-primary" />
+    </div>
+  );
+}
+
 export const metadata = generatePageMeta({
   title: "90-Day Muay Thai Visa Thailand | Education Visa \u2014 Ratchawat",
   description:
@@ -132,7 +142,8 @@ export default function NinetyDayVisaPage() {
       {/* Overview */}
       <section className="pb-16 sm:pb-20 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-4xl mx-auto">
-          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface mb-6">
+          <SectionLabel label="Overview" />
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface mb-6">
             The 90-Day Education Visa
           </h2>
           <div className="space-y-4 text-on-surface-variant text-base sm:text-lg leading-relaxed">
@@ -144,7 +155,7 @@ export default function NinetyDayVisaPage() {
             </p>
             <p>
               If you want more flexibility and a longer stay, the{" "}
-              <Link href="/visa/dtv" className="text-primary hover:text-primary-dim transition-colors font-medium">DTV visa (180 days)</Link>
+              <Link href="/visa/dtv" className="btn-link">DTV visa (180 days) <span className="btn-arrow">&rarr;</span></Link>
               {" "}might be a better fit.
             </p>
           </div>
@@ -154,17 +165,18 @@ export default function NinetyDayVisaPage() {
       {/* Highlights */}
       <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20 bg-surface-lowest/50">
         <div className="max-w-6xl mx-auto">
-          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface mb-8">
+          <SectionLabel label="Highlights" />
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface mb-8">
             What You Get
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {highlights.map((item) => (
-              <GlassCard key={item.title}>
+            {highlights.map((item, i) => (
+              <GlassCard key={item.title} number={String(i + 1).padStart(2, "0")}>
                 <item.icon size={28} className="text-primary mb-3" />
                 <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-2">
                   {item.title}
                 </h3>
-                <p className="text-on-surface-variant text-sm">
+                <p className="text-on-surface-variant text-xs leading-relaxed">
                   {item.description}
                 </p>
               </GlassCard>
@@ -176,25 +188,29 @@ export default function NinetyDayVisaPage() {
       {/* How to Apply */}
       <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-4xl mx-auto">
-          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface mb-8">
+          <SectionLabel label="Process" />
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface mb-8">
             How to Apply
           </h2>
-          <div className="space-y-6">
-            {steps.map((s) => (
-              <div key={s.step} className="flex gap-4 items-start">
-                <span className="flex-shrink-0 w-10 h-10 rounded-full bg-primary text-white font-bold flex items-center justify-center text-lg">
-                  {s.step}
-                </span>
-                <div>
-                  <h3 className="font-serif text-lg font-bold text-on-surface mb-1">
-                    {s.title}
-                  </h3>
-                  <p className="text-on-surface-variant text-sm sm:text-base">
-                    {s.description}
-                  </p>
+          <div className="relative pl-7">
+            {/* Vertical line */}
+            <div className="absolute left-[5px] top-2 bottom-2 w-[2px] bg-gradient-to-b from-primary to-primary/30" />
+            <div className="flex flex-col gap-5">
+              {steps.map((s) => (
+                <div key={s.step} className="relative flex items-start gap-4">
+                  {/* Dot */}
+                  <div className="absolute -left-7 top-1 w-3 h-3 rounded-full bg-primary border-2 border-surface z-10" />
+                  <div>
+                    <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-1">
+                      {s.title}
+                    </h3>
+                    <p className="text-on-surface-variant text-sm leading-relaxed">
+                      {s.description}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -202,19 +218,20 @@ export default function NinetyDayVisaPage() {
       {/* Pricing */}
       <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20 bg-surface-lowest/50">
         <div className="max-w-4xl mx-auto">
-          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface mb-6">
+          <SectionLabel label="Cost" />
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface mb-6">
             Pricing
           </h2>
           <div className="space-y-4 text-on-surface-variant text-base sm:text-lg leading-relaxed">
             <p>
               The 3-month training package is 5,500 THB per month (16,500 THB total for 90 days). This covers all group sessions at both camps. Private lessons are available at additional cost.{" "}
-              <Link href="/pricing" className="text-primary hover:text-primary-dim transition-colors font-medium">See full pricing</Link>.
+              <Link href="/pricing" className="btn-link">See full pricing <span className="btn-arrow">&rarr;</span></Link>.
             </p>
             <p>
               Many 90-day students also train in the{" "}
-              <Link href="/programs/fighter" className="text-primary hover:text-primary-dim transition-colors font-medium">fighter program</Link>
+              <Link href="/programs/fighter" className="btn-link">fighter program <span className="btn-arrow">&rarr;</span></Link>
               {" "}with multiple daily sessions. Need a place to stay?{" "}
-              <Link href="/accommodation" className="text-primary hover:text-primary-dim transition-colors font-medium">Accommodation</Link>
+              <Link href="/accommodation" className="btn-link">Accommodation <span className="btn-arrow">&rarr;</span></Link>
               {" "}is available near both camps.
             </p>
           </div>
@@ -224,7 +241,8 @@ export default function NinetyDayVisaPage() {
       {/* FAQ */}
       <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-3xl mx-auto">
-          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface mb-8">
+          <SectionLabel label="FAQ" />
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface mb-8">
             Frequently Asked Questions
           </h2>
           <FAQAccordion items={faqs} />
@@ -245,6 +263,8 @@ export default function NinetyDayVisaPage() {
         description="Contact us to start the paperwork. Training letter ready in 24 hours."
         buttonText="Contact Us"
         href="/contact"
+        ghostText="Book Now"
+        ghostHref="/booking"
       />
     </>
   );

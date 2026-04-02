@@ -108,7 +108,8 @@ export default function ReviewsPage() {
       {/* Page Header */}
       <section className="py-12 sm:py-16 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-semibold text-on-surface">
+          <div className="flex items-center justify-center gap-3 mb-4"><span className="w-8 h-[2px] bg-primary" /><span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">REVIEWS</span><span className="w-8 h-[2px] bg-primary" /></div>
+          <h1 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-on-surface">
             What Our Students Say
           </h1>
           <p className="mt-4 text-on-surface-variant text-lg max-w-2xl mx-auto">
@@ -141,17 +142,18 @@ export default function ReviewsPage() {
       {/* Reviews */}
       <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20 bg-surface-lowest/50">
         <div className="max-w-6xl mx-auto">
-          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface mb-8">
+          <div className="flex items-center justify-center gap-3 mb-4"><span className="w-8 h-[2px] bg-primary" /><span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">TESTIMONIALS</span><span className="w-8 h-[2px] bg-primary" /></div>
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface mb-8">
             Student Reviews
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {reviews.map((review) => (
               <GlassCard key={review.name} hover={false}>
                 <Quote size={24} className="text-primary/40 mb-3" />
-                <p className="text-on-surface-variant text-sm leading-relaxed mb-4">
+                <p className="text-[#ccc] italic text-xs leading-relaxed mb-4">
                   {review.text}
                 </p>
-                <div className="flex items-center justify-between">
+                <div className="border-t border-outline-variant pt-4 flex items-center justify-between">
                   <div>
                     <p className="text-on-surface font-semibold text-sm">
                       {review.name}
@@ -176,7 +178,8 @@ export default function ReviewsPage() {
       {/* Tags */}
       <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface mb-6">
+          <div className="flex items-center justify-center gap-3 mb-4"><span className="w-8 h-[2px] bg-primary" /><span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">HIGHLIGHTS</span><span className="w-8 h-[2px] bg-primary" /></div>
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface mb-6">
             What Reviewers Mention Most
           </h2>
           <div className="flex flex-wrap justify-center gap-3">
@@ -194,7 +197,7 @@ export default function ReviewsPage() {
             ].map((tag) => (
               <span
                 key={tag}
-                className="text-sm font-medium text-on-surface bg-surface-lowest px-4 py-2 rounded-[var(--radius-card)] border-2 border-outline-variant"
+                className="badge-underline badge-neutral"
               >
                 {tag}
               </span>
@@ -229,6 +232,8 @@ export default function ReviewsPage() {
         description="Drop-in from 500 THB. Most people come back."
         buttonText="Book Now"
         href="/booking"
+        ghostText="View Pricing"
+        ghostHref="/pricing"
       />
     </>
   );

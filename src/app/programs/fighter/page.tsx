@@ -89,7 +89,8 @@ export default function FighterProgramPage() {
       {/* Page Header */}
       <section className="py-12 sm:py-16 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-semibold text-on-surface">
+          <div className="flex items-center justify-center gap-3 mb-4"><span className="w-8 h-[2px] bg-primary" /><span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">FIGHTER CAMP</span><span className="w-8 h-[2px] bg-primary" /></div>
+          <h1 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-on-surface">
             Fighter Training Program
           </h1>
           <p className="mt-4 text-on-surface-variant text-lg max-w-2xl mx-auto">
@@ -102,7 +103,8 @@ export default function FighterProgramPage() {
       <section className="pb-16 sm:pb-20 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
           <div>
-            <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface mb-6">
+            <div className="flex items-center gap-3 mb-4"><span className="w-8 h-[2px] bg-primary" /><span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">OVERVIEW</span><span className="w-8 h-[2px] bg-primary" /></div>
+            <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface mb-6">
               The Program
             </h2>
             <div className="space-y-4 text-on-surface-variant text-base sm:text-lg leading-relaxed">
@@ -127,22 +129,23 @@ export default function FighterProgramPage() {
       {/* Training Schedule */}
       <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20 bg-surface-lowest/50">
         <div className="max-w-6xl mx-auto">
-          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface mb-8">
+          <div className="flex items-center gap-3 mb-4"><span className="w-8 h-[2px] bg-primary" /><span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">DAILY SCHEDULE</span><span className="w-8 h-[2px] bg-primary" /></div>
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface mb-8">
             Typical Training Day
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {trainingBlocks.map((block) => (
-              <GlassCard key={block.title}>
+            {trainingBlocks.map((block, i) => (
+              <GlassCard key={block.title} number={String(i + 1).padStart(2, "0")}>
                 <div className="flex items-center gap-3 mb-3">
                   <block.icon size={24} className="text-primary" />
-                  <span className="text-xs font-semibold uppercase tracking-wider text-on-surface-variant">
+                  <span className="badge-underline badge-neutral">
                     {block.time}
                   </span>
                 </div>
                 <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-2">
                   {block.title}
                 </h3>
-                <p className="text-on-surface-variant text-sm">
+                <p className="text-on-surface-variant text-xs leading-relaxed">
                   {block.description}
                 </p>
               </GlassCard>
@@ -154,17 +157,18 @@ export default function FighterProgramPage() {
       {/* Prerequisites */}
       <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-6xl mx-auto">
-          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface mb-8">
+          <div className="flex items-center gap-3 mb-4"><span className="w-8 h-[2px] bg-primary" /><span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">PREREQUISITES</span><span className="w-8 h-[2px] bg-primary" /></div>
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface mb-8">
             What You Need
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            {whatYouNeed.map((item) => (
-              <GlassCard key={item.title}>
+            {whatYouNeed.map((item, i) => (
+              <GlassCard key={item.title} number={String(i + 1).padStart(2, "0")}>
                 <item.icon size={28} className="text-primary mb-3" />
                 <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-2">
                   {item.title}
                 </h3>
-                <p className="text-on-surface-variant text-sm">
+                <p className="text-on-surface-variant text-xs leading-relaxed">
                   {item.description}
                 </p>
               </GlassCard>
@@ -176,7 +180,8 @@ export default function FighterProgramPage() {
       {/* Pricing & Stay */}
       <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20 bg-surface-lowest/50">
         <div className="max-w-4xl mx-auto">
-          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface mb-6">
+          <div className="flex items-center gap-3 mb-4"><span className="w-8 h-[2px] bg-primary" /><span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">PRICING & STAY</span><span className="w-8 h-[2px] bg-primary" /></div>
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface mb-6">
             Pricing & Accommodation
           </h2>
           <div className="space-y-4 text-on-surface-variant text-base sm:text-lg leading-relaxed">
@@ -212,6 +217,8 @@ export default function FighterProgramPage() {
         description="Monthly membership 5,500 THB. All sessions included."
         buttonText="Book Now"
         href="/booking"
+        ghostText="View Pricing"
+        ghostHref="/pricing"
       />
     </>
   );

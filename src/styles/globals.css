@@ -40,7 +40,16 @@
 
   /* Shadows */
   --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.3);
-  --shadow-card-hover: 0 10px 30px rgba(0, 0, 0, 0.5), 0 4px 10px rgba(0, 0, 0, 0.4);
+  --shadow-card-hover: 0 8px 30px rgba(0, 0, 0, 0.4);
+  --shadow-card-glow: 0 0 30px rgba(255, 102, 0, 0.06);
+
+  /* Border accent values */
+  --border-accent: #ff660040;
+  --border-accent-hover: #ff6600;
+
+  /* Filigree number opacity */
+  --filigree-opacity: 0.12;
+  --filigree-opacity-hover: 0.2;
 
   /* Animations */
   --animate-fade-in: fade-in 0.5s ease-out both;
@@ -240,11 +249,13 @@
     background-color: var(--color-primary);
     color: var(--color-on-primary);
     border-radius: var(--radius-btn);
-    padding: 0.75rem 1.5rem;
+    padding: 0.8125rem 1.75rem;
     font-weight: 600;
-    font-size: 0.9375rem;
+    font-size: 0.875rem;
     line-height: 1;
-    transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.094em;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
     cursor: pointer;
     border: none;
     text-decoration: none;
@@ -253,7 +264,7 @@
   .btn-primary:hover {
     background-color: var(--color-primary-dim);
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(var(--color-primary-rgb), 0.3);
+    box-shadow: 0 4px 16px rgba(var(--color-primary-rgb), 0.25);
   }
 
   .btn-primary:active {
@@ -267,10 +278,94 @@
 
   .btn-arrow {
     display: inline-block;
-    transition: transform 0.2s ease;
+    transition: transform 0.3s ease;
   }
 
-  .btn-primary:hover .btn-arrow {
-    transform: translateX(4px);
+  .btn-primary:hover .btn-arrow,
+  .btn-ghost:hover .btn-arrow,
+  .btn-link:hover .btn-arrow {
+    transform: translateX(3px);
+  }
+
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: transparent;
+    color: var(--color-on-surface-variant);
+    border: 1.5px solid var(--color-outline);
+    border-radius: var(--radius-btn);
+    padding: 0.8125rem 1.75rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+    line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: 0.094em;
+    transition: border-color 0.3s ease, color 0.3s ease;
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  .btn-ghost:hover {
+    border-color: var(--color-primary);
+    color: var(--color-on-surface);
+  }
+
+  .btn-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: none;
+    border: none;
+    color: var(--color-primary);
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.094em;
+    cursor: pointer;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  .btn-link:hover {
+    color: var(--color-primary-dim);
+  }
+}
+
+/* ─── Badge utilities ─── */
+@layer components {
+  .badge-underline {
+    display: inline-block;
+    font-size: 0.5625rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.094em;
+    border-bottom: 1.5px solid currentColor;
+    padding-bottom: 2px;
+    line-height: 1;
+  }
+
+  .badge-orange {
+    color: var(--color-primary);
+  }
+
+  .badge-green {
+    color: #22c55e;
+  }
+
+  .badge-neutral {
+    color: var(--color-on-surface-variant);
+    border-bottom-color: #666;
+  }
+}
+
+/* ─── Scrollbar hide ─── */
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
   }
 }

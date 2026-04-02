@@ -12,6 +12,16 @@ import {
 import { Phone, Mail, Clock, MessageCircle } from "lucide-react";
 import Link from "next/link";
 
+function SectionLabel({ label }: { label: string }) {
+  return (
+    <div className="flex items-center justify-center gap-3 mb-4">
+      <span className="w-8 h-[2px] bg-primary" />
+      <span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">{label}</span>
+      <span className="w-8 h-[2px] bg-primary" />
+    </div>
+  );
+}
+
 export const metadata = generatePageMeta({
   title: "Contact Us | Ratchawat Muay Thai - Koh Samui",
   description:
@@ -212,7 +222,8 @@ export default function ContactPage() {
       {/* Find Us */}
       <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20 bg-surface-lowest/50">
         <div className="max-w-6xl mx-auto">
-          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface text-center mb-12">
+          <SectionLabel label="Locations" />
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface text-center mb-12">
             Find Us
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -280,6 +291,8 @@ export default function ContactPage() {
         description="Book your first session at Ratchawat Koh Samui"
         buttonText="Book Now"
         href="/booking"
+        ghostText="View Pricing"
+        ghostHref="/pricing"
       />
     </>
   );

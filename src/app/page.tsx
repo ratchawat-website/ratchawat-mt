@@ -15,7 +15,6 @@ import {
   Users,
   FileCheck,
   DollarSign,
-  ArrowRight,
   Quote,
 } from "lucide-react";
 import Link from "next/link";
@@ -136,29 +135,40 @@ export default function HomePage() {
       />
 
       <HeroSection
-        title="RATCHAWAT MUAY THAI"
+        kicker="Koh Samui, Thailand"
+        title="RATCHAWAT"
+        titleLine2="MUAY THAI"
+        outlineLine2
         subtitle="Train at the heart of Koh Samui. Two camps. All levels."
-        ctaText="Book Your Training"
+        ctaText="Start Training"
         ctaHref="/booking"
+        ghostText="View Pricing"
+        ghostHref="/pricing"
+        established="Est. 2018"
       />
 
       {/* Why Train at Ratchawat */}
       <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-6xl mx-auto">
-          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface text-center mb-12">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <span className="w-8 h-[2px] bg-primary" />
+            <span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">Why Ratchawat</span>
+            <span className="w-8 h-[2px] bg-primary" />
+          </div>
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface text-center mb-12">
             Why Train at Ratchawat
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {features.map((feature) => (
-              <GlassCard key={feature.title}>
+            {features.map((feature, i) => (
+              <GlassCard key={feature.title} number={String(i + 1).padStart(2, "0")}>
                 <feature.icon
-                  className="w-8 h-8 text-primary mb-4"
-                  strokeWidth={1.5}
+                  className="w-7 h-7 text-primary mb-4"
+                  strokeWidth={2}
                 />
                 <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-2">
                   {feature.title}
                 </h3>
-                <p className="text-on-surface-variant text-sm leading-relaxed">
+                <p className="text-on-surface-variant text-xs leading-relaxed">
                   {feature.description}
                 </p>
               </GlassCard>
@@ -188,12 +198,8 @@ export default function HomePage() {
                   <p className="text-on-surface-variant text-sm leading-relaxed mb-4">
                     {camp.description}
                   </p>
-                  <span className="inline-flex items-center gap-2 text-primary text-sm font-semibold">
-                    Explore {camp.name}{" "}
-                    <ArrowRight
-                      size={16}
-                      className="transition-transform group-hover:translate-x-1"
-                    />
+                  <span className="btn-link">
+                    Explore {camp.name} <span className="btn-arrow">&rarr;</span>
                   </span>
                 </GlassCard>
               </Link>
@@ -209,13 +215,13 @@ export default function HomePage() {
             Training Programs
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {programs.map((program) => (
+            {programs.map((program, i) => (
               <Link key={program.title} href={program.href} className="group">
-                <GlassCard>
+                <GlassCard number={String(i + 1).padStart(2, "0")}>
                   <h3 className="font-serif text-xl font-bold text-on-surface uppercase mb-2 group-hover:text-primary transition-colors">
                     {program.title}
                   </h3>
-                  <p className="text-on-surface-variant text-sm leading-relaxed">
+                  <p className="text-on-surface-variant text-xs leading-relaxed">
                     {program.description}
                   </p>
                 </GlassCard>
@@ -223,11 +229,8 @@ export default function HomePage() {
             ))}
           </div>
           <div className="text-center mt-8">
-            <Link
-              href="/programs"
-              className="inline-flex items-center gap-2 text-primary font-semibold hover:text-primary-dim transition-colors"
-            >
-              View all programs <ArrowRight size={16} />
+            <Link href="/programs" className="btn-link">
+              View all programs <span className="btn-arrow">&rarr;</span>
             </Link>
           </div>
         </div>
@@ -267,11 +270,8 @@ export default function HomePage() {
                   </p>
                 </div>
               </div>
-              <Link
-                href="/pricing"
-                className="inline-flex items-center gap-2 bg-primary text-on-primary font-semibold px-6 py-3 rounded-[0.5rem] hover:bg-primary-dim transition-colors text-sm shrink-0"
-              >
-                View All Prices <ArrowRight size={16} />
+              <Link href="/pricing" className="btn-primary shrink-0">
+                View All Prices <span className="btn-arrow">&rarr;</span>
               </Link>
             </div>
           </GlassCard>
@@ -304,24 +304,23 @@ export default function HomePage() {
                   className="text-primary/30 mb-2"
                   strokeWidth={1.5}
                 />
-                <p className="text-on-surface-variant text-sm leading-relaxed mb-4">
+                <p className="text-[#ccc] text-sm leading-relaxed italic mb-4">
                   {testimonial.text}
                 </p>
-                <p className="font-serif text-sm font-bold text-on-surface">
-                  {testimonial.name}
-                </p>
-                <p className="text-on-surface-variant text-xs">
-                  {testimonial.country}
-                </p>
+                <div className="border-t border-outline-variant pt-4">
+                  <p className="font-serif text-[13px] font-bold text-on-surface">
+                    {testimonial.name}
+                  </p>
+                  <p className="text-[#666] text-[10px]">
+                    {testimonial.country}
+                  </p>
+                </div>
               </GlassCard>
             ))}
           </div>
           <div className="text-center mt-8">
-            <Link
-              href="/reviews"
-              className="inline-flex items-center gap-2 text-primary font-semibold hover:text-primary-dim transition-colors"
-            >
-              Read more reviews <ArrowRight size={16} />
+            <Link href="/reviews" className="btn-link">
+              Read more reviews <span className="btn-arrow">&rarr;</span>
             </Link>
           </div>
         </div>
@@ -341,21 +340,18 @@ export default function HomePage() {
                   aspectRatio="aspect-square"
                   className="mb-4"
                 />
-                <h3 className="font-serif text-base sm:text-lg font-bold text-on-surface text-center">
+                <h3 className="font-serif text-base font-bold text-on-surface text-center">
                   {trainer.name}
                 </h3>
-                <p className="text-on-surface-variant text-xs sm:text-sm text-center mt-1">
-                  {trainer.role}
+                <p className="text-center mt-1">
+                  <span className="badge-underline badge-orange">{trainer.role}</span>
                 </p>
               </GlassCard>
             ))}
           </div>
           <div className="text-center mt-8">
-            <Link
-              href="/team"
-              className="inline-flex items-center gap-2 text-primary font-semibold hover:text-primary-dim transition-colors"
-            >
-              Meet the full team <ArrowRight size={16} />
+            <Link href="/team" className="btn-link">
+              Meet the full team <span className="btn-arrow">&rarr;</span>
             </Link>
           </div>
         </div>
@@ -419,6 +415,8 @@ export default function HomePage() {
         description="Start training at Ratchawat Koh Samui today"
         buttonText="Book Now"
         href="/booking"
+        ghostText="View Pricing"
+        ghostHref="/pricing"
       />
     </>
   );

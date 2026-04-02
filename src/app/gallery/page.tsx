@@ -68,7 +68,8 @@ export default function GalleryPage() {
       {/* Page Header */}
       <section className="py-12 sm:py-16 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-semibold text-on-surface">
+          <div className="flex items-center justify-center gap-3 mb-4"><span className="w-8 h-[2px] bg-primary" /><span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">PHOTOS</span><span className="w-8 h-[2px] bg-primary" /></div>
+          <h1 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-on-surface">
             Gallery
           </h1>
           <p className="mt-4 text-on-surface-variant text-lg max-w-2xl mx-auto">
@@ -86,7 +87,7 @@ export default function GalleryPage() {
           }`}
         >
           <div className="max-w-6xl mx-auto">
-            <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface mb-8">
+            <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface mb-8">
               {cat.title}
             </h2>
             <div className={`grid gap-4 ${
@@ -148,6 +149,8 @@ export default function GalleryPage() {
         description="Drop-in from 500 THB. Two camps, all levels, six days a week."
         buttonText="Book Now"
         href="/booking"
+        ghostText="View Pricing"
+        ghostHref="/pricing"
       />
     </>
   );

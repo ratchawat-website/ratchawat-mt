@@ -108,7 +108,8 @@ export default function FAQPage() {
       {/* Quick Links */}
       <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20 bg-surface-lowest/50">
         <div className="max-w-4xl mx-auto">
-          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface mb-6">
+          <div className="flex items-center gap-3 mb-4"><span className="w-8 h-[2px] bg-primary" /><span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">LEARN MORE</span><span className="w-8 h-[2px] bg-primary" /></div>
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface mb-6">
             More Info
           </h2>
           <div className="space-y-3 text-on-surface-variant text-base sm:text-lg leading-relaxed">
@@ -135,6 +136,8 @@ export default function FAQPage() {
         description="Message us on WhatsApp or send an email. We reply fast."
         buttonText="Contact Us"
         href="/contact"
+        ghostText="Book Now"
+        ghostHref="/booking"
       />
     </>
   );

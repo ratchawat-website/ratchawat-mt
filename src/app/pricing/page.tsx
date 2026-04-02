@@ -8,7 +8,7 @@ import {
   courseSchema,
   offerCatalogSchema,
 } from "@/components/seo/SchemaOrg";
-import { Check, ArrowRight } from "lucide-react";
+import { Check } from "lucide-react";
 import Link from "next/link";
 
 export const metadata = generatePageMeta({
@@ -78,7 +78,8 @@ export default function PricingPage() {
       {/* Drop-in Sessions */}
       <section className="pb-16 sm:pb-20 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-4xl mx-auto">
-          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface text-center mb-8">
+          <div className="flex items-center justify-center gap-3 mb-4"><span className="w-8 h-[2px] bg-primary" /><span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">SINGLE CLASS</span><span className="w-8 h-[2px] bg-primary" /></div>
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface text-center mb-8">
             Drop-in Sessions
           </h2>
           <GlassCard>
@@ -110,9 +111,9 @@ export default function PricingPage() {
               </ul>
               <Link
                 href="/booking?package=drop-in"
-                className="inline-flex items-center gap-2 bg-primary text-on-primary font-semibold px-6 py-3 rounded-[0.5rem] hover:bg-primary-dim transition-colors shrink-0"
+                className="btn-primary shrink-0"
               >
-                Book Now <ArrowRight size={16} />
+                Book Now <span className="btn-arrow">&rarr;</span>
               </Link>
             </div>
           </GlassCard>
@@ -122,7 +123,8 @@ export default function PricingPage() {
       {/* Weekly & Monthly Packages */}
       <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20 bg-surface-lowest/50">
         <div className="max-w-4xl mx-auto">
-          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface text-center mb-8">
+          <div className="flex items-center justify-center gap-3 mb-4"><span className="w-8 h-[2px] bg-primary" /><span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">PACKAGES</span><span className="w-8 h-[2px] bg-primary" /></div>
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface text-center mb-8">
             Weekly & Monthly Packages
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -155,17 +157,17 @@ export default function PricingPage() {
               </ul>
               <Link
                 href="/booking?package=weekly"
-                className="inline-flex items-center gap-2 bg-primary text-on-primary font-semibold px-6 py-3 rounded-[0.5rem] hover:bg-primary-dim transition-colors w-full justify-center"
+                className="btn-primary w-full justify-center"
               >
-                Book Weekly <ArrowRight size={16} />
+                Book Weekly <span className="btn-arrow">&rarr;</span>
               </Link>
             </GlassCard>
 
             {/* Monthly */}
-            <GlassCard className="ring-2 ring-primary relative">
-              <span className="absolute -top-3 left-6 bg-primary text-on-primary text-xs font-bold px-3 py-1 rounded-[0.5rem]">
-                Most Popular
-              </span>
+            <GlassCard className="ring-2 ring-primary">
+              <div className="mb-3">
+                <span className="badge-underline badge-orange">Most Popular</span>
+              </div>
               <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-4">
                 Monthly Unlimited
               </h3>
@@ -197,9 +199,9 @@ export default function PricingPage() {
               </ul>
               <Link
                 href="/booking?package=monthly"
-                className="inline-flex items-center gap-2 bg-primary text-on-primary font-semibold px-6 py-3 rounded-[0.5rem] hover:bg-primary-dim transition-colors w-full justify-center"
+                className="btn-primary w-full justify-center"
               >
-                Book Monthly <ArrowRight size={16} />
+                Book Monthly <span className="btn-arrow">&rarr;</span>
               </Link>
             </GlassCard>
           </div>
@@ -209,7 +211,8 @@ export default function PricingPage() {
       {/* Private Lessons */}
       <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-4xl mx-auto">
-          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface text-center mb-8">
+          <div className="flex items-center justify-center gap-3 mb-4"><span className="w-8 h-[2px] bg-primary" /><span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">1-ON-1</span><span className="w-8 h-[2px] bg-primary" /></div>
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface text-center mb-8">
             Private Lessons
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -242,17 +245,17 @@ export default function PricingPage() {
               </ul>
               <Link
                 href="/booking?package=private-single"
-                className="inline-flex items-center gap-2 bg-primary text-on-primary font-semibold px-6 py-3 rounded-[0.5rem] hover:bg-primary-dim transition-colors w-full justify-center"
+                className="btn-primary w-full justify-center"
               >
-                Book Private <ArrowRight size={16} />
+                Book Private <span className="btn-arrow">&rarr;</span>
               </Link>
             </GlassCard>
 
             {/* 10-Pack */}
-            <GlassCard className="ring-2 ring-primary relative">
-              <span className="absolute -top-3 left-6 bg-primary text-on-primary text-xs font-bold px-3 py-1 rounded-[0.5rem]">
-                Save 20%
-              </span>
+            <GlassCard className="ring-2 ring-primary">
+              <div className="mb-3">
+                <span className="badge-underline badge-orange">Save 20%</span>
+              </div>
               <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-4">
                 10-Session Pack
               </h3>
@@ -280,9 +283,9 @@ export default function PricingPage() {
               </ul>
               <Link
                 href="/booking?package=private-10"
-                className="inline-flex items-center gap-2 bg-primary text-on-primary font-semibold px-6 py-3 rounded-[0.5rem] hover:bg-primary-dim transition-colors w-full justify-center"
+                className="btn-primary w-full justify-center"
               >
-                Book 10-Pack <ArrowRight size={16} />
+                Book 10-Pack <span className="btn-arrow">&rarr;</span>
               </Link>
             </GlassCard>
           </div>
@@ -290,9 +293,9 @@ export default function PricingPage() {
             Want to learn more about{" "}
             <Link
               href="/programs/private"
-              className="text-primary hover:text-primary-dim transition-colors"
+              className="btn-link"
             >
-              private training
+              private training <span className="btn-arrow">&rarr;</span>
             </Link>
             ?
           </p>
@@ -302,7 +305,8 @@ export default function PricingPage() {
       {/* Fighter Program */}
       <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20 bg-surface-lowest/50">
         <div className="max-w-4xl mx-auto">
-          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface text-center mb-8">
+          <div className="flex items-center justify-center gap-3 mb-4"><span className="w-8 h-[2px] bg-primary" /><span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">FIGHTER</span><span className="w-8 h-[2px] bg-primary" /></div>
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface text-center mb-8">
             Fighter Program Packages
           </h2>
           <GlassCard>
@@ -345,15 +349,15 @@ export default function PricingPage() {
               <div className="flex flex-col gap-3 shrink-0">
                 <Link
                   href="/contact"
-                  className="inline-flex items-center gap-2 bg-primary text-on-primary font-semibold px-6 py-3 rounded-[0.5rem] hover:bg-primary-dim transition-colors justify-center"
+                  className="btn-primary justify-center"
                 >
-                  Contact Us <ArrowRight size={16} />
+                  Contact Us <span className="btn-arrow">&rarr;</span>
                 </Link>
                 <Link
                   href="/programs/fighter"
-                  className="text-primary text-sm text-center hover:text-primary-dim transition-colors"
+                  className="btn-link text-sm justify-center"
                 >
-                  Learn more about the program
+                  Learn more about the program <span className="btn-arrow">&rarr;</span>
                 </Link>
               </div>
             </div>
@@ -364,7 +368,8 @@ export default function PricingPage() {
       {/* What's Included */}
       <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-4xl mx-auto">
-          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface text-center mb-8">
+          <div className="flex items-center justify-center gap-3 mb-4"><span className="w-8 h-[2px] bg-primary" /><span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">INCLUDED</span><span className="w-8 h-[2px] bg-primary" /></div>
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface text-center mb-8">
             What&#39;s Included
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -379,9 +384,9 @@ export default function PricingPage() {
             Looking for{" "}
             <Link
               href="/accommodation"
-              className="text-primary hover:text-primary-dim transition-colors"
+              className="btn-link"
             >
-              accommodation near the camps
+              accommodation near the camps <span className="btn-arrow">&rarr;</span>
             </Link>
             ?
           </p>
@@ -406,6 +411,8 @@ export default function PricingPage() {
         description="Book your session and pay securely online"
         buttonText="Book Now"
         href="/booking"
+        ghostText="View Pricing"
+        ghostHref="/pricing"
       />
     </>
   );

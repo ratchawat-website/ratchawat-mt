@@ -12,6 +12,16 @@ import {
 import { FileText, Clock, CheckCircle, Globe, Plane, CreditCard } from "lucide-react";
 import Link from "next/link";
 
+function SectionLabel({ label }: { label: string }) {
+  return (
+    <div className="flex items-center justify-center gap-3 mb-4">
+      <span className="w-8 h-[2px] bg-primary" />
+      <span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">{label}</span>
+      <span className="w-8 h-[2px] bg-primary" />
+    </div>
+  );
+}
+
 export const metadata = generatePageMeta({
   title: "DTV Visa for Muay Thai Thailand 2026 | Apply with Ratchawat",
   description:
@@ -132,7 +142,8 @@ export default function DTVVisaPage() {
       {/* What is DTV */}
       <section className="pb-16 sm:pb-20 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-4xl mx-auto">
-          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface mb-6">
+          <SectionLabel label="Overview" />
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface mb-6">
             What is the DTV Visa?
           </h2>
           <div className="space-y-4 text-on-surface-variant text-base sm:text-lg leading-relaxed">
@@ -152,17 +163,18 @@ export default function DTVVisaPage() {
       {/* Requirements */}
       <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20 bg-surface-lowest/50">
         <div className="max-w-6xl mx-auto">
-          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface mb-8">
+          <SectionLabel label="Documents" />
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface mb-8">
             Requirements
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {requirements.map((item) => (
-              <GlassCard key={item.title}>
+            {requirements.map((item, i) => (
+              <GlassCard key={item.title} number={String(i + 1).padStart(2, "0")}>
                 <item.icon size={28} className="text-primary mb-3" />
                 <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-2">
                   {item.title}
                 </h3>
-                <p className="text-on-surface-variant text-sm">
+                <p className="text-on-surface-variant text-xs leading-relaxed">
                   {item.description}
                 </p>
               </GlassCard>
@@ -174,25 +186,29 @@ export default function DTVVisaPage() {
       {/* How to Apply */}
       <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-4xl mx-auto">
-          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface mb-8">
+          <SectionLabel label="Process" />
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface mb-8">
             How to Apply with Ratchawat
           </h2>
-          <div className="space-y-6">
-            {steps.map((s) => (
-              <div key={s.step} className="flex gap-4 items-start">
-                <span className="flex-shrink-0 w-10 h-10 rounded-full bg-primary text-white font-bold flex items-center justify-center text-lg">
-                  {s.step}
-                </span>
-                <div>
-                  <h3 className="font-serif text-lg font-bold text-on-surface mb-1">
-                    {s.title}
-                  </h3>
-                  <p className="text-on-surface-variant text-sm sm:text-base">
-                    {s.description}
-                  </p>
+          <div className="relative pl-7">
+            {/* Vertical line */}
+            <div className="absolute left-[5px] top-2 bottom-2 w-[2px] bg-gradient-to-b from-primary to-primary/30" />
+            <div className="flex flex-col gap-5">
+              {steps.map((s) => (
+                <div key={s.step} className="relative flex items-start gap-4">
+                  {/* Dot */}
+                  <div className="absolute -left-7 top-1 w-3 h-3 rounded-full bg-primary border-2 border-surface z-10" />
+                  <div>
+                    <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-1">
+                      {s.title}
+                    </h3>
+                    <p className="text-on-surface-variant text-sm leading-relaxed">
+                      {s.description}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -200,7 +216,8 @@ export default function DTVVisaPage() {
       {/* Training Packages */}
       <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20 bg-surface-lowest/50">
         <div className="max-w-4xl mx-auto">
-          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface mb-6">
+          <SectionLabel label="Packages" />
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface mb-6">
             Training Packages for DTV Holders
           </h2>
           <div className="space-y-4 text-on-surface-variant text-base sm:text-lg leading-relaxed">
@@ -209,11 +226,11 @@ export default function DTVVisaPage() {
             </p>
             <p>
               You are not locked into a specific schedule. Train as much or as little as you want. Many long-stay students train 5 or 6 days a week, take a break, then come back.{" "}
-              <Link href="/pricing" className="text-primary hover:text-primary-dim transition-colors font-medium">See full pricing</Link>.
+              <Link href="/pricing" className="btn-link">See full pricing <span className="btn-arrow">&rarr;</span></Link>.
             </p>
             <p>
               Need a place to stay?{" "}
-              <Link href="/accommodation" className="text-primary hover:text-primary-dim transition-colors font-medium">Accommodation options</Link>
+              <Link href="/accommodation" className="btn-link">Accommodation options <span className="btn-arrow">&rarr;</span></Link>
               {" "}are available near both camps.
             </p>
           </div>
@@ -223,7 +240,8 @@ export default function DTVVisaPage() {
       {/* FAQ */}
       <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-3xl mx-auto">
-          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface mb-8">
+          <SectionLabel label="FAQ" />
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface mb-8">
             Frequently Asked Questions
           </h2>
           <FAQAccordion items={faqs} />
@@ -235,10 +253,10 @@ export default function DTVVisaPage() {
         <div className="max-w-4xl mx-auto text-center text-on-surface-variant text-base">
           <p>
             Looking for a shorter stay? Check the{" "}
-            <Link href="/visa/90-days" className="text-primary hover:text-primary-dim transition-colors font-medium">90-day Muay Thai visa</Link>
+            <Link href="/visa/90-days" className="btn-link">90-day Muay Thai visa <span className="btn-arrow">&rarr;</span></Link>
             .{" "}
             Ready to book?{" "}
-            <Link href="/booking" className="text-primary hover:text-primary-dim transition-colors font-medium">Reserve your training</Link>.
+            <Link href="/booking" className="btn-link">Reserve your training <span className="btn-arrow">&rarr;</span></Link>.
           </p>
         </div>
       </section>
@@ -257,6 +275,8 @@ export default function DTVVisaPage() {
         description="Book a training package and receive your acceptance letter within 24 hours."
         buttonText="Book Now"
         href="/booking"
+        ghostText="View Pricing"
+        ghostHref="/pricing"
       />
     </>
   );

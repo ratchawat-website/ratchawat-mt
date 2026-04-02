@@ -65,34 +65,35 @@ export default function ServicesPage() {
       {/* Transportation */}
       <section className="pb-16 sm:pb-20 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-6xl mx-auto">
-          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface mb-8">
+          <div className="flex items-center gap-3 mb-4"><span className="w-8 h-[2px] bg-primary" /><span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">GETTING HERE</span><span className="w-8 h-[2px] bg-primary" /></div>
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface mb-8">
             Transportation
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            <GlassCard>
+            <GlassCard number="01">
               <Car size={28} className="text-primary mb-3" />
               <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-2">
                 Airport Pickup
               </h3>
-              <p className="text-on-surface-variant text-sm">
+              <p className="text-on-surface-variant text-xs leading-relaxed">
                 We can arrange pickup from Samui Airport (USM). Let us know your flight details when you book. Cost varies by distance to your accommodation.
               </p>
             </GlassCard>
-            <GlassCard>
+            <GlassCard number="02">
               <Wrench size={28} className="text-primary mb-3" />
               <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-2">
                 Scooter Rental
               </h3>
-              <p className="text-on-surface-variant text-sm">
+              <p className="text-on-surface-variant text-xs leading-relaxed">
                 Most students rent a scooter. From 200 THB/day or 3,000-4,000 THB/month. We can point you to reliable rental shops near both camps.
               </p>
             </GlassCard>
-            <GlassCard>
+            <GlassCard number="03">
               <HelpCircle size={28} className="text-primary mb-3" />
               <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-2">
                 Getting Around
               </h3>
-              <p className="text-on-surface-variant text-sm">
+              <p className="text-on-surface-variant text-xs leading-relaxed">
                 Grab works on Koh Samui. Songthaew (shared taxis) run the main routes. Both camps are easy to reach. See directions on the{" "}
                 <Link href="/camps/bo-phut" className="text-primary hover:text-primary-dim transition-colors">Bo Phut</Link>
                 {" "}and{" "}
@@ -107,34 +108,35 @@ export default function ServicesPage() {
       {/* Training Gear */}
       <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20 bg-surface-lowest/50">
         <div className="max-w-6xl mx-auto">
-          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface mb-8">
+          <div className="flex items-center gap-3 mb-4"><span className="w-8 h-[2px] bg-primary" /><span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">EQUIPMENT</span><span className="w-8 h-[2px] bg-primary" /></div>
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface mb-8">
             Training Gear
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            <GlassCard>
+            <GlassCard number="01">
               <ShoppingBag size={28} className="text-primary mb-3" />
               <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-2">
                 Gear Rental
               </h3>
-              <p className="text-on-surface-variant text-sm">
+              <p className="text-on-surface-variant text-xs leading-relaxed">
                 Gloves and shin guards available at the gym. 100 THB per session. Good enough for your first few days.
               </p>
             </GlassCard>
-            <GlassCard>
+            <GlassCard number="02">
               <Shield size={28} className="text-primary mb-3" />
               <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-2">
                 Buy on the Island
               </h3>
-              <p className="text-on-surface-variant text-sm">
+              <p className="text-on-surface-variant text-xs leading-relaxed">
                 Koh Samui has shops selling Muay Thai gear (Twins, Fairtex, Top King). Budget 1,500-3,000 THB for a decent pair of gloves. We can recommend shops.
               </p>
             </GlassCard>
-            <GlassCard>
+            <GlassCard number="03">
               <ShoppingBag size={28} className="text-primary mb-3" />
               <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-2">
                 What You Need
               </h3>
-              <p className="text-on-surface-variant text-sm">
+              <p className="text-on-surface-variant text-xs leading-relaxed">
                 Minimum: shorts and a t-shirt. For regular training: gloves, shin guards, hand wraps, and a mouthguard. Fighters also need a groin guard and headgear.
               </p>
             </GlassCard>
@@ -145,7 +147,8 @@ export default function ServicesPage() {
       {/* Health Insurance */}
       <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-4xl mx-auto">
-          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface mb-6">
+          <div className="flex items-center gap-3 mb-4"><span className="w-8 h-[2px] bg-primary" /><span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">HEALTH</span><span className="w-8 h-[2px] bg-primary" /></div>
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface mb-6">
             Health Insurance
           </h2>
           <div className="space-y-4 text-on-surface-variant text-base sm:text-lg leading-relaxed">
@@ -199,6 +202,8 @@ export default function ServicesPage() {
         description="We handle the details. You focus on training."
         buttonText="Book Now"
         href="/booking"
+        ghostText="View Pricing"
+        ghostHref="/pricing"
       />
     </>
   );

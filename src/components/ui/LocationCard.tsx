@@ -1,4 +1,4 @@
-import { MapPin, Phone, Mail, Clock, ArrowRight } from "lucide-react";
+import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import Link from "next/link";
 import GlassCard from "./GlassCard";
 
@@ -10,6 +10,7 @@ interface LocationCardProps {
   hours: string;
   mapEmbedUrl: string;
   campPageHref: string;
+  isOpen?: boolean;
   className?: string;
 }
 
@@ -21,11 +22,13 @@ export default function LocationCard({
   hours,
   mapEmbedUrl,
   campPageHref,
+  isOpen = true,
   className = "",
 }: LocationCardProps) {
   return (
-    <GlassCard className={className} hover={false}>
-      <div className="aspect-video rounded-[var(--radius-card)] overflow-hidden mb-6">
+    <GlassCard className={`!p-0 overflow-hidden ${className}`}>
+      {/* Map zone */}
+      <div className="relative aspect-video">
         <iframe
           src={mapEmbedUrl}
           width="100%"
@@ -36,48 +39,51 @@ export default function LocationCard({
           referrerPolicy="no-referrer-when-downgrade"
           title={`Map of ${name}`}
         />
+        {/* Open Now badge */}
+        {isOpen && (
+          <div className="absolute bottom-3 left-3 flex items-center gap-2 bg-black/60 px-3 py-1.5 rounded text-xs uppercase tracking-wider font-semibold text-green-400">
+            <span className="w-2 h-2 rounded-full bg-green-400" />
+            Open Now
+          </div>
+        )}
       </div>
 
-      <h3 className="font-serif text-xl font-bold text-on-surface uppercase mb-4">
-        {name}
-      </h3>
+      {/* Info section */}
+      <div className="p-5">
+        <h3 className="font-serif text-xl font-bold text-on-surface uppercase mb-4">
+          {name}
+        </h3>
 
-      <ul className="space-y-3 text-sm text-on-surface-variant mb-6">
-        <li className="flex items-start gap-3">
-          <MapPin size={16} className="text-primary shrink-0 mt-0.5" />
-          <span>{address}</span>
-        </li>
-        <li className="flex items-center gap-3">
-          <Phone size={16} className="text-primary shrink-0" />
-          <a
-            href={`tel:${phone.replace(/\s/g, "")}`}
-            className="hover:text-primary transition-colors"
-          >
-            {phone}
-          </a>
-        </li>
-        <li className="flex items-center gap-3">
-          <Mail size={16} className="text-primary shrink-0" />
-          <a
-            href={`mailto:${email}`}
-            className="hover:text-primary transition-colors"
-          >
-            {email}
-          </a>
-        </li>
-        <li className="flex items-center gap-3">
-          <Clock size={16} className="text-primary shrink-0" />
-          <span>{hours}</span>
-        </li>
-      </ul>
+        <ul className="space-y-3 text-xs text-on-surface-variant mb-6">
+          <li className="flex items-start gap-3">
+            <MapPin size={16} className="text-primary shrink-0 mt-0.5" />
+            <span>{address}</span>
+          </li>
+          <li className="flex items-center gap-3">
+            <Phone size={16} className="text-primary shrink-0" />
+            <a href={`tel:${phone.replace(/\s/g, "")}`} className="hover:text-primary transition-colors">
+              {phone}
+            </a>
+          </li>
+          <li className="flex items-center gap-3">
+            <Mail size={16} className="text-primary shrink-0" />
+            <a href={`mailto:${email}`} className="hover:text-primary transition-colors">
+              {email}
+            </a>
+          </li>
+          <li className="flex items-center gap-3">
+            <Clock size={16} className="text-primary shrink-0" />
+            <span>{hours}</span>
+          </li>
+        </ul>
 
-      <Link
-        href={campPageHref}
-        className="inline-flex items-center gap-2 text-primary text-sm font-semibold hover:text-primary-dim transition-colors"
-      >
-        View camp details{" "}
-        <ArrowRight size={16} className="transition-transform hover:translate-x-1" />
-      </Link>
+        {/* Bottom link */}
+        <div className="border-t border-outline-variant pt-4">
+          <Link href={campPageHref} className="btn-link">
+            View camp details <span className="btn-arrow">&rarr;</span>
+          </Link>
+        </div>
+      </div>
     </GlassCard>
   );
 }
