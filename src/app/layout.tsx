@@ -60,7 +60,7 @@ export default function RootLayout({
     <html lang="en" className={`${outfit.variable} ${plusJakartaSans.variable}`}>
       <body className="bg-[#0a0a0a]">
         <Navigation />
-        <main>{children}</main>
+        <main className="pt-20">{children}</main>
         <Footer />
       </body>
     </html>

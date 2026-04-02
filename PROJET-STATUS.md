@@ -97,25 +97,25 @@ ratchawat-mt/
 | Route | Title | Status | SEO Meta | JSON-LD | Notes |
 |-------|-------|--------|:--------:|:-------:|-------|
 | `/` | Homepage | **Done** | Yes | Organization + WebSite + AggregateRating | Hero + features + camps + programs + pricing preview + testimonials + team + GEO + CTA |
-| `/about` | About | Planned | -- | -- | |
+| `/about` | About | **Done** | Yes | AboutPage + Organization | Story + 4 values + why students choose us + reputation + GEO + CTA |
 | `/pricing` | Pricing | **Done** | Yes | Course + OfferCatalog + Organization | Full pricing grid: drop-in, weekly, monthly, private, fighter |
-| `/programs` | Programs Overview | Planned | -- | -- | |
-| `/programs/group-adults` | Group Classes (Adults) | Planned | -- | -- | |
-| `/programs/group-kids` | Group Classes (Kids) | Planned | -- | -- | |
-| `/programs/private` | Private Lessons | Planned | -- | -- | |
-| `/programs/fighter` | Fighter Program | Planned | -- | -- | |
+| `/programs` | Programs Overview | **Done** | Yes | Course x4 + Organization | 4 ProgramCards + how it works + GEO + CTA |
+| `/programs/group-adults` | Group Classes (Adults) | **Done** | Yes | Course + Organization | Class structure (6 blocks) + schedule/pricing + GEO + CTA |
+| `/programs/group-kids` | Group Classes (Kids) | **Done** | Yes | Course + Organization | Benefits (6 cards) + parent info + GEO + CTA |
+| `/programs/private` | Private Lessons | **Done** | Yes | Course + Offer + Organization | 4 reasons + 3 trainer previews + pricing + GEO + CTA |
+| `/programs/fighter` | Fighter Program | **Done** | Yes | Course + Organization | Training day (4 blocks) + prerequisites (3) + pricing/accommodation + GEO + CTA |
 | `/booking` | Booking | Planned | -- | -- | Stripe integration |
 | `/contact` | Contact | **Done** | Yes | ContactPage + LocalBusiness x2 + Organization | Form + 2 location cards + maps + contact info |
-| `/camps/bo-phut` | Bo Phut Camp | Planned | -- | -- | + integrated schedule |
-| `/camps/plai-laem` | Plai Laem Camp | Planned | -- | -- | + integrated schedule |
-| `/accommodation` | Accommodation | Planned | -- | -- | |
-| `/services` | Services | Planned | -- | -- | Transport + insurance + gear |
-| `/visa/dtv` | DTV Visa | Planned | -- | -- | High SEO value |
-| `/visa/90-days` | 90-Day Visa | Planned | -- | -- | High SEO value |
-| `/team` | Trainers | Planned | -- | -- | Kroo Wat, Mam, Kong, Nangja |
-| `/gallery` | Gallery | Planned | -- | -- | |
-| `/faq` | FAQ | Planned | -- | -- | FAQPage schema |
-| `/reviews` | Reviews | Planned | -- | -- | AggregateRating schema |
+| `/camps/bo-phut` | Bo Phut Camp | **Done** | Yes | SportsActivityLocation + Organization | Hero + gym description + schedule table + equipment + location card + GEO + CTA |
+| `/camps/plai-laem` | Plai Laem Camp | **Done** | Yes | SportsActivityLocation + Organization | Hero + gym description + schedule table + equipment (8 items) + location card + GEO + CTA |
+| `/accommodation` | Accommodation | **Done** | Yes | LodgingBusiness + Organization | Bo Phut options (3) + Plai Laem options (3) + tips + GEO + CTA |
+| `/services` | Services | **Done** | Yes | Service x3 + Organization | Transport (3 cards) + gear (3 cards) + health insurance + GEO + CTA |
+| `/visa/dtv` | DTV Visa | **Done** | Yes | Article + FAQPage + Organization | Requirements (6) + 4-step process + packages + 6 FAQ + GEO + CTA |
+| `/visa/90-days` | 90-Day Visa | **Done** | Yes | Article + FAQPage + Organization | Highlights (6) + 4-step process + pricing + 6 FAQ + GEO + CTA |
+| `/team` | Trainers | **Done** | Yes | Person x4 + Organization | 4 trainer profiles (alternating layout) + specialties + GEO + CTA |
+| `/gallery` | Gallery | **Done** | Yes | ImageGallery + Organization | 4 sections (Bo Phut, Plai Laem, Training, Team) with placeholders + social links + CTA |
+| `/faq` | FAQ | **Done** | Yes | FAQPage + Organization | 10 Q&A accordion + quick links + GEO |
+| `/reviews` | Reviews | **Done** | Yes | AggregateRating + Review x6 + Organization | 5 score cards + 6 reviews + reviewer tags + GEO + CTA |
 
 ### 2.3 Components
 
@@ -135,17 +135,16 @@ ratchawat-mt/
 | SchemaOrg | `src/components/seo/` | 10 schema builders (org, website, breadcrumb, faq, article, sportsLocation, course, rating, localBusiness, offerCatalog) |
 | ContactForm | `src/components/ui/` | Client form with status states, submits to /api/contact |
 | LocationCard | `src/components/ui/` | Map embed + address/phone/email/hours + camp page link |
+| ScheduleTable | `src/components/ui/` | Responsive HTML schedule table (time x days), replaces image-based schedule |
+| ProgramCard | `src/components/ui/` | Program card with icon, title, level badge, duration badge, description, link |
 
 **Planned (project-specific, to build when needed):**
 
 | Component | Purpose | Build with page |
 |-----------|---------|----------------|
-| ScheduleTable | HTML schedule by location (replaces image-based schedule) | /camps/* |
-| TrainerCard | Trainer profile with photo, bio, specialty | /team |
-| TestimonialCarousel | Google reviews carousel | /reviews |
+| TestimonialCarousel | Google reviews carousel (live API integration) | /reviews (phase 3) |
 | BookingWidget | Booking form with date/program selection + Stripe | /booking |
 | LanguageSwitcher | EN/FR/ES language toggle | layout.tsx (later) |
-| ProgramCard | Program card with level, duration, description | /programs |
 
 ### 2.4 Design system: "Ratchawat Bold"
 
@@ -257,6 +256,28 @@ ratchawat-mt/
 | 2026-04-02 | Added localBusinessSchema + offerCatalogSchema to SchemaOrg.tsx (10 total builders). |
 | 2026-04-02 | Created ContactForm + LocationCard components in src/components/ui/. |
 | 2026-04-02 | Fixed sitemap.ts routes to match actual page slugs (group-adults, private, group-kids, fighter, 90-days). Added /team, /faq, /services routes. |
+| 2026-04-02 | Created ScheduleTable component (responsive HTML schedule, time x days grid). |
+| 2026-04-02 | Created /camps/bo-phut page: hero, gym description, schedule table, 6 equipment cards, LocationCard, GEO passage, SportsActivityLocation schema. |
+| 2026-04-02 | Created /camps/plai-laem page: hero, gym description, schedule table, 8 equipment cards (incl. bodyweight area), LocationCard, GEO passage, SportsActivityLocation schema. |
+| 2026-04-02 | Created ProgramCard component (icon, title, level/duration badges, description, link). |
+| 2026-04-02 | Created /programs overview page with 4 ProgramCards + Course schemas + how it works section. |
+| 2026-04-02 | Created /programs/group-adults: class structure (6 phases), schedule/pricing links, Course+Offer schema. |
+| 2026-04-02 | Created /programs/group-kids: 6 benefit cards, parent info section, Course schema. |
+| 2026-04-02 | Created /programs/private: 4 reason cards, 3 trainer previews (Kroo Wat, Mam, Kong), Course+Offer schema. |
+| 2026-04-02 | Created /programs/fighter: 4 training blocks (typical day), 3 prerequisites, pricing/accommodation links, Course schema. |
+| 2026-04-02 | Created /about page: story, 4 values cards, why students choose us, reputation section, AboutPage schema. |
+| 2026-04-02 | Created /team page: 4 trainer profiles (Kroo Wat, Mam, Kong, Nangja) with alternating layout, specialties badges, Person x4 schemas. |
+| 2026-04-02 | Created /faq page: 10 Q&A items with FAQAccordion, quick links section, FAQPage schema. |
+| 2026-04-02 | Created /reviews page: 5 score cards, 6 student reviews (multi-language), reviewer tags, AggregateRating + Review x6 schemas. |
+| 2026-04-02 | Created /visa/dtv page: DTV explanation, 6 requirements, 4-step process, training packages, 6 FAQ, Article + FAQPage schemas. |
+| 2026-04-02 | Created /visa/90-days page: ED visa explanation, 6 highlights, 4-step process, pricing, 6 FAQ, Article + FAQPage schemas. |
+| 2026-04-02 | Created /accommodation page: Bo Phut (3 options) + Plai Laem (3 options) + tips, LodgingBusiness schema. |
+| 2026-04-02 | Created /services page: transport (3 cards), gear (3 cards), health insurance section, Service x3 schemas. |
+| 2026-04-02 | Created /gallery page: 4 gallery sections with placeholders, ImageGallery schema. Awaiting real photos. |
+| 2026-04-02 | Fixed breadcrumbs hidden behind fixed nav: added pt-20 to main in layout.tsx. |
+| 2026-04-02 | Rebuilt Navigation: glassmorphism style, detached from top (pt-3), centered (max-w-6xl), rounded-2xl, backdrop-blur-xl, scroll-aware opacity. Added About + Camps submenu. |
+| 2026-04-02 | Rebuilt Footer: 5 columns (Training, Camps, Info, Contact + brand), all 20+ pages now accessible. |
+| 2026-04-02 | Revised font pairing: reduced H1/H2/Hero sizes by one step, H2 now font-semibold without uppercase, added letter-spacing -0.01em for elegance. |
 
 ---
 

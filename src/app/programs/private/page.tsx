@@ -1,0 +1,197 @@
+import { generatePageMeta } from "@/lib/seo/meta";
+import Breadcrumbs from "@/components/layout/Breadcrumbs";
+import GlassCard from "@/components/ui/GlassCard";
+import CTABanner from "@/components/ui/CTABanner";
+import ImagePlaceholder from "@/components/ui/ImagePlaceholder";
+import JsonLd from "@/components/seo/JsonLd";
+import {
+  organizationSchema,
+  courseSchema,
+} from "@/components/seo/SchemaOrg";
+import { UserCheck, Target, Clock, Flame } from "lucide-react";
+import Link from "next/link";
+
+export const metadata = generatePageMeta({
+  title: "Private Muay Thai Lessons Koh Samui | 1-on-1 Training \u2014 Ratchawat",
+  description:
+    "Book private Muay Thai lessons in Koh Samui with experienced Thai trainers. Personalized 1-on-1 sessions. All levels. Book & pay online.",
+  path: "/programs/private",
+});
+
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://ratchawatmuaythai.com";
+
+const privateCourse = courseSchema({
+  name: "Private Muay Thai Lessons",
+  description:
+    "One-on-one Muay Thai training with experienced Thai trainers at Ratchawat Koh Samui. Fully personalized sessions.",
+  url: `${SITE_URL}/programs/private`,
+  offers: { price: 800, priceCurrency: "THB" },
+});
+
+const trainers = [
+  {
+    name: "Kroo Wat",
+    role: "Head Trainer",
+    description: "The boss. Years of fighting and coaching experience. Calm, precise, and patient with beginners.",
+  },
+  {
+    name: "Mam",
+    role: "Trainer",
+    description: "Fast hands, sharp eye for technique. Good at breaking down combinations step by step.",
+  },
+  {
+    name: "Kong",
+    role: "Trainer",
+    description: "Strong clinch game. Popular with students who want to work on the inside fighting aspects of Muay Thai.",
+  },
+];
+
+const reasons = [
+  {
+    icon: UserCheck,
+    title: "Your Pace",
+    description: "The trainer adapts to what you need. Basics, advanced technique, fight prep, or just fitness.",
+  },
+  {
+    icon: Target,
+    title: "Full Attention",
+    description: "Every round, every correction is for you. You learn faster this way.",
+  },
+  {
+    icon: Clock,
+    title: "Flexible Timing",
+    description: "Book outside group class hours. Morning, midday, whatever fits your schedule.",
+  },
+  {
+    icon: Flame,
+    title: "Custom Intensity",
+    description: "Want a light technical session? Hard conditioning? Your call.",
+  },
+];
+
+export default function PrivateLessonsPage() {
+  return (
+    <>
+      <JsonLd data={[organizationSchema(), privateCourse]} />
+
+      <Breadcrumbs
+        items={[
+          { label: "Home", href: "/" },
+          { label: "Programs", href: "/programs" },
+          { label: "Private Lessons" },
+        ]}
+      />
+
+      {/* Page Header */}
+      <section className="py-12 sm:py-16 px-6 sm:px-10 md:px-16 lg:px-20">
+        <div className="max-w-4xl mx-auto text-center">
+          <h1 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface">
+            Private Muay Thai Lessons
+          </h1>
+          <p className="mt-4 text-on-surface-variant text-lg max-w-2xl mx-auto">
+            One-on-one with a Thai trainer. Your level, your goals, your session.
+          </p>
+        </div>
+      </section>
+
+      {/* Why Private */}
+      <section className="pb-16 sm:pb-20 px-6 sm:px-10 md:px-16 lg:px-20">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+          <div>
+            <h2 className="font-serif text-xl sm:text-2xl font-semibold text-on-surface mb-6">
+              Why Go Private
+            </h2>
+            <div className="space-y-4 text-on-surface-variant text-base sm:text-lg leading-relaxed">
+              <p>
+                Group classes are great for the energy and routine. But if you want to drill specific things, work at your own speed, or just get more pad time with a trainer, a private session is the way to go.
+              </p>
+              <p>
+                Each session lasts about an hour. The trainer will ask what you want to work on, then build the session around that. If you are not sure, they will figure out where you are and take it from there.
+              </p>
+              <p>
+                Private lessons work well combined with group classes. Train with the group in the morning, do a private in the afternoon to polish what you learned.
+              </p>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            {reasons.map((item) => (
+              <GlassCard key={item.title}>
+                <item.icon size={24} className="text-primary mb-2" />
+                <h3 className="font-serif text-base font-bold text-on-surface uppercase mb-1">
+                  {item.title}
+                </h3>
+                <p className="text-on-surface-variant text-xs">
+                  {item.description}
+                </p>
+              </GlassCard>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Trainers */}
+      <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20 bg-surface-lowest/50">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="font-serif text-xl sm:text-2xl font-semibold text-on-surface mb-8">
+            Your Trainers
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            {trainers.map((trainer) => (
+              <GlassCard key={trainer.name}>
+                <ImagePlaceholder category="team" aspectRatio="aspect-square" className="mb-4" />
+                <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-1">
+                  {trainer.name}
+                </h3>
+                <p className="text-primary text-xs font-semibold uppercase tracking-wider mb-2">
+                  {trainer.role}
+                </p>
+                <p className="text-on-surface-variant text-sm">
+                  {trainer.description}
+                </p>
+              </GlassCard>
+            ))}
+          </div>
+          <p className="mt-6 text-on-surface-variant text-base">
+            Get to know the full team on the{" "}
+            <Link href="/team" className="text-primary hover:text-primary-dim transition-colors font-medium">trainers page</Link>.
+          </p>
+        </div>
+      </section>
+
+      {/* Pricing */}
+      <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="font-serif text-xl sm:text-2xl font-semibold text-on-surface mb-6">
+            Pricing & Booking
+          </h2>
+          <div className="space-y-4 text-on-surface-variant text-base sm:text-lg leading-relaxed">
+            <p>
+              Private sessions start at 800 THB per hour. Multi-session packages bring the price down.{" "}
+              <Link href="/pricing" className="text-primary hover:text-primary-dim transition-colors font-medium">See full pricing</Link>.
+            </p>
+            <p>
+              Book online and pay securely through Stripe, or message us on WhatsApp to arrange a time.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* GEO Citable Passage */}
+      <section className="py-12 px-6 sm:px-10 md:px-16 lg:px-20">
+        <div className="max-w-3xl mx-auto">
+          <p className="text-on-surface-variant text-base leading-relaxed text-center">
+            Private 1-on-1 Muay Thai lessons at Ratchawat Koh Samui are available with experienced Thai trainers including Kroo Wat, Mam, and Kong. Sessions are fully personalized to your level and goals. Available at both Bo Phut and Plai Laem locations. Book and pay online.
+          </p>
+        </div>
+      </section>
+
+      <CTABanner
+        title="Book a Private Session"
+        description="From 800 THB per hour. Pick your trainer, pick your time."
+        buttonText="Book Now"
+        href="/booking"
+      />
+    </>
+  );
+}

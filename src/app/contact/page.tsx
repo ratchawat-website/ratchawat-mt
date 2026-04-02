@@ -113,7 +113,7 @@ export default function ContactPage() {
       {/* Page Header */}
       <section className="py-12 sm:py-16 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-on-surface uppercase">
+          <h1 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface">
             Contact Us
           </h1>
           <p className="mt-4 text-on-surface-variant text-lg max-w-2xl mx-auto">
@@ -212,7 +212,7 @@ export default function ContactPage() {
       {/* Find Us */}
       <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20 bg-surface-lowest/50">
         <div className="max-w-6xl mx-auto">
-          <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-on-surface uppercase text-center mb-12">
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface text-center mb-12">
             Find Us
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

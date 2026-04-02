@@ -145,7 +145,7 @@ export default function HomePage() {
       {/* Why Train at Ratchawat */}
       <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-6xl mx-auto">
-          <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-on-surface uppercase text-center mb-12">
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface text-center mb-12">
             Why Train at Ratchawat
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -170,7 +170,7 @@ export default function HomePage() {
       {/* Our Two Camps */}
       <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20 bg-surface-lowest/50">
         <div className="max-w-6xl mx-auto">
-          <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-on-surface uppercase text-center mb-12">
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface text-center mb-12">
             Our Two Camps
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -205,7 +205,7 @@ export default function HomePage() {
       {/* Training Programs */}
       <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-6xl mx-auto">
-          <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-on-surface uppercase text-center mb-12">
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface text-center mb-12">
             Training Programs
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -241,7 +241,7 @@ export default function HomePage() {
               <div className="flex items-center gap-3">
                 <DollarSign className="w-8 h-8 text-primary shrink-0" strokeWidth={1.5} />
                 <div>
-                  <h2 className="font-serif text-2xl sm:text-3xl font-bold text-on-surface uppercase">
+                  <h2 className="font-serif text-xl sm:text-2xl font-semibold text-on-surface">
                     Training Prices
                   </h2>
                   <p className="text-on-surface-variant text-sm mt-1">
@@ -281,7 +281,7 @@ export default function HomePage() {
       {/* What Our Students Say */}
       <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-6xl mx-auto">
-          <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-on-surface uppercase text-center mb-4">
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface text-center mb-4">
             What Our Students Say
           </h2>
           <p className="text-on-surface-variant text-center mb-12">
@@ -330,7 +330,7 @@ export default function HomePage() {
       {/* Meet the Team */}
       <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20 bg-surface-lowest/50">
         <div className="max-w-6xl mx-auto">
-          <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-on-surface uppercase text-center mb-12">
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface text-center mb-12">
             Meet the Team
           </h2>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">

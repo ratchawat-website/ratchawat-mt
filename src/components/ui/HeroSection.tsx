@@ -19,8 +19,8 @@ export default function HeroSection({ title, subtitle, imageSrc, imageAlt, ctaTe
       )}
       <div className="absolute inset-0 bg-black/50" />
       <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
-        <h1 className="font-serif text-4xl sm:text-5xl lg:text-7xl font-bold text-white leading-tight tracking-tight uppercase">{title}</h1>
-        {subtitle && <p className="mt-6 text-lg sm:text-xl text-white/80 font-sans max-w-2xl mx-auto">{subtitle}</p>}
+        <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight tracking-tight uppercase">{title}</h1>
+        {subtitle && <p className="mt-5 text-base sm:text-lg text-white/70 font-sans max-w-2xl mx-auto">{subtitle}</p>}
         {ctaText && ctaHref && (
           <div className="mt-8">
             <a href={ctaHref} className="inline-flex items-center gap-2 bg-primary text-white font-semibold px-8 py-4 rounded-[0.5rem] hover:bg-primary-dim transition-colors text-lg">

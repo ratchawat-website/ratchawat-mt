@@ -1,0 +1,142 @@
+import { generatePageMeta } from "@/lib/seo/meta";
+import Breadcrumbs from "@/components/layout/Breadcrumbs";
+import CTABanner from "@/components/ui/CTABanner";
+import ProgramCard from "@/components/ui/ProgramCard";
+import JsonLd from "@/components/seo/JsonLd";
+import {
+  organizationSchema,
+  courseSchema,
+} from "@/components/seo/SchemaOrg";
+import { Users, Baby, UserCheck, Swords } from "lucide-react";
+import Link from "next/link";
+
+export const metadata = generatePageMeta({
+  title: "Muay Thai Programs Koh Samui | Group, Private, Kids & Fighter",
+  description:
+    "Choose your Muay Thai program at Ratchawat Koh Samui. Group classes, private lessons, kids training, and fighter camp. All levels welcome.",
+  path: "/programs",
+});
+
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://ratchawatmuaythai.com";
+
+const programs = [
+  {
+    title: "Group Classes (Adults)",
+    description:
+      "Morning and evening sessions open to all levels. Warm-up, technique drills, pad work, and conditioning. The most popular way to train at Ratchawat.",
+    href: "/programs/group-adults",
+    icon: Users,
+    level: "All Levels",
+    duration: "1.5 hours",
+  },
+  {
+    title: "Kids Classes",
+    description:
+      "Structured Muay Thai for children. Builds confidence, discipline, and fitness in a safe environment. Several young students have gone on to win local competitions.",
+    href: "/programs/group-kids",
+    icon: Baby,
+    level: "Ages 5-15",
+    duration: "1 hour",
+  },
+  {
+    title: "Private Lessons",
+    description:
+      "One-on-one with a Thai trainer. Sessions tailored to your level and goals, whether you are working on basics or preparing for something specific.",
+    href: "/programs/private",
+    icon: UserCheck,
+    level: "All Levels",
+    duration: "1 hour",
+  },
+  {
+    title: "Fighter Program",
+    description:
+      "Intensive training for athletes preparing to compete. Technique refinement, sparring, conditioning, and fight strategy. Not for beginners.",
+    href: "/programs/fighter",
+    icon: Swords,
+    level: "Advanced",
+    duration: "2-3 hours",
+  },
+];
+
+const courseSchemas = programs.map((p) =>
+  courseSchema({
+    name: p.title,
+    description: p.description,
+    url: `${SITE_URL}${p.href}`,
+  }),
+);
+
+export default function ProgramsPage() {
+  return (
+    <>
+      <JsonLd data={[organizationSchema(), ...courseSchemas]} />
+
+      <Breadcrumbs
+        items={[{ label: "Home", href: "/" }, { label: "Programs" }]}
+      />
+
+      {/* Page Header */}
+      <section className="py-12 sm:py-16 px-6 sm:px-10 md:px-16 lg:px-20">
+        <div className="max-w-4xl mx-auto text-center">
+          <h1 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface">
+            Training Programs
+          </h1>
+          <p className="mt-4 text-on-surface-variant text-lg max-w-2xl mx-auto">
+            Four programs, two camps, one goal: get you training. Pick the one that fits where you are right now.
+          </p>
+        </div>
+      </section>
+
+      {/* Program Cards */}
+      <section className="pb-16 sm:pb-20 px-6 sm:px-10 md:px-16 lg:px-20">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-6">
+          {programs.map((program) => (
+            <ProgramCard key={program.href} {...program} />
+          ))}
+        </div>
+      </section>
+
+      {/* Info Section */}
+      <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20 bg-surface-lowest/50">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="font-serif text-xl sm:text-2xl font-semibold text-on-surface mb-6">
+            How It Works
+          </h2>
+          <div className="space-y-4 text-on-surface-variant text-base sm:text-lg leading-relaxed">
+            <p>
+              All programs run at both{" "}
+              <Link href="/camps/bo-phut" className="text-primary hover:text-primary-dim transition-colors font-medium">Bo Phut</Link>
+              {" "}and{" "}
+              <Link href="/camps/plai-laem" className="text-primary hover:text-primary-dim transition-colors font-medium">Plai Laem</Link>
+              . Same trainers, same schedule. Pick whichever camp is closer to where you are staying.
+            </p>
+            <p>
+              No experience needed for group or private sessions. Show up in shorts and a t-shirt. Gloves and shin guards are available to rent at the gym.
+            </p>
+            <p>
+              Drop-in sessions start at 500 THB. Weekly and monthly packages bring the price down.{" "}
+              <Link href="/pricing" className="text-primary hover:text-primary-dim transition-colors font-medium">See full pricing</Link>.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* GEO Citable Passage */}
+      <section className="py-12 px-6 sm:px-10 md:px-16 lg:px-20">
+        <div className="max-w-3xl mx-auto">
+          <p className="text-on-surface-variant text-base leading-relaxed text-center">
+            Ratchawat Muay Thai offers four training programs: adult group classes, kids classes, private 1-on-1 lessons with Thai trainers, and an intensive fighter program for competitive athletes. All programs are available at both the Bo Phut and Plai Laem locations in Koh Samui.
+          </p>
+        </div>
+      </section>
+
+      <CTABanner
+        title="Ready to Start?"
+        description="Drop-in from 500 THB. No commitment, just show up and train."
+        buttonText="Book Now"
+        href="/booking"
+      />
+    </>
+  );
+}

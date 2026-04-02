@@ -65,7 +65,7 @@ export default function PricingPage() {
       {/* Page Header */}
       <section className="py-12 sm:py-16 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-on-surface uppercase">
+          <h1 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface">
             Muay Thai Training Prices
           </h1>
           <p className="mt-4 text-on-surface-variant text-lg max-w-2xl mx-auto">
@@ -78,7 +78,7 @@ export default function PricingPage() {
       {/* Drop-in Sessions */}
       <section className="pb-16 sm:pb-20 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-4xl mx-auto">
-          <h2 className="font-serif text-2xl sm:text-3xl font-bold text-on-surface uppercase text-center mb-8">
+          <h2 className="font-serif text-xl sm:text-2xl font-semibold text-on-surface text-center mb-8">
             Drop-in Sessions
           </h2>
           <GlassCard>
@@ -122,7 +122,7 @@ export default function PricingPage() {
       {/* Weekly & Monthly Packages */}
       <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20 bg-surface-lowest/50">
         <div className="max-w-4xl mx-auto">
-          <h2 className="font-serif text-2xl sm:text-3xl font-bold text-on-surface uppercase text-center mb-8">
+          <h2 className="font-serif text-xl sm:text-2xl font-semibold text-on-surface text-center mb-8">
             Weekly & Monthly Packages
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -209,7 +209,7 @@ export default function PricingPage() {
       {/* Private Lessons */}
       <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-4xl mx-auto">
-          <h2 className="font-serif text-2xl sm:text-3xl font-bold text-on-surface uppercase text-center mb-8">
+          <h2 className="font-serif text-xl sm:text-2xl font-semibold text-on-surface text-center mb-8">
             Private Lessons
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -302,7 +302,7 @@ export default function PricingPage() {
       {/* Fighter Program */}
       <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20 bg-surface-lowest/50">
         <div className="max-w-4xl mx-auto">
-          <h2 className="font-serif text-2xl sm:text-3xl font-bold text-on-surface uppercase text-center mb-8">
+          <h2 className="font-serif text-xl sm:text-2xl font-semibold text-on-surface text-center mb-8">
             Fighter Program Packages
           </h2>
           <GlassCard>
@@ -364,7 +364,7 @@ export default function PricingPage() {
       {/* What's Included */}
       <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-4xl mx-auto">
-          <h2 className="font-serif text-2xl sm:text-3xl font-bold text-on-surface uppercase text-center mb-8">
+          <h2 className="font-serif text-xl sm:text-2xl font-semibold text-on-surface text-center mb-8">
             What&#39;s Included
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

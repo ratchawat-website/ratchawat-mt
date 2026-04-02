@@ -5,3 +5,5 @@ export { default as FAQAccordion } from "./FAQAccordion";
 export { default as ImagePlaceholder } from "./ImagePlaceholder";
 export { default as ContactForm } from "./ContactForm";
 export { default as LocationCard } from "./LocationCard";
+export { default as ScheduleTable } from "./ScheduleTable";
+export { default as ProgramCard } from "./ProgramCard";
