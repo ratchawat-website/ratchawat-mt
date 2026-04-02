@@ -356,36 +356,187 @@ After each page: `npm run build` + `npm run lint` + update this file.
 | 17 | **Services** | `/services` | Transport, gear, health insurance (3 sections) | Service |
 | 18 | **Gallery** | `/gallery` | Photo/video grid (placeholder until real content) | ImageGallery |
 
-#### Wave 5 -- Booking flow (requires Stripe keys)
+#### Wave 5 -- Booking flow (DONE, Stripe graceful fallback)
 
-| # | Page | Route | Key content | New components needed |
-|---|------|-------|-------------|----------------------|
-| 19 | **Booking** | `/booking` | Camp selector, program selector, date picker, Stripe checkout | `BookingWidget` |
-| 20 | **Booking Confirmed** | `/booking/confirmed` | Thank you page, confirmation details, next steps | -- |
+| # | Page | Route | Status | Notes |
+|---|------|-------|--------|-------|
+| 19 | **Booking** | `/booking` | **Done** | 4-step BookingWidget, reads ?package= and ?camp= query params, graceful Stripe fallback |
+| 20 | **Booking Confirmed** | `/booking/confirmed` | **Done** | Success page with next steps, noIndex |
+
+**Current behavior without Stripe keys:** The BookingWidget displays the full booking flow (package > camp > date > confirm). When the user clicks "Pay", it calls `/api/checkout` which fails gracefully and shows a message with WhatsApp/email links to book manually.
+
+**Current behavior without Resend keys:** The contact form at `/contact` submits to `/api/contact` which fails silently. The user sees an error message.
+
+**Current behavior without Supabase keys:** The middleware at `src/middleware.ts` skips auth entirely. No user accounts, no booking persistence. The site works as a static frontend.
+
+---
 
 ### Phase 2: Backend setup (requires API keys)
 
-When ready to connect services:
+#### Step 1: Stripe (payments)
 
-1. **Supabase**
-   - Create project on supabase.com
-   - Create tables: `bookings`, `schedules`, `trainers`, `programs`, `faq_items`, `testimonials`
-   - Configure Row Level Security (RLS)
-   - Enable Email auth
-   - Copy URL + anon key + service role key to .env.local
+**Account setup:**
+1. Create Stripe account at stripe.com
+2. Get API keys from Stripe Dashboard > Developers > API Keys
+3. Set in `.env.local`:
+   ```
+   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_...
+   STRIPE_SECRET_KEY=sk_test_...
+   ```
 
-2. **Stripe**
-   - Create account on stripe.com
-   - Create products: "Drop-in Session" (50000 satang), "Private Lesson", packages
-   - Create webhook endpoint pointing to /api/webhooks/stripe
-   - Copy publishable key + secret key + webhook secret to .env.local
+**Create Stripe Products (Dashboard > Products):**
 
-3. **Resend**
-   - Create account on resend.com
-   - Verify domain ratchawatmuaythai.com
-   - Copy API key to .env.local
+| Product Name | Price (THB) | Price in satang | Stripe Price ID needed |
+|-------------|------------|----------------|----------------------|
+| Drop-in Session | 500 | 50000 | No (created dynamically) |
+| Weekly Package (5 Days) | 2,000 | 200000 | No |
+| Monthly Unlimited | 5,500 | 550000 | No |
+| Private Lesson (Single) | 1,500 | 150000 | No |
+| Private Lessons (10-Pack) | 12,000 | 1200000 | No |
+| Fighter Monthly | 8,000 | 800000 | No |
 
-4. **Set all keys in .env.local** (copy from .env.local.example)
+**Note:** The current checkout API (`src/app/api/checkout/route.ts`) creates prices dynamically using `price_data` rather than pre-created Stripe Price IDs. This works but means products are not tracked in Stripe Dashboard. To improve:
+- Create each product in Stripe Dashboard
+- Store the `price_xxx` IDs
+- Update `BookingWidget.tsx` to send `priceId` instead of `amount`
+- Update `src/app/api/checkout/route.ts` to use `price: priceId` instead of `price_data`
+
+**Webhook setup:**
+1. In Stripe Dashboard > Developers > Webhooks, create endpoint:
+   - URL: `https://ratchawatmuaythai.com/api/webhooks/stripe`
+   - Events: `checkout.session.completed`
+2. Copy webhook signing secret to `.env.local`:
+   ```
+   STRIPE_WEBHOOK_SECRET=whsec_...
+   ```
+
+**Files to update when adding Stripe:**
+
+| File | What to do |
+|------|-----------|
+| `src/app/api/checkout/route.ts` | Currently works. Optional: switch from `price_data` to pre-created `price` IDs |
+| `src/app/api/webhooks/stripe/route.ts` | Add logic at the TODO comment (line 22): save booking to Supabase, send confirmation email via Resend |
+| `src/app/booking/BookingWidget.tsx` | Currently works. The `handleSubmit` function calls `/api/checkout` and redirects to Stripe. No changes needed for basic flow. Optional: pass `priceId` instead of `amount` |
+| `.env.local` | Add `STRIPE_SECRET_KEY`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`, `STRIPE_WEBHOOK_SECRET` |
+
+**Booking flow (how it works):**
+```
+User selects package/camp/date on /booking
+  → BookingWidget calls POST /api/checkout with { productName, amount, email }
+  → /api/checkout creates Stripe Checkout Session with success_url=/booking/confirmed
+  → User redirected to Stripe Checkout (hosted page)
+  → After payment, Stripe redirects to /booking/confirmed
+  → Stripe sends webhook to /api/webhooks/stripe (checkout.session.completed)
+  → Webhook handler should: save to Supabase + send email via Resend
+```
+
+**Connected links (query params):**
+- `/pricing` page: each "Book X" button links to `/booking?package=ID`
+- Package IDs: `drop-in`, `weekly`, `monthly`, `private-single`, `private-10`, `fighter`
+- Camp IDs: `bo-phut`, `plai-laem`, `both`
+- Example: `/booking?package=monthly&camp=bo-phut` pre-selects Monthly + Bo Phut
+
+---
+
+#### Step 2: Resend (emails)
+
+**Account setup:**
+1. Create account at resend.com
+2. Verify domain `ratchawatmuaythai.com` (add DNS records)
+3. Create API key
+4. Set in `.env.local`:
+   ```
+   RESEND_API_KEY=re_...
+   ```
+
+**Currently implemented emails:**
+
+| Trigger | File | From | To | Purpose |
+|---------|------|------|----|---------|
+| Contact form submit | `src/app/api/contact/route.ts` | contact@ratchawatmuaythai.com | chor.ratchawat@gmail.com | Notification to gym |
+| Contact form submit | `src/app/api/contact/route.ts` | contact@ratchawatmuaythai.com | User's email | Auto-reply confirmation |
+
+**Emails to add (Phase 2):**
+
+| Trigger | Where to add | From | To | Purpose |
+|---------|-------------|------|----|---------|
+| Stripe checkout.session.completed | `src/app/api/webhooks/stripe/route.ts` (line 22 TODO) | booking@ratchawatmuaythai.com | User's email | Booking confirmation with details |
+| Stripe checkout.session.completed | `src/app/api/webhooks/stripe/route.ts` (line 22 TODO) | booking@ratchawatmuaythai.com | chor.ratchawat@gmail.com | New booking notification to gym |
+
+---
+
+#### Step 3: Supabase (database + auth)
+
+**Account setup:**
+1. Create project on supabase.com (region: Singapore for Thailand proximity)
+2. Set in `.env.local`:
+   ```
+   NEXT_PUBLIC_SUPABASE_URL=https://xxx.supabase.co
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
+   SUPABASE_SERVICE_ROLE_KEY=eyJ...
+   ```
+
+**Tables to create:**
+
+| Table | Columns | Purpose | Used by |
+|-------|---------|---------|---------|
+| `bookings` | id, user_id, package_id, camp, start_date, stripe_session_id, status, created_at | Store all bookings | Webhook handler, admin |
+| `schedules` | id, camp, day_of_week, time_slot, class_type, trainer_id | Class schedule per camp | Optional: dynamic schedule |
+| `trainers` | id, name, role, bio, specialties, photo_url | Trainer profiles | Optional: dynamic /team page |
+| `programs` | id, name, slug, description, price_thb | Program data | Optional: dynamic pricing |
+| `faq_items` | id, question, answer, sort_order | FAQ content | Optional: dynamic /faq |
+| `testimonials` | id, name, country, text, rating, approved | Student reviews | Optional: dynamic /reviews |
+
+**Priority order:** Only `bookings` is required for Phase 2. Other tables are for Phase 3 (dynamic content from CMS).
+
+**Row Level Security (RLS):**
+- `bookings`: users can read their own bookings, service role can write
+- Other tables: public read, service role write (admin only)
+
+**Auth:**
+- Enable Email auth in Supabase Dashboard > Auth > Providers
+- The middleware at `src/middleware.ts` already uses `@supabase/ssr` for session refresh
+- Protected routes (if needed): `/booking/confirmed`, user account pages
+
+**Files already scaffolded:**
+
+| File | Status | Purpose |
+|------|--------|---------|
+| `src/lib/supabase/client.ts` | Ready | Browser Supabase client |
+| `src/lib/supabase/server.ts` | Ready | Server Supabase client |
+| `src/lib/supabase/middleware.ts` | Ready | Session refresh helper |
+| `src/middleware.ts` | Ready | Gracefully skips when keys not set |
+
+**Files to update when adding Supabase:**
+
+| File | What to do |
+|------|-----------|
+| `src/app/api/webhooks/stripe/route.ts` | Insert booking record into `bookings` table after payment |
+| `src/middleware.ts` | Already works, will start refreshing sessions once keys are set |
+
+---
+
+#### Step 4: Set all keys
+
+Copy `.env.local.example` to `.env.local` and fill in all values:
+
+```bash
+cp .env.local.example .env.local
+```
+
+Required keys:
+```
+NEXT_PUBLIC_SITE_URL=https://ratchawatmuaythai.com
+NEXT_PUBLIC_SUPABASE_URL=https://xxx.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
+SUPABASE_SERVICE_ROLE_KEY=eyJ...
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_...
+STRIPE_SECRET_KEY=sk_test_...
+STRIPE_WEBHOOK_SECRET=whsec_...
+RESEND_API_KEY=re_...
+```
+
+**Test order:** Stripe first (booking flow), then Resend (emails), then Supabase (persistence).
 
 ### Phase 3: Polish & launch preparation
 
