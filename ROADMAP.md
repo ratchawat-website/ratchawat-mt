@@ -10,7 +10,7 @@
 
 ## Phase 1 — Content & Pricing Foundation
 
-**Status:** IN PROGRESS
+**Status:** COMPLETE
 **Goal:** Real prices on every page. Centralized price catalog. Production documentation in place.
 **Blocker:** None.
 **Spec:** `docs/superpowers/specs/2026-04-11-production-phase-design.md`
@@ -33,7 +33,7 @@
 - [x] Update `/` homepage — drop-in 400 THB
 - [x] `npm run lint` — 0 errors
 - [x] `npm run build` — 0 errors
-- [ ] Commit
+- [x] Commit
 
 ### Success criteria
 
