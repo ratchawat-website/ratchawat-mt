@@ -12,7 +12,7 @@ import { Clock, Zap, Shield, Heart, Users, Target } from "lucide-react";
 import Link from "next/link";
 
 export const metadata = generatePageMeta({
-  title: "Muay Thai Group Classes Koh Samui | All Levels \u2014 Ratchawat",
+  title: "Muay Thai Group Classes Koh Samui | All Levels - Ratchawat",
   description:
     "Join Muay Thai group classes at Ratchawat in Koh Samui. Morning & evening sessions, all levels welcome. Drop-in or book a weekly package.",
   path: "/programs/group-adults",

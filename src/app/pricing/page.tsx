@@ -55,8 +55,8 @@ export default function PricingPage() {
               { name: "Monthly Package 2x/day", price: 7000, description: "2 sessions per day for one month" },
               { name: "Private Lesson Adult 1-on-1", price: 800, description: "60-minute solo private session" },
               { name: "Private Lesson Adult Group", price: 600, description: "60-minute group private session" },
-              { name: "Private Lesson Kids 1-on-1", price: 600, description: "45-minute solo private session for kids" },
-              { name: "Private Lesson Kids Group", price: 400, description: "45-minute group private session for kids" },
+              { name: "Private Lesson Kids 1-on-1", price: 600, description: "60-minute solo private session for kids" },
+              { name: "Private Lesson Kids Group", price: 400, description: "60-minute group private session for kids" },
               { name: "Fighter Program Monthly", price: 9500, description: "Full fighter prep: 2x/day training, yoga, ice bath, fight organisation and corner support" },
               { name: "Resident Pack 10 Classes", price: 3000, description: "10 classes for Koh Samui residents" },
               { name: "Resident Pack 20 Classes", price: 5500, description: "20 classes for Koh Samui residents" },
@@ -367,14 +367,14 @@ export default function PricingPage() {
                 <li className="flex items-start justify-between gap-4">
                   <div className="flex items-start gap-2 text-on-surface-variant">
                     <Check size={16} className="text-primary shrink-0 mt-0.5" />
-                    <span>1-on-1 private session (45 min)</span>
+                    <span>1-on-1 private session (60 min)</span>
                   </div>
                   <span className="font-bold text-primary shrink-0">600 THB</span>
                 </li>
                 <li className="flex items-start justify-between gap-4">
                   <div className="flex items-start gap-2 text-on-surface-variant">
                     <Check size={16} className="text-primary shrink-0 mt-0.5" />
-                    <span>Small group private session (45 min)</span>
+                    <span>Small group private session (60 min)</span>
                   </div>
                   <span className="font-bold text-primary shrink-0">400 THB</span>
                 </li>
@@ -490,9 +490,6 @@ export default function PricingPage() {
                 <li className="flex items-center gap-2">
                   <Check size={16} className="text-primary shrink-0" /> For Koh Samui residents
                 </li>
-                <li className="flex items-center gap-2">
-                  <Check size={16} className="text-primary shrink-0" /> Valid 60 days
-                </li>
               </ul>
               <Link
                 href="/contact"
@@ -520,9 +517,6 @@ export default function PricingPage() {
                 </li>
                 <li className="flex items-center gap-2">
                   <Check size={16} className="text-primary shrink-0" /> For Koh Samui residents
-                </li>
-                <li className="flex items-center gap-2">
-                  <Check size={16} className="text-primary shrink-0" /> Valid 90 days
                 </li>
               </ul>
               <Link

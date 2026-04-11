@@ -9,7 +9,7 @@ import { MapPin, Wifi, Utensils, Bed, DollarSign, Users, Check } from "lucide-re
 import Link from "next/link";
 
 export const metadata = generatePageMeta({
-  title: "Muay Thai Accommodation Koh Samui | Train & Stay \u2014 Ratchawat",
+  title: "Muay Thai Accommodation Koh Samui | Train & Stay - Ratchawat",
   description:
     "Stay near Ratchawat Muay Thai in Koh Samui. Accommodation options near both Bo Phut and Plai Laem camps. Training + stay packages available.",
   path: "/accommodation",

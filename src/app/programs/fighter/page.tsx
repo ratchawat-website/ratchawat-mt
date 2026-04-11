@@ -12,7 +12,7 @@ import { Swords, Zap, Brain, Timer, Dumbbell, Shield } from "lucide-react";
 import Link from "next/link";
 
 export const metadata = generatePageMeta({
-  title: "Fighter Program Koh Samui | Train to Fight \u2014 Ratchawat Muay Thai",
+  title: "Fighter Program Koh Samui | Train to Fight - Ratchawat Muay Thai",
   description:
     "Intensive Muay Thai fighter program at Ratchawat Koh Samui. Fight preparation, sparring, conditioning. For serious athletes ready to compete.",
   path: "/programs/fighter",

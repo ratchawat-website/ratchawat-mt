@@ -12,7 +12,7 @@ import { Shield, Heart, Trophy, Brain, Smile, Users } from "lucide-react";
 import Link from "next/link";
 
 export const metadata = generatePageMeta({
-  title: "Kids Muay Thai Classes Koh Samui | Safe & Fun \u2014 Ratchawat",
+  title: "Kids Muay Thai Classes Koh Samui | Safe & Fun - Ratchawat",
   description:
     "Kids Muay Thai at Ratchawat Koh Samui. Safe, structured classes for children. Build confidence, discipline & fitness. Family-friendly gym.",
   path: "/programs/group-kids",
