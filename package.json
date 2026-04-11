@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "stripe:seed": "tsx scripts/stripe-seed-products.ts"
   },
   "dependencies": {
     "@react-email/components": "^1.0.12",
