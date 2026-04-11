@@ -4,7 +4,7 @@
 > Each agent must read it at the start of a conversation and update it after each modification.
 
 **Last updated:** 2026-04-11
-**Phase:** Phase 1 -- Content & Pricing Foundation (IN PROGRESS)
+**Phase:** Phase 3 -- Booking System Full Stack (IN PROGRESS, awaiting Stripe client credentials)
 **Project status:** Production refonte accepted by client. Maquette phase complete. Building toward full deployment (no live deployment until all 6 phases complete).
 **Rebuilt from:** https://ratchawatmuaythai.com/
 
@@ -268,6 +268,7 @@ ratchawat-mt/
 
 | Date | Description |
 |------|-------------|
+| 2026-04-11 | **Phase 3 Booking System Full Stack (code complete, Stripe seed pending):** Rebuilt entire booking subsystem. Deleted legacy `src/app/booking/BookingWidget.tsx` (flat 4-step widget with hardcoded packages, ignored pricing.ts). Rebuilt `/booking` landing with 4 clear type cards (Group Training, Private Lessons, Fighter Program, Camp Stay) with camp badges. Built 4 dedicated wizard routes: `/booking/training` (5 steps), `/booking/private` (5 steps with AvailabilityCalendar + 4 time slots filtered per date), `/booking/fighter` (5 steps with 3 tiers, conditional camp lock for stay tiers), `/booking/camp-stay` (4 steps with auto-computed checkout date and camp='both'). Rewrote `/booking/confirmed` as async Server Component resolving booking via `stripe.checkout.sessions.retrieve(session_id)` then querying Supabase via `createAdminClient` (service_role bypass RLS). Created 5 shared components in `src/components/booking/`: BookingWizard shell, DatePicker (react-day-picker wrapper), AvailabilityCalendar (Supabase-connected), ContactInfoForm, BookingReview. Created Supabase client helpers (`src/lib/supabase/{browser,server,admin}.ts`). Added Zod validation (`src/lib/validation/booking.ts`). Rewrote `/api/checkout` (Zod + Supabase insert + Stripe session creation with booking_id metadata) and `/api/webhooks/stripe` (signature verification + booking status update + Resend emails). Added Resend email templates (BookingConfirmed, BookingNotification as React Email components) + send helpers. Installed deps: react-day-picker, date-fns, @supabase/ssr, @supabase/supabase-js, @react-email/render, zod, tsx, dotenv. Created Supabase migration `supabase/migrations/20260411000000_init.sql` (bookings + availability_blocks tables with RLS, num_participants, time_slot, camp='both'). Created idempotent Stripe seed script `scripts/stripe-seed-products.ts`. Applied ARCHITECTURE.md 7 corrections (drop /booking/accommodation, rewrite Fighter to 3 tiers, add cross-camp note, add num_participants/time_slot/camp='both' to schema, confirmed page service_role pattern, priceTodo Stripe note). Renumbered ROADMAP.md: merged Phase 3 UI + Phase 4 Backend into new Phase 3 Full Stack, renumbered phases 4-6 (Admin / Security / Go-live). Reclassified `fighter-stay-room-monthly` and `fighter-stay-bungalow-monthly` from `camp-stay` to `fighter` bookingType. Smoke test partial PASS: all 6 booking routes 200, Zod validation rejects bad bodies with issue details, `/api/checkout` reaches Stripe step and fails cleanly on missing `stripePriceId` (expected), Supabase anon client reads availability_blocks (2 test blocks in place), service_role admin client reads bookings. `npm run lint` 0 errors, `npm run build` 0 errors (32 pages). |
 | 2026-04-11 | **/accommodation rebuild + bungalow tier:** Removed Bo Phut accommodation section and all external partner lodging (US Hostel, guesthouses). Page now presents on-site stay at Plai Laem camp only: 12-photo horizontal carousel (6 rooms + 6 bungalows), Standard Rooms section (4 rooms, 8 amenities), Private Bungalows section (4 bungalows limited, 10 amenities including king bed, kitchenette, private terrace), 4-card Camp Stay Packages in 2x2 grid (1 week 8k / 2 weeks 15k / 1 month Room 18k / 1 month Bungalow 23k), new Fighter Program + Stay section (Fighter + Room ~20k, Fighter + Bungalow ~25k, prices TODO pending client confirmation), and 3 "Why stay here" benefits. Extended `src/content/pricing.ts` with `camp-stay-bungalow-monthly`, `fighter-stay-room-monthly`, `fighter-stay-bungalow-monthly`. Added Camp Stay section to `/pricing` page. Updated `/programs/fighter` to mention Fighter + Accommodation tiers. Updated Schema.org LodgingBusiness with amenityFeature, meta description, GEO passage, AUDIT-SEO.md PAGE 13. |
 | 2026-04-02 | Initial project setup via project-init skill (32 files) |
 | 2026-04-02 | Fixed layout.tsx imports (components/layout/ path) |
@@ -318,9 +319,12 @@ ratchawat-mt/
 |---|----------|-------|--------|
 | 1 | Low | Next.js 16 warns "middleware" is deprecated, use "proxy" | Won't fix now |
 | 2 | Medium | All images are placeholders (no real photos) | Pending client content |
-| 3 | Medium | API keys not configured (Supabase, Stripe, Resend) | TO DO LATER |
-| 4 | Low | Blog section not implemented (phase 3) | Planned |
-| 5 | Low | Multi-language (FR/ES) not implemented yet | Planned |
+| 3 | High | Stripe TEST keys not in .env.local (waiting for client dashboard credentials) | Blocks full E2E smoke test of payment flow |
+| 4 | Low | Fighter+Room and Fighter+Bungalow prices are approximate (20k/25k THB) | Pending client confirmation |
+| 5 | Low | Supabase RLS policy `anon_insert_bookings` rejects direct anon inserts even though `with check (true)` is set. Not a blocker because /api/checkout uses service_role which bypasses RLS. To investigate and either remove the policy (simpler security model) or fix the check condition. | Follow-up in Phase 5 Security |
+| 6 | Medium | npm audit flags `next@16.0.0` high severity DoS (GHSA-q4gf-8mx6-v5v3). Fix requires `--force` upgrade to 16.2.3 | Deferred to Phase 5 Security |
+| 7 | Low | Blog section not implemented | Planned post-launch |
+| 8 | Low | Multi-language (FR/ES) not implemented yet | Planned post-launch |
 
 ---
 
@@ -328,21 +332,19 @@ ratchawat-mt/
 
 > Read `ROADMAP.md` for the full phased plan and current task list.
 
-### Current phase: Phase 1 -- Content & Pricing Foundation
+### Current phase: Phase 3 -- Booking System Full Stack (in progress, awaiting Stripe credentials)
 
-See `ROADMAP.md` for complete task checklist and success criteria.
+See `ROADMAP.md` for complete task checklist and success criteria. 24 of 27 tasks done. Remaining: full Stripe seed + full end-to-end payment smoke test + phase close.
 
 ### External blockers (actions required from RD)
 
 | Blocker | Needed for | Action |
 |---------|-----------|--------|
-| New GitHub account (client) | Phase 3 | Create account, add as project owner |
-| New Supabase account (client) | Phase 3 | Sign up with client GitHub |
-| Stripe account access | Phase 3 | Client shares Stripe dashboard access |
-| Bluehost domain access | Phase 6 | Analyze + transfer domain |
-| Fighter + accommodation price | Phase 5 | Confirm with client |
-| Real photos | Phase 5 | Client delivers photos |
-| Resend domain verification | Phase 3 | Requires DNS access to ratchawatmuaythai.com |
+| **Stripe TEST keys from client dashboard** | Finish Phase 3 Task 25 (Stripe seed + webhook listener) | Client must share access to Stripe dashboard in TEST mode |
+| Bluehost domain access | Phase 6 Go-live | Analyze + transfer domain |
+| Fighter + accommodation final prices | Phase 5 Security & Quality | Confirm with client (currently 20k/25k approximate) |
+| Real photos | Phase 5 Security & Quality | Client delivers photos |
+| Resend domain verification | Phase 6 Go-live | Requires DNS access to ratchawatmuaythai.com (currently using sandbox `onboarding@resend.dev`) |
 
 ---
 
