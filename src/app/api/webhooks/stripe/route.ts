@@ -7,7 +7,12 @@ import {
 } from "@/lib/email/send";
 import type { BookingEmailData } from "@/lib/email/types";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+function getStripe(): Stripe {
+  if (!process.env.STRIPE_SECRET_KEY) {
+    throw new Error("STRIPE_SECRET_KEY is not set");
+  }
+  return new Stripe(process.env.STRIPE_SECRET_KEY);
+}
 
 export async function POST(request: Request) {
   const signature = request.headers.get("stripe-signature");
@@ -17,6 +22,7 @@ export async function POST(request: Request) {
 
   const body = await request.text();
 
+  const stripe = getStripe();
   let event: Stripe.Event;
   try {
     event = stripe.webhooks.constructEvent(
