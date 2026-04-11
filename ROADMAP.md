@@ -4,7 +4,7 @@
 > Update task statuses as work progresses. Never start work without checking the current phase.
 
 **Last updated:** 2026-04-11
-**Current phase:** Phase 2 — Accommodation Page Redesign
+**Current phase:** Phase 3 — Booking System Full Stack
 
 ---
 
@@ -82,78 +82,63 @@
 
 ---
 
-## Phase 3 — Booking System UI
+## Phase 3 — Booking System Full Stack
 
-**Status:** PENDING
-**Goal:** All 5 booking flows navigable. Training flow connected to Stripe (no availability needed). Other flows show correct UI with static placeholders for availability.
+**Status:** IN PROGRESS
+**Goal:** 4 booking flows fully functional in dev with real Supabase persistence, Stripe Checkout, and Resend emails. Replaces the legacy flat BookingWidget.
 **Blocker:** Phase 2 complete.
-**Spec:** `docs/superpowers/specs/2026-04-11-production-phase-design.md` § 3
+**Spec:** `docs/superpowers/specs/2026-04-11-booking-system-full-stack-design.md`
+**Plan:** `docs/superpowers/plans/2026-04-11-booking-system-full-stack.md`
 
 ### Routes to build
 
-- [ ] `/booking` — landing with 3 type-selection cards
+- [ ] `/booking` — landing with 4 type selection cards (training / private / fighter / camp-stay)
 - [ ] `/booking/training` — 5-step wizard (package, camp, date, contact, payment)
-- [ ] `/booking/private` — wizard with static availability slots
-- [ ] `/booking/accommodation` — wizard with static calendar
-- [ ] `/booking/camp-stay` — wizard with static calendar + packages
-- [ ] `/booking/fighter` — wizard with accommodation option
-- [ ] `/booking/confirmed` — post-payment confirmation
+- [ ] `/booking/private` — 5-step wizard (session type, camp, date+time-slot, contact, payment)
+- [ ] `/booking/fighter` — 5-step wizard (info, tier, camp+date, contact, payment)
+- [ ] `/booking/camp-stay` — 4-step wizard (package, check-in, contact, payment)
+- [ ] `/booking/confirmed` — server component reading Supabase via service_role
 
 ### Components to build
 
-- [ ] `BookingWizard` — shell with step indicator + navigation
-- [ ] `DatePicker` — simple (no availability check)
-- [ ] `AvailabilityCalendar` — static for now, wired to Supabase in Phase 3
-- [ ] `ContactInfoForm` — name, email, phone, nationality
-- [ ] `BookingReview` — summary before Stripe redirect
+- [ ] `BookingWizard` — shared shell with step indicator and navigation
+- [ ] `DatePicker` — react-day-picker wrapper with design tokens
+- [ ] `AvailabilityCalendar` — Supabase-connected calendar for private and camp-stay
+- [ ] `ContactInfoForm` — name, email, phone, nationality, num_participants, notes
+- [ ] `BookingReview` — summary and Pay button
+
+### Backend to wire
+
+- [ ] Supabase project (dedicated account) + migration for bookings + availability_blocks + RLS policies
+- [ ] Stripe test-mode products (22 seeded) via `scripts/stripe-seed-products.ts`
+- [ ] Rewrite `/api/checkout` with Zod + Supabase insert + Stripe Checkout Session
+- [ ] Rewrite `/api/webhooks/stripe` with signature verification + booking update + email send
+- [ ] Resend integration with BookingConfirmed and BookingNotification React templates
+
+### Setup to perform
+
+- [ ] Create Supabase project + run migration SQL
+- [ ] Configure .env.local with Supabase + Stripe + Resend keys
+- [ ] Run `npx tsx scripts/stripe-seed-products.ts` to create products
+- [ ] Start `stripe listen --forward-to localhost:3000/api/webhooks/stripe` for webhook
 
 ### Success criteria
 
-All routes accessible. Training flow completes through Stripe Checkout. `npm run build` passes.
+All 4 booking flows payable end-to-end with Stripe test card `4242 4242 4242 4242`. Bookings appear in Supabase with `status='confirmed'`. Client and admin emails received. `npm run build` passes with 0 errors.
+
+### Known follow-ups (deferred)
+
+- Replace approximate prices for `fighter-stay-room-monthly` and `fighter-stay-bungalow-monthly` once client confirms
+- Rate limiting, CORS, and Zod hardening on API routes (tracked in new Phase 5)
+- Domain verification for Resend production sender (tracked in new Phase 6)
 
 ---
 
-## Phase 4 — Backend Integration
-
-**Status:** PENDING
-**Goal:** Supabase + Stripe + Resend fully operational. All booking flows live with real availability.
-**Blocker:** New Supabase account ready (client GitHub account required).
-
-### Tasks
-
-- [ ] Create Supabase project (client account)
-- [ ] Run migration: `bookings` table
-- [ ] Run migration: `availability_blocks` table
-- [ ] Configure RLS policies (see ARCHITECTURE.md)
-- [ ] Create Stripe products + prices for all `PriceItem.id` values
-- [ ] Wire Stripe webhook (`/api/webhooks/stripe`)
-- [ ] Configure Resend (domain verification)
-- [ ] Build email templates (booking confirmed, admin notification)
-- [ ] Wire `AvailabilityCalendar` to Supabase
-- [ ] Wire all booking flows to Supabase + Stripe
-- [ ] Set `.env.local` with all real keys
-- [ ] End-to-end test all 5 booking flows
-
-### External blockers
-
-| Action | Owner |
-|--------|-------|
-| Create GitHub account for client | RD |
-| Create Supabase account with client GitHub | RD |
-| Get Stripe account access from client | RD |
-| DNS access for Resend domain verification | RD (after domain transfer) |
-
-### Success criteria
-
-Full booking + payment + email confirmation works for all 5 flows.
-
----
-
-## Phase 5 — Admin Dashboard
+## Phase 4 — Admin Dashboard
 
 **Status:** PENDING
 **Goal:** Gym owner can manage bookings and availability from `/admin`.
-**Blocker:** Phase 4 complete.
+**Blocker:** Phase 3 complete.
 
 ### Tasks
 
@@ -169,11 +154,11 @@ Admin logs in, views all bookings, updates availability. No unauthenticated acce
 
 ---
 
-## Phase 6 — Security & Quality
+## Phase 5 — Security & Quality
 
 **Status:** PENDING
 **Goal:** Production-ready. Lighthouse targets met. Zero critical vulnerabilities.
-**Blocker:** Phase 5 complete.
+**Blocker:** Phase 4 complete.
 
 ### Tasks
 
@@ -193,11 +178,11 @@ Security scan: 0 critical, 0 high findings. All Lighthouse targets met.
 
 ---
 
-## Phase 7 — Go-live
+## Phase 6 — Go-live
 
 **Status:** PENDING
 **Goal:** Site live at ratchawatmuaythai.com.
-**Blocker:** Domain transfer confirmed + Phase 6 complete.
+**Blocker:** Domain transfer confirmed + Phase 5 complete.
 
 ### Tasks
 

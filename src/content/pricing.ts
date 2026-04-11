@@ -1,7 +1,6 @@
 export type BookingType =
   | "training"
   | "private"
-  | "accommodation"
   | "camp-stay"
   | "fighter";
 
@@ -441,7 +440,7 @@ export const PRICES: PriceItem[] = [
       "Wi-Fi",
     ],
     notes: "Plai Laem camp only. Electricity charged separately. Price pending final client confirmation.",
-    bookingType: "camp-stay",
+    bookingType: "fighter",
   },
   {
     id: "fighter-stay-bungalow-monthly",
@@ -459,7 +458,7 @@ export const PRICES: PriceItem[] = [
       "Wi-Fi",
     ],
     notes: "Plai Laem camp only. Electricity charged separately. Limited to 4 bungalows. Price pending final client confirmation.",
-    bookingType: "camp-stay",
+    bookingType: "fighter",
   },
 ];
 
