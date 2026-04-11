@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import BookingWizard from "@/components/booking/BookingWizard";
 import DatePicker from "@/components/booking/DatePicker";
@@ -13,6 +13,11 @@ import { MapPin } from "lucide-react";
 import { getPricesByBookingType, getPriceById } from "@/content/pricing";
 
 const STEPS = ["Package", "Camp", "Date", "Contact", "Review"];
+
+// Computed once at module load; filter is stable since pricing.ts is static.
+const TRAINING_PACKAGES = getPricesByBookingType("training").filter(
+  (p) => !p.id.startsWith("bodyweight-"),
+);
 
 const CAMPS = [
   {
@@ -38,9 +43,7 @@ const DEFAULT_CONTACT: ContactInfo = {
 
 export default function TrainingWizard() {
   const searchParams = useSearchParams();
-  const packages = getPricesByBookingType("training").filter(
-    (p) => !p.id.startsWith("bodyweight-"),
-  );
+  const packages = TRAINING_PACKAGES;
 
   const [step, setStep] = useState(0);
   const [priceId, setPriceId] = useState<string | null>(null);
@@ -50,13 +53,18 @@ export default function TrainingWizard() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Consume `?package=` on mount only. Running once prevents the effect from
+  // re-firing later and snapping the step back when the user clicks Continue.
+  const initializedRef = useRef(false);
   useEffect(() => {
+    if (initializedRef.current) return;
+    initializedRef.current = true;
     const pkg = searchParams.get("package");
-    if (pkg && packages.some((p) => p.id === pkg)) {
+    if (pkg && TRAINING_PACKAGES.some((p) => p.id === pkg)) {
       setPriceId(pkg);
       setStep(1);
     }
-  }, [searchParams, packages]);
+  }, [searchParams]);
 
   const selectedPackage = priceId ? getPriceById(priceId) : null;
 

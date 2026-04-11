@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import BookingWizard from "@/components/booking/BookingWizard";
 import AvailabilityCalendar from "@/components/booking/AvailabilityCalendar";
@@ -12,6 +12,9 @@ import BookingReview from "@/components/booking/BookingReview";
 import { getPricesByBookingType, getPriceById } from "@/content/pricing";
 
 const STEPS = ["Package", "Check-in", "Contact", "Review"];
+
+// Computed once at module load; reference stays stable across re-renders.
+const CAMP_STAY_PACKAGES = getPricesByBookingType("camp-stay");
 
 const DEFAULT_CONTACT: ContactInfo = {
   name: "",
@@ -41,7 +44,7 @@ function formatDate(d: Date): string {
 
 export default function CampStayWizard() {
   const searchParams = useSearchParams();
-  const packages = getPricesByBookingType("camp-stay");
+  const packages = CAMP_STAY_PACKAGES;
 
   const [step, setStep] = useState(0);
   const [priceId, setPriceId] = useState<string | null>(null);
@@ -50,13 +53,18 @@ export default function CampStayWizard() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Consume `?package=` on mount only. Running once prevents the effect from
+  // re-firing later and snapping the step back when the user clicks Continue.
+  const initializedRef = useRef(false);
   useEffect(() => {
+    if (initializedRef.current) return;
+    initializedRef.current = true;
     const pkg = searchParams.get("package");
-    if (pkg && packages.some((p) => p.id === pkg)) {
+    if (pkg && CAMP_STAY_PACKAGES.some((p) => p.id === pkg)) {
       setPriceId(pkg);
       setStep(1);
     }
-  }, [searchParams, packages]);
+  }, [searchParams]);
 
   const selectedPackage = priceId ? getPriceById(priceId) : null;
 

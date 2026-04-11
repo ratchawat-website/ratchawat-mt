@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import BookingWizard from "@/components/booking/BookingWizard";
 import AvailabilityCalendar from "@/components/booking/AvailabilityCalendar";
@@ -13,6 +13,9 @@ import { MapPin } from "lucide-react";
 import { getPricesByBookingType, getPriceById } from "@/content/pricing";
 
 const STEPS = ["Session type", "Camp", "Date & Time", "Contact", "Review"];
+
+// Computed once at module load; reference stays stable across re-renders.
+const PRIVATE_PACKAGES = getPricesByBookingType("private");
 
 const CAMPS = [
   {
@@ -42,7 +45,7 @@ function isGroupPrice(id: string): boolean {
 
 export default function PrivateWizard() {
   const searchParams = useSearchParams();
-  const packages = getPricesByBookingType("private");
+  const packages = PRIVATE_PACKAGES;
 
   const [step, setStep] = useState(0);
   const [priceId, setPriceId] = useState<string | null>(null);
@@ -59,13 +62,18 @@ export default function PrivateWizard() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Consume `?package=` on mount only. Running once prevents the effect from
+  // re-firing later and snapping the step back when the user clicks Continue.
+  const initializedRef = useRef(false);
   useEffect(() => {
+    if (initializedRef.current) return;
+    initializedRef.current = true;
     const pkg = searchParams.get("package");
-    if (pkg && packages.some((p) => p.id === pkg)) {
+    if (pkg && PRIVATE_PACKAGES.some((p) => p.id === pkg)) {
       setPriceId(pkg);
       setStep(1);
     }
-  }, [searchParams, packages]);
+  }, [searchParams]);
 
   const selectedPackage = priceId ? getPriceById(priceId) : null;
   const isGroup = priceId ? isGroupPrice(priceId) : false;
