@@ -73,7 +73,20 @@ export async function POST(request: Request) {
       );
     }
 
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+    // Build success/cancel URLs from the actual request origin.
+    // This works in dev (localhost:3000) and prod without depending on
+    // NEXT_PUBLIC_SITE_URL, which is set for SSR metadata and may legitimately
+    // point to the production domain even when we are running locally.
+    const origin =
+      request.headers.get("origin") ??
+      (() => {
+        const host = request.headers.get("host");
+        const proto =
+          request.headers.get("x-forwarded-proto") ??
+          (host?.startsWith("localhost") ? "http" : "https");
+        return host ? `${proto}://${host}` : "http://localhost:3000";
+      })();
+
     const stripe = getStripe();
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
@@ -88,8 +101,8 @@ export async function POST(request: Request) {
         booking_id: booking.id,
       },
       customer_email: data.client_email,
-      success_url: `${siteUrl}/booking/confirmed?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${siteUrl}/booking?cancelled=1`,
+      success_url: `${origin}/booking/confirmed?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${origin}/booking?cancelled=1`,
     });
 
     return NextResponse.json({ url: session.url });
