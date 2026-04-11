@@ -49,6 +49,7 @@ const lodgingSchema = {
     addressCountry: "TH",
   },
   priceRange: "฿฿",
+  numberOfRooms: 8,
   amenityFeature: [
     { "@type": "LocationFeatureSpecification", name: "Air conditioning", value: true },
     { "@type": "LocationFeatureSpecification", name: "Wi-Fi", value: true },
@@ -175,7 +176,7 @@ export default function AccommodationPage() {
             <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface">
               Standard Rooms
             </h2>
-            <span className="badge-underline badge-orange">4 ROOMS AVAILABLE</span>
+            <span className="badge-underline badge-orange">7 ROOMS AVAILABLE</span>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
             <div className="space-y-4 text-on-surface-variant leading-relaxed">
@@ -239,17 +240,17 @@ export default function AccommodationPage() {
           </div>
           <div className="flex items-center justify-between flex-wrap gap-3 mb-8">
             <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface">
-              Private Bungalows
+              The Private Bungalow
             </h2>
-            <span className="badge-underline badge-orange">4 BUNGALOWS, LIMITED</span>
+            <span className="badge-underline badge-orange">1 BUNGALOW, UNIQUE</span>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
             <div className="space-y-4 text-on-surface-variant leading-relaxed">
               <p>
-                The bungalows are the premium option. Stand-alone, private, with a king-size bed, a dressing area, and a full living space with dining and a fitted kitchenette. The private terrace opens over the shared pool.
+                The bungalow is the premium option. Stand-alone, private, with a king-size bed, a dressing area, and a full living space with dining and a fitted kitchenette. The private terrace opens over the shared pool.
               </p>
               <p>
-                Built for longer stays, fighters bringing family, or anyone who wants a real home during training. Only four bungalows exist, so they fill up fast.
+                Built for longer stays, fighters bringing family, or anyone who wants a real home during training. There is only one bungalow on-site, so it books out months in advance.
               </p>
             </div>
             <div className="grid grid-cols-2 gap-4">
@@ -360,14 +361,14 @@ export default function AccommodationPage() {
               </Link>
             </GlassCard>
             <GlassCard>
-              <div className="mb-2"><span className="badge-underline badge-orange">Premium - 4 left</span></div>
+              <div className="mb-2"><span className="badge-underline badge-orange">Unique - 1 on-site</span></div>
               <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-3">1 Month - Bungalow</h3>
               <div className="mb-4">
                 <span className="font-serif text-4xl font-bold text-primary">23,000</span>
                 <span className="text-on-surface-variant text-sm ml-1">THB</span>
               </div>
               <ul className="space-y-2 text-sm text-on-surface-variant mb-6">
-                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> 30 nights in a private bungalow</li>
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> 30 nights in the private bungalow</li>
                 <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> King bed, kitchenette, private terrace</li>
                 <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> Unlimited group training</li>
                 <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> Wi-Fi</li>
@@ -395,7 +396,7 @@ export default function AccommodationPage() {
             Fighter Program + Accommodation
           </h2>
           <p className="text-center text-on-surface-variant text-sm mb-10 max-w-2xl mx-auto">
-            Fighter program combined with a monthly stay. Two tiers: standard room or private bungalow. Prices are approximate and pending final client confirmation.
+            Fighter program combined with a monthly stay. Two tiers: standard room or the unique private bungalow. The Fighter + Room price is approximate and pending final client confirmation.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <GlassCard>
@@ -416,21 +417,21 @@ export default function AccommodationPage() {
               </Link>
             </GlassCard>
             <GlassCard>
-              <div className="mb-2"><span className="badge-underline badge-orange">Premium - 4 left</span></div>
+              <div className="mb-2"><span className="badge-underline badge-orange">Unique - 1 on-site</span></div>
               <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-3">Fighter + Bungalow</h3>
               <div className="mb-4">
-                <span className="font-serif text-4xl font-bold text-primary">~25,000</span>
+                <span className="font-serif text-4xl font-bold text-primary">25,500</span>
                 <span className="text-on-surface-variant text-sm ml-1">THB/month</span>
               </div>
               <ul className="space-y-2 text-sm text-on-surface-variant mb-6">
                 <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> 2x/day training, yoga, ice bath</li>
                 <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> Fight organization + support</li>
-                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> 30 nights in a private bungalow</li>
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> 30 nights in the private bungalow</li>
                 <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> King bed, kitchenette, private terrace</li>
-                <li className="flex items-center gap-2 opacity-50"><Check size={16} className="shrink-0" aria-hidden="true" /> Electricity separate. Price pending confirmation.</li>
+                <li className="flex items-center gap-2 opacity-50"><Check size={16} className="shrink-0" aria-hidden="true" /> Electricity charged separately</li>
               </ul>
-              <Link href="/contact" className="btn-primary w-full justify-center">
-                Contact Us <span className="btn-arrow">&rarr;</span>
+              <Link href="/booking/fighter" className="btn-primary w-full justify-center">
+                Apply Now <span className="btn-arrow">&rarr;</span>
               </Link>
             </GlassCard>
           </div>
@@ -470,7 +471,7 @@ export default function AccommodationPage() {
       <section className="py-12 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-3xl mx-auto">
           <p className="text-on-surface-variant text-base leading-relaxed text-center">
-            Chor Ratchawat Muay Thai offers on-site accommodation at its Plai Laem camp in Koh Samui. Standard rooms include a double bed, private bathroom, air conditioning, Wi-Fi, and a private balcony with pool view. Private bungalows add a king-size bed, a fitted kitchenette, a living and dining area, and a private terrace over the shared pool. Camp Stay packages start at 8,000 THB per week for rooms or 23,000 THB per month for bungalows (4 available), and combine unlimited group training with accommodation in one price.
+            Chor Ratchawat Muay Thai offers on-site accommodation at its Plai Laem camp in Koh Samui. The camp has 7 standard rooms and 1 private bungalow. Standard rooms include a double bed, private bathroom, air conditioning, Wi-Fi, and a private balcony with pool view. The private bungalow adds a king-size bed, a fitted kitchenette, a living and dining area, and a private terrace over the shared pool. Camp Stay packages start at 8,000 THB per week for a room and 23,000 THB per month for the bungalow, and combine unlimited group training with accommodation in one price.
           </p>
         </div>
       </section>

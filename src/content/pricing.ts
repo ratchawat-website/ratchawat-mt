@@ -37,6 +37,8 @@ export const PRICES: PriceItem[] = [
   // --- GROUP TRAINING (ADULT) ---
   {
     id: "drop-in-adult",
+    stripeProductId: "prod_UJh4fbwG6ygUrF",
+    stripePriceId: "price_1TL3gARu1Uc6NzUvSgLsgmaY",
     name: "Drop-in Session (Adult)",
     nameShort: "Drop-in",
     category: "group",
@@ -53,6 +55,8 @@ export const PRICES: PriceItem[] = [
   },
   {
     id: "weekly-1x",
+    stripeProductId: "prod_UJh4CP5HQSTSqk",
+    stripePriceId: "price_1TL3gBRu1Uc6NzUv83Hbyk6Y",
     name: "1 Week — 1 Session/Day",
     nameShort: "1 Week (1x/day)",
     category: "group",
@@ -70,6 +74,8 @@ export const PRICES: PriceItem[] = [
   },
   {
     id: "weekly-2x",
+    stripeProductId: "prod_UJh4QBRiRLrJt7",
+    stripePriceId: "price_1TL3gBRu1Uc6NzUv8rRlkrBC",
     name: "1 Week — 2 Sessions/Day",
     nameShort: "1 Week (2x/day)",
     category: "group",
@@ -87,6 +93,8 @@ export const PRICES: PriceItem[] = [
   },
   {
     id: "biweekly-1x",
+    stripeProductId: "prod_UJh4VvVcXVZEc5",
+    stripePriceId: "price_1TL3gCRu1Uc6NzUvijdQUZ76",
     name: "2 Weeks — 1 Session/Day",
     nameShort: "2 Weeks (1x/day)",
     category: "group",
@@ -104,6 +112,8 @@ export const PRICES: PriceItem[] = [
   },
   {
     id: "biweekly-2x",
+    stripeProductId: "prod_UJh4USRFja6dBB",
+    stripePriceId: "price_1TL3gDRu1Uc6NzUv1JfSXzm5",
     name: "2 Weeks — 2 Sessions/Day",
     nameShort: "2 Weeks (2x/day)",
     category: "group",
@@ -121,6 +131,8 @@ export const PRICES: PriceItem[] = [
   },
   {
     id: "monthly-1x",
+    stripeProductId: "prod_UJh4tcv5VCdNFj",
+    stripePriceId: "price_1TL3gERu1Uc6NzUvwlwr6UwK",
     name: "Monthly — 1 Session/Day",
     nameShort: "Monthly (1x/day)",
     category: "group",
@@ -139,6 +151,8 @@ export const PRICES: PriceItem[] = [
   },
   {
     id: "monthly-2x",
+    stripeProductId: "prod_UJh4L3MEKITK8L",
+    stripePriceId: "price_1TL3gFRu1Uc6NzUvLOHIOWeb",
     name: "Monthly — 2 Sessions/Day",
     nameShort: "Monthly (2x/day)",
     category: "group",
@@ -158,6 +172,8 @@ export const PRICES: PriceItem[] = [
   // --- GROUP TRAINING (KIDS 8-13) ---
   {
     id: "drop-in-kids",
+    stripeProductId: "prod_UJh4gSFTIJxxtY",
+    stripePriceId: "price_1TL3gHRu1Uc6NzUvM8naG1Zn",
     name: "Drop-in Session (Kids 8-13)",
     nameShort: "Kids Drop-in",
     category: "kids",
@@ -174,6 +190,8 @@ export const PRICES: PriceItem[] = [
   },
   {
     id: "monthly-kids",
+    stripeProductId: "prod_UJh4xE2AR2ebdg",
+    stripePriceId: "price_1TL3gHRu1Uc6NzUvzC4sqdAr",
     name: "Monthly Unlimited (Kids 8-13)",
     nameShort: "Kids Monthly",
     category: "kids",
@@ -193,6 +211,8 @@ export const PRICES: PriceItem[] = [
   // --- RESIDENT (KOH SAMUI) ---
   {
     id: "resident-10",
+    stripeProductId: "prod_UJh4ul51Pe9DJz",
+    stripePriceId: "price_1TL3gIRu1Uc6NzUvH77Uf9pM",
     name: "Resident 10 Classes",
     nameShort: "Resident 10x",
     category: "resident",
@@ -210,6 +230,8 @@ export const PRICES: PriceItem[] = [
   },
   {
     id: "resident-20",
+    stripeProductId: "prod_UJh4bqa2s1V8Ra",
+    stripePriceId: "price_1TL3gJRu1Uc6NzUvVC2DjREX",
     name: "Resident 20 Classes",
     nameShort: "Resident 20x",
     category: "resident",
@@ -230,6 +252,8 @@ export const PRICES: PriceItem[] = [
   // --- PRIVATE LESSONS (ADULT) ---
   {
     id: "private-adult-solo",
+    stripeProductId: "prod_UJh4kc75JQna2q",
+    stripePriceId: "price_1TL3gKRu1Uc6NzUvwM0juIF7",
     name: "Private Lesson 1-on-1 (Adult)",
     nameShort: "Private 1-on-1",
     category: "private-adult",
@@ -246,6 +270,8 @@ export const PRICES: PriceItem[] = [
   },
   {
     id: "private-adult-group",
+    stripeProductId: "prod_UJh47v38QjpAfA",
+    stripePriceId: "price_1TL3gLRu1Uc6NzUvLoCZSVze",
     name: "Private Group 2-3 (Adult)",
     nameShort: "Private Group",
     category: "private-adult",
@@ -265,6 +291,8 @@ export const PRICES: PriceItem[] = [
   // --- PRIVATE LESSONS (KIDS) ---
   {
     id: "private-kids-solo",
+    stripeProductId: "prod_UJh4BkRQsTY603",
+    stripePriceId: "price_1TL3gMRu1Uc6NzUvFopE0wpO",
     name: "Private Lesson 1-on-1 (Kids)",
     nameShort: "Private Kids 1-on-1",
     category: "private-kids",
@@ -281,6 +309,8 @@ export const PRICES: PriceItem[] = [
   },
   {
     id: "private-kids-group",
+    stripeProductId: "prod_UJh4A9p61wAlWG",
+    stripePriceId: "price_1TL3gNRu1Uc6NzUv0rpMvyh7",
     name: "Private Group 2-3 (Kids)",
     nameShort: "Private Kids Group",
     category: "private-kids",
@@ -332,6 +362,8 @@ export const PRICES: PriceItem[] = [
   // --- FIGHTER PROGRAM ---
   {
     id: "fighter-monthly",
+    stripeProductId: "prod_UJh4O6smKPIYsg",
+    stripePriceId: "price_1TL3gNRu1Uc6NzUvzlmTzvWd",
     name: "Fighter Program (Monthly)",
     nameShort: "Fighter Program",
     category: "fighter",
@@ -353,6 +385,8 @@ export const PRICES: PriceItem[] = [
   // --- ACCOMMODATION + TRAINING (PLAI LAEM ONLY) ---
   {
     id: "camp-stay-1week",
+    stripeProductId: "prod_UJh4o6oaXIjRTW",
+    stripePriceId: "price_1TL3gORu1Uc6NzUvnurFcy0E",
     name: "Camp Stay — 1 Week",
     nameShort: "Camp Stay 1 Week",
     category: "camp-stay",
@@ -371,6 +405,8 @@ export const PRICES: PriceItem[] = [
   },
   {
     id: "camp-stay-2weeks",
+    stripeProductId: "prod_UJh45hlO9IayCF",
+    stripePriceId: "price_1TL3gPRu1Uc6NzUvg1pqGorN",
     name: "Camp Stay — 2 Weeks",
     nameShort: "Camp Stay 2 Weeks",
     category: "camp-stay",
@@ -390,6 +426,8 @@ export const PRICES: PriceItem[] = [
   },
   {
     id: "camp-stay-1month",
+    stripeProductId: "prod_UJh4aT5o6LteUz",
+    stripePriceId: "price_1TL3gQRu1Uc6NzUvxoKyvZpw",
     name: "Camp Stay - 1 Month (Room)",
     nameShort: "Camp Stay 1 Month (Room)",
     category: "camp-stay",
@@ -407,25 +445,29 @@ export const PRICES: PriceItem[] = [
   },
   {
     id: "camp-stay-bungalow-monthly",
+    stripeProductId: "prod_UJh4vu405OIsux",
+    stripePriceId: "price_1TL3gRRu1Uc6NzUvjfriPKij",
     name: "Camp Stay - 1 Month (Bungalow)",
     nameShort: "Camp Stay 1 Month (Bungalow)",
     category: "camp-stay",
     price: 23000,
     currency: "THB",
     unit: "month",
-    description: "1 month training + private bungalow at Plai Laem. King bed, kitchenette, private terrace over pool. Limited availability (4 bungalows).",
+    description: "1 month training + the private bungalow at Plai Laem. King bed, kitchenette, private terrace over the pool. Only 1 bungalow available on-site.",
     includes: [
-      "30 nights in a private bungalow at Plai Laem",
+      "30 nights in the private bungalow at Plai Laem",
       "Unlimited group training sessions",
       "Wi-Fi",
     ],
-    notes: "Plai Laem camp only. Electricity charged separately. Limited to 4 bungalows.",
+    notes: "Plai Laem camp only. Electricity charged separately. Only 1 bungalow available.",
     bookingType: "camp-stay",
   },
 
   // --- FIGHTER PROGRAM + ACCOMMODATION ---
   {
     id: "fighter-stay-room-monthly",
+    stripeProductId: "prod_UJh4sXBzENDjwN",
+    stripePriceId: "price_1TL3gSRu1Uc6NzUvgqxHaCps",
     name: "Fighter Program + Room (Monthly)",
     nameShort: "Fighter + Room",
     category: "camp-stay",
@@ -444,20 +486,21 @@ export const PRICES: PriceItem[] = [
   },
   {
     id: "fighter-stay-bungalow-monthly",
+    stripeProductId: "prod_UJh4Z54nNAmlWn",
+    stripePriceId: "price_1TL3gTRu1Uc6NzUvatELfWUz",
     name: "Fighter Program + Bungalow (Monthly)",
     nameShort: "Fighter + Bungalow",
     category: "camp-stay",
-    price: 25000,
-    priceTodo: "Approximate price - pending client confirmation",
+    price: 25500,
     currency: "THB",
     unit: "month",
-    description: "Fighter program plus private bungalow at Plai Laem for 1 month. Premium tier with full kitchenette and terrace.",
+    description: "Fighter program plus the private bungalow at Plai Laem for 1 month. Premium tier with full kitchenette and terrace. Only 1 bungalow on-site.",
     includes: [
       "Fighter program (2x/day training, weekly stretch/yoga, weekly ice bath, fight organization, fight support)",
-      "30 nights in a private bungalow at Plai Laem",
+      "30 nights in the private bungalow at Plai Laem",
       "Wi-Fi",
     ],
-    notes: "Plai Laem camp only. Electricity charged separately. Limited to 4 bungalows. Price pending final client confirmation.",
+    notes: "Plai Laem camp only. Electricity charged separately. Only 1 bungalow available on-site.",
     bookingType: "fighter",
   },
 ];

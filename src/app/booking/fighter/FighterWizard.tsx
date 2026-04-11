@@ -201,7 +201,7 @@ export default function FighterWizard() {
                     )}
                     {tier.id === "fighter-stay-bungalow-monthly" && (
                       <span className="text-[10px] font-bold uppercase tracking-wider bg-primary/20 text-primary px-2 py-0.5 rounded">
-                        Limited - 4 only
+                        Unique - 1 on-site
                       </span>
                     )}
                   </div>

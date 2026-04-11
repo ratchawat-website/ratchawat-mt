@@ -519,13 +519,13 @@ export default function PricingPage() {
               </Link>
             </GlassCard>
             <GlassCard>
-              <div className="mb-2"><span className="badge-underline badge-orange">Premium - 4 left</span></div>
+              <div className="mb-2"><span className="badge-underline badge-orange">Unique - 1 on-site</span></div>
               <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-3">1 Month - Bungalow</h3>
               <div className="mb-4">
                 <span className="font-serif text-4xl font-bold text-primary">23,000 THB</span>
               </div>
               <ul className="space-y-2 text-sm text-on-surface-variant mb-6">
-                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> 30 nights in a private bungalow</li>
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> 30 nights in the private bungalow</li>
                 <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> King bed, kitchenette, private terrace</li>
                 <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> Unlimited group training</li>
                 <li className="flex items-center gap-2 opacity-50"><Check size={16} className="shrink-0" aria-hidden="true" /> Electricity charged separately</li>
@@ -538,7 +538,7 @@ export default function PricingPage() {
           <p className="text-center mt-8 text-on-surface-variant text-sm">
             Looking for Fighter Program with accommodation? See the{" "}
             <Link href="/accommodation" className="btn-link">full accommodation options <span className="btn-arrow">&rarr;</span></Link>
-            {" "}(approximately 20,000 THB/month with a room, 25,000 THB/month with a bungalow).
+            {" "}(approximately 20,000 THB/month with a room, 25,500 THB/month with the bungalow).
           </p>
         </div>
       </section>
