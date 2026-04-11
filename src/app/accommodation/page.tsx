@@ -5,13 +5,30 @@ import CTABanner from "@/components/ui/CTABanner";
 import ImagePlaceholder from "@/components/ui/ImagePlaceholder";
 import JsonLd from "@/components/seo/JsonLd";
 import { organizationSchema } from "@/components/seo/SchemaOrg";
-import { MapPin, Wifi, Utensils, Bed, DollarSign, Users, Check } from "lucide-react";
+import {
+  BedDouble,
+  Bath,
+  Wind,
+  Wifi,
+  Waves,
+  Fence,
+  Package,
+  MapPin,
+  Zap,
+  Users,
+  Tag,
+  Check,
+  UtensilsCrossed,
+  Armchair,
+  Palmtree,
+  Refrigerator,
+} from "lucide-react";
 import Link from "next/link";
 
 export const metadata = generatePageMeta({
   title: "Muay Thai Accommodation Koh Samui | Train & Stay - Ratchawat",
   description:
-    "Stay near Ratchawat Muay Thai in Koh Samui. Accommodation options near both Bo Phut and Plai Laem camps. Training + stay packages available.",
+    "Stay at Ratchawat Muay Thai Plai Laem camp in Koh Samui. On-site rooms with pool, AC, balcony. All-inclusive training and stay packages from 8,000 THB.",
   path: "/accommodation",
 });
 
@@ -21,16 +38,24 @@ const SITE_URL =
 const lodgingSchema = {
   "@context": "https://schema.org",
   "@type": "LodgingBusiness",
-  name: "US Hostel / US Samui",
-  description: "Partner accommodation near Ratchawat Bo Phut camp in Koh Samui.",
+  name: "Ratchawat Muay Thai Camp Stay - Plai Laem",
+  description:
+    "On-site accommodation at Ratchawat Muay Thai Plai Laem camp in Koh Samui. Rooms with private bathroom, air conditioning, Wi-Fi, and pool-view balcony. All-inclusive training and stay packages.",
   address: {
     "@type": "PostalAddress",
-    addressLocality: "Bo Phut, Ko Samui",
+    addressLocality: "Plai Laem, Ko Samui",
     addressRegion: "Surat Thani",
     postalCode: "84320",
     addressCountry: "TH",
   },
-  priceRange: "$",
+  priceRange: "฿฿",
+  amenityFeature: [
+    { "@type": "LocationFeatureSpecification", name: "Air conditioning", value: true },
+    { "@type": "LocationFeatureSpecification", name: "Wi-Fi", value: true },
+    { "@type": "LocationFeatureSpecification", name: "Private bathroom", value: true },
+    { "@type": "LocationFeatureSpecification", name: "Shared pool", value: true },
+    { "@type": "LocationFeatureSpecification", name: "Balcony", value: true },
+  ],
   parentOrganization: {
     "@type": "Organization",
     name: "Chor Ratchawat Muay Thai Gym",
@@ -38,58 +63,66 @@ const lodgingSchema = {
   },
 };
 
-const boPhutOptions = [
-  {
-    icon: Bed,
-    title: "US Hostel / US Samui",
-    description: "Our partner hostel in Bo Phut. Walking distance from the gym. Dorm beds and private rooms. Popular with training students.",
-    price: "From 300 THB/night",
-  },
-  {
-    icon: MapPin,
-    title: "Guesthouses on Soi Sunday",
-    description: "Several small guesthouses within a few minutes of the camp. Basic, clean, and cheap. Ask us for current recommendations.",
-    price: "From 400 THB/night",
-  },
-  {
-    icon: Utensils,
-    title: "Fisherman's Village Area",
-    description: "More options (hotels, Airbnbs, apartments) near Fisherman's Village. 5 minutes from the gym by scooter. Better food and nightlife nearby.",
-    price: "From 600 THB/night",
-  },
+const roomPhotos = [
+  { caption: "Room" },
+  { caption: "Balcony" },
+  { caption: "Pool" },
+  { caption: "Camp view" },
+  { caption: "Shared area" },
+  { caption: "Storage" },
 ];
 
-const plaiLaemOptions = [
+const bungalowPhotos = [
+  { caption: "Bungalow" },
+  { caption: "Bedroom" },
+  { caption: "Kitchenette" },
+  { caption: "Living area" },
+  { caption: "Terrace" },
+  { caption: "Pool view" },
+];
+
+const amenities = [
+  { icon: BedDouble, label: "Double bed" },
+  { icon: Bath, label: "Private bathroom" },
+  { icon: Wind, label: "Air conditioning" },
+  { icon: Wifi, label: "Wi-Fi" },
+  { icon: Waves, label: "Shared pool" },
+  { icon: Fence, label: "Pool-view balcony" },
+  { icon: Package, label: "Storage" },
+  { icon: MapPin, label: "Inside the camp" },
+];
+
+const bungalowAmenities = [
+  { icon: BedDouble, label: "King-size bed" },
+  { icon: Package, label: "Dressing area" },
+  { icon: Bath, label: "Private bathroom" },
+  { icon: UtensilsCrossed, label: "Kitchenette" },
+  { icon: Armchair, label: "Living + dining area" },
+  { icon: Palmtree, label: "Private terrace" },
+  { icon: Wind, label: "Air conditioning" },
+  { icon: Wifi, label: "Wi-Fi" },
+  { icon: Refrigerator, label: "Fridge" },
+  { icon: Waves, label: "Pool view" },
+];
+
+const benefits = [
   {
-    icon: Bed,
-    title: "Guesthouses Near Big Buddha",
-    description: "Quiet area with budget guesthouses and bungalows. Close to the camp, away from the tourist noise.",
-    price: "From 400 THB/night",
-  },
-  {
-    icon: Wifi,
-    title: "Apartments & Condos",
-    description: "Monthly rentals are common in this area. Good for 90-day visa holders and long-stay students. Kitchens, wifi, laundry.",
-    price: "From 8,000 THB/month",
+    icon: Zap,
+    title: "Zero Commute",
+    description:
+      "The gym is 30 seconds away. Train, eat, sleep, repeat. No scooter, no waiting.",
   },
   {
     icon: Users,
-    title: "Shared Houses",
-    description: "Some students share houses with other fighters. We can connect you with others looking for roommates.",
-    price: "From 5,000 THB/month",
-  },
-];
-
-const tips = [
-  {
-    icon: DollarSign,
-    title: "Budget Tip",
-    description: "Monthly rentals are much cheaper than nightly rates. If you are staying more than 2 weeks, look for a monthly place.",
+    title: "Fighter Community",
+    description:
+      "You share the camp with other fighters. Sparring partners when you need them, and people who get why you're here.",
   },
   {
-    icon: MapPin,
-    title: "Location Tip",
-    description: "Staying near your camp makes training easier. A scooter (200 THB/day) opens up the whole island if you want more options.",
+    icon: Tag,
+    title: "All-In-One Price",
+    description:
+      "One price covers your room and all your training. No surprises at checkout.",
   },
 ];
 
@@ -102,33 +135,181 @@ export default function AccommodationPage() {
         items={[{ label: "Home", href: "/" }, { label: "Accommodation" }]}
       />
 
-      {/* Page Header */}
-      <section className="py-12 sm:py-16 px-6 sm:px-10 md:px-16 lg:px-20">
-        <div className="max-w-4xl mx-auto text-center">
+      {/* Hero */}
+      <section className="relative py-16 sm:py-24 px-6 sm:px-10 md:px-16 lg:px-20 overflow-hidden">
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,#0a0a0a_0%,#1a1200_50%,#0a0a0a_100%)]" />
+        <div
+          className="absolute inset-0 opacity-100"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(255,102,0,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,102,0,0.03) 1px, transparent 1px)",
+            backgroundSize: "60px 60px",
+          }}
+        />
+        <div className="absolute inset-0 bg-black/30" />
+        <div className="relative z-10 max-w-4xl mx-auto text-center flex flex-col items-center">
+          <div className="w-[60px] h-[3px] bg-primary mb-8" />
+          <div className="mb-4">
+            <span className="badge-underline badge-orange">PLAI LAEM CAMP ONLY</span>
+          </div>
           <h1 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-semibold text-on-surface">
-            Accommodation
+            Stay at the Camp
           </h1>
           <p className="mt-4 text-on-surface-variant text-lg max-w-2xl mx-auto">
-            Where to stay near both camps. From hostels to apartments, budget to comfortable.
+            Train. Rest. Repeat. Rooms and bungalows inside our Plai Laem camp. Pool view, AC, all-inclusive packages.
           </p>
         </div>
       </section>
 
-      {/* Camp Stay Packages — Plai Laem */}
-      <section className="pb-16 sm:pb-20 px-6 sm:px-10 md:px-16 lg:px-20">
-        <div className="max-w-4xl mx-auto">
+      {/* Standard Rooms */}
+      <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20 bg-surface-lowest/50">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex items-center gap-3 mb-4">
+            <span className="w-8 h-[2px] bg-primary" />
+            <span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">
+              STANDARD ROOM
+            </span>
+            <span className="w-8 h-[2px] bg-primary" />
+          </div>
+          <div className="flex items-center justify-between flex-wrap gap-3 mb-8">
+            <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface">
+              Standard Rooms
+            </h2>
+            <span className="badge-underline badge-orange">4 ROOMS AVAILABLE</span>
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
+            <div className="space-y-4 text-on-surface-variant leading-relaxed">
+              <p>
+                The rooms are inside the Plai Laem camp. Clean, simple, everything you need after training and nothing you don&apos;t. Each room has a double bed, a private bathroom, air conditioning, and a balcony over the shared pool.
+              </p>
+              <p>
+                The pool is where fighters cool down between sessions. It is not a resort pool, it is a camp pool, and that is the point. You come here to train, and the water is there when your legs need it.
+              </p>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              {amenities.map((item) => (
+                <div
+                  key={item.label}
+                  className="flex items-center gap-3 p-4 rounded-card bg-surface-low border-2 border-outline-variant"
+                >
+                  <item.icon size={22} className="text-primary shrink-0" aria-hidden="true" />
+                  <span className="text-sm text-on-surface font-medium">{item.label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Room Photos */}
+        <div className="mt-12">
+          <div
+            className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-px-6 px-6 sm:px-10 md:px-16 lg:px-20"
+            role="region"
+            aria-label="Standard room photo gallery"
+            tabIndex={0}
+          >
+            {roomPhotos.map((photo) => (
+              <div
+                key={photo.caption}
+                className="shrink-0 w-[260px] sm:w-[300px] md:w-[340px] snap-start"
+              >
+                <ImagePlaceholder
+                  category="accommodation"
+                  aspectRatio="aspect-[3/4]"
+                  className="w-full"
+                />
+                <p className="mt-3 text-xs uppercase tracking-[0.19em] text-on-surface-variant">
+                  {photo.caption}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Bungalows */}
+      <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex items-center gap-3 mb-4">
+            <span className="w-8 h-[2px] bg-primary" />
+            <span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">
+              BUNGALOW
+            </span>
+            <span className="w-8 h-[2px] bg-primary" />
+          </div>
+          <div className="flex items-center justify-between flex-wrap gap-3 mb-8">
+            <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface">
+              Private Bungalows
+            </h2>
+            <span className="badge-underline badge-orange">4 BUNGALOWS, LIMITED</span>
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
+            <div className="space-y-4 text-on-surface-variant leading-relaxed">
+              <p>
+                The bungalows are the premium option. Stand-alone, private, with a king-size bed, a dressing area, and a full living space with dining and a fitted kitchenette. The private terrace opens over the shared pool.
+              </p>
+              <p>
+                Built for longer stays, fighters bringing family, or anyone who wants a real home during training. Only four bungalows exist, so they fill up fast.
+              </p>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              {bungalowAmenities.map((item) => (
+                <div
+                  key={item.label}
+                  className="flex items-center gap-3 p-4 rounded-card bg-surface-low border-2 border-outline-variant"
+                >
+                  <item.icon size={22} className="text-primary shrink-0" aria-hidden="true" />
+                  <span className="text-sm text-on-surface font-medium">{item.label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Bungalow Photos */}
+        <div className="mt-12">
+          <div
+            className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-px-6 px-6 sm:px-10 md:px-16 lg:px-20"
+            role="region"
+            aria-label="Private bungalow photo gallery"
+            tabIndex={0}
+          >
+            {bungalowPhotos.map((photo) => (
+              <div
+                key={photo.caption}
+                className="shrink-0 w-[260px] sm:w-[300px] md:w-[340px] snap-start"
+              >
+                <ImagePlaceholder
+                  category="accommodation"
+                  aspectRatio="aspect-[3/4]"
+                  className="w-full"
+                />
+                <p className="mt-3 text-xs uppercase tracking-[0.19em] text-on-surface-variant">
+                  {photo.caption}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Camp Stay Packages */}
+      <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20 bg-surface-lowest/50">
+        <div className="max-w-5xl mx-auto">
           <div className="flex items-center justify-center gap-3 mb-4">
             <span className="w-8 h-[2px] bg-primary" />
-            <span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">ALL-INCLUSIVE</span>
+            <span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">
+              ALL-INCLUSIVE
+            </span>
             <span className="w-8 h-[2px] bg-primary" />
           </div>
           <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface text-center mb-4">
             Camp Stay Packages
           </h2>
           <p className="text-center text-on-surface-variant text-sm mb-10">
-            Training and accommodation in one package. Available at our Plai Laem camp only. Electricity included for 1-week and 2-week stays.
+            Training and accommodation in one package. Electricity is included for 1-week and 2-week stays.
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
             <GlassCard>
               <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-3">1 Week</h3>
               <div className="mb-4">
@@ -136,10 +317,10 @@ export default function AccommodationPage() {
                 <span className="text-on-surface-variant text-sm ml-1">THB</span>
               </div>
               <ul className="space-y-2 text-sm text-on-surface-variant mb-6">
-                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" /> 7 nights accommodation</li>
-                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" /> Unlimited group training</li>
-                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" /> Electricity included</li>
-                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" /> Wi-Fi</li>
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> 7 nights in a standard room</li>
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> Unlimited group training</li>
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> Electricity included</li>
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> Wi-Fi</li>
               </ul>
               <Link href="/booking/camp-stay?package=camp-stay-1week" className="btn-primary w-full justify-center">
                 Book 1 Week <span className="btn-arrow">&rarr;</span>
@@ -153,134 +334,135 @@ export default function AccommodationPage() {
                 <span className="text-on-surface-variant text-sm ml-1">THB</span>
               </div>
               <ul className="space-y-2 text-sm text-on-surface-variant mb-6">
-                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" /> 14 nights accommodation</li>
-                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" /> Unlimited group training</li>
-                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" /> Electricity included</li>
-                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" /> Wi-Fi</li>
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> 14 nights in a standard room</li>
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> Unlimited group training</li>
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> Electricity included</li>
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> Wi-Fi</li>
               </ul>
               <Link href="/booking/camp-stay?package=camp-stay-2weeks" className="btn-primary w-full justify-center">
                 Book 2 Weeks <span className="btn-arrow">&rarr;</span>
               </Link>
             </GlassCard>
             <GlassCard>
-              <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-3">1 Month</h3>
+              <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-3">1 Month - Room</h3>
               <div className="mb-4">
                 <span className="font-serif text-4xl font-bold text-primary">18,000</span>
                 <span className="text-on-surface-variant text-sm ml-1">THB</span>
               </div>
               <ul className="space-y-2 text-sm text-on-surface-variant mb-6">
-                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" /> 30 nights accommodation</li>
-                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" /> Unlimited group training</li>
-                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" /> Wi-Fi</li>
-                <li className="flex items-center gap-2 opacity-50"><Check size={16} className="shrink-0" /> Electricity charged separately</li>
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> 30 nights in a standard room</li>
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> Unlimited group training</li>
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> Wi-Fi</li>
+                <li className="flex items-center gap-2 opacity-50"><Check size={16} className="shrink-0" aria-hidden="true" /> Electricity charged separately</li>
               </ul>
               <Link href="/booking/camp-stay?package=camp-stay-1month" className="btn-primary w-full justify-center">
-                Book 1 Month <span className="btn-arrow">&rarr;</span>
+                Book Room <span className="btn-arrow">&rarr;</span>
+              </Link>
+            </GlassCard>
+            <GlassCard>
+              <div className="mb-2"><span className="badge-underline badge-orange">Premium - 4 left</span></div>
+              <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-3">1 Month - Bungalow</h3>
+              <div className="mb-4">
+                <span className="font-serif text-4xl font-bold text-primary">23,000</span>
+                <span className="text-on-surface-variant text-sm ml-1">THB</span>
+              </div>
+              <ul className="space-y-2 text-sm text-on-surface-variant mb-6">
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> 30 nights in a private bungalow</li>
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> King bed, kitchenette, private terrace</li>
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> Unlimited group training</li>
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> Wi-Fi</li>
+                <li className="flex items-center gap-2 opacity-50"><Check size={16} className="shrink-0" aria-hidden="true" /> Electricity charged separately</li>
+              </ul>
+              <Link href="/booking/camp-stay?package=camp-stay-bungalow-monthly" className="btn-primary w-full justify-center">
+                Book Bungalow <span className="btn-arrow">&rarr;</span>
               </Link>
             </GlassCard>
           </div>
-          <p className="text-center mt-6 text-on-surface-variant text-sm">
-            Interested in the{" "}
-            <Link href="/programs/fighter" className="btn-link">fighter program <span className="btn-arrow">&rarr;</span></Link>
-            {" "}with accommodation?{" "}
-            <Link href="/contact" className="btn-link">Contact us <span className="btn-arrow">&rarr;</span></Link>.
-          </p>
         </div>
       </section>
 
-      {/* Bo Phut Area */}
-      <section className="pb-16 sm:pb-20 px-6 sm:px-10 md:px-16 lg:px-20">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex items-center gap-3 mb-4"><span className="w-8 h-[2px] bg-primary" /><span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">BO PHUT</span><span className="w-8 h-[2px] bg-primary" /></div>
-          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface mb-8">
-            Near{" "}
-            <Link href="/camps/bo-phut" className="text-primary hover:text-primary-dim transition-colors">Bo Phut Camp</Link>
-          </h2>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-            <div className="grid grid-cols-1 gap-4">
-              {boPhutOptions.map((opt, i) => (
-                <GlassCard key={opt.title} number={String(i + 1).padStart(2, "0")}>
-                  <div className="flex gap-4 items-start">
-                    <opt.icon size={24} className="text-primary shrink-0 mt-1" />
-                    <div>
-                      <h3 className="font-serif text-lg font-bold text-on-surface mb-1">
-                        {opt.title}
-                      </h3>
-                      <p className="text-on-surface-variant text-xs leading-relaxed mb-2">
-                        {opt.description}
-                      </p>
-                      <p className="text-primary text-xs font-semibold">
-                        {opt.price}
-                      </p>
-                    </div>
-                  </div>
-                </GlassCard>
-              ))}
-            </div>
-            <ImagePlaceholder category="accommodation" aspectRatio="aspect-[3/4]" />
-          </div>
-        </div>
-      </section>
-
-      {/* Plai Laem Area */}
-      <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20 bg-surface-lowest/50">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex items-center gap-3 mb-4"><span className="w-8 h-[2px] bg-primary" /><span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">PLAI LAEM</span><span className="w-8 h-[2px] bg-primary" /></div>
-          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface mb-8">
-            Near{" "}
-            <Link href="/camps/plai-laem" className="text-primary hover:text-primary-dim transition-colors">Plai Laem Camp</Link>
-          </h2>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-            <ImagePlaceholder category="accommodation" aspectRatio="aspect-[3/4]" className="lg:order-2" />
-            <div className="grid grid-cols-1 gap-4 lg:order-1">
-              {plaiLaemOptions.map((opt, i) => (
-                <GlassCard key={opt.title} number={String(i + 1).padStart(2, "0")}>
-                  <div className="flex gap-4 items-start">
-                    <opt.icon size={24} className="text-primary shrink-0 mt-1" />
-                    <div>
-                      <h3 className="font-serif text-lg font-bold text-on-surface mb-1">
-                        {opt.title}
-                      </h3>
-                      <p className="text-on-surface-variant text-xs leading-relaxed mb-2">
-                        {opt.description}
-                      </p>
-                      <p className="text-primary text-xs font-semibold">
-                        {opt.price}
-                      </p>
-                    </div>
-                  </div>
-                </GlassCard>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Tips */}
+      {/* Fighter Program + Stay */}
       <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-4xl mx-auto">
-          <div className="flex items-center gap-3 mb-4"><span className="w-8 h-[2px] bg-primary" /><span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">TIPS</span><span className="w-8 h-[2px] bg-primary" /></div>
-          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface mb-6">
-            Tips
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <span className="w-8 h-[2px] bg-primary" />
+            <span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">
+              FIGHTER + STAY
+            </span>
+            <span className="w-8 h-[2px] bg-primary" />
+          </div>
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface text-center mb-4">
+            Fighter Program + Accommodation
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {tips.map((tip, i) => (
-              <GlassCard key={tip.title} number={String(i + 1).padStart(2, "0")}>
-                <tip.icon size={24} className="text-primary mb-3" />
+          <p className="text-center text-on-surface-variant text-sm mb-10 max-w-2xl mx-auto">
+            Fighter program combined with a monthly stay. Two tiers: standard room or private bungalow. Prices are approximate and pending final client confirmation.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <GlassCard>
+              <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-3">Fighter + Room</h3>
+              <div className="mb-4">
+                <span className="font-serif text-4xl font-bold text-primary">~20,000</span>
+                <span className="text-on-surface-variant text-sm ml-1">THB/month</span>
+              </div>
+              <ul className="space-y-2 text-sm text-on-surface-variant mb-6">
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> 2x/day training, yoga, ice bath</li>
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> Fight organization + support</li>
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> 30 nights in a standard room</li>
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> Wi-Fi</li>
+                <li className="flex items-center gap-2 opacity-50"><Check size={16} className="shrink-0" aria-hidden="true" /> Electricity separate. Price pending confirmation.</li>
+              </ul>
+              <Link href="/contact" className="btn-primary w-full justify-center">
+                Contact Us <span className="btn-arrow">&rarr;</span>
+              </Link>
+            </GlassCard>
+            <GlassCard>
+              <div className="mb-2"><span className="badge-underline badge-orange">Premium - 4 left</span></div>
+              <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-3">Fighter + Bungalow</h3>
+              <div className="mb-4">
+                <span className="font-serif text-4xl font-bold text-primary">~25,000</span>
+                <span className="text-on-surface-variant text-sm ml-1">THB/month</span>
+              </div>
+              <ul className="space-y-2 text-sm text-on-surface-variant mb-6">
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> 2x/day training, yoga, ice bath</li>
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> Fight organization + support</li>
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> 30 nights in a private bungalow</li>
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> King bed, kitchenette, private terrace</li>
+                <li className="flex items-center gap-2 opacity-50"><Check size={16} className="shrink-0" aria-hidden="true" /> Electricity separate. Price pending confirmation.</li>
+              </ul>
+              <Link href="/contact" className="btn-primary w-full justify-center">
+                Contact Us <span className="btn-arrow">&rarr;</span>
+              </Link>
+            </GlassCard>
+          </div>
+        </div>
+      </section>
+
+      {/* Why Stay On-Site */}
+      <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20 bg-surface-lowest/50">
+        <div className="max-w-5xl mx-auto">
+          <div className="flex items-center gap-3 mb-4">
+            <span className="w-8 h-[2px] bg-primary" />
+            <span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">
+              WHY STAY HERE
+            </span>
+            <span className="w-8 h-[2px] bg-primary" />
+          </div>
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface mb-8">
+            The Camp Stay Experience
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            {benefits.map((benefit, i) => (
+              <GlassCard key={benefit.title} number={String(i + 1).padStart(2, "0")}>
+                <benefit.icon size={28} className="text-primary mb-3" aria-hidden="true" />
                 <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-2">
-                  {tip.title}
+                  {benefit.title}
                 </h3>
-                <p className="text-on-surface-variant text-xs leading-relaxed">
-                  {tip.description}
+                <p className="text-on-surface-variant text-sm leading-relaxed">
+                  {benefit.description}
                 </p>
               </GlassCard>
             ))}
           </div>
-          <p className="mt-6 text-on-surface-variant text-base">
-            Not sure where to stay?{" "}
-            <Link href="/contact" className="text-primary hover:text-primary-dim transition-colors font-medium">Message us</Link>
-            {" "}and we will point you in the right direction based on your budget and how long you are staying.
-          </p>
         </div>
       </section>
 
@@ -288,17 +470,17 @@ export default function AccommodationPage() {
       <section className="py-12 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-3xl mx-auto">
           <p className="text-on-surface-variant text-base leading-relaxed text-center">
-            Chor Ratchawat Muay Thai Gym offers Camp Stay packages at its Plai Laem location in Koh Samui, combining accommodation and unlimited group training. Prices start at 8,000 THB for one week (electricity included) and 18,000 THB for one month. For students who prefer independent accommodation, both Bo Phut and Plai Laem camps have budget guesthouses and monthly rentals nearby.
+            Chor Ratchawat Muay Thai offers on-site accommodation at its Plai Laem camp in Koh Samui. Standard rooms include a double bed, private bathroom, air conditioning, Wi-Fi, and a private balcony with pool view. Private bungalows add a king-size bed, a fitted kitchenette, a living and dining area, and a private terrace over the shared pool. Camp Stay packages start at 8,000 THB per week for rooms or 23,000 THB per month for bungalows (4 available), and combine unlimited group training with accommodation in one price.
           </p>
         </div>
       </section>
 
       <CTABanner
-        title="Book Training, Sort Stay Later"
-        description="We can help with accommodation once you have your dates."
-        buttonText="Book Now"
-        href="/booking"
-        ghostText="View Pricing"
+        title="Book Your Stay"
+        description="Training and accommodation, one price. Plai Laem camp, Koh Samui."
+        buttonText="Book a Package"
+        href="/booking/camp-stay"
+        ghostText="View All Prices"
         ghostHref="/pricing"
       />
     </>

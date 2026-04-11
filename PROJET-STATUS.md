@@ -268,6 +268,7 @@ ratchawat-mt/
 
 | Date | Description |
 |------|-------------|
+| 2026-04-11 | **/accommodation rebuild + bungalow tier:** Removed Bo Phut accommodation section and all external partner lodging (US Hostel, guesthouses). Page now presents on-site stay at Plai Laem camp only: 12-photo horizontal carousel (6 rooms + 6 bungalows), Standard Rooms section (4 rooms, 8 amenities), Private Bungalows section (4 bungalows limited, 10 amenities including king bed, kitchenette, private terrace), 4-card Camp Stay Packages in 2x2 grid (1 week 8k / 2 weeks 15k / 1 month Room 18k / 1 month Bungalow 23k), new Fighter Program + Stay section (Fighter + Room ~20k, Fighter + Bungalow ~25k, prices TODO pending client confirmation), and 3 "Why stay here" benefits. Extended `src/content/pricing.ts` with `camp-stay-bungalow-monthly`, `fighter-stay-room-monthly`, `fighter-stay-bungalow-monthly`. Added Camp Stay section to `/pricing` page. Updated `/programs/fighter` to mention Fighter + Accommodation tiers. Updated Schema.org LodgingBusiness with amenityFeature, meta description, GEO passage, AUDIT-SEO.md PAGE 13. |
 | 2026-04-02 | Initial project setup via project-init skill (32 files) |
 | 2026-04-02 | Fixed layout.tsx imports (components/layout/ path) |
 | 2026-04-02 | Fixed Resend lazy initialization (build without API keys) |

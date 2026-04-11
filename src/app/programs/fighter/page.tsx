@@ -186,13 +186,24 @@ export default function FighterProgramPage() {
           </h2>
           <div className="space-y-4 text-on-surface-variant text-base sm:text-lg leading-relaxed">
             <p>
-              Fighter training: 9,500 THB per month. Includes training 2x per day, weekly stretch and yoga class, weekly ice bath, fight organization, and corner support on fight day.{" "}
+              Fighter training alone: 9,500 THB per month. Includes training 2x per day, weekly stretch and yoga class, weekly ice bath, fight organization, and corner support on fight day.{" "}
               <Link href="/pricing" className="text-primary hover:text-primary-dim transition-colors font-medium">See full pricing</Link>.
             </p>
             <p>
-              Most fighters stay for at least a month. We work with nearby{" "}
-              <Link href="/accommodation" className="text-primary hover:text-primary-dim transition-colors font-medium">accommodation options</Link>
-              {" "}so you can focus on training.
+              You can add on-site accommodation at our Plai Laem camp. Two tiers available:
+            </p>
+            <ul className="ml-4 space-y-2 text-base">
+              <li>
+                <strong className="text-on-surface">Fighter + Standard Room:</strong> approximately 20,000 THB per month (electricity separate). Pending final price confirmation.
+              </li>
+              <li>
+                <strong className="text-on-surface">Fighter + Private Bungalow:</strong> approximately 25,000 THB per month (electricity separate). Premium tier with king bed, kitchenette, and private terrace. Only 4 bungalows available.
+              </li>
+            </ul>
+            <p>
+              See the{" "}
+              <Link href="/accommodation" className="text-primary hover:text-primary-dim transition-colors font-medium">accommodation page</Link>
+              {" "}for photos, amenities, and the full Camp Stay packages. Contact us to lock in your dates.
             </p>
             <p>
               Meet the{" "}

@@ -365,18 +365,20 @@ Description: Train Muay Thai at Ratchawat Plai Laem, Koh Samui. Full gym with bo
 
 **Meta :**
 ```
-Title: Muay Thai Accommodation Koh Samui | Train & Stay — Ratchawat
-Description: Stay near Ratchawat Muay Thai in Koh Samui. Accommodation options near both Bo Phut and Plai Laem camps. Training + stay packages available.
+Title: Muay Thai Accommodation Koh Samui | Train & Stay - Ratchawat
+Description: Stay at Ratchawat Muay Thai Plai Laem camp in Koh Samui. On-site rooms and private bungalows. All-inclusive training and stay packages from 8,000 THB.
 ```
 
-**H1 :** `Accommodation`
+**H1 :** `Stay at the Camp`
 
-**Schema :** `LodgingBusiness` lie a l'`Organization`
+**Schema :** `LodgingBusiness` avec `amenityFeature` lie a l'`Organization`
 
 **Passage GEO :**
-> Ratchawat Muay Thai partners with local accommodations near both Koh Samui locations. In Bo Phut, the camp works with US Hostel / US Samui near Fisherman's Village. Accommodation options near the Plai Laem camp are also available. Training and stay packages combine lodging with daily Muay Thai classes.
+> Chor Ratchawat Muay Thai offers on-site accommodation at its Plai Laem camp in Koh Samui. Standard rooms include a double bed, private bathroom, air conditioning, Wi-Fi, and a private balcony with pool view. Private bungalows add a king-size bed, a fitted kitchenette, a living and dining area, and a private terrace over the shared pool. Camp Stay packages start at 8,000 THB per week for rooms or 23,000 THB per month for bungalows (4 available), and combine unlimited group training with accommodation in one price.
 
-**Liens internes :** /pricing, /booking, /camps/bo-phut, /camps/plai-laem
+**Note :** On-site accommodation at Plai Laem camp only. No Bo Phut accommodation. Two tiers: 4 standard rooms + 4 private bungalows (limited). Fighter Program + Accommodation tiers available (prices pending client confirmation).
+
+**Liens internes :** /pricing, /booking/camp-stay, /programs/fighter, /camps/plai-laem
 
 ---
 

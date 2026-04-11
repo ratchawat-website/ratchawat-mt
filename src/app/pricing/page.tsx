@@ -459,6 +459,90 @@ export default function PricingPage() {
         </div>
       </section>
 
+      {/* Camp Stay Packages */}
+      <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20">
+        <div className="max-w-5xl mx-auto">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <span className="w-8 h-[2px] bg-primary" />
+            <span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">PLAI LAEM STAY</span>
+            <span className="w-8 h-[2px] bg-primary" />
+          </div>
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface text-center mb-4">
+            Camp Stay Packages
+          </h2>
+          <p className="text-center text-on-surface-variant text-sm mb-10 max-w-2xl mx-auto">
+            Training and on-site accommodation at our Plai Laem camp. Rooms and bungalows available.
+            Electricity is included for 1-week and 2-week stays.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+            <GlassCard>
+              <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-3">1 Week</h3>
+              <div className="mb-4">
+                <span className="font-serif text-4xl font-bold text-primary">8,000 THB</span>
+              </div>
+              <ul className="space-y-2 text-sm text-on-surface-variant mb-6">
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> 7 nights in a standard room</li>
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> Unlimited group training</li>
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> Electricity + Wi-Fi included</li>
+              </ul>
+              <Link href="/booking/camp-stay?package=camp-stay-1week" className="btn-primary w-full justify-center">
+                Book 1 Week <span className="btn-arrow">&rarr;</span>
+              </Link>
+            </GlassCard>
+            <GlassCard className="ring-2 ring-primary">
+              <div className="mb-2"><span className="badge-underline badge-orange">Best Value</span></div>
+              <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-3">2 Weeks</h3>
+              <div className="mb-4">
+                <span className="font-serif text-4xl font-bold text-primary">15,000 THB</span>
+              </div>
+              <ul className="space-y-2 text-sm text-on-surface-variant mb-6">
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> 14 nights in a standard room</li>
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> Unlimited group training</li>
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> Electricity + Wi-Fi included</li>
+              </ul>
+              <Link href="/booking/camp-stay?package=camp-stay-2weeks" className="btn-primary w-full justify-center">
+                Book 2 Weeks <span className="btn-arrow">&rarr;</span>
+              </Link>
+            </GlassCard>
+            <GlassCard>
+              <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-3">1 Month - Room</h3>
+              <div className="mb-4">
+                <span className="font-serif text-4xl font-bold text-primary">18,000 THB</span>
+              </div>
+              <ul className="space-y-2 text-sm text-on-surface-variant mb-6">
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> 30 nights in a standard room</li>
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> Unlimited group training</li>
+                <li className="flex items-center gap-2 opacity-50"><Check size={16} className="shrink-0" aria-hidden="true" /> Electricity charged separately</li>
+              </ul>
+              <Link href="/booking/camp-stay?package=camp-stay-1month" className="btn-primary w-full justify-center">
+                Book Room <span className="btn-arrow">&rarr;</span>
+              </Link>
+            </GlassCard>
+            <GlassCard>
+              <div className="mb-2"><span className="badge-underline badge-orange">Premium - 4 left</span></div>
+              <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-3">1 Month - Bungalow</h3>
+              <div className="mb-4">
+                <span className="font-serif text-4xl font-bold text-primary">23,000 THB</span>
+              </div>
+              <ul className="space-y-2 text-sm text-on-surface-variant mb-6">
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> 30 nights in a private bungalow</li>
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> King bed, kitchenette, private terrace</li>
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> Unlimited group training</li>
+                <li className="flex items-center gap-2 opacity-50"><Check size={16} className="shrink-0" aria-hidden="true" /> Electricity charged separately</li>
+              </ul>
+              <Link href="/booking/camp-stay?package=camp-stay-bungalow-monthly" className="btn-primary w-full justify-center">
+                Book Bungalow <span className="btn-arrow">&rarr;</span>
+              </Link>
+            </GlassCard>
+          </div>
+          <p className="text-center mt-8 text-on-surface-variant text-sm">
+            Looking for Fighter Program with accommodation? See the{" "}
+            <Link href="/accommodation" className="btn-link">full accommodation options <span className="btn-arrow">&rarr;</span></Link>
+            {" "}(approximately 20,000 THB/month with a room, 25,000 THB/month with a bungalow).
+          </p>
+        </div>
+      </section>
+
       {/* Resident Rates */}
       <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-4xl mx-auto">
@@ -611,8 +695,9 @@ export default function PricingPage() {
             (~$12 USD) for an adult drop-in session. Monthly packages run from 5,500 THB (1x/day)
             to 7,000 THB (2x/day). The Fighter Program costs 9,500 THB per month and includes
             2 daily sessions, weekly yoga, weekly ice bath, fight organisation, and corner support.
-            Camp stays with training start from 8,000 THB per week. All packages cover both
-            Bo Phut and Plai Laem locations.
+            Camp Stay packages at Plai Laem combine training and accommodation from 8,000 THB
+            per week to 23,000 THB per month for a private bungalow. All training packages cover
+            both Bo Phut and Plai Laem locations.
           </p>
         </div>
       </section>
