@@ -118,7 +118,7 @@ export default function CampStayWizard() {
       isSubmitting={isSubmitting}
       submitLabel={
         selectedPackage && selectedPackage.price
-          ? `Pay ${selectedPackage.price.toLocaleString()} THB`
+          ? `Pay ${selectedPackage.price.toLocaleString("en-US")} THB`
           : "Pay"
       }
       onSubmit={handleSubmit}
@@ -157,7 +157,7 @@ export default function CampStayWizard() {
                   )}
                 </div>
                 <p className="font-serif text-xl font-bold text-primary mb-2">
-                  {pkg.price?.toLocaleString()} THB
+                  {pkg.price?.toLocaleString("en-US")} THB
                 </p>
                 <p className="text-on-surface-variant text-xs leading-relaxed">
                   {pkg.description}

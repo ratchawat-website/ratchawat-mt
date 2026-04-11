@@ -31,7 +31,7 @@ export default function BookingReview({ rows, totalAmount, note }: Props) {
         <div className="flex justify-between pt-2 border-t border-outline-variant">
           <span className="text-on-surface font-semibold">Total</span>
           <span className="font-serif text-xl font-bold text-primary">
-            {totalAmount.toLocaleString()} THB
+            {totalAmount.toLocaleString("en-US")} THB
           </span>
         </div>
       </div>

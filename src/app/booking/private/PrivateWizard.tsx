@@ -137,7 +137,7 @@ export default function PrivateWizard() {
       canProceed={canProceed()}
       isFinalStep={step === 4}
       isSubmitting={isSubmitting}
-      submitLabel={`Pay ${totalAmount.toLocaleString()} THB`}
+      submitLabel={`Pay ${totalAmount.toLocaleString("en-US")} THB`}
       onSubmit={handleSubmit}
     >
       {/* Step 0: Session type */}
@@ -168,7 +168,7 @@ export default function PrivateWizard() {
                 </div>
                 <div className="text-right shrink-0">
                   <span className="font-serif text-lg font-bold text-primary">
-                    {pkg.price?.toLocaleString()} THB
+                    {pkg.price?.toLocaleString("en-US")} THB
                   </span>
                   <p className="text-on-surface-variant text-xs">
                     / {pkg.unit}

@@ -118,7 +118,7 @@ export default function TrainingWizard() {
       isSubmitting={isSubmitting}
       submitLabel={
         selectedPackage && selectedPackage.price
-          ? `Pay ${selectedPackage.price.toLocaleString()} THB`
+          ? `Pay ${selectedPackage.price.toLocaleString("en-US")} THB`
           : "Pay"
       }
       onSubmit={handleSubmit}
@@ -158,7 +158,7 @@ export default function TrainingWizard() {
                 </div>
                 <div className="text-right shrink-0">
                   <span className="font-serif text-lg font-bold text-primary">
-                    {pkg.price?.toLocaleString()} THB
+                    {pkg.price?.toLocaleString("en-US")} THB
                   </span>
                   <p className="text-on-surface-variant text-xs">
                     / {pkg.unit}

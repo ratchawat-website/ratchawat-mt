@@ -122,7 +122,7 @@ export default function FighterWizard() {
       isSubmitting={isSubmitting}
       submitLabel={
         selectedTier && selectedTier.price
-          ? `Pay ${selectedTier.price.toLocaleString()} THB`
+          ? `Pay ${selectedTier.price.toLocaleString("en-US")} THB`
           : "Pay"
       }
       onSubmit={handleSubmit}
@@ -211,7 +211,7 @@ export default function FighterWizard() {
                 </div>
                 <div className="text-right shrink-0">
                   <span className="font-serif text-lg font-bold text-primary">
-                    {tier.price?.toLocaleString()} THB
+                    {tier.price?.toLocaleString("en-US")} THB
                   </span>
                   <p className="text-on-surface-variant text-xs">
                     / {tier.unit}

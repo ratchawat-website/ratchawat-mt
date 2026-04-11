@@ -163,7 +163,7 @@ export default async function BookingConfirmedPage({ searchParams }: Props) {
                     Total paid
                   </span>
                   <span className="font-serif text-xl font-bold text-primary">
-                    {booking.amount.toLocaleString()} THB
+                    {booking.amount.toLocaleString("en-US")} THB
                   </span>
                 </div>
                 <p className="text-on-surface-variant text-xs pt-2">

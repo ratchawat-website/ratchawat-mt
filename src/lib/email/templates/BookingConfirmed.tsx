@@ -69,7 +69,7 @@ export function BookingConfirmed({ booking, packageName }: Props) {
             )}
             <Text>
               <strong>Total paid:</strong>{" "}
-              {booking.price_amount.toLocaleString()} THB
+              {booking.price_amount.toLocaleString("en-US")} THB
             </Text>
           </Section>
 

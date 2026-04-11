@@ -36,7 +36,7 @@ export function BookingNotification({ booking, packageName }: Props) {
             </Text>
             <Text>
               <strong>Amount:</strong>{" "}
-              {booking.price_amount.toLocaleString()} THB
+              {booking.price_amount.toLocaleString("en-US")} THB
             </Text>
             <Text>
               <strong>Participants:</strong> {booking.num_participants}

@@ -517,5 +517,5 @@ export const getPricesByBookingType = (type: BookingType): PriceItem[] =>
 
 export const formatPrice = (item: PriceItem): string =>
   item.price !== null
-    ? `${item.price.toLocaleString()} THB`
+    ? `${item.price.toLocaleString("en-US")} THB`
     : (item.priceTodo ?? "Contact us");
