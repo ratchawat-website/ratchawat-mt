@@ -186,7 +186,7 @@ export default function FighterProgramPage() {
           </h2>
           <div className="space-y-4 text-on-surface-variant text-base sm:text-lg leading-relaxed">
             <p>
-              Fighter training uses the monthly membership at 5,500 THB, which covers all sessions.{" "}
+              Fighter training: 9,500 THB per month. Includes training 2x per day, weekly stretch and yoga class, weekly ice bath, fight organization, and corner support on fight day.{" "}
               <Link href="/pricing" className="text-primary hover:text-primary-dim transition-colors font-medium">See full pricing</Link>.
             </p>
             <p>
@@ -214,10 +214,10 @@ export default function FighterProgramPage() {
 
       <CTABanner
         title="Ready to Fight?"
-        description="Monthly membership 5,500 THB. All sessions included."
-        buttonText="Book Now"
-        href="/booking"
-        ghostText="View Pricing"
+        description="Monthly fighter program 9,500 THB. Training 2x/day, fight support included."
+        buttonText="Apply Now"
+        href="/booking/fighter?package=fighter-monthly"
+        ghostText="View All Prices"
         ghostHref="/pricing"
       />
     </>

@@ -26,7 +26,7 @@ const groupClassCourse = courseSchema({
   description:
     "Daily group Muay Thai classes at Ratchawat Koh Samui. Morning and evening sessions for all levels.",
   url: `${SITE_URL}/programs/group-adults`,
-  offers: { price: 500, priceCurrency: "THB" },
+  offers: { price: 400, priceCurrency: "THB" },
 });
 
 const classStructure = [
@@ -165,7 +165,7 @@ export default function GroupAdultsPage() {
               {" "}camp pages.
             </p>
             <p>
-              Drop-in: 500 THB per session. Weekly and monthly packages available.{" "}
+              Drop-in: 400 THB per session. Weekly packages from 2,000 THB.{" "}
               <Link href="/pricing" className="text-primary hover:text-primary-dim transition-colors font-medium">See full pricing</Link>.
             </p>
           </div>
@@ -176,16 +176,16 @@ export default function GroupAdultsPage() {
       <section className="py-12 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-3xl mx-auto">
           <p className="text-on-surface-variant text-base leading-relaxed text-center">
-            Ratchawat&apos;s adult group Muay Thai classes in Koh Samui run daily with morning and evening sessions. Classes are open to all levels, from complete beginners to experienced fighters. Each session includes warm-up, technique drills, pad work, and conditioning. Drop-in available at 500 THB per session.
+            Ratchawat&apos;s adult group Muay Thai classes in Koh Samui run daily with morning and evening sessions. Classes are open to all levels, from complete beginners to experienced fighters. Each session includes warm-up, technique drills, pad work, and conditioning. Drop-in available at 400 THB per session.
           </p>
         </div>
       </section>
 
       <CTABanner
         title="Try a Group Class"
-        description="500 THB drop-in. No booking required, just show up."
+        description="400 THB drop-in. No booking required, just show up."
         buttonText="Book Now"
-        href="/booking"
+        href="/booking/training?package=drop-in-adult"
         ghostText="View Pricing"
         ghostHref="/pricing"
       />

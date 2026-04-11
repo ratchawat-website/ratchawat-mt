@@ -255,10 +255,10 @@ export default function HomePage() {
               <div className="flex flex-col sm:flex-row items-center gap-6 sm:gap-10">
                 <div className="text-center">
                   <span className="font-serif text-3xl font-bold text-primary">
-                    500 THB
+                    400 THB
                   </span>
                   <p className="text-on-surface-variant text-xs mt-1">
-                    Drop-in (~$15 USD)
+                    Drop-in (~$12 USD)
                   </p>
                 </div>
                 <div className="text-center">
@@ -405,7 +405,7 @@ export default function HomePage() {
               fighter program
             </Link>
             . Open 6 days a week from 8 AM to 8 PM. Drop-in sessions start at
-            500 THB (~$15 USD).
+            400 THB.
           </p>
         </div>
       </section>

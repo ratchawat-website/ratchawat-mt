@@ -184,7 +184,7 @@ export default function AboutPage() {
 
       <CTABanner
         title="Come Train With Us"
-        description="Drop-in from 500 THB. Two camps, all levels, six days a week."
+        description="Drop-in from 400 THB. Two camps, all levels, six days a week."
         buttonText="Book Now"
         href="/booking"
         ghostText="View Pricing"

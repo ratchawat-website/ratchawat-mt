@@ -117,7 +117,7 @@ export default function ProgramsPage() {
               No experience needed for group or private sessions. Show up in shorts and a t-shirt. Gloves and shin guards are available to rent at the gym.
             </p>
             <p>
-              Drop-in sessions start at 500 THB. Weekly and monthly packages bring the price down.{" "}
+              Drop-in sessions start at 400 THB. Weekly and monthly packages bring the price down.{" "}
               <Link href="/pricing" className="text-primary hover:text-primary-dim transition-colors font-medium">See full pricing</Link>.
             </p>
           </div>
@@ -135,7 +135,7 @@ export default function ProgramsPage() {
 
       <CTABanner
         title="Ready to Start?"
-        description="Drop-in from 500 THB. No commitment, just show up and train."
+        description="Drop-in from 400 THB. No commitment, just show up and train."
         buttonText="Book Now"
         href="/booking"
         ghostText="View Pricing"

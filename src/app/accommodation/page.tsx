@@ -5,7 +5,7 @@ import CTABanner from "@/components/ui/CTABanner";
 import ImagePlaceholder from "@/components/ui/ImagePlaceholder";
 import JsonLd from "@/components/seo/JsonLd";
 import { organizationSchema } from "@/components/seo/SchemaOrg";
-import { MapPin, Wifi, Utensils, Bed, DollarSign, Users } from "lucide-react";
+import { MapPin, Wifi, Utensils, Bed, DollarSign, Users, Check } from "lucide-react";
 import Link from "next/link";
 
 export const metadata = generatePageMeta({
@@ -114,6 +114,80 @@ export default function AccommodationPage() {
         </div>
       </section>
 
+      {/* Camp Stay Packages — Plai Laem */}
+      <section className="pb-16 sm:pb-20 px-6 sm:px-10 md:px-16 lg:px-20">
+        <div className="max-w-4xl mx-auto">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <span className="w-8 h-[2px] bg-primary" />
+            <span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">ALL-INCLUSIVE</span>
+            <span className="w-8 h-[2px] bg-primary" />
+          </div>
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface text-center mb-4">
+            Camp Stay Packages
+          </h2>
+          <p className="text-center text-on-surface-variant text-sm mb-10">
+            Training and accommodation in one package. Available at our Plai Laem camp only. Electricity included for 1-week and 2-week stays.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <GlassCard>
+              <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-3">1 Week</h3>
+              <div className="mb-4">
+                <span className="font-serif text-4xl font-bold text-primary">8,000</span>
+                <span className="text-on-surface-variant text-sm ml-1">THB</span>
+              </div>
+              <ul className="space-y-2 text-sm text-on-surface-variant mb-6">
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" /> 7 nights accommodation</li>
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" /> Unlimited group training</li>
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" /> Electricity included</li>
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" /> Wi-Fi</li>
+              </ul>
+              <Link href="/booking/camp-stay?package=camp-stay-1week" className="btn-primary w-full justify-center">
+                Book 1 Week <span className="btn-arrow">&rarr;</span>
+              </Link>
+            </GlassCard>
+            <GlassCard className="ring-2 ring-primary">
+              <div className="mb-2"><span className="badge-underline badge-orange">Best Value</span></div>
+              <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-3">2 Weeks</h3>
+              <div className="mb-4">
+                <span className="font-serif text-4xl font-bold text-primary">15,000</span>
+                <span className="text-on-surface-variant text-sm ml-1">THB</span>
+              </div>
+              <ul className="space-y-2 text-sm text-on-surface-variant mb-6">
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" /> 14 nights accommodation</li>
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" /> Unlimited group training</li>
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" /> Electricity included</li>
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" /> Wi-Fi</li>
+              </ul>
+              <Link href="/booking/camp-stay?package=camp-stay-2weeks" className="btn-primary w-full justify-center">
+                Book 2 Weeks <span className="btn-arrow">&rarr;</span>
+              </Link>
+            </GlassCard>
+            <GlassCard>
+              <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-3">1 Month</h3>
+              <div className="mb-4">
+                <span className="font-serif text-4xl font-bold text-primary">18,000</span>
+                <span className="text-on-surface-variant text-sm ml-1">THB</span>
+              </div>
+              <ul className="space-y-2 text-sm text-on-surface-variant mb-6">
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" /> 30 nights accommodation</li>
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" /> Unlimited group training</li>
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" /> Wi-Fi</li>
+                <li className="flex items-center gap-2 opacity-50"><Check size={16} className="shrink-0" /> Electricity charged separately</li>
+              </ul>
+              <Link href="/booking/camp-stay?package=camp-stay-1month" className="btn-primary w-full justify-center">
+                Book 1 Month <span className="btn-arrow">&rarr;</span>
+              </Link>
+            </GlassCard>
+          </div>
+          <p className="text-center mt-6 text-on-surface-variant text-sm">
+            Interested in the{" "}
+            <Link href="/programs/fighter" className="btn-link">fighter program <span className="btn-arrow">&rarr;</span></Link>
+            {" "}with accommodation?{" "}
+            <Link href="/contact" className="btn-link">Contact us <span className="btn-arrow">&rarr;</span></Link>.
+          </p>
+        </div>
+      </section>
+
       {/* Bo Phut Area */}
       <section className="pb-16 sm:pb-20 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-6xl mx-auto">
@@ -214,7 +288,7 @@ export default function AccommodationPage() {
       <section className="py-12 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-3xl mx-auto">
           <p className="text-on-surface-variant text-base leading-relaxed text-center">
-            Ratchawat Muay Thai partners with local accommodations near both Koh Samui locations. In Bo Phut, the camp works with US Hostel / US Samui near Fisherman&apos;s Village. Accommodation options near the Plai Laem camp are also available. Training and stay packages combine lodging with daily Muay Thai classes.
+            Chor Ratchawat Muay Thai Gym offers Camp Stay packages at its Plai Laem location in Koh Samui, combining accommodation and unlimited group training. Prices start at 8,000 THB for one week (electricity included) and 18,000 THB for one month. For students who prefer independent accommodation, both Bo Phut and Plai Laem camps have budget guesthouses and monthly rentals nearby.
           </p>
         </div>
       </section>

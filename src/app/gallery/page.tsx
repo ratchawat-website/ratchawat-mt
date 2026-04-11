@@ -146,7 +146,7 @@ export default function GalleryPage() {
 
       <CTABanner
         title="Come See It in Person"
-        description="Drop-in from 500 THB. Two camps, all levels, six days a week."
+        description="Drop-in from 400 THB. Two camps, all levels, six days a week."
         buttonText="Book Now"
         href="/booking"
         ghostText="View Pricing"

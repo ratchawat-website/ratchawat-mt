@@ -229,7 +229,7 @@ export default function ReviewsPage() {
 
       <CTABanner
         title="See for Yourself"
-        description="Drop-in from 500 THB. Most people come back."
+        description="Drop-in from 400 THB. Most people come back."
         buttonText="Book Now"
         href="/booking"
         ghostText="View Pricing"

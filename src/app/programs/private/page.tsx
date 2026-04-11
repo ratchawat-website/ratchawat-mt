@@ -171,12 +171,30 @@ export default function PrivateLessonsPage() {
           </h2>
           <div className="space-y-4 text-on-surface-variant text-base sm:text-lg leading-relaxed">
             <p>
-              Private sessions start at 800 THB per hour. Multi-session packages bring the price down.{" "}
+              Private sessions start at 800 THB per hour.{" "}
               <Link href="/pricing" className="text-primary hover:text-primary-dim transition-colors font-medium">See full pricing</Link>.
             </p>
             <p>
               Book online and pay securely through Stripe, or message us on WhatsApp to arrange a time.
             </p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
+            <div className="flex items-center justify-between p-4 bg-surface-lowest rounded-lg">
+              <span className="text-on-surface text-sm font-medium">1-on-1 adult</span>
+              <span className="font-serif text-2xl font-bold text-primary">800 <span className="text-xs font-normal text-on-surface-variant">THB</span></span>
+            </div>
+            <div className="flex items-center justify-between p-4 bg-surface-lowest rounded-lg">
+              <span className="text-on-surface text-sm font-medium">Group 2-3 adults</span>
+              <span className="font-serif text-2xl font-bold text-primary">600 <span className="text-xs font-normal text-on-surface-variant">THB/person</span></span>
+            </div>
+            <div className="flex items-center justify-between p-4 bg-surface-lowest rounded-lg">
+              <span className="text-on-surface text-sm font-medium">1-on-1 kids</span>
+              <span className="font-serif text-2xl font-bold text-primary">600 <span className="text-xs font-normal text-on-surface-variant">THB</span></span>
+            </div>
+            <div className="flex items-center justify-between p-4 bg-surface-lowest rounded-lg">
+              <span className="text-on-surface text-sm font-medium">Group 2-3 kids</span>
+              <span className="font-serif text-2xl font-bold text-primary">400 <span className="text-xs font-normal text-on-surface-variant">THB/kid</span></span>
+            </div>
           </div>
         </div>
       </section>
@@ -192,9 +210,9 @@ export default function PrivateLessonsPage() {
 
       <CTABanner
         title="Book a Private Session"
-        description="From 800 THB per hour. Pick your trainer, pick your time."
+        description="From 800 THB per hour. Fully personalized, your pace."
         buttonText="Book Now"
-        href="/booking"
+        href="/booking/private?package=private-adult-solo"
         ghostText="View Pricing"
         ghostHref="/pricing"
       />

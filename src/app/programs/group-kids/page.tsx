@@ -26,7 +26,7 @@ const kidsCourse = courseSchema({
   description:
     "Specialized Muay Thai classes for children at Ratchawat Koh Samui. Focused on fundamentals, discipline, and confidence.",
   url: `${SITE_URL}/programs/group-kids`,
-  offers: { price: 500, priceCurrency: "THB" },
+  offers: { price: 300, priceCurrency: "THB" },
 });
 
 const benefits = [
@@ -153,7 +153,7 @@ export default function GroupKidsPage() {
               No gear needed to start. Gloves and shin guards are available at the gym. If your child sticks with it, their own pair of gloves makes a good souvenir.
             </p>
             <p>
-              Drop-in: 500 THB per session. See{" "}
+              Drop-in: 300 THB per session. Monthly unlimited: 2,500 THB. See{" "}
               <Link href="/pricing" className="text-primary hover:text-primary-dim transition-colors font-medium">pricing</Link>
               {" "}for weekly and monthly rates. Questions?{" "}
               <Link href="/contact" className="text-primary hover:text-primary-dim transition-colors font-medium">Get in touch</Link>.
@@ -173,9 +173,9 @@ export default function GroupKidsPage() {
 
       <CTABanner
         title="Bring the Kids"
-        description="Drop-in 500 THB. No experience needed, just shorts and a t-shirt."
+        description="Drop-in 300 THB. Monthly unlimited 2,500 THB. Ages 8-13."
         buttonText="Book Now"
-        href="/booking"
+        href="/booking/training?package=drop-in-kids"
         ghostText="View Pricing"
         ghostHref="/pricing"
       />

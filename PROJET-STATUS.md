@@ -3,8 +3,9 @@
 > **This file is the primary reference for the project.**
 > Each agent must read it at the start of a conversation and update it after each modification.
 
-**Last updated:** 2026-04-02
-**Current commit:** component-elegance-redesign
+**Last updated:** 2026-04-11
+**Phase:** Phase 1 -- Content & Pricing Foundation (IN PROGRESS)
+**Project status:** Production refonte accepted by client. Maquette phase complete. Building toward full deployment (no live deployment until all 6 phases complete).
 **Rebuilt from:** https://ratchawatmuaythai.com/
 
 ---
@@ -23,7 +24,14 @@
 - Email: chor.ratchawat@gmail.com
 - Hours: 8:00 AM - 8:00 PM, 6 days/week
 - Rating: 9.3/10 on MuayThaiMap (131 Google reviews)
-- Drop-in: 500 THB (~$15 USD) | Monthly: 5,500 THB (~$167 USD)
+- Drop-in (adult): 400 THB | Drop-in (kids 8-13): 300 THB
+- Monthly (1x/day): 5,500 THB | Monthly (2x/day): 7,000 THB
+- Monthly kids unlimited: 2,500 THB | Resident 10x: 3,000 THB | Resident 20x: 5,500 THB
+- Private 1-on-1 adult: 800 THB | Private group (2-3) adult: 600 THB/person
+- Private 1-on-1 kids: 600 THB | Private group kids: 400 THB/kid
+- Fighter Program: 9,500 THB/month
+- Camp Stay (Plai Laem): 8,000 THB/1wk -- 15,000 THB/2wks -- 18,000 THB/month
+- Bodyweight area: 100 THB drop-in, 900 THB/month
 
 | Layer | Technology | Version |
 |-------|-----------|---------|
@@ -299,6 +307,7 @@ ratchawat-mt/
 | 2026-04-02 | Typography scale bump: H1 hero +1 step (36/48/60px), H1 pages +1 step (24/30/36px), H2 sections added lg:text-3xl (30px desktop). 22 pages + 2 components updated. |
 | 2026-04-02 | **Component Elegance Redesign** (spec: docs/superpowers/specs/2026-04-02-component-elegance-redesign.md). Full visual refinement of all 12 components + 21 pages. Added: CSS tokens (shadow-card-glow, border-accent, filigree-opacity), btn-ghost/btn-link/badge-underline utilities, scrollbar-hide. GlassCard: top glow line, left border, bottom border, filigree number, hover lift. HeroSection: centered bold+outline, kicker, warm glow gradient, grid overlay, dual buttons, "Est. 2018". CTABanner: warm glow gradient bg, accent lines, kicker, dual buttons. FAQAccordion: numbered, +/- toggle, left border transitions. ProgramCard: underline badges, bottom separator. ContactForm: kicker label, uppercase labels, focus glow. LocationCard: "Open Now" overlay, bottom separator. ScheduleTable: dual render (desktop table + mobile day list). Navigation: diamond logo, Camps dropdown on hover, gradient top line. Footer: brand header row, gradient accent, 4 columns with orange headers. Breadcrumbs: accent line, uppercase, slash separator. All 21 pages: category labels on sections, filigree numbers, underline badges, btn-link/btn-primary, ghost buttons on CTAs, text-xs in cards. Visa steps: timeline vertical with dots. New hook: useScrollAnimation (Intersection Observer). |
 | 2026-04-02 | Navigation: moved Camps first, added hover dropdown (Bo Phut / Plai Laem) instead of direct link. Pricing badges (Most Popular, Save 20%) repositioned inside card flow to avoid top line overlap. |
+| 2026-04-11 | Production phase begins. Client accepted project. Created ROADMAP.md, ARCHITECTURE.md, spec (docs/superpowers/specs/2026-04-11-production-phase-design.md) and plan (docs/superpowers/plans/2026-04-11-phase-1-content-pricing.md). Updated PROJET-STATUS.md, CLAUDE.md with production mode. Created src/content/pricing.ts with all real prices. Updated all pages with correct prices. |
 
 ---
 
@@ -314,286 +323,25 @@ ratchawat-mt/
 
 ---
 
-## 6. Next Steps -- Detailed Instructions for Agents
+## 6. Next Steps
 
-### IMPORTANT: Before working on any page
+> Read `ROADMAP.md` for the full phased plan and current task list.
 
-1. **Read this file** (PROJET-STATUS.md) for current state
-2. **Read AUDIT-SEO.md** for SEO strategy per page (keywords, meta title/description, H1, schemas, GEO passage, internal links)
-3. **Read CLAUDE.md** for coding conventions and workflows
-4. **Read AUDIT-REFONTE-COMPLET.md** for business context and content to migrate
+### Current phase: Phase 1 -- Content & Pricing Foundation
 
-### Phase 1: Core pages (priority order)
+See `ROADMAP.md` for complete task checklist and success criteria.
 
-Build pages in this order. Each page MUST include:
-- SEO metadata via `generatePageMeta()` (title and description from AUDIT-SEO.md)
-- Breadcrumbs component with JSON-LD
-- Schema.org JSON-LD (type specified in AUDIT-SEO.md per page)
-- GEO citable passage (exact text in AUDIT-SEO.md per page)
-- Internal links (minimum 3, targets specified in AUDIT-SEO.md)
-- CTABanner at bottom pointing to /booking or /pricing
-- Mobile-responsive (test at 375px)
+### External blockers (actions required from RD)
 
-After each page: `npm run build` + `npm run lint` + update this file.
-
-#### Wave 1 -- High conversion impact
-
-| # | Page | Route | Key content | New components needed | Schema |
-|---|------|-------|-------------|----------------------|--------|
-| 1 | **Pricing** | `/pricing` | Price grid: drop-in 500 THB, packages, monthly 5500 THB, private, fighter | `PricingTable` | Offer, AggregateOffer |
-| 2 | **Contact** | `/contact` | Form (Resend API ready), Google Maps embed x2, phone, email, WhatsApp, directions | `LocationCard` | ContactPage, LocalBusiness x2 |
-| 3 | **Bo Phut Camp** | `/camps/bo-phut` | Gym description, equipment, HTML schedule, gallery, address, map | `ScheduleTable`, `LocationCard` | SportsActivityLocation |
-| 4 | **Plai Laem Camp** | `/camps/plai-laem` | Same as Bo Phut but for Plai Laem | Reuse `ScheduleTable`, `LocationCard` | SportsActivityLocation |
-
-#### Wave 2 -- Programs (SEO content)
-
-| # | Page | Route | Key content | Schema |
-|---|------|-------|-------------|--------|
-| 5 | **Programs overview** | `/programs` | 4 program cards linking to sub-pages | ItemList of Course |
-| 6 | **Group Adults** | `/programs/group-adults` | Class description, what to expect, levels, schedule link | Course + CourseInstance |
-| 7 | **Group Kids** | `/programs/group-kids` | Kids program, safety, ages, parent info | Course |
-| 8 | **Private Lessons** | `/programs/private` | 1-on-1 description, trainer selection, booking CTA | Course + Offer |
-| 9 | **Fighter Program** | `/programs/fighter` | Intensive training, prerequisites, competition prep | Course |
-
-#### Wave 3 -- Trust & differentiation
-
-| # | Page | Route | Key content | New components needed | Schema |
-|---|------|-------|-------------|----------------------|--------|
-| 10 | **Team** | `/team` | Trainer profiles: Kroo Wat, Mam, Kong, Teacher Nangja (photo, bio, specialty) | `TrainerCard` | Person x4 |
-| 11 | **Reviews** | `/reviews` | Showcase 131 Google reviews, 9.3/10 rating, key quotes | `TestimonialCarousel` | AggregateRating + Review |
-| 12 | **FAQ** | `/faq` | 10+ Q&A (see AUDIT-SEO.md for questions list) | Reuse `FAQAccordion` | FAQPage |
-| 13 | **About** | `/about` | Story, values, mission, reputation | -- | AboutPage |
-
-#### Wave 4 -- Services & visa (SEO gap exploitation)
-
-| # | Page | Route | Key content | Schema |
-|---|------|-------|-------------|--------|
-| 14 | **DTV Visa** | `/visa/dtv` | What is DTV, requirements, how to apply with Ratchawat, FAQ section, packages | FAQPage + Article |
-| 15 | **90-Day Visa** | `/visa/90-days` | Education visa info, 3-month training, documents, FAQ | FAQPage + Article |
-| 16 | **Accommodation** | `/accommodation` | Options near both camps, US Hostel partnership, photos, prices | LodgingBusiness |
-| 17 | **Services** | `/services` | Transport, gear, health insurance (3 sections) | Service |
-| 18 | **Gallery** | `/gallery` | Photo/video grid (placeholder until real content) | ImageGallery |
-
-#### Wave 5 -- Booking flow (DONE, Stripe graceful fallback)
-
-| # | Page | Route | Status | Notes |
-|---|------|-------|--------|-------|
-| 19 | **Booking** | `/booking` | **Done** | 4-step BookingWidget, reads ?package= and ?camp= query params, graceful Stripe fallback |
-| 20 | **Booking Confirmed** | `/booking/confirmed` | **Done** | Success page with next steps, noIndex |
-
-**Current behavior without Stripe keys:** The BookingWidget displays the full booking flow (package > camp > date > confirm). When the user clicks "Pay", it calls `/api/checkout` which fails gracefully and shows a message with WhatsApp/email links to book manually.
-
-**Current behavior without Resend keys:** The contact form at `/contact` submits to `/api/contact` which fails silently. The user sees an error message.
-
-**Current behavior without Supabase keys:** The middleware at `src/middleware.ts` skips auth entirely. No user accounts, no booking persistence. The site works as a static frontend.
-
----
-
-### Phase 2: Backend setup (requires API keys)
-
-#### Step 1: Stripe (payments)
-
-**Account setup:**
-1. Create Stripe account at stripe.com
-2. Get API keys from Stripe Dashboard > Developers > API Keys
-3. Set in `.env.local`:
-   ```
-   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_...
-   STRIPE_SECRET_KEY=sk_test_...
-   ```
-
-**Create Stripe Products (Dashboard > Products):**
-
-| Product Name | Price (THB) | Price in satang | Stripe Price ID needed |
-|-------------|------------|----------------|----------------------|
-| Drop-in Session | 500 | 50000 | No (created dynamically) |
-| Weekly Package (5 Days) | 2,000 | 200000 | No |
-| Monthly Unlimited | 5,500 | 550000 | No |
-| Private Lesson (Single) | 1,500 | 150000 | No |
-| Private Lessons (10-Pack) | 12,000 | 1200000 | No |
-| Fighter Monthly | 8,000 | 800000 | No |
-
-**Note:** The current checkout API (`src/app/api/checkout/route.ts`) creates prices dynamically using `price_data` rather than pre-created Stripe Price IDs. This works but means products are not tracked in Stripe Dashboard. To improve:
-- Create each product in Stripe Dashboard
-- Store the `price_xxx` IDs
-- Update `BookingWidget.tsx` to send `priceId` instead of `amount`
-- Update `src/app/api/checkout/route.ts` to use `price: priceId` instead of `price_data`
-
-**Webhook setup:**
-1. In Stripe Dashboard > Developers > Webhooks, create endpoint:
-   - URL: `https://ratchawatmuaythai.com/api/webhooks/stripe`
-   - Events: `checkout.session.completed`
-2. Copy webhook signing secret to `.env.local`:
-   ```
-   STRIPE_WEBHOOK_SECRET=whsec_...
-   ```
-
-**Files to update when adding Stripe:**
-
-| File | What to do |
-|------|-----------|
-| `src/app/api/checkout/route.ts` | Currently works. Optional: switch from `price_data` to pre-created `price` IDs |
-| `src/app/api/webhooks/stripe/route.ts` | Add logic at the TODO comment (line 22): save booking to Supabase, send confirmation email via Resend |
-| `src/app/booking/BookingWidget.tsx` | Currently works. The `handleSubmit` function calls `/api/checkout` and redirects to Stripe. No changes needed for basic flow. Optional: pass `priceId` instead of `amount` |
-| `.env.local` | Add `STRIPE_SECRET_KEY`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`, `STRIPE_WEBHOOK_SECRET` |
-
-**Booking flow (how it works):**
-```
-User selects package/camp/date on /booking
-  → BookingWidget calls POST /api/checkout with { productName, amount, email }
-  → /api/checkout creates Stripe Checkout Session with success_url=/booking/confirmed
-  → User redirected to Stripe Checkout (hosted page)
-  → After payment, Stripe redirects to /booking/confirmed
-  → Stripe sends webhook to /api/webhooks/stripe (checkout.session.completed)
-  → Webhook handler should: save to Supabase + send email via Resend
-```
-
-**Connected links (query params):**
-- `/pricing` page: each "Book X" button links to `/booking?package=ID`
-- Package IDs: `drop-in`, `weekly`, `monthly`, `private-single`, `private-10`, `fighter`
-- Camp IDs: `bo-phut`, `plai-laem`, `both`
-- Example: `/booking?package=monthly&camp=bo-phut` pre-selects Monthly + Bo Phut
-
----
-
-#### Step 2: Resend (emails)
-
-**Account setup:**
-1. Create account at resend.com
-2. Verify domain `ratchawatmuaythai.com` (add DNS records)
-3. Create API key
-4. Set in `.env.local`:
-   ```
-   RESEND_API_KEY=re_...
-   ```
-
-**Currently implemented emails:**
-
-| Trigger | File | From | To | Purpose |
-|---------|------|------|----|---------|
-| Contact form submit | `src/app/api/contact/route.ts` | contact@ratchawatmuaythai.com | chor.ratchawat@gmail.com | Notification to gym |
-| Contact form submit | `src/app/api/contact/route.ts` | contact@ratchawatmuaythai.com | User's email | Auto-reply confirmation |
-
-**Emails to add (Phase 2):**
-
-| Trigger | Where to add | From | To | Purpose |
-|---------|-------------|------|----|---------|
-| Stripe checkout.session.completed | `src/app/api/webhooks/stripe/route.ts` (line 22 TODO) | booking@ratchawatmuaythai.com | User's email | Booking confirmation with details |
-| Stripe checkout.session.completed | `src/app/api/webhooks/stripe/route.ts` (line 22 TODO) | booking@ratchawatmuaythai.com | chor.ratchawat@gmail.com | New booking notification to gym |
-
----
-
-#### Step 3: Supabase (database + auth)
-
-**Account setup:**
-1. Create project on supabase.com (region: Singapore for Thailand proximity)
-2. Set in `.env.local`:
-   ```
-   NEXT_PUBLIC_SUPABASE_URL=https://xxx.supabase.co
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
-   SUPABASE_SERVICE_ROLE_KEY=eyJ...
-   ```
-
-**Tables to create:**
-
-| Table | Columns | Purpose | Used by |
-|-------|---------|---------|---------|
-| `bookings` | id, user_id, package_id, camp, start_date, stripe_session_id, status, created_at | Store all bookings | Webhook handler, admin |
-| `schedules` | id, camp, day_of_week, time_slot, class_type, trainer_id | Class schedule per camp | Optional: dynamic schedule |
-| `trainers` | id, name, role, bio, specialties, photo_url | Trainer profiles | Optional: dynamic /team page |
-| `programs` | id, name, slug, description, price_thb | Program data | Optional: dynamic pricing |
-| `faq_items` | id, question, answer, sort_order | FAQ content | Optional: dynamic /faq |
-| `testimonials` | id, name, country, text, rating, approved | Student reviews | Optional: dynamic /reviews |
-
-**Priority order:** Only `bookings` is required for Phase 2. Other tables are for Phase 3 (dynamic content from CMS).
-
-**Row Level Security (RLS):**
-- `bookings`: users can read their own bookings, service role can write
-- Other tables: public read, service role write (admin only)
-
-**Auth:**
-- Enable Email auth in Supabase Dashboard > Auth > Providers
-- The middleware at `src/middleware.ts` already uses `@supabase/ssr` for session refresh
-- Protected routes (if needed): `/booking/confirmed`, user account pages
-
-**Files already scaffolded:**
-
-| File | Status | Purpose |
-|------|--------|---------|
-| `src/lib/supabase/client.ts` | Ready | Browser Supabase client |
-| `src/lib/supabase/server.ts` | Ready | Server Supabase client |
-| `src/lib/supabase/middleware.ts` | Ready | Session refresh helper |
-| `src/middleware.ts` | Ready | Gracefully skips when keys not set |
-
-**Files to update when adding Supabase:**
-
-| File | What to do |
-|------|-----------|
-| `src/app/api/webhooks/stripe/route.ts` | Insert booking record into `bookings` table after payment |
-| `src/middleware.ts` | Already works, will start refreshing sessions once keys are set |
-
----
-
-#### Step 4: Set all keys
-
-Copy `.env.local.example` to `.env.local` and fill in all values:
-
-```bash
-cp .env.local.example .env.local
-```
-
-Required keys:
-```
-NEXT_PUBLIC_SITE_URL=https://ratchawatmuaythai.com
-NEXT_PUBLIC_SUPABASE_URL=https://xxx.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
-SUPABASE_SERVICE_ROLE_KEY=eyJ...
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_...
-STRIPE_SECRET_KEY=sk_test_...
-STRIPE_WEBHOOK_SECRET=whsec_...
-RESEND_API_KEY=re_...
-```
-
-**Test order:** Stripe first (booking flow), then Resend (emails), then Supabase (persistence).
-
-### Phase 3: Polish & launch preparation
-
-1. **Content**
-   - Replace all ImagePlaceholder components with real photos
-   - Write final content for all pages
-   - Run `/humanizer` on all text
-   - Run `/seo` audit on each page
-
-2. **Multi-language (next-intl)**
-   - Install and configure next-intl
-   - Create EN/FR/ES translations for all pages
-   - Add `LanguageSwitcher` component
-   - Update hreflang tags
-
-3. **Redirections 301**
-   - Implement all redirects from section 3 in next.config.js
-   - Test every old URL redirects correctly
-
-4. **Performance & accessibility**
-   - Run Lighthouse audit (targets: Performance >= 90, Accessibility >= 95, SEO = 100)
-   - Run `/accessibility` skill
-   - Run `/performance` skill
-   - Optimize images (WebP/AVIF, srcset, lazy-loading)
-
-5. **Deployment**
-   - Deploy to Vercel
-   - Configure custom domain (ratchawatmuaythai.com)
-   - Set environment variables in Vercel dashboard
-   - Submit sitemap to Google Search Console
-   - Update Google Business Profile (2 listings) with new URLs
-   - Verify all Schema.org with Google Rich Results Test
-
-### Phase 4: Post-launch
-
-1. **Blog** (11 articles to migrate from old site, see AUDIT-REFONTE-COMPLET.md)
-2. **Analytics review** and conversion tracking
-3. **Review collection system** (Google reviews integration)
-4. **A/B testing** on booking flow
+| Blocker | Needed for | Action |
+|---------|-----------|--------|
+| New GitHub account (client) | Phase 3 | Create account, add as project owner |
+| New Supabase account (client) | Phase 3 | Sign up with client GitHub |
+| Stripe account access | Phase 3 | Client shares Stripe dashboard access |
+| Bluehost domain access | Phase 6 | Analyze + transfer domain |
+| Fighter + accommodation price | Phase 5 | Confirm with client |
+| Real photos | Phase 5 | Client delivers photos |
+| Resend domain verification | Phase 3 | Requires DNS access to ratchawatmuaythai.com |
 
 ---
 

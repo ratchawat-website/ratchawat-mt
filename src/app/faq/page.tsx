@@ -35,7 +35,7 @@ const faqs = [
   {
     question: "Can I drop in for a single session?",
     answer:
-      "Yes. Drop-in is 500 THB per session. No booking required for group classes. Just show up 10 minutes early. Private lessons should be booked in advance.",
+      "Yes. Drop-in is 400 THB per session. No booking required for group classes. Just show up 10 minutes early. Private lessons should be booked in advance.",
   },
   {
     question: "Do you offer training for kids?",

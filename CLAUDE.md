@@ -1,6 +1,9 @@
 # Ratchawat Muay Thai -- Project Instructions
 
-> **First action in every session:** read `PROJET-STATUS.md` at project root to know exactly where the project stands.
+> **First actions in every session:**
+> 1. Read `PROJET-STATUS.md` -- state of the codebase (what is built)
+> 2. Read `ROADMAP.md` -- current phase and tasks to do next
+> 3. Read `ARCHITECTURE.md` -- before any backend or integration work
 
 ---
 
@@ -193,6 +196,7 @@ Activate the relevant skills systematically when creating or modifying any page:
 | `/stripe-best-practices` | Stripe Checkout configuration, webhooks, products/prices |
 | `/prd` | Generate Product Requirements Documents when needed |
 | `/find-skills` | Search and install new skills from the ecosystem |
+| `/nextjs-security-scan` | Security audit -- run before any deployment, after Phase 5 begins |
 
 All skills listed above are pre-installed globally in `~/.claude/skills/`. No per-project installation needed.
 

@@ -191,7 +191,7 @@ export default function BoPhutCampPage() {
             Schedule
           </h2>
           <p className="text-on-surface-variant text-base sm:text-lg mb-8">
-            Classes run Monday to Saturday. Sunday is rest day. Drop-in sessions start at 500 THB.{" "}
+            Classes run Monday to Saturday. Sunday is rest day. Drop-in sessions start at 400 THB.{" "}
             <Link
               href="/pricing"
               className="text-primary hover:text-primary-dim transition-colors font-medium"
@@ -290,7 +290,7 @@ export default function BoPhutCampPage() {
 
       <CTABanner
         title="Ready to Train at Bo Phut?"
-        description="Drop-in from 500 THB. No commitment, just show up and train."
+        description="Drop-in from 400 THB. No commitment, just show up and train."
         buttonText="Book Now"
         href="/booking"
         ghostText="View Pricing"
