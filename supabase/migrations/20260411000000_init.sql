@@ -57,10 +57,14 @@ create index if not exists availability_blocks_type_date_idx on availability_blo
 -- ============================================================
 -- RLS: bookings
 -- ============================================================
-alter table bookings enable row level security;
+-- All inserts flow through /api/checkout which uses SUPABASE_SERVICE_ROLE_KEY
+-- and bypasses RLS. There is intentionally NO insert policy for the anon role
+-- so a malicious client cannot bypass the Zod validation in /api/checkout by
+-- POSTing directly to the Supabase REST endpoint with the public anon key.
+-- See migration 20260412023040_drop_anon_insert_bookings_policy.sql for the
+-- security rationale.
 
-create policy "anon_insert_bookings" on bookings
-  for insert to anon with check (true);
+alter table bookings enable row level security;
 
 create policy "admin_read_bookings" on bookings
   for select to authenticated using (true);

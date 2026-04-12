@@ -133,17 +133,21 @@ create table availability_blocks (
 ### RLS Policies
 
 ```sql
--- bookings: anyone can insert (booking), only admin can read/update
+-- bookings: NO insert policy for anon. All inserts go through /api/checkout
+-- which uses SUPABASE_SERVICE_ROLE_KEY (bypasses RLS). This forces validation
+-- through the Zod schema in /api/checkout and prevents bypass via the public
+-- anon key.
 alter table bookings enable row level security;
-create policy "Anyone can insert bookings" on bookings for insert to anon with check (true);
-create policy "Admin reads bookings" on bookings for select to authenticated using (true);
-create policy "Admin updates bookings" on bookings for update to authenticated using (true);
+create policy "admin_read_bookings" on bookings for select to authenticated using (true);
+create policy "admin_update_bookings" on bookings for update to authenticated using (true);
 
 -- availability_blocks: anyone can read, only admin can write
 alter table availability_blocks enable row level security;
-create policy "Anyone reads availability" on availability_blocks for select to anon using (true);
-create policy "Admin manages availability" on availability_blocks for all to authenticated using (true);
+create policy "public_read_availability" on availability_blocks for select to anon using (true);
+create policy "admin_manage_availability" on availability_blocks for all to authenticated using (true);
 ```
+
+**Phase 5 follow-up:** the `admin_*` policies use `using (true)` which means any authenticated user can do anything. Acceptable for single-admin Phase 4 setup but must be tightened in Phase 5 to check `profiles.role = 'admin'` (or equivalent) once the admin profile schema exists. Tracked by Supabase advisor lint code 0024.
 
 ### Reading bookings from `/booking/confirmed`
 

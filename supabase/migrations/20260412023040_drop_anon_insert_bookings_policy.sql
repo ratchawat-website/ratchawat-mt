@@ -1,0 +1,21 @@
+-- Drop the unused and overly permissive anon insert policy on bookings.
+--
+-- Rationale: /api/checkout uses createAdminClient (SUPABASE_SERVICE_ROLE_KEY)
+-- which bypasses RLS entirely, so this policy was never exercised by our app.
+-- Keeping it would let anyone with the public anon key POST directly to the
+-- Supabase REST endpoint and insert arbitrary booking rows, bypassing the
+-- Zod validation in /api/checkout. All inserts must now flow through the
+-- server-side API.
+--
+-- Discovered by `mcp__supabase-ratchawat__get_advisors security` on 2026-04-12
+-- (Supabase database linter, lint code 0024 "permissive_rls_policy").
+-- See https://supabase.com/docs/guides/database/database-linter?lint=0024_permissive_rls_policy
+--
+-- After this migration, the bookings table has only two policies:
+--   - admin_read_bookings (SELECT, authenticated)
+--   - admin_update_bookings (UPDATE, authenticated)
+-- No INSERT policy means anon clients cannot insert at all via the REST API.
+-- Server-side inserts via createAdminClient still work because service_role
+-- bypasses RLS.
+
+drop policy if exists "anon_insert_bookings" on public.bookings;
