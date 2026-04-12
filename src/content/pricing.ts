@@ -472,7 +472,6 @@ export const PRICES: PriceItem[] = [
     nameShort: "Fighter + Room",
     category: "camp-stay",
     price: 20000,
-    priceTodo: "Approximate price - pending client confirmation",
     currency: "THB",
     unit: "month",
     description: "Fighter program plus standard room at Plai Laem for 1 month. All-in-one tier for serious athletes.",
@@ -481,7 +480,7 @@ export const PRICES: PriceItem[] = [
       "30 nights in a standard room at Plai Laem",
       "Wi-Fi",
     ],
-    notes: "Plai Laem camp only. Electricity charged separately. Price pending final client confirmation.",
+    notes: "Plai Laem camp only. Electricity charged separately.",
     bookingType: "fighter",
   },
   {

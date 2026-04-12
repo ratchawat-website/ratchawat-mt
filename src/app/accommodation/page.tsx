@@ -396,13 +396,13 @@ export default function AccommodationPage() {
             Fighter Program + Accommodation
           </h2>
           <p className="text-center text-on-surface-variant text-sm mb-10 max-w-2xl mx-auto">
-            Fighter program combined with a monthly stay. Two tiers: standard room or the unique private bungalow. The Fighter + Room price is approximate and pending final client confirmation.
+            Fighter program combined with a monthly stay. Two tiers: standard room or the unique private bungalow.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <GlassCard>
               <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-3">Fighter + Room</h3>
               <div className="mb-4">
-                <span className="font-serif text-4xl font-bold text-primary">~20,000</span>
+                <span className="font-serif text-4xl font-bold text-primary">20,000</span>
                 <span className="text-on-surface-variant text-sm ml-1">THB/month</span>
               </div>
               <ul className="space-y-2 text-sm text-on-surface-variant mb-6">
@@ -410,10 +410,10 @@ export default function AccommodationPage() {
                 <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> Fight organization + support</li>
                 <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> 30 nights in a standard room</li>
                 <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> Wi-Fi</li>
-                <li className="flex items-center gap-2 opacity-50"><Check size={16} className="shrink-0" aria-hidden="true" /> Electricity separate. Price pending confirmation.</li>
+                <li className="flex items-center gap-2 opacity-50"><Check size={16} className="shrink-0" aria-hidden="true" /> Electricity charged separately</li>
               </ul>
-              <Link href="/contact" className="btn-primary w-full justify-center">
-                Contact Us <span className="btn-arrow">&rarr;</span>
+              <Link href="/booking/fighter?package=fighter-stay-room-monthly" className="btn-primary w-full justify-center">
+                Book Now <span className="btn-arrow">&rarr;</span>
               </Link>
             </GlassCard>
             <GlassCard>
