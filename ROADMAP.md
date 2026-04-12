@@ -93,35 +93,36 @@
 
 ### Routes to build
 
-- [ ] `/booking` — landing with 4 type selection cards (training / private / fighter / camp-stay)
-- [ ] `/booking/training` — 5-step wizard (package, camp, date, contact, payment)
-- [ ] `/booking/private` — 5-step wizard (session type, camp, date+time-slot, contact, payment)
-- [ ] `/booking/fighter` — 5-step wizard (info, tier, camp+date, contact, payment)
-- [ ] `/booking/camp-stay` — 4-step wizard (package, check-in, contact, payment)
-- [ ] `/booking/confirmed` — server component reading Supabase via service_role
+- [x] `/booking` — landing with 4 type selection cards (training / private / fighter / camp-stay)
+- [x] `/booking/training` — 5-step wizard (package, camp, date, contact, payment)
+- [x] `/booking/private` — 5-step wizard (session type, camp, date+time-slot, contact, payment)
+- [x] `/booking/fighter` — 5-step wizard (info, tier, camp+date, contact, payment)
+- [x] `/booking/camp-stay` — 4-step wizard (package, check-in, contact, payment)
+- [x] `/booking/confirmed` — server component reading Supabase via service_role
 
 ### Components to build
 
-- [ ] `BookingWizard` — shared shell with step indicator and navigation
-- [ ] `DatePicker` — react-day-picker wrapper with design tokens
-- [ ] `AvailabilityCalendar` — Supabase-connected calendar for private and camp-stay
-- [ ] `ContactInfoForm` — name, email, phone, nationality, num_participants, notes
-- [ ] `BookingReview` — summary and Pay button
+- [x] `BookingWizard` — shared shell with step indicator and navigation
+- [x] `DatePicker` — react-day-picker wrapper with design tokens
+- [x] `AvailabilityCalendar` — Supabase-connected calendar for private and camp-stay
+- [x] `ContactInfoForm` — name, email, phone, nationality, num_participants, notes
+- [x] `BookingReview` — summary and Pay button
 
 ### Backend to wire
 
-- [ ] Supabase project (dedicated account) + migration for bookings + availability_blocks + RLS policies
-- [ ] Stripe test-mode products (22 seeded) via `scripts/stripe-seed-products.ts`
-- [ ] Rewrite `/api/checkout` with Zod + Supabase insert + Stripe Checkout Session
-- [ ] Rewrite `/api/webhooks/stripe` with signature verification + booking update + email send
-- [ ] Resend integration with BookingConfirmed and BookingNotification React templates
+- [x] Supabase project (dedicated account) + migration for bookings + availability_blocks + RLS policies
+- [x] Stripe test-mode products (22 seeded) via `scripts/stripe-seed-products.ts`
+- [x] Rewrite `/api/checkout` with Zod + Supabase insert + Stripe Checkout Session
+- [x] Rewrite `/api/webhooks/stripe` with signature verification + booking update + email send
+- [x] Resend integration with BookingConfirmed and BookingNotification React templates
 
 ### Setup to perform
 
-- [ ] Create Supabase project + run migration SQL
-- [ ] Configure .env.local with Supabase + Stripe + Resend keys
-- [ ] Run `npx tsx scripts/stripe-seed-products.ts` to create products
-- [ ] Start `stripe listen --forward-to localhost:3000/api/webhooks/stripe` for webhook
+- [x] Create Supabase project + run migration SQL
+- [x] Configure .env.local with Supabase + Stripe + Resend keys
+- [x] Run `npx tsx scripts/stripe-seed-products.ts` to create products
+- [x] Start `stripe listen --forward-to localhost:3000/api/webhooks/stripe` for webhook
+- [x] End-to-end smoke test: 4242 test card payment → booking confirmed in Supabase → client email delivered (2026-04-12)
 
 ### Success criteria
 
