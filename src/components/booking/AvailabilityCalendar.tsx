@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import DatePicker from "./DatePicker";
 import { createClient } from "@/lib/supabase/browser";
 import { Matcher } from "react-day-picker";
+import { PRIVATE_SLOTS } from "@/lib/config/slots";
 
 interface AvailabilityBlock {
   date: string;
@@ -17,8 +18,6 @@ interface Props {
   onSelect: (date: Date | undefined) => void;
   onAvailableSlotsChange?: (slots: string[]) => void;
 }
-
-const ALL_SLOTS = ["09:00", "11:00", "14:00", "16:00"];
 
 export default function AvailabilityCalendar({
   type,
@@ -61,7 +60,7 @@ export default function AvailabilityCalendar({
 
     if (type === "private") {
       for (const [date, slots] of dateSlotMap.entries()) {
-        if (slots.size >= ALL_SLOTS.length) blockedDates.add(date);
+        if (slots.size >= PRIVATE_SLOTS.length) blockedDates.add(date);
       }
     }
 
@@ -76,7 +75,7 @@ export default function AvailabilityCalendar({
         .filter((b) => b.date === dateStr && b.time_slot)
         .map((b) => b.time_slot as string),
     );
-    const available = ALL_SLOTS.filter((s) => !blockedSlotsForDate.has(s));
+    const available = PRIVATE_SLOTS.filter((s) => !blockedSlotsForDate.has(s));
     onAvailableSlotsChange(available);
   }, [selected, blocks, type, onAvailableSlotsChange]);
 

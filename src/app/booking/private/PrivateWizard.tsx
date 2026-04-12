@@ -11,6 +11,7 @@ import ContactInfoForm, {
 import BookingReview from "@/components/booking/BookingReview";
 import { MapPin } from "lucide-react";
 import { getPricesByBookingType, getPriceById } from "@/content/pricing";
+import { PRIVATE_SLOTS } from "@/lib/config/slots";
 
 const STEPS = ["Session type", "Camp", "Date & Time", "Contact", "Review"];
 
@@ -52,12 +53,7 @@ export default function PrivateWizard() {
   const [camp, setCamp] = useState<"bo-phut" | "plai-laem" | null>(null);
   const [date, setDate] = useState<Date | undefined>();
   const [timeSlot, setTimeSlot] = useState<string | null>(null);
-  const [availableSlots, setAvailableSlots] = useState<string[]>([
-    "09:00",
-    "11:00",
-    "14:00",
-    "16:00",
-  ]);
+  const [availableSlots, setAvailableSlots] = useState<string[]>([...PRIVATE_SLOTS]);
   const [contact, setContact] = useState<ContactInfo>(DEFAULT_CONTACT);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -248,7 +244,7 @@ export default function PrivateWizard() {
                 Available time slots
               </p>
               <div className="grid grid-cols-4 gap-2">
-                {(["09:00", "11:00", "14:00", "16:00"] as const).map((slot) => {
+                {PRIVATE_SLOTS.map((slot) => {
                   const isAvailable = availableSlots.includes(slot);
                   return (
                     <button

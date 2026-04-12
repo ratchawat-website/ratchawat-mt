@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { PRIVATE_SLOTS } from "@/lib/config/slots";
 
 export const BookingTypeSchema = z.enum([
   "training",
@@ -9,7 +10,7 @@ export const BookingTypeSchema = z.enum([
 
 export const CampSchema = z.enum(["bo-phut", "plai-laem", "both"]);
 
-export const TimeSlotSchema = z.enum(["09:00", "11:00", "14:00", "16:00"]);
+export const TimeSlotSchema = z.enum(PRIVATE_SLOTS);
 
 export const BookingRequestSchema = z.object({
   price_id: z.string().min(1),
