@@ -3,7 +3,7 @@
 > **Technical reference.** Read this before writing any backend code, touching integrations, or designing new booking flows.
 > This file documents decisions that are fixed. If you need to change something here, discuss with RD first.
 
-**Last updated:** 2026-04-11
+**Last updated:** 2026-04-12
 
 ---
 
@@ -74,13 +74,32 @@ Note: Fighter+Room and Fighter+Bungalow prices are approximate and marked with p
 
 ## 4. Calendar Components
 
-**DatePicker** — used for training start date, fighter start date. Simple HTML date input or lightweight component. No Supabase.
+**DatePicker** — used for training start date, fighter start date. react-day-picker v9 with full Tailwind dark theme (shared tokens in `src/components/ui/calendar-tokens.ts`). No Supabase.
 
-**AvailabilityCalendar** — used for private and camp-stay flows. Fetches `availability_blocks` from Supabase. Blocked dates = greyed out, unselectable. Admin creates blocks via `/admin/availability`.
+**AvailabilityCalendar** — used for private and camp-stay flows. Fetches `availability_blocks` from Supabase + occupancy data from `/api/availability/occupancy`. Blocked dates (manual blocks OR capacity full) = greyed out, unselectable. For multi-day stays, a check-in date is blocked if ANY night in the resulting range is at capacity. Admin creates blocks via `/admin/availability`.
+
+**Private lesson time slots:** `08:00, 11:00, 12:00, 13:00, 14:00, 15:00, 16:00` (7 slots). Centralized in `src/lib/config/slots.ts`.
 
 ---
 
-## 5. Supabase Data Model
+## 5. Capacity Model
+
+**File:** `src/lib/admin/inventory.ts`
+
+Fixed inventory constants (physical rooms, not configurable via UI):
+- **Rooms:** 7 (standard rooms at Plai Laem)
+- **Bungalows:** 1 (private bungalow at Plai Laem)
+
+`getInventoryKey(priceId)` maps a price_id to its pool (`"rooms"` or `"bungalows"`). Returns `null` for non-accommodation bookings.
+
+**Occupancy helpers:** `src/lib/admin/availability.ts`
+- `getOccupancyMap(key, from, to)` — counts active bookings per night (hotel logic: checkout morning frees the night)
+- `checkRangeAvailability(key, start, end)` — returns `{ ok: true }` or `{ ok: false, conflictDate }`
+- Used by `/api/checkout` (overbooking prevention) and `/api/availability/occupancy` (public calendar)
+
+---
+
+## 6. Supabase Data Model
 
 ### Table: bookings
 
@@ -130,24 +149,43 @@ create table availability_blocks (
 );
 ```
 
+### Table: profiles
+
+```sql
+create table profiles (
+  user_id uuid primary key references auth.users(id) on delete cascade,
+  role text not null check (role in ('admin')),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+```
+
+**Function:** `is_admin()` — returns boolean, `security definer`, `set search_path = ''`. Checks `profiles.role = 'admin'` for current `auth.uid()`.
+
 ### RLS Policies
 
 ```sql
 -- bookings: NO insert policy for anon. All inserts go through /api/checkout
--- which uses SUPABASE_SERVICE_ROLE_KEY (bypasses RLS). This forces validation
--- through the Zod schema in /api/checkout and prevents bypass via the public
--- anon key.
+-- which uses SUPABASE_SERVICE_ROLE_KEY (bypasses RLS).
 alter table bookings enable row level security;
-create policy "admin_read_bookings" on bookings for select to authenticated using (true);
-create policy "admin_update_bookings" on bookings for update to authenticated using (true);
+create policy "admin_read_bookings" on bookings
+  for select to authenticated using (public.is_admin());
+create policy "admin_update_bookings" on bookings
+  for update to authenticated using (public.is_admin());
 
 -- availability_blocks: anyone can read, only admin can write
 alter table availability_blocks enable row level security;
 create policy "public_read_availability" on availability_blocks for select to anon using (true);
-create policy "admin_manage_availability" on availability_blocks for all to authenticated using (true);
+create policy "admin_manage_availability" on availability_blocks
+  for all to authenticated using (public.is_admin());
+
+-- profiles: user can read own row
+alter table profiles enable row level security;
+create policy "users_read_own_profile" on profiles
+  for select to authenticated using (auth.uid() = user_id);
 ```
 
-**Phase 5 follow-up:** the `admin_*` policies use `using (true)` which means any authenticated user can do anything. Acceptable for single-admin Phase 4 setup but must be tightened in Phase 5 to check `profiles.role = 'admin'` (or equivalent) once the admin profile schema exists. Tracked by Supabase advisor lint code 0024.
+All admin policies gated by `is_admin()`. Supabase security advisor: 0 lints.
 
 ### Reading bookings from `/booking/confirmed`
 
@@ -186,14 +224,30 @@ Templates live in `src/lib/email/`.
 ## 8. Admin Dashboard
 
 ```
-/admin               — redirect to /admin/bookings
-/admin/login         — Supabase Auth (email + password)
-/admin/bookings      — table, filters by type/status/date range
-/admin/bookings/[id] — detail view + status update
-/admin/availability  — calendar, block/unblock dates and time slots
+/admin                     — redirect to /admin/bookings (via route group)
+/admin/login               — Supabase Auth (email + password), standalone layout
+/admin/bookings            — paginated table/cards, filters (type/status/date/search)
+/admin/bookings/[id]       — detail view + status transitions + notes + resend email
+/admin/availability        — monthly calendar with occupancy (R x/7, B x/1) + day drawer
+/admin/account             — user info
 ```
 
-All `/admin/*` routes protected by middleware: unauthenticated request redirects to `/admin/login`.
+**Route structure:** Uses `(dashboard)` route group so `/admin/login` has no shell, all other admin routes share `AdminShell` (sidebar + top bar + bottom tabs).
+
+**API routes:**
+```
+POST /api/admin/signout                    — sign out
+POST /api/admin/bookings/[id]/status       — update booking status
+POST /api/admin/bookings/[id]/notes        — update internal notes
+POST /api/admin/bookings/[id]/resend-email — resend confirmation email
+POST /api/admin/availability               — create availability block
+DELETE /api/admin/availability/[id]        — delete availability block
+GET /api/availability/occupancy            — public occupancy data for calendar
+```
+
+**Auth:** Middleware checks `auth.getUser()` + `is_admin()` RPC on all `/admin/*` except `/admin/login`. Layout double-gates with same check. Admin user created via `scripts/create-admin.ts`.
+
+**Public nav:** `AdminNavButton` in header — Lock icon (not logged in) or LayoutDashboard icon (admin). ConditionalLayout hides public nav/footer on admin routes.
 
 ---
 

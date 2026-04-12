@@ -4,7 +4,7 @@
 > Update task statuses as work progresses. Never start work without checking the current phase.
 
 **Last updated:** 2026-04-12
-**Current phase:** Phase 4 — Admin Dashboard (Phase 3 complete in dev, end-to-end validated)
+**Current phase:** Phase 5 — Security & Quality (Phase 4 complete in dev)
 
 ---
 
@@ -136,23 +136,37 @@ All 4 booking flows payable end-to-end with Stripe test card `4242 4242 4242 424
 
 ---
 
-## Phase 4 — Admin Dashboard
+## Phase 4 — Admin Dashboard + Capacity Tracking
 
-**Status:** PENDING
-**Goal:** Gym owner can manage bookings and availability from `/admin`.
+**Status:** COMPLETE (in dev, 2026-04-12)
+**Goal:** Gym owner can manage bookings and availability from `/admin`. Room/bungalow capacity tracked and enforced.
 **Blocker:** Phase 3 complete.
+**Spec:** `docs/superpowers/specs/2026-04-12-admin-dashboard-design.md`
+**Plan:** `docs/superpowers/plans/2026-04-12-admin-dashboard.md`
 
 ### Tasks
 
-- [ ] Build `/admin/login` — Supabase Auth
-- [ ] Build `/admin/bookings` — paginated table, filters by type/status/date
-- [ ] Build `/admin/bookings/[id]` — detail view + status update
-- [ ] Build `/admin/availability` — calendar view, block/unblock dates + private slots
-- [ ] Protect all `/admin/*` via middleware
+- [x] Centralize private time slots to 7 (08:00, 11:00-16:00) in `src/lib/config/slots.ts`
+- [x] Supabase migration: `profiles` table + `is_admin()` function + tighten RLS policies (resolves pending #56)
+- [x] Supabase migration: remap 09:00 → 08:00 in existing availability_blocks
+- [x] Create `scripts/create-admin.ts` for one-time admin user setup
+- [x] Calendar visual refonte: shared Tailwind tokens, remove default rdp CSS
+- [x] Inventory model + capacity helpers (7 rooms, 1 bungalow)
+- [x] Capacity check in `/api/checkout` (409 on overbooking)
+- [x] Capacity-aware `AvailabilityCalendar` (public booking flow)
+- [x] Middleware: protect `/admin/*`, remove legacy `/account`
+- [x] Build `/admin/login` — Supabase Auth email/password
+- [x] Build admin layout shell (sidebar, bottom tabs, user menu, signout)
+- [x] Add admin icon button in public nav header
+- [x] Build `/admin/bookings` — paginated table/cards, filters, search
+- [x] Build `/admin/bookings/[id]` — detail + status transitions + notes + resend email
+- [x] Build `/admin/availability` — calendar with occupancy display + day drawer
+- [x] Build `/admin/account` — user info page
+- [x] Hide public nav/footer on admin routes via ConditionalLayout
 
 ### Success criteria
 
-Admin logs in, views all bookings, updates availability. No unauthenticated access possible.
+Admin logs in, views all bookings with filters, updates status, manages availability with capacity display. Overbooking prevented. Calendar properly themed. No unauthenticated access possible. `npm run build` passes.
 
 ---
 
