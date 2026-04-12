@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Menu, X, ChevronDown } from "lucide-react";
+import AdminNavButton from "@/components/admin/AdminNavButton";
 
 const navItems = [
   {
@@ -19,7 +20,11 @@ const navItems = [
   { label: "Contact", href: "/contact" },
 ];
 
-export default function Navigation() {
+interface NavigationProps {
+  isAdmin?: boolean;
+}
+
+export default function Navigation({ isAdmin = false }: NavigationProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -96,6 +101,7 @@ export default function Navigation() {
             >
               Book Now
             </Link>
+            <AdminNavButton isAdmin={isAdmin} />
           </div>
 
           {/* Mobile toggle */}
@@ -146,6 +152,9 @@ export default function Navigation() {
             >
               Book Now
             </Link>
+            <div className="border-t border-white/5 pt-3 mt-2 flex justify-center">
+              <AdminNavButton isAdmin={isAdmin} />
+            </div>
           </div>
         )}
       </nav>

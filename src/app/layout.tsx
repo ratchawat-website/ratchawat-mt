@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import { Barlow_Condensed, Inter } from "next/font/google";
 
 import "@/styles/globals.css";
-import Navigation from "@/components/layout/Navigation";
-import Footer from "@/components/layout/Footer";
+import ConditionalLayout from "@/components/layout/ConditionalLayout";
 
 const barlowCondensed = Barlow_Condensed({
   subsets: ["latin", "latin-ext"],
@@ -51,17 +50,37 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  let isAdmin = false;
+
+  try {
+    // Dynamic import to avoid build errors when Supabase is not configured
+    if (
+      process.env.NEXT_PUBLIC_SUPABASE_URL &&
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    ) {
+      const { createClient } = await import("@/lib/supabase/server");
+      const supabase = await createClient();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (user) {
+        const { data } = await supabase.rpc("is_admin");
+        isAdmin = !!data;
+      }
+    }
+  } catch {
+    // Silently fail — non-admin is the safe default
+  }
+
   return (
     <html lang="en" className={`${barlowCondensed.variable} ${inter.variable}`}>
       <body className="bg-[#0a0a0a]">
-        <Navigation />
-        <main className="pt-20">{children}</main>
-        <Footer />
+        <ConditionalLayout isAdmin={isAdmin}>{children}</ConditionalLayout>
       </body>
     </html>
   );
