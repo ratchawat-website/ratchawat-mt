@@ -3,8 +3,8 @@
 > **Source of truth for what to build.** Read this at the start of every session alongside PROJET-STATUS.md.
 > Update task statuses as work progresses. Never start work without checking the current phase.
 
-**Last updated:** 2026-04-11
-**Current phase:** Phase 3 — Booking System Full Stack
+**Last updated:** 2026-04-12
+**Current phase:** Phase 4 — Admin Dashboard (Phase 3 complete in dev, end-to-end validated)
 
 ---
 
@@ -84,9 +84,10 @@
 
 ## Phase 3 — Booking System Full Stack
 
-**Status:** IN PROGRESS
+**Status:** COMPLETE (in dev, end-to-end validated 2026-04-12)
 **Goal:** 4 booking flows fully functional in dev with real Supabase persistence, Stripe Checkout, and Resend emails. Replaces the legacy flat BookingWidget.
 **Blocker:** Phase 2 complete.
+**Pre-go-live config:** see `GO-LIVE-CHECKLIST.md` for env var switches deferred to Phase 6.
 **Spec:** `docs/superpowers/specs/2026-04-11-booking-system-full-stack-design.md`
 **Plan:** `docs/superpowers/plans/2026-04-11-booking-system-full-stack.md`
 
@@ -183,20 +184,27 @@ Security scan: 0 critical, 0 high findings. All Lighthouse targets met.
 **Status:** PENDING
 **Goal:** Site live at ratchawatmuaythai.com.
 **Blocker:** Domain transfer confirmed + Phase 5 complete.
+**Reference:** **`GO-LIVE-CHECKLIST.md`** at the project root is the authoritative pre-launch checklist. Read it from start to finish before executing any task in this phase. It documents every env var switch, dashboard action, DNS record, and rollback step that was deferred from Phase 3. Do not skip items.
 
 ### Tasks
 
-- [ ] Analyze Bluehost domain situation
+- [ ] Read `GO-LIVE-CHECKLIST.md` end to end
+- [ ] Analyze Bluehost domain situation (checklist §5.1)
 - [ ] Transfer domain or update nameservers
+- [ ] Resend domain verification (`ratchawatmuaythai.com`) — checklist §3
+- [ ] Stripe LIVE mode switch + create webhook endpoint + seed live products — checklist §1.2 + §2
+- [ ] Decide Supabase migration vs keep current — checklist §1.1 + §4
+- [ ] Clean Supabase test data (availability_blocks, smoke test bookings) — checklist §4.1
 - [ ] Deploy to Vercel (production)
-- [ ] Set all environment variables in Vercel
-- [ ] Add 301 redirections in `next.config.js`
-- [ ] Verify Google Search Console
-- [ ] Configure Google Analytics (migrate G-SVH7KPWM2S or create new)
-- [ ] Update 2 Google Business Profile fiches with new URLs
-- [ ] Smoke test all booking flows on production
-- [ ] Monitor for 48h post-launch
+- [ ] Set all environment variables in Vercel — checklist §1
+- [ ] Switch `ADMIN_EMAIL` from RD's dev address to `chor.ratchawat@gmail.com` — checklist §1.4
+- [ ] Add 301 redirections in `next.config.js` — checklist §5.3
+- [ ] Verify Google Search Console — checklist §6.2
+- [ ] Configure Google Analytics (migrate G-SVH7KPWM2S or create new) — checklist §6.1
+- [ ] Update 2 Google Business Profile fiches with new URLs — checklist §6.3
+- [ ] Smoke test all booking flows on production — checklist §9
+- [ ] Monitor for 48h post-launch — checklist §10 rollback plan ready
 
 ### Success criteria
 
-Site accessible at ratchawatmuaythai.com. All booking flows confirmed working in production.
+Site accessible at ratchawatmuaythai.com. All booking flows confirmed working in production. All sign-off rows in `GO-LIVE-CHECKLIST.md` checked.
