@@ -8,6 +8,7 @@ import { organizationSchema } from "@/components/seo/SchemaOrg";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getPriceById } from "@/content/pricing";
 import { CheckCircle, Mail, MapPin, Clock } from "lucide-react";
+import { formatDateShort } from "@/lib/utils/date-format";
 
 export const metadata = generatePageMeta({
   title: "Booking Confirmed | Ratchawat Muay Thai Koh Samui",
@@ -131,14 +132,14 @@ export default async function BookingConfirmedPage({ searchParams }: Props) {
                 <div className="flex justify-between gap-4">
                   <span className="text-on-surface-variant">Start date</span>
                   <span className="text-on-surface font-medium">
-                    {booking.startDate}
+                    {formatDateShort(booking.startDate)}
                   </span>
                 </div>
                 {booking.endDate && (
                   <div className="flex justify-between gap-4">
                     <span className="text-on-surface-variant">End date</span>
                     <span className="text-on-surface font-medium">
-                      {booking.endDate}
+                      {formatDateShort(booking.endDate)}
                     </span>
                   </div>
                 )}

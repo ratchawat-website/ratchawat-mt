@@ -11,6 +11,7 @@ import ContactInfoForm, {
 } from "@/components/booking/ContactInfoForm";
 import BookingReview from "@/components/booking/BookingReview";
 import { getPricesByBookingType, getPriceById } from "@/content/pricing";
+import { formatDateLong } from "@/lib/utils/date-format";
 
 const STEPS = ["Package", "Check-in", "Contact", "Review"];
 
@@ -47,14 +48,6 @@ function getInventoryKeyForPackage(priceId: string | null): InventoryKey {
   return "rooms";
 }
 
-function formatDate(d: Date): string {
-  return d.toLocaleDateString("en-US", {
-    weekday: "long",
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  });
-}
 
 export default function CampStayWizard() {
   const searchParams = useSearchParams();
@@ -210,11 +203,11 @@ export default function CampStayWizard() {
             <div className="bg-primary/5 border-2 border-primary/20 rounded-[var(--radius-card)] p-4">
               <p className="text-on-surface text-sm">
                 <span className="text-on-surface-variant">Check-in:</span>{" "}
-                <strong>{formatDate(checkIn)}</strong>
+                <strong>{formatDateLong(checkIn)}</strong>
               </p>
               <p className="text-on-surface text-sm mt-1">
                 <span className="text-on-surface-variant">Check-out:</span>{" "}
-                <strong>{formatDate(checkOut)}</strong>
+                <strong>{formatDateLong(checkOut)}</strong>
               </p>
             </div>
           )}
@@ -240,8 +233,8 @@ export default function CampStayWizard() {
           <BookingReview
             rows={[
               { label: "Package", value: selectedPackage.name },
-              { label: "Check-in", value: formatDate(checkIn) },
-              { label: "Check-out", value: formatDate(checkOut) },
+              { label: "Check-in", value: formatDateLong(checkIn) },
+              { label: "Check-out", value: formatDateLong(checkOut) },
               {
                 label: "Access",
                 value: "Stay Plai Laem, train any camp",

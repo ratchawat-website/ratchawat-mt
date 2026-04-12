@@ -13,6 +13,7 @@ import GlassCard from "@/components/ui/GlassCard";
 import { MapPin, Swords, Brain, Shield, Zap, Info } from "lucide-react";
 import { getPricesByBookingType, getPriceById } from "@/content/pricing";
 import type { InventoryKey } from "@/lib/admin/inventory";
+import { formatDateLong } from "@/lib/utils/date-format";
 
 const STEPS = ["Info", "Tier", "Camp & Date", "Contact", "Review"];
 
@@ -356,12 +357,7 @@ export default function FighterWizard() {
               },
               {
                 label: "Start date",
-                value: date.toLocaleDateString("en-US", {
-                  weekday: "long",
-                  month: "long",
-                  day: "numeric",
-                  year: "numeric",
-                }),
+                value: formatDateLong(date),
               },
               { label: "Contact", value: contact.email },
             ]}

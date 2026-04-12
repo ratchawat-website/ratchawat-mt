@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import StatusBadge from "./StatusBadge";
 import TypeBadge from "./TypeBadge";
+import { formatDateShort } from "@/lib/utils/date-format";
 
 interface Booking {
   id: string;
@@ -61,11 +62,7 @@ export default function BookingsTable({ bookings }: Props) {
               className="border-b border-outline-variant hover:bg-surface-lowest transition-colors"
             >
               <td className="py-3 px-4 text-on-surface-variant whitespace-nowrap">
-                {new Date(booking.created_at).toLocaleDateString("en-US", {
-                  month: "short",
-                  day: "numeric",
-                  year: "numeric",
-                })}
+                {formatDateShort(booking.created_at)}
               </td>
               <td className="py-3 px-4">
                 <TypeBadge type={booking.type} />
@@ -82,9 +79,9 @@ export default function BookingsTable({ bookings }: Props) {
                 </div>
               </td>
               <td className="py-3 px-4 text-on-surface-variant whitespace-nowrap">
-                {booking.start_date}
+                {formatDateShort(booking.start_date)}
                 {booking.end_date && booking.end_date !== booking.start_date
-                  ? ` - ${booking.end_date}`
+                  ? ` - ${formatDateShort(booking.end_date)}`
                   : ""}
               </td>
               <td className="py-3 px-4 text-right font-semibold text-on-surface whitespace-nowrap">

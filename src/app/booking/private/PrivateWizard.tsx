@@ -12,6 +12,7 @@ import BookingReview from "@/components/booking/BookingReview";
 import { MapPin } from "lucide-react";
 import { getPricesByBookingType, getPriceById } from "@/content/pricing";
 import { PRIVATE_SLOTS } from "@/lib/config/slots";
+import { formatDateLong } from "@/lib/utils/date-format";
 
 const STEPS = ["Session type", "Camp", "Date & Time", "Contact", "Review"];
 
@@ -300,12 +301,7 @@ export default function PrivateWizard() {
               },
               {
                 label: "Date",
-                value: date.toLocaleDateString("en-US", {
-                  weekday: "long",
-                  month: "long",
-                  day: "numeric",
-                  year: "numeric",
-                }),
+                value: formatDateLong(date),
               },
               { label: "Time", value: timeSlot },
               ...(isGroup

@@ -7,6 +7,7 @@ import StatusBadge from "@/components/admin/StatusBadge";
 import TypeBadge from "@/components/admin/TypeBadge";
 import BookingActions from "@/components/admin/BookingActions";
 import BookingNotesEditor from "@/components/admin/BookingNotesEditor";
+import { formatDateLong } from "@/lib/utils/date-format";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -20,11 +21,7 @@ const CAMP_LABELS: Record<string, string> = {
 
 function formatDate(dateStr: string | null): string {
   if (!dateStr) return "-";
-  return new Date(dateStr).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
+  return formatDateLong(dateStr);
 }
 
 function formatAmount(amount: number | null): string {

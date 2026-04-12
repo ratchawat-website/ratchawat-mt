@@ -1,6 +1,7 @@
 import Link from "next/link";
 import StatusBadge from "./StatusBadge";
 import TypeBadge from "./TypeBadge";
+import { formatDateShort } from "@/lib/utils/date-format";
 
 interface Booking {
   id: string;
@@ -49,9 +50,9 @@ export default function BookingsCards({ bookings }: Props) {
 
           {/* Dates */}
           <div className="text-xs text-on-surface-variant mb-3">
-            {booking.start_date}
+            {formatDateShort(booking.start_date)}
             {booking.end_date && booking.end_date !== booking.start_date
-              ? ` - ${booking.end_date}`
+              ? ` - ${formatDateShort(booking.end_date)}`
               : ""}
           </div>
 
