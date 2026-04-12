@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 const VALID_TRANSITIONS: Record<string, string[]> = {
   pending: ["confirmed", "cancelled"],
@@ -34,5 +35,26 @@ export async function POST(
 
   const { error } = await supabase.from("bookings").update({ status }).eq("id", id);
   if (error) return NextResponse.json({ error: "Update failed" }, { status: 500 });
+
+  // On cancellation, remove the corresponding private-slot availability block
+  if (status === "cancelled") {
+    const adminSupabase = createAdminClient();
+    const { data: cancelledBooking } = await adminSupabase
+      .from("bookings")
+      .select("type, start_date, time_slot")
+      .eq("id", id)
+      .single();
+
+    if (cancelledBooking?.type === "private" && cancelledBooking.time_slot) {
+      await adminSupabase
+        .from("availability_blocks")
+        .delete()
+        .eq("date", cancelledBooking.start_date)
+        .eq("type", "private-slot")
+        .eq("time_slot", cancelledBooking.time_slot)
+        .eq("reason", `Booking ${id}`);
+    }
+  }
+
   return NextResponse.json({ ok: true, status });
 }

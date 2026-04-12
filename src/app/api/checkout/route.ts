@@ -93,6 +93,19 @@ export async function POST(request: Request) {
       );
     }
 
+    // If this is a private session, create an availability block for the slot
+    if (data.type === "private" && data.time_slot) {
+      await supabase
+        .from("availability_blocks")
+        .insert({
+          date: data.start_date,
+          type: "private-slot",
+          time_slot: data.time_slot,
+          is_blocked: true,
+          reason: `Booking ${booking.id}`,
+        });
+    }
+
     // Build success/cancel URLs from the actual request origin.
     // This works in dev (localhost:3000) and prod without depending on
     // NEXT_PUBLIC_SITE_URL, which is set for SSR metadata and may legitimately

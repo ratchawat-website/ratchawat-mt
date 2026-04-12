@@ -91,6 +91,30 @@ export async function POST(request: Request) {
     } catch (emailErr) {
       console.error("Email send failed:", emailErr);
     }
+
+    // Ensure a private-slot block exists for confirmed private sessions
+    // (idempotent: checkout route creates it on booking insert, this is a safety net)
+    if (updated.type === "private" && updated.time_slot) {
+      const { data: existingBlock } = await supabase
+        .from("availability_blocks")
+        .select("id")
+        .eq("date", updated.start_date)
+        .eq("type", "private-slot")
+        .eq("time_slot", updated.time_slot)
+        .maybeSingle();
+
+      if (!existingBlock) {
+        await supabase
+          .from("availability_blocks")
+          .insert({
+            date: updated.start_date,
+            type: "private-slot",
+            time_slot: updated.time_slot,
+            is_blocked: true,
+            reason: `Booking ${bookingId}`,
+          });
+      }
+    }
   } else if (event.type === "checkout.session.expired") {
     const session = event.data.object as Stripe.Checkout.Session;
     const bookingId = session.metadata?.booking_id;
