@@ -33,7 +33,7 @@ export default function DatePicker({
   }
 
   return (
-    <div className="bg-surface-lowest rounded-lg p-5">
+    <div className="bg-surface-lowest rounded-lg p-5 flex justify-center">
       <DayPicker
         mode="single"
         selected={selected}

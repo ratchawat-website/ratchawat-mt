@@ -12,7 +12,7 @@ interface Booking {
   client_email: string;
   start_date: string;
   end_date?: string | null;
-  amount_total: number;
+  price_amount: number;
 }
 
 interface Props {
@@ -88,8 +88,8 @@ export default function BookingsTable({ bookings }: Props) {
                   : ""}
               </td>
               <td className="py-3 px-4 text-right font-semibold text-on-surface whitespace-nowrap">
-                {booking.amount_total != null
-                  ? `${booking.amount_total.toLocaleString("en-US")} ฿`
+                {booking.price_amount != null
+                  ? `${booking.price_amount.toLocaleString("en-US")} ฿`
                   : "-"}
               </td>
               <td className="py-3 px-2">

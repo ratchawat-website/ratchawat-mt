@@ -1,7 +1,7 @@
 import type { ClassNames } from "react-day-picker";
 
 export const calendarClassNames: Partial<ClassNames> = {
-  root: "w-full",
+  root: "w-full flex flex-col items-center",
   months: "flex flex-col",
   month: "space-y-4",
   month_caption: "flex justify-center relative items-center h-10",
@@ -16,7 +16,7 @@ export const calendarClassNames: Partial<ClassNames> = {
   day_button: "w-10 h-10 flex items-center justify-center rounded-md text-sm font-medium text-on-surface hover:ring-2 hover:ring-primary transition-colors duration-150 cursor-pointer",
   selected: "!bg-primary !text-on-primary font-bold rounded-md ring-0 hover:!ring-0",
   today: "ring-1 ring-primary rounded-md",
-  disabled: "!text-on-surface-variant/30 line-through pointer-events-none hover:ring-0",
+  disabled: "!text-on-surface-variant/30 !bg-surface-low/50 line-through pointer-events-none hover:ring-0 rounded-md opacity-40",
   outside: "!text-on-surface-variant/20",
   hidden: "invisible",
 };

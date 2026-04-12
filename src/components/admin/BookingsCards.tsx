@@ -11,7 +11,7 @@ interface Booking {
   client_email: string;
   start_date: string;
   end_date?: string | null;
-  amount_total: number;
+  price_amount: number;
 }
 
 interface Props {
@@ -57,8 +57,8 @@ export default function BookingsCards({ bookings }: Props) {
 
           {/* Amount */}
           <div className="text-lg font-bold text-on-surface">
-            {booking.amount_total != null
-              ? `${booking.amount_total.toLocaleString("en-US")} ฿`
+            {booking.price_amount != null
+              ? `${booking.price_amount.toLocaleString("en-US")} ฿`
               : "-"}
           </div>
         </Link>
