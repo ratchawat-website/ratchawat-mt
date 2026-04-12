@@ -48,14 +48,14 @@ All "Book Now" links pass `?package=<price-id>` so wizards pre-select the packag
 
 ### Private lessons
 1. Session type — solo/group, adult/kids
-2. Date — AvailabilityCalendar (reads availability_blocks, type='private')
+2. Date — AvailabilityCalendar (reads availability_blocks, type IN ('full','private','private-slot'))
 3. Time slot — from available slots on chosen date
 4. Contact info
 5. Review + Stripe Checkout
 
 ### Camp Stay (training + accommodation, Plai Laem only)
 1. Package — 1 week / 2 weeks / 1 month Room / 1 month Bungalow
-2. Check-in date — AvailabilityCalendar (reads availability_blocks, type IN ('camp-stay','all'))
+2. Check-in date — AvailabilityCalendar (reads availability_blocks, type IN ('full') + occupancy API)
 3. Contact info
 4. Review + Stripe Checkout
 
@@ -63,12 +63,12 @@ Note: Clients stay at Plai Laem but can train at either camp (Bo Phut or Plai La
 
 ### Fighter Program
 1. Info screen — what is included in the Fighter Program
-2. Tier selection — Fighter Only (9,500 THB) / Fighter + Room (20,000 THB approx) / Fighter + Bungalow (25,000 THB approx)
+2. Tier selection — Fighter Only (9,500 THB) / Fighter + Room (20,000 THB) / Fighter + Bungalow (25,500 THB)
 3. Camp + start date — Bo Phut or Plai Laem for Fighter Only, auto-locked to Plai Laem with AvailabilityCalendar for stay tiers
 4. Contact info
 5. Review + Stripe Checkout
 
-Note: Fighter+Room and Fighter+Bungalow prices are approximate and marked with priceTodo until client confirmation.
+Note: Fighter+Room confirmed at 20,000 THB (2026-04-12).
 
 ---
 
@@ -76,7 +76,9 @@ Note: Fighter+Room and Fighter+Bungalow prices are approximate and marked with p
 
 **DatePicker** — used for training start date, fighter start date. react-day-picker v9 with full Tailwind dark theme (shared tokens in `src/components/ui/calendar-tokens.ts`). No Supabase.
 
-**AvailabilityCalendar** — used for private and camp-stay flows. Fetches `availability_blocks` from Supabase + occupancy data from `/api/availability/occupancy`. Blocked dates (manual blocks OR capacity full) = greyed out, unselectable. For multi-day stays, a check-in date is blocked if ANY night in the resulting range is at capacity. Admin creates blocks via `/admin/availability`.
+**AvailabilityCalendar** — used for private and camp-stay flows. Fetches `availability_blocks` from Supabase + occupancy data from `/api/availability/occupancy`. Block type filter depends on booking type: private fetches `('full','private','private-slot')`, camp-stay/fighter fetches only `('full')`. Blocked dates (manual blocks OR capacity full) = greyed out, unselectable. For multi-day stays, a check-in date is blocked if ANY night in the resulting range is at capacity. Private bookings auto-create `availability_blocks` rows (type='private-slot') on checkout, deleted on cancellation.
+
+**Date formatting** — unified via `src/lib/utils/date-format.ts`. Short format `formatDateShort` (Apr 12, 2026) for tables, cards, lists. Long format `formatDateLong` (Saturday, April 12, 2026) for review steps and detail pages.
 
 **Private lesson time slots:** `08:00, 11:00, 12:00, 13:00, 14:00, 15:00, 16:00` (7 slots). Centralized in `src/lib/config/slots.ts`.
 
@@ -140,7 +142,7 @@ create table bookings (
 create table availability_blocks (
   id uuid primary key default gen_random_uuid(),
   created_at timestamptz not null default now(),
-  type text not null check (type in ('private','camp-stay','all')),
+  type text not null check (type in ('private','private-slot','full')),
   date date not null,
   time_slot text,
   is_blocked boolean not null default true,
@@ -237,10 +239,11 @@ Templates live in `src/lib/email/`.
 **API routes:**
 ```
 POST /api/admin/signout                    — sign out
-POST /api/admin/bookings/[id]/status       — update booking status
+POST /api/admin/bookings                   — create manual booking (admin, no Stripe)
+POST /api/admin/bookings/[id]/status       — update booking status (+ delete private-slot block on cancel)
 POST /api/admin/bookings/[id]/notes        — update internal notes
 POST /api/admin/bookings/[id]/resend-email — resend confirmation email
-POST /api/admin/availability               — create availability block
+POST /api/admin/availability               — create availability block (types: private, private-slot, full)
 DELETE /api/admin/availability/[id]        — delete availability block
 GET /api/availability/occupancy            — public occupancy data for calendar
 ```
