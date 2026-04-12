@@ -5,6 +5,7 @@ import { queryBookings, PAGE_SIZE } from "@/lib/admin/bookings-query";
 import BookingsFilters from "@/components/admin/BookingsFilters";
 import BookingsTable from "@/components/admin/BookingsTable";
 import BookingsCards from "@/components/admin/BookingsCards";
+import BookingsHeader from "@/components/admin/BookingsHeader";
 
 interface PageProps {
   searchParams: Promise<Record<string, string | undefined>>;
@@ -56,6 +57,11 @@ export default async function AdminBookingsPage({ searchParams }: PageProps) {
           </p>
         </div>
       </div>
+
+      {/* Create Booking Header */}
+      <Suspense>
+        <BookingsHeader />
+      </Suspense>
 
       {/* Filters */}
       <Suspense>
