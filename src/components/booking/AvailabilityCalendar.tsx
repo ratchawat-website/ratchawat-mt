@@ -41,10 +41,17 @@ export default function AvailabilityCalendar({
     const to = format(addDays(today, 180), "yyyy-MM-dd");
 
     const supabase = createClient();
+    // Compute block types to fetch based on booking type:
+    // - private sessions are blocked by full closures, full-day private blocks, and per-slot blocks
+    // - camp-stay / fighter are only blocked by full closures
+    const blockTypes =
+      type === "private"
+        ? ["full", "private", "private-slot"]
+        : ["full"];
     const blocksPromise = supabase
       .from("availability_blocks")
       .select("date, time_slot, type")
-      .in("type", [type, "all"])
+      .in("type", blockTypes)
       .eq("is_blocked", true)
       .then(({ data, error }) => {
         if (error) {
@@ -80,7 +87,8 @@ export default function AvailabilityCalendar({
     const dateSlotMap = new Map<string, Set<string>>();
 
     for (const block of blocks) {
-      if (!block.time_slot) {
+      // "full" and "private" block the entire day; "private-slot" blocks an individual slot
+      if (block.type === "full" || block.type === "private" || !block.time_slot) {
         blockedDates.add(block.date);
       } else {
         if (!dateSlotMap.has(block.date)) dateSlotMap.set(block.date, new Set());
