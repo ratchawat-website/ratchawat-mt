@@ -24,7 +24,6 @@ interface Props {
 }
 
 const BLOCK_TYPES = [
-  { type: "camp-stay", label: "Block camp-stay rooms" },
   { type: "private", label: "Block all private sessions" },
   { type: "full", label: "Block everything (camp closed)" },
 ] as const;
@@ -172,6 +171,16 @@ export default function AdminDayDrawer({
                 </span>
               </div>
             </div>
+          </section>
+
+          {/* Quick actions */}
+          <section>
+            <a
+              href={`/admin/bookings?create=1&date=${dateStr}`}
+              className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg border-2 border-primary bg-primary/10 text-primary text-sm font-semibold hover:bg-primary/20 transition-colors focus:outline-none focus:ring-2 focus:ring-primary"
+            >
+              + Create Booking for {format(date, "MMM d")}
+            </a>
           </section>
 
           {/* Reason field */}
