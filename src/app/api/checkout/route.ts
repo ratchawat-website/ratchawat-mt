@@ -3,6 +3,8 @@ import Stripe from "stripe";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { BookingRequestSchema } from "@/lib/validation/booking";
 import { getPriceById } from "@/content/pricing";
+import { getInventoryKey } from "@/lib/admin/inventory";
+import { checkRangeAvailability } from "@/lib/admin/availability";
 
 function getStripe(): Stripe {
   if (!process.env.STRIPE_SECRET_KEY) {
@@ -42,6 +44,24 @@ export async function POST(request: Request) {
     }
 
     const totalAmount = pkg.price * data.num_participants;
+
+    // Capacity check for accommodation bookings
+    const inventoryKey = getInventoryKey(data.price_id);
+    if (inventoryKey && data.start_date && data.end_date) {
+      const check = await checkRangeAvailability(
+        inventoryKey,
+        data.start_date,
+        data.end_date,
+      );
+      if (!check.ok) {
+        return NextResponse.json(
+          {
+            error: `Sold out on ${check.conflictDate}. Please choose different dates.`,
+          },
+          { status: 409 },
+        );
+      }
+    }
 
     const supabase = createAdminClient();
     const { data: booking, error } = await supabase
