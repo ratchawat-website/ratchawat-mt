@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import BookingWizard from "@/components/booking/BookingWizard";
 import AvailabilityCalendar from "@/components/booking/AvailabilityCalendar";
+import type { InventoryKey } from "@/lib/admin/inventory";
 import ContactInfoForm, {
   ContactInfo,
   isContactInfoValid,
@@ -31,6 +32,19 @@ function getDurationDays(id: string): number {
   if (id === "camp-stay-1month") return 30;
   if (id === "camp-stay-bungalow-monthly") return 30;
   return 7;
+}
+
+function getStayDuration(priceId: string | null): number {
+  if (!priceId) return 7;
+  if (priceId.includes("1week")) return 7;
+  if (priceId.includes("2weeks")) return 14;
+  if (priceId.includes("1month") || priceId.includes("monthly")) return 30;
+  return 7;
+}
+
+function getInventoryKeyForPackage(priceId: string | null): InventoryKey {
+  if (priceId && priceId.includes("bungalow")) return "bungalows";
+  return "rooms";
 }
 
 function formatDate(d: Date): string {
@@ -189,6 +203,8 @@ export default function CampStayWizard() {
             type="camp-stay"
             selected={checkIn}
             onSelect={setCheckIn}
+            inventoryKey={getInventoryKeyForPackage(priceId)}
+            stayDurationDays={getStayDuration(priceId)}
           />
           {checkIn && checkOut && (
             <div className="bg-primary/5 border-2 border-primary/20 rounded-[var(--radius-card)] p-4">

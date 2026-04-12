@@ -12,6 +12,7 @@ import BookingReview from "@/components/booking/BookingReview";
 import GlassCard from "@/components/ui/GlassCard";
 import { MapPin, Swords, Brain, Shield, Zap, Info } from "lucide-react";
 import { getPricesByBookingType, getPriceById } from "@/content/pricing";
+import type { InventoryKey } from "@/lib/admin/inventory";
 
 const STEPS = ["Info", "Tier", "Camp & Date", "Contact", "Review"];
 
@@ -41,6 +42,11 @@ function isStayTier(id: string | null): boolean {
   return (
     id === "fighter-stay-room-monthly" || id === "fighter-stay-bungalow-monthly"
   );
+}
+
+function getStayInventoryKey(id: string | null): InventoryKey {
+  if (id && id.includes("bungalow")) return "bungalows";
+  return "rooms";
 }
 
 export default function FighterWizard() {
@@ -306,6 +312,8 @@ export default function FighterWizard() {
                 type="camp-stay"
                 selected={date}
                 onSelect={setDate}
+                inventoryKey={getStayInventoryKey(priceId)}
+                stayDurationDays={30}
               />
             ) : (
               <DatePicker

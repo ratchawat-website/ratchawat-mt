@@ -5,6 +5,8 @@ import DatePicker from "./DatePicker";
 import { createClient } from "@/lib/supabase/browser";
 import { Matcher } from "react-day-picker";
 import { PRIVATE_SLOTS } from "@/lib/config/slots";
+import { INVENTORY, type InventoryKey } from "@/lib/admin/inventory";
+import { addDays, format } from "date-fns";
 
 interface AvailabilityBlock {
   date: string;
@@ -17,6 +19,8 @@ interface Props {
   selected: Date | undefined;
   onSelect: (date: Date | undefined) => void;
   onAvailableSlotsChange?: (slots: string[]) => void;
+  inventoryKey?: InventoryKey;
+  stayDurationDays?: number;
 }
 
 export default function AvailabilityCalendar({
@@ -24,13 +28,20 @@ export default function AvailabilityCalendar({
   selected,
   onSelect,
   onAvailableSlotsChange,
+  inventoryKey,
+  stayDurationDays,
 }: Props) {
   const [blocks, setBlocks] = useState<AvailabilityBlock[]>([]);
+  const [occupancy, setOccupancy] = useState<Record<string, number>>({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const today = new Date();
+    const from = format(today, "yyyy-MM-dd");
+    const to = format(addDays(today, 180), "yyyy-MM-dd");
+
     const supabase = createClient();
-    supabase
+    const blocksPromise = supabase
       .from("availability_blocks")
       .select("date, time_slot, type")
       .in("type", [type, "all"])
@@ -38,12 +49,31 @@ export default function AvailabilityCalendar({
       .then(({ data, error }) => {
         if (error) {
           console.error("Failed to load availability:", error);
-        } else {
-          setBlocks(data ?? []);
+          return [];
         }
-        setLoading(false);
+        return data ?? [];
       });
-  }, [type]);
+
+    const occupancyPromise = inventoryKey
+      ? fetch(
+          `/api/availability/occupancy?key=${inventoryKey}&from=${from}&to=${to}`,
+        )
+          .then((r) => r.json())
+          .then((json) => (json.occupancy ?? {}) as Record<string, number>)
+          .catch((err) => {
+            console.error("Failed to load occupancy:", err);
+            return {};
+          })
+      : Promise.resolve({});
+
+    Promise.all([blocksPromise, occupancyPromise]).then(
+      ([blocksData, occupancyData]) => {
+        setBlocks(blocksData as AvailabilityBlock[]);
+        setOccupancy(occupancyData);
+        setLoading(false);
+      },
+    );
+  }, [type, inventoryKey]);
 
   const disabledDays: Matcher[] = useMemo(() => {
     const blockedDates = new Set<string>();
@@ -64,8 +94,37 @@ export default function AvailabilityCalendar({
       }
     }
 
+    // Capacity-based blocking
+    if (inventoryKey) {
+      const capacity = INVENTORY[inventoryKey];
+      const duration = stayDurationDays ?? 1;
+
+      // For multi-night stays, block check-in date if ANY night during the stay is at capacity
+      // For single-day, block any day at capacity
+      if (duration > 1) {
+        // Iterate all possible check-in dates in the occupancy window
+        for (const [dateStr, count] of Object.entries(occupancy)) {
+          if (count < capacity) continue;
+          // This night is full — find all check-in dates whose stay overlaps this night.
+          // A check-in on D occupies nights D, D+1, ..., D+(duration-1).
+          // Night N is blocked if D <= N <= D+(duration-1), i.e. N-(duration-1) <= D <= N.
+          const nightDate = new Date(dateStr + "T00:00:00");
+          for (let offset = 0; offset < duration; offset++) {
+            const checkInDate = new Date(
+              nightDate.getTime() - offset * 86400000,
+            );
+            blockedDates.add(format(checkInDate, "yyyy-MM-dd"));
+          }
+        }
+      } else {
+        for (const [dateStr, count] of Object.entries(occupancy)) {
+          if (count >= capacity) blockedDates.add(dateStr);
+        }
+      }
+    }
+
     return Array.from(blockedDates).map((d) => new Date(d + "T00:00:00"));
-  }, [blocks, type]);
+  }, [blocks, type, occupancy, inventoryKey, stayDurationDays]);
 
   useEffect(() => {
     if (!selected || type !== "private" || !onAvailableSlotsChange) return;
