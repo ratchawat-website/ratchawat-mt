@@ -3,8 +3,8 @@
 > **This file is the primary reference for the project.**
 > Each agent must read it at the start of a conversation and update it after each modification.
 
-**Last updated:** 2026-04-12
-**Phase:** Phase 4 -- Admin Dashboard + Capacity Tracking (COMPLETE in dev, audit fixes applied). Next: Phase 5 Security & Quality.
+**Last updated:** 2026-04-13
+**Phase:** Phase 6 -- Go-live preparation (Phase 4 + audit complete, Phase 5 partial).
 **Pre-go-live config:** Read `GO-LIVE-CHECKLIST.md` before any production deployment.
 **Project status:** Production refonte accepted by client. Maquette phase complete. Building toward full deployment (no live deployment until all 6 phases complete).
 **Rebuilt from:** https://ratchawatmuaythai.com/
@@ -331,6 +331,7 @@ ratchawat-mt/
 | 6 | Medium | npm audit flags `next@16.0.0` high severity DoS (GHSA-q4gf-8mx6-v5v3). Fix requires `--force` upgrade to 16.2.3 | Deferred to Phase 5 Security |
 | 7 | Low | Blog section not implemented | Planned post-launch |
 | 8 | Low | Multi-language (FR/ES) not implemented yet | Planned post-launch |
+| 9 | **High** | **Camp addresses are WRONG** on all pages. Bo Phut and Plai Laem addresses need correction across: `/camps/bo-phut`, `/camps/plai-laem`, `/contact`, `/accommodation`, booking confirmation page, confirmation emails, Schema.org LocalBusiness/SportsActivityLocation, LocationCard components, Footer, and any other location where addresses appear. Client to provide correct addresses. | **TODO — Phase 5/6** |
 
 ---
 
@@ -338,9 +339,9 @@ ratchawat-mt/
 
 > Read `ROADMAP.md` for the full phased plan and current task list.
 
-### Current phase: Phase 4 -- Admin Dashboard
+### Current phase: Phase 6 -- Go-live
 
-Phase 3 is complete in dev: 4 booking flows live, Supabase persistence, Stripe Checkout, Resend emails, end-to-end validated with test payment. See `ROADMAP.md` for Phase 4 task checklist.
+Phase 4 (Admin Dashboard) + post-audit (14 tasks) complete. Phase 5 partial: Zod validation done, fighter price confirmed. Remaining Phase 5 tasks (security scan, rate limiting, Lighthouse, real photos) deferred to post-launch or ongoing. See `ROADMAP.md` for Phase 6 task checklist and `GO-LIVE-CHECKLIST.md` for deployment steps.
 
 **Pre-go-live config:** Read `GO-LIVE-CHECKLIST.md` before any production deployment. It documents all env var switches, Resend domain verification, Stripe LIVE mode toggle, Supabase test data cleanup, DNS records, and rollback plan.
 

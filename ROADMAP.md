@@ -3,8 +3,8 @@
 > **Source of truth for what to build.** Read this at the start of every session alongside PROJET-STATUS.md.
 > Update task statuses as work progresses. Never start work without checking the current phase.
 
-**Last updated:** 2026-04-12
-**Current phase:** Phase 5 — Security & Quality (Phase 4 complete in dev)
+**Last updated:** 2026-04-13
+**Current phase:** Phase 6 — Go-live (Phase 4 audit complete, Phase 5 partial)
 
 ---
 
@@ -78,7 +78,7 @@
 
 ### Known follow-ups
 
-- Fighter + Room / Fighter + Bungalow prices are approximate (20,000 / 25,000 THB). Client to confirm final prices — tracked in `pricing.ts` via `priceTodo` field. Remove `priceTodo` and update display once confirmed.
+- ~~Fighter + Room / Fighter + Bungalow prices are approximate~~ DONE 2026-04-12: Fighter+Room confirmed at 20,000 THB. `priceTodo` removed.
 
 ---
 
@@ -130,9 +130,9 @@ All 4 booking flows payable end-to-end with Stripe test card `4242 4242 4242 424
 
 ### Known follow-ups (deferred)
 
-- Replace approximate prices for `fighter-stay-room-monthly` and `fighter-stay-bungalow-monthly` once client confirms
-- Rate limiting, CORS, and Zod hardening on API routes (tracked in new Phase 5)
-- Domain verification for Resend production sender (tracked in new Phase 6)
+- ~~Replace approximate prices for `fighter-stay-room-monthly` and `fighter-stay-bungalow-monthly` once client confirms~~ DONE 2026-04-12 (20,000 THB confirmed)
+- Rate limiting, CORS, and Zod hardening on API routes (tracked in Phase 5)
+- Domain verification for Resend production sender (tracked in Phase 6)
 
 ---
 
@@ -164,15 +164,32 @@ All 4 booking flows payable end-to-end with Stripe test card `4242 4242 4242 424
 - [x] Build `/admin/account` — user info page
 - [x] Hide public nav/footer on admin routes via ConditionalLayout
 
+### Post-completion audit (2026-04-12/13)
+
+**Spec:** `docs/superpowers/specs/2026-04-12-booking-availability-audit-design.md`
+**Plan:** `docs/superpowers/plans/2026-04-12-booking-availability-audit.md`
+
+- [x] Fix `availability_blocks` type constraint: `('private','private-slot','full')` — removed `camp-stay` and `all`
+- [x] Unified date formatting via `src/lib/utils/date-format.ts` (7 files migrated)
+- [x] Calendar month navigation: custom external nav (ChevronLeft/ChevronRight), centered grid
+- [x] Block type filter fix in AvailabilityCalendar (full/private/private-slot)
+- [x] Private booking → availability_blocks sync (create on checkout+webhook, delete on cancel)
+- [x] Admin drawer: removed "Block camp-stay rooms", added "Create Booking" link
+- [x] Admin "Create Booking": validation schema + API + form + page integration
+- [x] Admin capacity check enforced: auto-compute end_date from package duration
+- [x] Fighter+Room confirmed at 20,000 THB, /accommodation button updated
+- [x] Camp Stay package names clarified: added "(Room)" to 1 Week and 2 Weeks
+- [x] Applied all migrations to dev Supabase (rlmeafyvedpsflwohuyy)
+
 ### Success criteria
 
-Admin logs in, views all bookings with filters, updates status, manages availability with capacity display. Overbooking prevented. Calendar properly themed. No unauthenticated access possible. `npm run build` passes.
+Admin logs in, views all bookings with filters, updates status, manages availability with capacity display. Overbooking prevented (client + admin). Calendar properly themed with month navigation. No unauthenticated access possible. `npm run build` passes.
 
 ---
 
 ## Phase 5 — Security & Quality
 
-**Status:** PENDING
+**Status:** PARTIAL (some tasks completed during Phase 4 audit, rest deferred to post-launch)
 **Goal:** Production-ready. Lighthouse targets met. Zero critical vulnerabilities.
 **Blocker:** Phase 4 complete.
 
@@ -181,12 +198,13 @@ Admin logs in, views all bookings with filters, updates status, manages availabi
 - [ ] Run `/nextjs-security-scan` — fix all critical + high findings
 - [ ] Add rate limiting to `/api/*` routes
 - [ ] Configure CORS
-- [ ] Add Zod validation to all API routes
+- [x] Add Zod validation to all API routes (client: BookingRequestSchema, admin: AdminBookingSchema)
 - [ ] Lighthouse: Performance ≥ 90, Accessibility ≥ 95, Best Practices ≥ 90, SEO = 100
 - [ ] Audit all pages vs AUDIT-SEO.md (schemas, GEO, internal links)
 - [ ] Update `llms.txt` + `llms-full.txt` with booking system info
-- [ ] Confirm fighter + accommodation price (replace TODO)
+- [x] Confirm fighter + accommodation price (20,000 THB confirmed 2026-04-12)
 - [ ] Photos: replace all `ImagePlaceholder` with real images (pending client)
+- [ ] **FIX CAMP ADDRESSES** — correct addresses for Bo Phut and Plai Laem camps on ALL pages, data, booking confirmations, emails, and everywhere addresses are displayed (current addresses are wrong)
 
 ### Success criteria
 
