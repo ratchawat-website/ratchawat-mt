@@ -5,6 +5,17 @@ import { AdminBookingSchema } from "@/lib/validation/admin-booking";
 import { getPriceById } from "@/content/pricing";
 import { getInventoryKey } from "@/lib/admin/inventory";
 import { checkRangeAvailability } from "@/lib/admin/availability";
+import { addDays, format } from "date-fns";
+
+function computeEndDate(priceId: string, startDate: string): string | null {
+  let days: number | null = null;
+  if (priceId.includes("1week")) days = 7;
+  else if (priceId.includes("2weeks")) days = 14;
+  else if (priceId.includes("1month") || priceId.includes("monthly")) days = 30;
+  else if (priceId.includes("bungalow")) days = 30;
+  if (!days) return null;
+  return format(addDays(new Date(startDate + "T00:00:00"), days), "yyyy-MM-dd");
+}
 
 export async function POST(request: Request) {
   // Auth check
@@ -33,13 +44,17 @@ export async function POST(request: Request) {
   const priceAmount =
     data.price_amount ?? (pkg.price ?? 0) * data.num_participants;
 
+  // Compute end_date from package duration if not provided
+  const endDate =
+    data.end_date || computeEndDate(data.price_id, data.start_date);
+
   // Capacity check for accommodation types
   const inventoryKey = getInventoryKey(data.price_id);
-  if (inventoryKey && data.start_date && data.end_date) {
+  if (inventoryKey && endDate) {
     const check = await checkRangeAvailability(
       inventoryKey,
       data.start_date,
-      data.end_date,
+      endDate,
     );
     if (!check.ok) {
       return NextResponse.json(
@@ -82,7 +97,7 @@ export async function POST(request: Request) {
       price_amount: priceAmount,
       num_participants: data.num_participants,
       start_date: data.start_date,
-      end_date: data.end_date ?? null,
+      end_date: endDate ?? null,
       time_slot: data.time_slot ?? null,
       camp: data.camp,
       client_name: data.client_name,

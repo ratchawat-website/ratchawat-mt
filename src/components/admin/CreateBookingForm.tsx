@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { X } from "lucide-react";
 import { PRICES, type PriceItem } from "@/content/pricing";
 import { PRIVATE_SLOTS } from "@/lib/config/slots";
+import { addDays, format } from "date-fns";
 
 const BOOKING_TYPES = [
   { value: "training", label: "Training" },
@@ -34,6 +35,14 @@ function needsEndDate(type: string): boolean {
 
 function needsTimeSlot(type: string): boolean {
   return type === "private";
+}
+
+function getStayDurationDays(priceId: string): number | null {
+  if (priceId.includes("1week")) return 7;
+  if (priceId.includes("2weeks")) return 14;
+  if (priceId.includes("1month") || priceId.includes("monthly")) return 30;
+  if (priceId.includes("bungalow")) return 30;
+  return null;
 }
 
 function getDefaultCamp(priceId: string | null, type: string): string {
@@ -82,6 +91,17 @@ export default function CreateBookingForm({ defaultDate, onClose }: Props) {
     setTimeSlot("");
     setEndDate("");
   }, [type]);
+
+  // Auto-calculate end_date from start_date + package duration
+  useEffect(() => {
+    if (!startDate || !priceId) return;
+    const duration = getStayDurationDays(priceId);
+    if (duration) {
+      const start = new Date(startDate + "T00:00:00");
+      const end = addDays(start, duration);
+      setEndDate(format(end, "yyyy-MM-dd"));
+    }
+  }, [startDate, priceId]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
