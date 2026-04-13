@@ -9,8 +9,7 @@ interface LocationCardProps {
   email: string;
   hours: string;
   mapEmbedUrl: string;
-  campPageHref: string;
-  isOpen?: boolean;
+  campPageHref?: string;
   className?: string;
 }
 
@@ -22,7 +21,6 @@ export default function LocationCard({
   hours,
   mapEmbedUrl,
   campPageHref,
-  isOpen = true,
   className = "",
 }: LocationCardProps) {
   return (
@@ -39,13 +37,6 @@ export default function LocationCard({
           referrerPolicy="no-referrer-when-downgrade"
           title={`Map of ${name}`}
         />
-        {/* Open Now badge */}
-        {isOpen && (
-          <div className="absolute bottom-3 left-3 flex items-center gap-2 bg-black/60 px-3 py-1.5 rounded text-xs uppercase tracking-wider font-semibold text-green-400">
-            <span className="w-2 h-2 rounded-full bg-green-400" />
-            Open Now
-          </div>
-        )}
       </div>
 
       {/* Info section */}
@@ -54,7 +45,7 @@ export default function LocationCard({
           {name}
         </h3>
 
-        <ul className="space-y-3 text-xs text-on-surface-variant mb-6">
+        <ul className={`space-y-3 text-xs text-on-surface-variant ${campPageHref ? "mb-6" : ""}`}>
           <li className="flex items-start gap-3">
             <MapPin size={16} className="text-primary shrink-0 mt-0.5" />
             <span>{address}</span>
@@ -77,12 +68,14 @@ export default function LocationCard({
           </li>
         </ul>
 
-        {/* Bottom link */}
-        <div className="border-t border-outline-variant pt-4">
-          <Link href={campPageHref} className="btn-link">
-            View camp details <span className="btn-arrow">&rarr;</span>
-          </Link>
-        </div>
+        {/* Bottom link — only shown when linking to another page */}
+        {campPageHref && (
+          <div className="border-t border-outline-variant pt-4">
+            <Link href={campPageHref} className="btn-link">
+              View camp details <span className="btn-arrow">&rarr;</span>
+            </Link>
+          </div>
+        )}
       </div>
     </GlassCard>
   );
