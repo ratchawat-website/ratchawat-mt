@@ -203,8 +203,8 @@ Admin logs in, views all bookings with filters, updates status, manages availabi
 - [ ] Audit all pages vs AUDIT-SEO.md (schemas, GEO, internal links)
 - [ ] Update `llms.txt` + `llms-full.txt` with booking system info
 - [x] Confirm fighter + accommodation price (20,000 THB confirmed 2026-04-12)
-- [ ] Photos: replace all `ImagePlaceholder` with real images (pending client)
-- [ ] **FIX CAMP ADDRESSES** — correct addresses for Bo Phut and Plai Laem camps on ALL pages, data, booking confirmations, emails, and everywhere addresses are displayed (current addresses are wrong)
+- [ ] **NEXT: Photos** — replace key `ImagePlaceholder` with real images (rooms, bungalow, camps). Priority before Phase 6.
+- [x] **FIX CAMP ADDRESSES** — corrected 2026-04-13: Bo Phut (Soi Sunday Tambon Bo Put) + Plai Laem (20, 33 หมู่ที่ 5 ปลายแหลม ซอย 13) across 6 production files + llms-full.txt. Fixed Plai Laem GPS coords (9.5718, 100.0726). Fixed email template bug (Plai Laem was labeled "Soi Sunday"). Removed static "Open Now" badge + self-referencing camp links. Rewrote ScheduleTable with correct hours (8:00 Private, 9:30 Group, 11:00-17:00 Private, 17:00 Group, Mon-Sat, Sunday closed). Removed Fighter from schedule.
 
 ### Success criteria
 
