@@ -1,15 +1,15 @@
 import type { ClassNames } from "react-day-picker";
 
 export const calendarClassNames: Partial<ClassNames> = {
-  root: "w-full flex flex-col items-center",
-  months: "flex flex-col w-full",
-  month: "space-y-4 w-full",
+  root: "flex flex-col items-center",
+  months: "flex flex-col",
+  month: "space-y-4",
   month_caption: "hidden",
   caption_label: "hidden",
   nav: "hidden",
   button_previous: "hidden",
   button_next: "hidden",
-  weekdays: "flex w-full",
+  weekdays: "flex",
   weekday: "text-on-surface-variant text-[10px] font-semibold uppercase tracking-widest w-11 h-8 flex items-center justify-center",
   week: "flex mt-1",
   day: "relative w-11 h-11 flex items-center justify-center",
