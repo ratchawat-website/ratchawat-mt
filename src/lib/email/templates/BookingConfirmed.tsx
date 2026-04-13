@@ -84,11 +84,11 @@ export function BookingConfirmed({ booking, packageName }: Props) {
           <Heading as="h3">Address</Heading>
           <Text>
             <Link href="https://maps.google.com/?q=Plai+Laem+Muay+Thai+Koh+Samui">
-              Plai Laem camp - Soi Sunday
+              Plai Laem camp - Plai Laem Soi 13
             </Link>
             {" · "}
             <Link href="https://maps.google.com/?q=Bo+Phut+Muay+Thai+Koh+Samui">
-              Bo Phut camp - Fisherman Village
+              Bo Phut camp - Soi Sunday
             </Link>
           </Text>
 

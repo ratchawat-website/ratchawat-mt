@@ -43,7 +43,8 @@ const lodgingSchema = {
     "On-site accommodation at Ratchawat Muay Thai Plai Laem camp in Koh Samui. Rooms with private bathroom, air conditioning, Wi-Fi, and pool-view balcony. All-inclusive training and stay packages.",
   address: {
     "@type": "PostalAddress",
-    addressLocality: "Plai Laem, Ko Samui",
+    streetAddress: "20/33 Moo 5, Plai Laem Soi 13, Tambon Bo Put",
+    addressLocality: "Ko Samui",
     addressRegion: "Surat Thani",
     postalCode: "84320",
     addressCountry: "TH",

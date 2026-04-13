@@ -268,7 +268,7 @@ export default function BoPhutCampPage() {
             </div>
             <LocationCard
               name="Ratchawat Bo Phut"
-              address="Soi Sunday, Tambon Bo Put, Ko Samui District, Surat Thani 84320"
+              address="Soi Sunday Tambon Bo Put, Ko Samui District, Surat Thani 84320"
               phone="+66 63 080 2876"
               email="chor.ratchawat@gmail.com"
               hours="8:00 AM - 8:00 PM, 6 days/week"
@@ -283,7 +283,7 @@ export default function BoPhutCampPage() {
       <section className="py-12 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-3xl mx-auto">
           <p className="text-on-surface-variant text-base leading-relaxed text-center">
-            Ratchawat Muay Thai Bo Phut is located on Soi Sunday in Bo Phut, near Fisherman&apos;s Village, Koh Samui. It is a small, intimate gym with an authentic street atmosphere and family vibes. The gym offers group and private Muay Thai classes 6 days a week, 8 AM to 8 PM. Address: Soi Sunday, Tambon Bo Put, Ko Samui District, Surat Thani 84320.
+            Ratchawat Muay Thai Bo Phut is located on Soi Sunday in Bo Phut, near Fisherman&apos;s Village, Koh Samui. It is a small, intimate gym with an authentic street atmosphere and family vibes. The gym offers group and private Muay Thai classes 6 days a week, 8 AM to 8 PM. Address: Soi Sunday Tambon Bo Put, Ko Samui District, Surat Thani 84320.
           </p>
         </div>
       </section>

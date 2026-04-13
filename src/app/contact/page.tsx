@@ -64,7 +64,7 @@ const plaiLaemBusiness = localBusinessSchema({
   description:
     "Muay Thai training camp in Plai Laem, Koh Samui. Full gym with bodyweight area, group and private classes.",
   address: {
-    streetAddress: "20/33 Village No. 5, Plai Laem Soi 13, Tambon Bo Put",
+    streetAddress: "20/33 Moo 5, Plai Laem Soi 13, Tambon Bo Put",
     addressLocality: "Ko Samui",
     addressRegion: "Surat Thani",
     postalCode: "84320",
@@ -229,7 +229,7 @@ export default function ContactPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <LocationCard
               name="Ratchawat Bo Phut"
-              address="Soi Sunday, Tambon Bo Put, Ko Samui District, Surat Thani 84320"
+              address="Soi Sunday Tambon Bo Put, Ko Samui District, Surat Thani 84320"
               phone="+66 63 080 2876"
               email="chor.ratchawat@gmail.com"
               hours="8:00 AM - 8:00 PM, 6 days/week"
@@ -238,7 +238,7 @@ export default function ContactPage() {
             />
             <LocationCard
               name="Ratchawat Plai Laem"
-              address="20/33 Village No. 5, Plai Laem Soi 13, Tambon Bo Put, Ko Samui, Surat Thani 84320"
+              address="20, 33 หมู่ที่ 5 ปลายแหลม ซอย 13, Tambon Bo Put, Amphoe Ko Samui, Surat Thani 84320"
               phone="+66 63 080 2876"
               email="chor.ratchawat@gmail.com"
               hours="8:00 AM - 8:00 PM, 6 days/week"
