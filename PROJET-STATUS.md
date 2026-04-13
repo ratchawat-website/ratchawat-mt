@@ -331,7 +331,7 @@ ratchawat-mt/
 | 6 | Medium | npm audit flags `next@16.0.0` high severity DoS (GHSA-q4gf-8mx6-v5v3). Fix requires `--force` upgrade to 16.2.3 | Deferred to Phase 5 Security |
 | 7 | Low | Blog section not implemented | Planned post-launch |
 | 8 | Low | Multi-language (FR/ES) not implemented yet | Planned post-launch |
-| 9 | **High** | **Camp addresses are WRONG** on all pages. Bo Phut and Plai Laem addresses need correction across: `/camps/bo-phut`, `/camps/plai-laem`, `/contact`, `/accommodation`, booking confirmation page, confirmation emails, Schema.org LocalBusiness/SportsActivityLocation, LocationCard components, Footer, and any other location where addresses appear. Client to provide correct addresses. | **TODO — Phase 5/6** |
+| 9 | RESOLVED 2026-04-13 | Camp addresses corrected across 6 files: camps pages, contact, accommodation (Schema.org + LocationCard), email template (Plai Laem label bug fix), llms-full.txt. Bo Phut: Soi Sunday Tambon Bo Put, Ko Samui District, Surat Thani 84320. Plai Laem: 20, 33 หมู่ที่ 5 ปลายแหลม ซอย 13, Tambon Bo Put, Amphoe Ko Samui, Surat Thani 84320. | DONE |
 
 ---
 
