@@ -33,14 +33,21 @@ export default function HeroSection({
   return (
     <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
       {imageSrc ? (
-        <Image src={imageSrc} alt={imageAlt || title} fill className="object-cover" priority />
+        <Image
+          src={imageSrc}
+          alt={imageAlt || title}
+          fill
+          className="object-cover object-[center_30%]"
+          priority
+          sizes="100vw"
+        />
       ) : (
         <div className="absolute inset-0 bg-[linear-gradient(180deg,#0a0a0a_0%,#1a1200_50%,#0a0a0a_100%)]" />
       )}
 
-      {/* Grid overlay */}
+      {/* Grid overlay (subtle on images, visible on gradient) */}
       <div
-        className="absolute inset-0 opacity-100"
+        className={`absolute inset-0 ${imageSrc ? "opacity-40" : "opacity-100"}`}
         style={{
           backgroundImage:
             "linear-gradient(rgba(255,102,0,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,102,0,0.03) 1px, transparent 1px)",
@@ -48,7 +55,15 @@ export default function HeroSection({
         }}
       />
 
-      <div className="absolute inset-0 bg-black/30" />
+      {/* Readability overlay: strong radial + vertical gradient when image present */}
+      {imageSrc ? (
+        <>
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.55)_0%,rgba(0,0,0,0.75)_45%,rgba(0,0,0,0.85)_100%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.3)_0%,rgba(0,0,0,0)_70%)]" />
+        </>
+      ) : (
+        <div className="absolute inset-0 bg-black/30" />
+      )}
 
       <div className="relative z-10 text-center px-6 max-w-4xl mx-auto flex flex-col items-center">
         {/* Top accent bar */}

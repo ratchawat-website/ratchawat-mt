@@ -3,7 +3,7 @@ import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import HeroSection from "@/components/ui/HeroSection";
 import GlassCard from "@/components/ui/GlassCard";
 import CTABanner from "@/components/ui/CTABanner";
-import ImagePlaceholder from "@/components/ui/ImagePlaceholder";
+import Image from "next/image";
 import ScheduleTable from "@/components/ui/ScheduleTable";
 import LocationCard from "@/components/ui/LocationCard";
 import JsonLd from "@/components/seo/JsonLd";
@@ -175,10 +175,34 @@ export default function PlaiLaemCampPage() {
               </p>
             </div>
             <div className="space-y-4">
-              <ImagePlaceholder category="gym" aspectRatio="aspect-video" />
+              <div className="relative aspect-video rounded-card overflow-hidden">
+                <Image
+                  src="/images/camp-plai-laem/camp-view.png"
+                  alt="Ratchawat Plai Laem gym, full training facility near Big Buddha"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover"
+                />
+              </div>
               <div className="grid grid-cols-2 gap-4">
-                <ImagePlaceholder category="gym" aspectRatio="aspect-square" />
-                <ImagePlaceholder category="training" aspectRatio="aspect-square" />
+                <div className="relative aspect-square rounded-card overflow-hidden">
+                  <Image
+                    src="/images/camp-plai-laem/ring-view.jpg"
+                    alt="Boxing ring at Ratchawat Plai Laem"
+                    fill
+                    sizes="(max-width: 1024px) 50vw, 25vw"
+                    className="object-cover"
+                  />
+                </div>
+                <div className="relative aspect-square rounded-card overflow-hidden">
+                  <Image
+                    src="/images/camp-plai-laem/camp-inside.jpg"
+                    alt="Inside view of Ratchawat Plai Laem training area"
+                    fill
+                    sizes="(max-width: 1024px) 50vw, 25vw"
+                    className="object-cover"
+                  />
+                </div>
               </div>
             </div>
           </div>

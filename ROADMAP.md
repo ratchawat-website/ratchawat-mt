@@ -203,7 +203,12 @@ Admin logs in, views all bookings with filters, updates status, manages availabi
 - [ ] Audit all pages vs AUDIT-SEO.md (schemas, GEO, internal links)
 - [ ] Update `llms.txt` + `llms-full.txt` with booking system info
 - [x] Confirm fighter + accommodation price (20,000 THB confirmed 2026-04-12)
-- [ ] **NEXT: Photos** — replace key `ImagePlaceholder` with real images (rooms, bungalow, camps). Priority before Phase 6.
+- [x] **Photos (partial)** — 2026-04-13/14:
+  - `/accommodation` fully replaced (6 room photos, 9 bungalow photos via `next/image`). Room amenity "Inside the camp" → "Fridge" + schema updated.
+  - `/camps/plai-laem` fully replaced (camp-view, ring-view, camp-inside).
+  - `/camps/bo-phut` main image replaced (camp-view).
+  - `/` homepage hero image added (`hero-trainers.webp`): `HeroSection` upgraded with image-aware overlay (object-position center 30%, vertical + radial gradient for text readability, grid overlay softened to 40% opacity on images). Established date updated to 2023.
+- [ ] **TODO Photos** — Bo Phut: 2 square placeholders remaining in "The Gym" section. Other pages with `ImagePlaceholder` still to audit (homepage camps/team sections, etc.).
 - [x] **FIX CAMP ADDRESSES** — corrected 2026-04-13: Bo Phut (Soi Sunday Tambon Bo Put) + Plai Laem (20, 33 หมู่ที่ 5 ปลายแหลม ซอย 13) across 6 production files + llms-full.txt. Fixed Plai Laem GPS coords (9.5718, 100.0726). Fixed email template bug (Plai Laem was labeled "Soi Sunday"). Removed static "Open Now" badge + self-referencing camp links. Rewrote ScheduleTable with correct hours (8:00 Private, 9:30 Group, 11:00-17:00 Private, 17:00 Group, Mon-Sat, Sunday closed). Removed Fighter from schedule.
 
 ### Success criteria

@@ -144,7 +144,9 @@ export default function HomePage() {
         ctaHref="/booking"
         ghostText="View Pricing"
         ghostHref="/pricing"
-        established="Est. 2018"
+        established="Est. 2023"
+        imageSrc="/images/home/hero-trainers.webp"
+        imageAlt="Ratchawat Muay Thai trainers and fighters team photo at Koh Samui camp"
       />
 
       {/* Why Train at Ratchawat */}

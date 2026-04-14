@@ -3,6 +3,7 @@ import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import HeroSection from "@/components/ui/HeroSection";
 import GlassCard from "@/components/ui/GlassCard";
 import CTABanner from "@/components/ui/CTABanner";
+import Image from "next/image";
 import ImagePlaceholder from "@/components/ui/ImagePlaceholder";
 import ScheduleTable from "@/components/ui/ScheduleTable";
 import LocationCard from "@/components/ui/LocationCard";
@@ -163,7 +164,16 @@ export default function BoPhutCampPage() {
               </p>
             </div>
             <div className="space-y-4">
-              <ImagePlaceholder category="gym" aspectRatio="aspect-video" />
+              <div className="relative aspect-video rounded-card overflow-hidden">
+                <Image
+                  src="/images/camp-bophut/camp-view.jpeg"
+                  alt="Ratchawat Bo Phut gym, street gym near Fisherman's Village"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover"
+                />
+              </div>
+              {/* TODO: replace placeholders with real Bo Phut gym photos */}
               <div className="grid grid-cols-2 gap-4">
                 <ImagePlaceholder category="gym" aspectRatio="aspect-square" />
                 <ImagePlaceholder category="training" aspectRatio="aspect-square" />

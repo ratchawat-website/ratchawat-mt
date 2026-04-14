@@ -2,7 +2,7 @@ import { generatePageMeta } from "@/lib/seo/meta";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import GlassCard from "@/components/ui/GlassCard";
 import CTABanner from "@/components/ui/CTABanner";
-import ImagePlaceholder from "@/components/ui/ImagePlaceholder";
+import Image from "next/image";
 import JsonLd from "@/components/seo/JsonLd";
 import { organizationSchema } from "@/components/seo/SchemaOrg";
 import {
@@ -13,7 +13,6 @@ import {
   Waves,
   Fence,
   Package,
-  MapPin,
   Zap,
   Users,
   Tag,
@@ -57,6 +56,7 @@ const lodgingSchema = {
     { "@type": "LocationFeatureSpecification", name: "Private bathroom", value: true },
     { "@type": "LocationFeatureSpecification", name: "Shared pool", value: true },
     { "@type": "LocationFeatureSpecification", name: "Balcony", value: true },
+    { "@type": "LocationFeatureSpecification", name: "Fridge", value: true },
   ],
   parentOrganization: {
     "@type": "Organization",
@@ -66,21 +66,24 @@ const lodgingSchema = {
 };
 
 const roomPhotos = [
-  { caption: "Room" },
-  { caption: "Balcony" },
-  { caption: "Pool" },
-  { caption: "Camp view" },
-  { caption: "Shared area" },
-  { caption: "Storage" },
+  { src: "/images/room/room.jpeg", caption: "Room", alt: "Standard room overview at Ratchawat Plai Laem camp" },
+  { src: "/images/room/room-bed.jpeg", caption: "Bed", alt: "Double bed in standard room" },
+  { src: "/images/room/room-bathroom.jpeg", caption: "Bathroom", alt: "Private bathroom in standard room" },
+  { src: "/images/room/room-balcony.jpeg", caption: "Balcony", alt: "Pool-view balcony from standard room" },
+  { src: "/images/room/room-storage.jpeg", caption: "Storage", alt: "Storage space in standard room" },
+  { src: "/images/room/pool.jpg", caption: "Pool", alt: "Shared pool at Ratchawat Plai Laem camp" },
 ];
 
 const bungalowPhotos = [
-  { caption: "Bungalow" },
-  { caption: "Bedroom" },
-  { caption: "Kitchenette" },
-  { caption: "Living area" },
-  { caption: "Terrace" },
-  { caption: "Pool view" },
+  { src: "/images/bungalow/bungalow.jpeg", caption: "Bungalow", alt: "Private bungalow exterior at Ratchawat Plai Laem" },
+  { src: "/images/bungalow/bungalow-room.jpeg", caption: "Bedroom", alt: "King-size bed in private bungalow" },
+  { src: "/images/bungalow/bungalow-bathroom.jpeg", caption: "Bathroom", alt: "Private bathroom in bungalow" },
+  { src: "/images/bungalow/bungalow-kitchette.jpeg", caption: "Kitchenette", alt: "Fitted kitchenette in bungalow" },
+  { src: "/images/bungalow/bungalow-living-room.jpeg", caption: "Living area", alt: "Living and dining area in bungalow" },
+  { src: "/images/bungalow/bungalow-storage.jpeg", caption: "Storage", alt: "Storage and dressing area in bungalow" },
+  { src: "/images/bungalow/bungalow-terrace.jpeg", caption: "Terrace", alt: "Private terrace with pool view" },
+  { src: "/images/bungalow/bungalow-view.jpeg", caption: "View", alt: "View from the private bungalow" },
+  { src: "/images/bungalow/pool.jpg", caption: "Pool", alt: "Shared pool seen from bungalow" },
 ];
 
 const amenities = [
@@ -91,7 +94,7 @@ const amenities = [
   { icon: Waves, label: "Shared pool" },
   { icon: Fence, label: "Pool-view balcony" },
   { icon: Package, label: "Storage" },
-  { icon: MapPin, label: "Inside the camp" },
+  { icon: Refrigerator, label: "Fridge" },
 ];
 
 const bungalowAmenities = [
@@ -215,11 +218,15 @@ export default function AccommodationPage() {
                 key={photo.caption}
                 className="shrink-0 w-[260px] sm:w-[300px] md:w-[340px] snap-start"
               >
-                <ImagePlaceholder
-                  category="accommodation"
-                  aspectRatio="aspect-[3/4]"
-                  className="w-full"
-                />
+                <div className="relative aspect-[3/4] rounded-card overflow-hidden">
+                  <Image
+                    src={photo.src}
+                    alt={photo.alt}
+                    fill
+                    sizes="(max-width: 640px) 260px, (max-width: 768px) 300px, 340px"
+                    className="object-cover"
+                  />
+                </div>
                 <p className="mt-3 text-xs uppercase tracking-[0.19em] text-on-surface-variant">
                   {photo.caption}
                 </p>
@@ -281,11 +288,15 @@ export default function AccommodationPage() {
                 key={photo.caption}
                 className="shrink-0 w-[260px] sm:w-[300px] md:w-[340px] snap-start"
               >
-                <ImagePlaceholder
-                  category="accommodation"
-                  aspectRatio="aspect-[3/4]"
-                  className="w-full"
-                />
+                <div className="relative aspect-[3/4] rounded-card overflow-hidden">
+                  <Image
+                    src={photo.src}
+                    alt={photo.alt}
+                    fill
+                    sizes="(max-width: 640px) 260px, (max-width: 768px) 300px, 340px"
+                    className="object-cover"
+                  />
+                </div>
                 <p className="mt-3 text-xs uppercase tracking-[0.19em] text-on-surface-variant">
                   {photo.caption}
                 </p>
