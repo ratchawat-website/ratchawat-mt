@@ -3,6 +3,9 @@ import HeroSection from "@/components/ui/HeroSection";
 import GlassCard from "@/components/ui/GlassCard";
 import CTABanner from "@/components/ui/CTABanner";
 import ImagePlaceholder from "@/components/ui/ImagePlaceholder";
+import TeamCircularGallery, {
+  type Trainer,
+} from "@/components/sections/TeamCircularGallery";
 import JsonLd from "@/components/seo/JsonLd";
 import {
   organizationSchema,
@@ -121,11 +124,24 @@ const testimonials = [
   },
 ];
 
-const trainers = [
-  { name: "Kroo Wat", role: "Head Trainer" },
-  { name: "Mam", role: "Trainer" },
-  { name: "Kong", role: "Trainer" },
-  { name: "Teacher Nangja", role: "Kids Instructor" },
+const trainers: Trainer[] = [
+  {
+    name: "Kruu Wat",
+    role: "Owner & Head Coach",
+    image: null,
+    alt: "Kruu Wat, owner and head coach of Ratchawat Muay Thai",
+  },
+  { name: "Trainer 02", role: "Trainer", image: null, alt: "Ratchawat Muay Thai trainer" },
+  { name: "Trainer 03", role: "Trainer", image: null, alt: "Ratchawat Muay Thai trainer" },
+  { name: "Trainer 04", role: "Trainer", image: null, alt: "Ratchawat Muay Thai trainer" },
+  { name: "Trainer 05", role: "Trainer", image: null, alt: "Ratchawat Muay Thai trainer" },
+  { name: "Trainer 06", role: "Trainer", image: null, alt: "Ratchawat Muay Thai trainer" },
+  { name: "Trainer 07", role: "Trainer", image: null, alt: "Ratchawat Muay Thai trainer" },
+  { name: "Trainer 08", role: "Trainer", image: null, alt: "Ratchawat Muay Thai trainer" },
+  { name: "Trainer 09", role: "Trainer", image: null, alt: "Ratchawat Muay Thai trainer" },
+  { name: "Trainer 10", role: "Trainer", image: null, alt: "Ratchawat Muay Thai trainer" },
+  { name: "Trainer 11", role: "Trainer", image: null, alt: "Ratchawat Muay Thai trainer" },
+  { name: "Trainer 12", role: "Trainer", image: null, alt: "Ratchawat Muay Thai trainer" },
 ];
 
 export default function HomePage() {
@@ -346,33 +362,24 @@ export default function HomePage() {
       </section>
 
       {/* Meet the Team */}
-      <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20 bg-surface-lowest/50">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface text-center mb-12">
+      <section className="py-16 sm:py-20 bg-surface-lowest/50 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6 sm:px-10 md:px-16 lg:px-20 mb-2 sm:mb-10">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <span className="w-8 h-[2px] bg-primary" />
+            <span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">
+              THE TEAM
+            </span>
+            <span className="w-8 h-[2px] bg-primary" />
+          </div>
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-semibold text-on-surface text-center">
             Meet the Team
           </h2>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-            {trainers.map((trainer) => (
-              <GlassCard key={trainer.name}>
-                <ImagePlaceholder
-                  category="team"
-                  aspectRatio="aspect-square"
-                  className="mb-4"
-                />
-                <h3 className="font-serif text-base font-bold text-on-surface text-center">
-                  {trainer.name}
-                </h3>
-                <p className="text-center mt-1">
-                  <span className="badge-underline badge-orange">{trainer.role}</span>
-                </p>
-              </GlassCard>
-            ))}
-          </div>
-          <div className="text-center mt-8">
-            <Link href="/team" className="btn-link">
-              Meet the full team <span className="btn-arrow">&rarr;</span>
-            </Link>
-          </div>
+        </div>
+        <TeamCircularGallery trainers={trainers} />
+        <div className="max-w-7xl mx-auto px-6 sm:px-10 md:px-16 lg:px-20 text-center mt-10">
+          <Link href="/team" className="btn-link">
+            Meet the full team <span className="btn-arrow">&rarr;</span>
+          </Link>
         </div>
       </section>
 
