@@ -12,9 +12,9 @@ export function organizationSchema(): Record<string, unknown> {
     url: SITE_URL,
     logo: `${SITE_URL}/images/logo.png`,
     sameAs: [
-      "https://www.facebook.com/ChorRatchawatMuayThai",
-      "https://www.instagram.com/chorratchawat",
-      "https://www.tiktok.com/@chorratchawat",
+      "https://www.facebook.com/Chor.RatchawatMuayThaiGym",
+      "https://www.instagram.com/chor.ratchawatmuaythai",
+      "https://www.tiktok.com/@chor.ratchawat",
       "https://maps.app.goo.gl/yxkGkZtzkn1Lq48Y9",
       "https://maps.app.goo.gl/fLdyZsRm9r5WRCU86",
     ],

@@ -32,9 +32,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE_URL}/visa/dtv`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${BASE_URL}/visa/90-days`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
 
-    /* ── Services ── */
-    { url: `${BASE_URL}/services`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
-
     /* ── Social proof ── */
     { url: `${BASE_URL}/team`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${BASE_URL}/reviews`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },

@@ -208,8 +208,8 @@ Admin logs in, views all bookings with filters, updates status, manages availabi
 - [ ] `/faq` — full audit (partial update 2026-04-16: removed MuayThaiMap + stale trainer reference from female-friendly answer)
 - [x] `/gallery` — **REMOVED 2026-04-16**. Photos and updates now live on Instagram/Facebook. Page deleted, footer link removed, sitemap entry removed. No redirect (site not deployed).
 - [x] `/reviews` — **DONE 2026-04-16**. Real Google reviews (12 curated + 3 featured homepage), filter tabs (All/Bo Phut/Plai Laem), per-camp stats (5.0 / 255 Bo Phut + 5.0 / 141 Plai Laem = 396 total), language flags on non-EN, Schema.org per-camp AggregateRating + individual Review entries with `inLanguage`, GBP canonical URLs (`maps.app.goo.gl`), month-year dates (no "X weeks ago" staleness), `reviewDisplayDate()` helper via date-fns. Also fixed stale 9.3/131/MuayThaiMap references across `/about`, `/faq`, `llms.txt`, `llms-full.txt`. Homepage testimonials + AggregateRating + `organizationSchema.sameAs` also updated.
-- [ ] `/services` — build or remove if unused
-- [ ] `/contact` — verify map + addresses + phone + email
+- [x] `/services` — **REMOVED 2026-04-16**. Page supprimée, footer + sitemap nettoyés. Content redundant with `/programs`.
+- [x] `/contact` — **VERIFIED 2026-04-16**. Addresses, GPS coords, phone, email, hours, map embeds all correct. Schema.org ContactPage + Organization + per-camp LocalBusiness present. Fixed social handle inconsistency: `organizationSchema.sameAs` + `llms-full.txt` aligned with `/contact` page's canonical handles (Facebook `/Chor.RatchawatMuayThaiGym`, Instagram `/chor.ratchawatmuaythai`, TikTok `/@chor.ratchawat`). **⚠ TODO** : confirm with owner that these are the REAL social URLs (couldn't verify without access).
 - [ ] `/pricing` — full audit post-Phase 4 (camp-stay 4 cards, fighter+stay section)
 - [ ] Run `/humanizer` on every visible copy block
 - [ ] Update `Navigation.tsx` and `Footer.tsx` if any new pages are added
