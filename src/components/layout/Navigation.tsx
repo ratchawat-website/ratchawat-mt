@@ -14,6 +14,7 @@ const navItems = [
     ],
   },
   { label: "Programs", href: "/programs" },
+  { label: "Accommodation", href: "/accommodation" },
   { label: "Pricing", href: "/pricing" },
   { label: "About", href: "/about" },
   { label: "Visa", href: "/visa/dtv" },
