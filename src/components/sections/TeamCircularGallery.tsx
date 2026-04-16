@@ -27,6 +27,7 @@ export default function TeamCircularGallery({
   trainers,
   autoRotateSpeed = -0.05,
 }: TeamCircularGalleryProps) {
+  const [mounted, setMounted] = useState(false);
   const [rotation, setRotation] = useState(0);
   const [reducedMotion, setReducedMotion] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -34,7 +35,9 @@ export default function TeamCircularGallery({
 
   const sectionRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number | null>(null);
-  const inViewRef = useRef(false);
+  // Default true: auto-rotate runs optimistically before IntersectionObserver attaches.
+  // Observer then refines to false when section is off-screen.
+  const inViewRef = useRef(true);
   const isDraggingRef = useRef(false);
   const momentumRef = useRef(0);
   const cooldownUntilRef = useRef(0);
@@ -43,6 +46,7 @@ export default function TeamCircularGallery({
   const arrowStep = 360 / Math.max(trainers.length, 1);
 
   useEffect(() => {
+    setMounted(true);
     const mm = window.matchMedia("(prefers-reduced-motion: reduce)");
     const mbl = window.matchMedia("(max-width: 767px)");
     const apply = () => {
@@ -59,6 +63,7 @@ export default function TeamCircularGallery({
   }, []);
 
   useEffect(() => {
+    if (!mounted) return;
     const node = sectionRef.current;
     if (!node) return;
     const observer = new IntersectionObserver(
@@ -69,7 +74,7 @@ export default function TeamCircularGallery({
     );
     observer.observe(node);
     return () => observer.disconnect();
-  }, []);
+  }, [mounted]);
 
   useEffect(() => {
     const t = setTimeout(() => setHintVisible(false), HINT_DURATION_MS);
@@ -108,7 +113,10 @@ export default function TeamCircularGallery({
   const handlePointerDown = useCallback(
     (e: React.PointerEvent) => {
       if (reducedMotion) return;
-      (e.currentTarget as Element).setPointerCapture?.(e.pointerId);
+      // Deliberately NOT calling setPointerCapture here — it breaks `touch-action: pan-y`
+      // on iOS Safari and Chrome mobile by locking the pointer before the browser can
+      // decide vertical scroll vs horizontal drag. Drag still works via React event bubbling;
+      // downside is drag stops if finger leaves the gallery bounds (acceptable UX).
       isDraggingRef.current = true;
       momentumRef.current = 0;
       lastPointerXRef.current = e.clientX;
@@ -130,9 +138,8 @@ export default function TeamCircularGallery({
     lastPointerTimeRef.current = now;
   }, []);
 
-  const endDrag = useCallback((e: React.PointerEvent) => {
+  const endDrag = useCallback(() => {
     if (!isDraggingRef.current) return;
-    (e.currentTarget as Element).releasePointerCapture?.(e.pointerId);
     isDraggingRef.current = false;
     const timeSinceLastMove = performance.now() - lastPointerTimeRef.current;
     if (timeSinceLastMove > STILL_THRESHOLD_MS) {
@@ -156,6 +163,18 @@ export default function TeamCircularGallery({
   );
 
   if (trainers.length === 0) return null;
+
+  // Render stable SSR/hydration placeholder until client-side viewport detection is resolved.
+  // Prevents "huge truncated frozen card" bug where desktop sizing leaks to mobile on first paint.
+  if (!mounted) {
+    return (
+      <div
+        className="relative w-full"
+        style={{ height: 420, minHeight: 420 }}
+        aria-hidden="true"
+      />
+    );
+  }
 
   if (reducedMotion) {
     return (
