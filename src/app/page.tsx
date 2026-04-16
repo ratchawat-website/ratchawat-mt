@@ -3,9 +3,7 @@ import HeroSection from "@/components/ui/HeroSection";
 import GlassCard from "@/components/ui/GlassCard";
 import CTABanner from "@/components/ui/CTABanner";
 import ImagePlaceholder from "@/components/ui/ImagePlaceholder";
-import TeamCircularGallery, {
-  type Trainer,
-} from "@/components/sections/TeamCircularGallery";
+import TeamCircularGallery from "@/components/sections/TeamCircularGallery";
 import {
   featuredHomepageReviews,
   OVERALL_RATING,
@@ -13,6 +11,7 @@ import {
   CAMP_LABELS,
   reviewDisplayDate,
 } from "@/content/reviews";
+import { trainers as allTrainers } from "@/content/trainers";
 import JsonLd from "@/components/seo/JsonLd";
 import {
   organizationSchema,
@@ -111,25 +110,13 @@ const camps = [
 
 const testimonials = featuredHomepageReviews;
 
-const trainers: Trainer[] = [
-  {
-    name: "Kruu Wat",
-    role: "Owner & Head Coach",
-    image: null,
-    alt: "Kruu Wat, owner and head coach of Ratchawat Muay Thai",
-  },
-  { name: "Trainer 02", role: "Trainer", image: null, alt: "Ratchawat Muay Thai trainer" },
-  { name: "Trainer 03", role: "Trainer", image: null, alt: "Ratchawat Muay Thai trainer" },
-  { name: "Trainer 04", role: "Trainer", image: null, alt: "Ratchawat Muay Thai trainer" },
-  { name: "Trainer 05", role: "Trainer", image: null, alt: "Ratchawat Muay Thai trainer" },
-  { name: "Trainer 06", role: "Trainer", image: null, alt: "Ratchawat Muay Thai trainer" },
-  { name: "Trainer 07", role: "Trainer", image: null, alt: "Ratchawat Muay Thai trainer" },
-  { name: "Trainer 08", role: "Trainer", image: null, alt: "Ratchawat Muay Thai trainer" },
-  { name: "Trainer 09", role: "Trainer", image: null, alt: "Ratchawat Muay Thai trainer" },
-  { name: "Trainer 10", role: "Trainer", image: null, alt: "Ratchawat Muay Thai trainer" },
-  { name: "Trainer 11", role: "Trainer", image: null, alt: "Ratchawat Muay Thai trainer" },
-  { name: "Trainer 12", role: "Trainer", image: null, alt: "Ratchawat Muay Thai trainer" },
-];
+const trainers = allTrainers.map((t) => ({
+  name: t.name,
+  role: t.role,
+  image: t.image,
+  alt: t.imageAlt,
+  pos: t.pos,
+}));
 
 export default function HomePage() {
   return (

@@ -44,7 +44,6 @@ export default function Footer() {
             <li><Link href="/camps/bo-phut" className={linkClasses}>Bo Phut</Link></li>
             <li><Link href="/camps/plai-laem" className={linkClasses}>Plai Laem</Link></li>
             <li><Link href="/team" className={linkClasses}>Our Trainers</Link></li>
-            <li><Link href="/gallery" className={linkClasses}>Gallery</Link></li>
             <li><Link href="/reviews" className={linkClasses}>Reviews</Link></li>
           </ul>
         </div>

@@ -197,7 +197,7 @@ Admin logs in, views all bookings with filters, updates status, manages availabi
 
 ### Tasks
 
-- [ ] `/team` — **full rebuild required**. Current page lists only 4 trainers (stale). Real team is ~12 trainers (Kruu Wat owner + ~11 trainers). Recent reviews confirm active trainers: **Tae, Kuan, Kit, Sing** (Bo Phut) + **Tae, Mam, Mon** (Plai Laem). Confirm full list + bios + photos with owner before rebuild.
+- [~] `/team` — **Structure built 2026-04-16 with placeholders** (Option A: Hero founder card + camp-filtered grid, 12 trainers, Schema.org Person per trainer, date-demo-ready). Centralized data in `src/content/trainers.ts`, also used by homepage circular gallery. **PENDING**: real names for 5 unknown trainers (7 confirmed: Kruu Wat + Tae, Kuan, Kit, Sing, Mam, Mon), real bios for all 12, real specialties, real photos. Bios and TBD names must be replaced before launch.
 - [ ] `/about` — full content audit: story, founders, mission, philosophy. Partial update done 2026-04-16 (rating + Kruu Wat spelling). Still needs /humanizer pass + hero image + trainer list alignment with rebuilt `/team`.
 - [ ] `/visa/dtv` — content accuracy, DTV 180-day eligibility, required docs, booking CTA, GEO passage
 - [ ] `/visa/90-days` — ED visa content, durations, documents provided, GEO passage
@@ -206,7 +206,7 @@ Admin logs in, views all bookings with filters, updates status, manages availabi
 - [ ] `/programs/private` — verify pricing 800 THB solo / 600 THB group, time slots (8:00 + 11:00-16:00). Kroo → Kruu spelling normalized 2026-04-16. Trainer name list in page needs sync with rebuilt `/team`.
 - [ ] `/programs/fighter` — verify pricing 9500 THB, tier structure, fighter+stay options (20,000 / 25,500 THB)
 - [ ] `/faq` — full audit (partial update 2026-04-16: removed MuayThaiMap + stale trainer reference from female-friendly answer)
-- [ ] `/gallery` — build or remove if unused
+- [x] `/gallery` — **REMOVED 2026-04-16**. Photos and updates now live on Instagram/Facebook. Page deleted, footer link removed, sitemap entry removed. No redirect (site not deployed).
 - [x] `/reviews` — **DONE 2026-04-16**. Real Google reviews (12 curated + 3 featured homepage), filter tabs (All/Bo Phut/Plai Laem), per-camp stats (5.0 / 255 Bo Phut + 5.0 / 141 Plai Laem = 396 total), language flags on non-EN, Schema.org per-camp AggregateRating + individual Review entries with `inLanguage`, GBP canonical URLs (`maps.app.goo.gl`), month-year dates (no "X weeks ago" staleness), `reviewDisplayDate()` helper via date-fns. Also fixed stale 9.3/131/MuayThaiMap references across `/about`, `/faq`, `llms.txt`, `llms-full.txt`. Homepage testimonials + AggregateRating + `organizationSchema.sameAs` also updated.
 - [ ] `/services` — build or remove if unused
 - [ ] `/contact` — verify map + addresses + phone + email
