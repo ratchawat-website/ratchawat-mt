@@ -6,6 +6,13 @@ import ImagePlaceholder from "@/components/ui/ImagePlaceholder";
 import TeamCircularGallery, {
   type Trainer,
 } from "@/components/sections/TeamCircularGallery";
+import {
+  featuredHomepageReviews,
+  OVERALL_RATING,
+  TOTAL_REVIEWS,
+  CAMP_LABELS,
+  reviewDisplayDate,
+} from "@/content/reviews";
 import JsonLd from "@/components/seo/JsonLd";
 import {
   organizationSchema,
@@ -33,9 +40,8 @@ export const metadata = generatePageMeta({
 const features = [
   {
     icon: Star,
-    title: "Rating 9.3/10",
-    description:
-      "Consistently top-rated Muay Thai camp on Koh Samui with verified reviews from fighters worldwide.",
+    title: `Rated ${OVERALL_RATING.toFixed(1)}/5`,
+    description: `${TOTAL_REVIEWS} verified Google reviews across both camps. Bo Phut and Plai Laem both hold a perfect 5-star rating.`,
   },
   {
     icon: MapPin,
@@ -103,26 +109,7 @@ const camps = [
   },
 ];
 
-const testimonials = [
-  {
-    name: "Sarah M.",
-    country: "Australia",
-    rating: 5,
-    text: "Best Muay Thai experience in Thailand. Kroo Wat and the team made me feel welcome from day one. I came for a week and stayed for a month.",
-  },
-  {
-    name: "Thomas L.",
-    country: "France",
-    rating: 5,
-    text: "Fantastic gym with real Thai trainers who care about your technique. The vibe is friendly, no ego. Both locations are great but I prefer Bo Phut for the street feel.",
-  },
-  {
-    name: "James K.",
-    country: "UK",
-    rating: 5,
-    text: "Trained here for 3 months on a DTV visa. Went from complete beginner to confident in the ring. The fighter program is tough but the trainers push you the right way.",
-  },
-];
+const testimonials = featuredHomepageReviews;
 
 const trainers: Trainer[] = [
   {
@@ -151,7 +138,12 @@ export default function HomePage() {
         data={[
           organizationSchema(),
           websiteSchema(),
-          aggregateRatingSchema({ ratingValue: 9.3, reviewCount: 131 }),
+          aggregateRatingSchema({
+            ratingValue: OVERALL_RATING,
+            reviewCount: TOTAL_REVIEWS,
+            bestRating: 5,
+            worstRating: 1,
+          }),
         ]}
       />
 
@@ -320,19 +312,24 @@ export default function HomePage() {
             What Our Students Say
           </h2>
           <p className="text-on-surface-variant text-center mb-12">
-            9.3/10 average rating from 131 Google reviews
+            {OVERALL_RATING.toFixed(1)}/5 stars from {TOTAL_REVIEWS} Google reviews
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {testimonials.map((testimonial) => (
-              <GlassCard key={testimonial.name}>
-                <div className="flex gap-1 mb-4">
-                  {Array.from({ length: testimonial.rating }).map((_, i) => (
-                    <Star
-                      key={i}
-                      size={16}
-                      className="text-primary fill-primary"
-                    />
-                  ))}
+              <GlassCard key={testimonial.id}>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex gap-1">
+                    {Array.from({ length: testimonial.rating }).map((_, i) => (
+                      <Star
+                        key={i}
+                        size={16}
+                        className="text-primary fill-primary"
+                      />
+                    ))}
+                  </div>
+                  <span className="badge-underline badge-neutral text-[10px]">
+                    {CAMP_LABELS[testimonial.camp]}
+                  </span>
                 </div>
                 <Quote
                   size={20}
@@ -342,13 +339,23 @@ export default function HomePage() {
                 <p className="text-[#ccc] text-sm leading-relaxed italic mb-4">
                   {testimonial.text}
                 </p>
-                <div className="border-t border-outline-variant pt-4">
-                  <p className="font-serif text-[13px] font-bold text-on-surface">
-                    {testimonial.name}
-                  </p>
-                  <p className="text-[#666] text-[10px]">
-                    {testimonial.country}
-                  </p>
+                <div className="border-t border-outline-variant pt-4 flex items-center justify-between">
+                  <div>
+                    <p className="font-serif text-[13px] font-bold text-on-surface flex items-center gap-2">
+                      {testimonial.author}
+                      {testimonial.flag && (
+                        <span
+                          aria-label={`${testimonial.language.toUpperCase()} review`}
+                          className="text-sm"
+                        >
+                          {testimonial.flag}
+                        </span>
+                      )}
+                    </p>
+                    <p className="text-[#666] text-[10px]">
+                      {reviewDisplayDate(testimonial)}
+                    </p>
+                  </div>
                 </div>
               </GlassCard>
             ))}

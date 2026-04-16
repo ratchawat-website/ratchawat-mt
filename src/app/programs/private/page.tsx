@@ -31,7 +31,7 @@ const privateCourse = courseSchema({
 
 const trainers = [
   {
-    name: "Kroo Wat",
+    name: "Kruu Wat",
     role: "Head Trainer",
     description: "The boss. Years of fighting and coaching experience. Calm, precise, and patient with beginners.",
   },
@@ -203,7 +203,7 @@ export default function PrivateLessonsPage() {
       <section className="py-12 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-3xl mx-auto">
           <p className="text-on-surface-variant text-base leading-relaxed text-center">
-            Private 1-on-1 Muay Thai lessons at Ratchawat Koh Samui are available with experienced Thai trainers including Kroo Wat, Mam, and Kong. Sessions are fully personalized to your level and goals. Available at both Bo Phut and Plai Laem locations. Book and pay online.
+            Private 1-on-1 Muay Thai lessons at Ratchawat Koh Samui are available with experienced Thai trainers including Kruu Wat, Mam, and Kong. Sessions are fully personalized to your level and goals. Available at both Bo Phut and Plai Laem locations. Book and pay online.
           </p>
         </div>
       </section>

@@ -9,7 +9,7 @@ import Link from "next/link";
 export const metadata = generatePageMeta({
   title: "Our Trainers | Ratchawat Muay Thai Koh Samui \u2014 Meet the Team",
   description:
-    "Meet the trainers at Ratchawat Muay Thai Koh Samui. Experienced Thai coaches including Kroo Wat, Mam, Kong & Teacher Nangja.",
+    "Meet the trainers at Ratchawat Muay Thai Koh Samui. Experienced Thai coaches including Kruu Wat, Mam, Kong & Teacher Nangja.",
   path: "/team",
 });
 
@@ -18,9 +18,9 @@ const SITE_URL =
 
 const trainers = [
   {
-    name: "Kroo Wat",
+    name: "Kruu Wat",
     jobTitle: "Head Trainer & Founder",
-    bio: "Kroo Wat built Ratchawat from the ground up. He started the Bo Phut gym and still teaches there every day. Calm, patient, technically precise. He can break down a technique for a first-timer and then push an experienced fighter in the same hour. Students keep coming back because of him.",
+    bio: "Kruu Wat built Ratchawat from the ground up. He started the Bo Phut gym and still teaches there every day. Calm, patient, technically precise. He can break down a technique for a first-timer and then push an experienced fighter in the same hour. Students keep coming back because of him.",
     specialties: ["Pad work", "Technique", "Fight preparation"],
   },
   {
@@ -145,7 +145,7 @@ export default function TeamPage() {
       <section className="py-12 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-3xl mx-auto">
           <p className="text-on-surface-variant text-base leading-relaxed text-center">
-            Ratchawat Muay Thai&apos;s training team in Koh Samui includes Kroo Wat (head trainer), Mam, Kong, and Teacher Nangja. All trainers are experienced Thai fighters and coaches who teach in English. The team is known for patient, personalized instruction suitable for all levels.
+            Ratchawat Muay Thai&apos;s training team in Koh Samui includes Kruu Wat (head trainer), Mam, Kong, and Teacher Nangja. All trainers are experienced Thai fighters and coaches who teach in English. The team is known for patient, personalized instruction suitable for all levels.
           </p>
         </div>
       </section>

@@ -3,7 +3,7 @@
 > **Source of truth for what to build.** Read this at the start of every session alongside PROJET-STATUS.md.
 > Update task statuses as work progresses. Never start work without checking the current phase.
 
-**Last updated:** 2026-04-15
+**Last updated:** 2026-04-16
 **Current phase:** Phase 5 — Pages & Content Completion
 
 > **Phase ordering (post-Phase 4 restructure, 2026-04-15):** Before go-live we split the generic "Security & Quality" bucket into 4 sequential phases (5 → 8) so work happens in the right order. Go-live (Phase 9) is the FINAL phase, unblocked only when all content, media, SEO, and security/perf/a11y work is done. Do not skip ahead.
@@ -197,17 +197,17 @@ Admin logs in, views all bookings with filters, updates status, manages availabi
 
 ### Tasks
 
-- [ ] `/team` — full trainers page: photos, bios, roles, specialties, CTA to `/booking`
-- [ ] `/about` — story, founders, mission, training philosophy, Established 2023, Kruu Wat profile
+- [ ] `/team` — **full rebuild required**. Current page lists only 4 trainers (stale). Real team is ~12 trainers (Kruu Wat owner + ~11 trainers). Recent reviews confirm active trainers: **Tae, Kuan, Kit, Sing** (Bo Phut) + **Tae, Mam, Mon** (Plai Laem). Confirm full list + bios + photos with owner before rebuild.
+- [ ] `/about` — full content audit: story, founders, mission, philosophy. Partial update done 2026-04-16 (rating + Kruu Wat spelling). Still needs /humanizer pass + hero image + trainer list alignment with rebuilt `/team`.
 - [ ] `/visa/dtv` — content accuracy, DTV 180-day eligibility, required docs, booking CTA, GEO passage
 - [ ] `/visa/90-days` — ED visa content, durations, documents provided, GEO passage
 - [ ] `/programs/group-adults` — verify pricing, schedule (Mon-Sat), drop-in 400 THB, GEO passage
 - [ ] `/programs/group-kids` — verify pricing 300 THB drop-in / 2500 THB monthly, age range 5-15
-- [ ] `/programs/private` — verify pricing 800 THB solo / 600 THB group, time slots (8:00 + 11:00-16:00)
+- [ ] `/programs/private` — verify pricing 800 THB solo / 600 THB group, time slots (8:00 + 11:00-16:00). Kroo → Kruu spelling normalized 2026-04-16. Trainer name list in page needs sync with rebuilt `/team`.
 - [ ] `/programs/fighter` — verify pricing 9500 THB, tier structure, fighter+stay options (20,000 / 25,500 THB)
-- [ ] `/faq` — relevant questions + accurate answers (post-Phase 4 audit may have outdated info)
+- [ ] `/faq` — full audit (partial update 2026-04-16: removed MuayThaiMap + stale trainer reference from female-friendly answer)
 - [ ] `/gallery` — build or remove if unused
-- [ ] `/reviews` — pulled from Google (9.3/10, 131 reviews), schema valid
+- [x] `/reviews` — **DONE 2026-04-16**. Real Google reviews (12 curated + 3 featured homepage), filter tabs (All/Bo Phut/Plai Laem), per-camp stats (5.0 / 255 Bo Phut + 5.0 / 141 Plai Laem = 396 total), language flags on non-EN, Schema.org per-camp AggregateRating + individual Review entries with `inLanguage`, GBP canonical URLs (`maps.app.goo.gl`), month-year dates (no "X weeks ago" staleness), `reviewDisplayDate()` helper via date-fns. Also fixed stale 9.3/131/MuayThaiMap references across `/about`, `/faq`, `llms.txt`, `llms-full.txt`. Homepage testimonials + AggregateRating + `organizationSchema.sameAs` also updated.
 - [ ] `/services` — build or remove if unused
 - [ ] `/contact` — verify map + addresses + phone + email
 - [ ] `/pricing` — full audit post-Phase 4 (camp-stay 4 cards, fighter+stay section)

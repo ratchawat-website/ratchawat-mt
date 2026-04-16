@@ -15,6 +15,8 @@ export function organizationSchema(): Record<string, unknown> {
       "https://www.facebook.com/ChorRatchawatMuayThai",
       "https://www.instagram.com/chorratchawat",
       "https://www.tiktok.com/@chorratchawat",
+      "https://maps.app.goo.gl/yxkGkZtzkn1Lq48Y9",
+      "https://maps.app.goo.gl/fLdyZsRm9r5WRCU86",
     ],
     contactPoint: {
       "@type": "ContactPoint",

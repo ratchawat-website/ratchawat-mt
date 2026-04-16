@@ -11,7 +11,7 @@ import Link from "next/link";
 export const metadata = generatePageMeta({
   title: "About Chor Ratchawat Muay Thai Gym | Koh Samui",
   description:
-    "Learn about Chor Ratchawat Muay Thai, a family-run camp in Koh Samui. Meet our trainers, discover our story, and see why we're rated 9.3/10.",
+    "Learn about Chor Ratchawat Muay Thai, a family-run camp in Koh Samui. Meet our trainers, discover our story, and see why we are rated 5.0/5 on Google.",
   path: "/about",
 });
 
@@ -50,7 +50,7 @@ const values = [
     icon: Star,
     title: "Reputation Earned",
     description:
-      "9.3 out of 10 on MuayThaiMap. 131 Google reviews. We did not get there through marketing. Students leave, write something honest, and others read it.",
+      "5.0 out of 5 stars on Google, with 396 reviews across our two camps. We did not get there through marketing. Students leave, write something honest, and others read it.",
   },
 ];
 
@@ -70,7 +70,7 @@ export default function AboutPage() {
             About Chor Ratchawat Muay Thai
           </h1>
           <p className="mt-4 text-on-surface-variant text-lg max-w-2xl mx-auto">
-            A family-run Muay Thai camp on Koh Samui. Two locations, four trainers, and a reputation built one student at a time.
+            A family-run Muay Thai camp on Koh Samui. Two locations, a dozen trainers, and a reputation built one student at a time.
           </p>
         </div>
       </section>
@@ -85,13 +85,13 @@ export default function AboutPage() {
             </h2>
             <div className="space-y-4 text-on-surface-variant text-base sm:text-lg leading-relaxed">
               <p>
-                Ratchawat started in Bo Phut. A small gym on Soi Sunday, a few bags, a ring, and a trainer named Kroo Wat who wanted to teach Muay Thai the right way. No shortcuts, no gimmicks.
+                Ratchawat started in Bo Phut. A small gym on Soi Sunday, a few bags, a ring, and a trainer named Kruu Wat who wanted to teach Muay Thai the right way. No shortcuts, no gimmicks.
               </p>
               <p>
                 Word got around. Travelers training for a week told friends. Fighters came to prepare for bouts. Families brought their kids. The gym filled up, so a second location opened in Plai Laem, near Big Buddha. Bigger space, same approach.
               </p>
               <p>
-                Today Ratchawat runs two camps with four trainers. The gym is still family-run. Kroo Wat still teaches every day. The philosophy has not changed: train hard, treat people well, keep it real.
+                Today Ratchawat runs two camps with a dozen trainers. The gym is still family-run. Kruu Wat still teaches every day. The philosophy has not changed: train hard, treat people well, keep it real.
               </p>
             </div>
           </div>
@@ -159,7 +159,7 @@ export default function AboutPage() {
           </h2>
           <div className="space-y-4 text-on-surface-variant text-base sm:text-lg leading-relaxed">
             <p>
-              Ratchawat is rated 9.3 out of 10 on MuayThaiMap, based on 131 Google reviews. The breakdown: Training 9.5, Ambiance 9.6, Value 9.1, Facilities 9.0, Accessibility 9.2.
+              Ratchawat holds a 5.0 out of 5 star rating on Google at both camps. Bo Phut has 255 reviews. Plai Laem has 141 reviews. That adds up to 396 verified reviews with a perfect average.
             </p>
             <p>
               The gym is listed as beginner-friendly, female-friendly, and kid-friendly with English-speaking trainers. Read what students have written on our{" "}
@@ -177,7 +177,7 @@ export default function AboutPage() {
       <section className="py-12 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-3xl mx-auto">
           <p className="text-on-surface-variant text-base leading-relaxed text-center">
-            Chor Ratchawat Muay Thai Gym is a family-run training camp in Koh Samui, Thailand, rated 9.3 out of 10 on MuayThaiMap based on 131 Google reviews. The gym is known for its welcoming atmosphere, qualified Thai trainers, and programs for all levels from complete beginners to professional fighters.
+            Chor Ratchawat Muay Thai Gym is a family-run training camp in Koh Samui, Thailand, rated 5.0 out of 5 stars on Google with 396 reviews across its Bo Phut and Plai Laem camps. The gym is known for its welcoming atmosphere, qualified Thai trainers, and programs for all levels from complete beginners to professional fighters.
           </p>
         </div>
       </section>

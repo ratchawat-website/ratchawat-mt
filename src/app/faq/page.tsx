@@ -45,7 +45,7 @@ const faqs = [
   {
     question: "Is the gym suitable for women?",
     answer:
-      "Absolutely. Women train at Ratchawat every day. We have a female trainer (Teacher Nangja) on the team. The gym is listed as female-friendly on MuayThaiMap.",
+      "Absolutely. Women train at Ratchawat every day, solo and in groups. Our reviews include repeat visits from female students, and the trainers adapt the session to your level. Both camps hold a perfect 5.0 rating on Google.",
   },
   {
     question: "Can you help with visa applications?",
