@@ -197,6 +197,7 @@ Admin logs in, views all bookings with filters, updates status, manages availabi
 
 ### Tasks
 
+- [ ] **TODO admin UX (2026-04-17)**: surface per-slot occupancy on `/admin/availability` and in `AdminDayDrawer`. For each private slot show `N / PRIVATE_SLOT_CAPACITY` booked per camp (e.g. "Bo Phut 2/6 · Plai Laem 4/6"). Helps admin spot saturation at a glance without opening the bookings list. Data source: count `availability_blocks` rows where `type='private-slot'`, `is_blocked=true`, grouped by `(date, time_slot, camp)`.
 - [x] **Wave 1 — Fondations (2026-04-17)**: centralized schedule in `src/content/schedule.ts` (group 9:00–10:30 + 17:00–18:30; private 1h slots 7:00–17:00; fighter 7:30–10:00 + 16:00–18:30). Propagated to `/camps/*`, `/programs/*`, `/booking/fighter` (locked Plai Laem), `/pricing`, `/contact`, `llms.txt`, `llms-full.txt`. Homepage "Est. 2023" → "Since 2020". "7 days" → "6 days". Kids group 8–13 + private 3–13 (under 8 private only). Small group private 3 people max. Fighter program now Plai Laem only across all surfaces. Removed stale 90-day visa link from llms-full. `PRIVATE_SLOTS` now 9 slots (added 07:00, 10:00). `ScheduleTable` supports `fighter` type. `openingHours` schema Mo-Sa 07:00–18:30.
 - [~] `/team` — **Structure built 2026-04-16 with placeholders** (Option A: Hero founder card + camp-filtered grid, 12 trainers, Schema.org Person per trainer, date-demo-ready). Centralized data in `src/content/trainers.ts`, also used by homepage circular gallery. **PENDING**: real names for 5 unknown trainers (7 confirmed: Kruu Wat + Tae, Kuan, Kit, Sing, Mam, Mon), real bios for all 12, real specialties, real photos. Bios and TBD names must be replaced before launch.
 - [~] `/about` — Wave 3 done 2026-04-17: Kruu Wat story integrated (started 2020 Bo Phut with two pairs of gloves, expansion to Plai Laem, cultural transmission theme, respect/sportsmanship values), new "Ring Results" section listing Rajadamnern Stadium / One Lumpinee / RWS, hero kicker now "since 2020", GEO passage updated, AboutPage schema description updated. **TODO**: hero image (currently no hero image on /about — could use `/public/images/home/hero-trainers.webp` or dedicated Kruu Wat portrait once provided).
@@ -218,6 +219,47 @@ Admin logs in, views all bookings with filters, updates status, manages availabi
 ### Success criteria
 
 Every public route returns a complete, human-copy page with real content. No "TODO", "TBD", lorem ipsum, or empty sections. Navigation reflects actual site structure.
+
+---
+
+### Wave 5 — /visa DTV rebuild (PENDING, next up)
+
+**Status:** PLANNED 2026-04-17, decisions validated with client. All other Phase 5 waves committed.
+
+**Goal:** Replace the current /visa/dtv page with a complete DTV application flow: content + long-form application (14 fields) + Stripe Checkout for the 3 DTV packages + Resend email with docs within 24h. Delete /visa/90-days entirely (client dropped ED visa assistance).
+
+**Validated decisions (from Wave 5 planning 2026-04-17):**
+- **A1** — Content on `/visa/dtv`, dedicated application page at `/visa/dtv/apply` (14 fields is long, needs focus).
+- **B1** — New dedicated `dtv_applications` table (DTV-specific fields like passport + arrival_date + currently_in_thailand do not belong in `bookings`).
+- **C1** — Single-page form with sections (Personal / Passport / Travel / Package), not multi-step wizard (fewer clicks, faster completion).
+
+**Form fields (source: `meeting-infos-client.md:75-88`, client example):**
+First Name, Last Name, Country of Origin/Nationality, Phone (WhatsApp), Email, Passport Number, Passport Expiration Date, Currently in Thailand? (yes/no), Training start date, Planned arrival date in Thailand, Package (dtv-6m-2x / dtv-6m-4x / dtv-6m-unlimited), Commitment checkbox (must be true).
+
+**Sub-wave execution order:**
+
+- [ ] **5a — Cleanup /visa/90-days**: delete `src/app/visa/90-days/page.tsx`, remove sitemap entry in `src/app/sitemap.ts`, remove any internal link (Footer, FAQ, About, llms.txt, llms-full.txt — llms-full already done in Wave 1). Update `AUDIT-SEO.md` to remove the /visa/90-days section. No redirect needed (site not deployed yet).
+
+- [ ] **5b — Supabase `dtv_applications` table**: migration file `supabase/migrations/20260417000001_dtv_applications.sql`. Columns: `id uuid pk default gen_random_uuid()`, `created_at timestamptz default now()`, `first_name`, `last_name`, `nationality`, `phone`, `email`, `passport_number`, `passport_expiry date`, `currently_in_thailand bool`, `training_start_date date`, `arrival_date date`, `price_id text` (must be a DTV id), `committed_at timestamptz` (when checkbox ticked), `stripe_session_id text`, `stripe_payment_intent_id text`, `stripe_payment_status text default 'pending'`, `status text default 'pending'` (pending / paid / docs_sent / cancelled / refused_voucher_issued), `docs_sent_at timestamptz`. RLS: anon can INSERT only (form submission); admins can SELECT/UPDATE. Indexes on `email`, `stripe_session_id`. Apply via Supabase MCP.
+
+- [ ] **5c — API endpoints**: `/api/visa/dtv/apply` (POST): Zod validation, insert into `dtv_applications`, create Stripe Checkout Session with `metadata: { dtv_application_id, type: 'dtv' }` using the DTV price id (20k/25k/33k), persist session id on the application row, return `{ url }` for client redirect. Validation schema in `src/lib/validation/dtv-application.ts`. Reuse `BookingType` includes `"dtv"` from Wave 2.
+
+- [ ] **5d — `/visa/dtv` page refonte**: hero (DTV 180 days, Soft Power Muay Thai), explainer sections (what DTV is, eligibility checklist, included benefits), 3 package cards (reuse data from `src/content/pricing.ts` `category === 'dtv'`), required documents list (passport, 500,000 THB bank statement, 10,000 THB embassy fee, enrollment letter), process timeline (apply → pay → docs in 24h → online DTV application → success), GEO passage mentioning Soft Power visa + 180 days + Koh Samui, CTA button pointing to `/visa/dtv/apply?package=<id>`. Schema.org `Service` + `Offer` per package.
+
+- [ ] **5e — `/visa/dtv/apply` form page**: client component with single-page form organized in 4 sections. react-hook-form or controlled state (reuse project patterns — `ContactInfoForm` style). Zod schema from 5c. Fields validation: passport expiry must be > 6 months out, arrival date must be before training start date, email format, phone digits. Pre-fill `price_id` from `?package=` query. Commitment checkbox required. Submit → POST `/api/visa/dtv/apply` → redirect to Stripe. Error handling: inline field errors + toast-level API errors with WhatsApp fallback CTA. Reuse `BookingWizard` / `BookingReview` visual primitives for consistency.
+
+- [ ] **5f — Email template + webhook**: new Resend template `src/lib/email/templates/DTVApplicationReceived.tsx` styled like `BookingConfirmed`. Subject: "Your DTV training application at Chor Ratchawat — we will send your documents within 24h". Content: thank-you, package summary, what happens next (24h docs delivery), embassy fee reminder, "no refund but training voucher if visa refused" disclaimer. Update `src/app/api/webhooks/stripe/route.ts`: detect DTV sessions via `metadata.type === 'dtv'`, update `dtv_applications.status = 'paid'` + `stripe_payment_status = 'paid'`, send email via Resend. On `checkout.session.expired` mark `status = 'cancelled'`.
+
+- [ ] **5g — Confirmation + docs + smoke test**: reuse `/booking/confirmed` for the success redirect OR create `/visa/dtv/confirmed` if the copy diverges enough. Run full flow end to end in Stripe test mode (apply, pay with 4242 card, confirm email received, verify DB row). Update PROJET-STATUS.md + ARCHITECTURE.md (new table + endpoint). Commit.
+
+**Dependencies already in place (from earlier waves):**
+- Stripe products + prices created (Wave 2 — see PROJET-STATUS business info).
+- `BookingType` enum contains `"dtv"` (Wave 2 — `src/lib/validation/booking.ts`, `admin-booking.ts`, `src/content/pricing.ts`).
+- Resend already integrated for bookings (`src/lib/email/templates/BookingConfirmed.tsx`).
+
+**Out of scope for Wave 5 (future):**
+- Admin UI to list/manage DTV applications (admin bookings list covers only `bookings` table).
+- Voucher issuance logic on visa refusal (manual process for now).
 
 ---
 
