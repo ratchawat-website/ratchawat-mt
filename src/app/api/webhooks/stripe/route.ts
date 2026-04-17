@@ -95,12 +95,13 @@ export async function POST(request: Request) {
     // Ensure a private-slot block exists for confirmed private sessions
     // (idempotent: checkout route creates it on booking insert, this is a safety net)
     if (updated.type === "private" && updated.time_slot) {
+      // Check by reason (tied to this booking) so duplicate inserts for
+      // the same booking are avoided while still allowing up to
+      // PRIVATE_SLOT_CAPACITY distinct bookings per (date, slot, camp).
       const { data: existingBlock } = await supabase
         .from("availability_blocks")
         .select("id")
-        .eq("date", updated.start_date)
-        .eq("type", "private-slot")
-        .eq("time_slot", updated.time_slot)
+        .eq("reason", `Booking ${bookingId}`)
         .maybeSingle();
 
       if (!existingBlock) {
@@ -110,6 +111,7 @@ export async function POST(request: Request) {
             date: updated.start_date,
             type: "private-slot",
             time_slot: updated.time_slot,
+            camp: updated.camp,
             is_blocked: true,
             reason: `Booking ${bookingId}`,
           });

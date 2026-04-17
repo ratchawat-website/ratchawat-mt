@@ -47,6 +47,13 @@ export const PRIVATE_BOOKING_CUTOFF_HOURS = 12;
 export const PRIVATE_BOOKING_WHATSAPP_FALLBACK =
   "Less than 12 hours before the session? Send us a WhatsApp message and we will get back to you.";
 
+/**
+ * Maximum simultaneous private sessions the camp can run per time slot,
+ * per location. Each camp has several trainers, so a single private-slot
+ * booking does not block the slot for everyone.
+ */
+export const PRIVATE_SLOT_CAPACITY = 6;
+
 export const CAMP_WHATSAPP_NUMBER = "66630802876";
 export const CAMP_WHATSAPP_DISPLAY = "+66 63 080 2876";
 
@@ -60,23 +67,15 @@ export function buildWhatsAppUrl(message?: string): string {
 }
 
 /**
- * Returns true when the given slot (HH:mm) on `date` falls inside the
- * same-day 12-hour cutoff, i.e. the slot is today AND starts in less than
- * `PRIVATE_BOOKING_CUTOFF_HOURS` from now. For any future date the slot is
- * always bookable online. Below the cutoff the client must reach out on
- * WhatsApp instead.
+ * Returns true when the given slot (HH:mm) on `date` starts in less than
+ * `PRIVATE_BOOKING_CUTOFF_HOURS` from now. Applies to any date: sessions
+ * must always be booked at least 12 hours in advance online. Below the
+ * cutoff the client must reach out on WhatsApp instead.
  */
 export function isSlotWithinCutoff(date: Date, slot: string): boolean {
-  const now = new Date();
-  const isSameDay =
-    date.getFullYear() === now.getFullYear() &&
-    date.getMonth() === now.getMonth() &&
-    date.getDate() === now.getDate();
-  if (!isSameDay) return false;
-
   const [hh, mm] = slot.split(":").map(Number);
   const slotDate = new Date(date);
   slotDate.setHours(hh, mm, 0, 0);
   const cutoffMs = PRIVATE_BOOKING_CUTOFF_HOURS * 60 * 60 * 1000;
-  return slotDate.getTime() - now.getTime() < cutoffMs;
+  return slotDate.getTime() - Date.now() < cutoffMs;
 }

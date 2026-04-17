@@ -5,6 +5,7 @@ import DatePicker from "./DatePicker";
 import { createClient } from "@/lib/supabase/browser";
 import { Matcher } from "react-day-picker";
 import { PRIVATE_SLOTS } from "@/lib/config/slots";
+import { PRIVATE_SLOT_CAPACITY } from "@/content/schedule";
 import { INVENTORY, type InventoryKey } from "@/lib/admin/inventory";
 import { addDays, format } from "date-fns";
 
@@ -12,6 +13,7 @@ interface AvailabilityBlock {
   date: string;
   time_slot: string | null;
   type: string;
+  camp: string | null;
 }
 
 interface Props {
@@ -21,6 +23,12 @@ interface Props {
   onAvailableSlotsChange?: (slots: string[]) => void;
   inventoryKey?: InventoryKey;
   stayDurationDays?: number;
+  /**
+   * Camp filter for private bookings. Per-slot blocks only count toward
+   * capacity for the camp they belong to, so availability must be
+   * computed per camp. Required once the user has picked a camp upstream.
+   */
+  camp?: "bo-phut" | "plai-laem";
 }
 
 export default function AvailabilityCalendar({
@@ -30,6 +38,7 @@ export default function AvailabilityCalendar({
   onAvailableSlotsChange,
   inventoryKey,
   stayDurationDays,
+  camp,
 }: Props) {
   const [blocks, setBlocks] = useState<AvailabilityBlock[]>([]);
   const [occupancy, setOccupancy] = useState<Record<string, number>>({});
@@ -50,7 +59,7 @@ export default function AvailabilityCalendar({
         : ["full"];
     const blocksPromise = supabase
       .from("availability_blocks")
-      .select("date, time_slot, type")
+      .select("date, time_slot, type, camp")
       .in("type", blockTypes)
       .eq("is_blocked", true)
       .then(({ data, error }) => {
@@ -84,21 +93,34 @@ export default function AvailabilityCalendar({
 
   const disabledDays: Matcher[] = useMemo(() => {
     const blockedDates = new Set<string>();
-    const dateSlotMap = new Map<string, Set<string>>();
+    // For private bookings we track occupancy per slot per camp so we can
+    // tell whether an entire day is saturated (every slot × relevant
+    // camps at capacity). For simple full-day blocks we just flag the
+    // date.
+    const dateSlotCampCount = new Map<string, Map<string, number>>();
 
     for (const block of blocks) {
-      // "full" and "private" block the entire day; "private-slot" blocks an individual slot
       if (block.type === "full" || block.type === "private" || !block.time_slot) {
         blockedDates.add(block.date);
-      } else {
-        if (!dateSlotMap.has(block.date)) dateSlotMap.set(block.date, new Set());
-        dateSlotMap.get(block.date)!.add(block.time_slot);
+      } else if (block.type === "private-slot") {
+        // Only count blocks relevant to the selected camp (or all if no
+        // camp filter yet; in that case any camp counts).
+        if (camp && block.camp && block.camp !== camp) continue;
+        if (!dateSlotCampCount.has(block.date)) {
+          dateSlotCampCount.set(block.date, new Map());
+        }
+        const slotMap = dateSlotCampCount.get(block.date)!;
+        slotMap.set(block.time_slot, (slotMap.get(block.time_slot) ?? 0) + 1);
       }
     }
 
     if (type === "private") {
-      for (const [date, slots] of dateSlotMap.entries()) {
-        if (slots.size >= PRIVATE_SLOTS.length) blockedDates.add(date);
+      // A day is fully blocked only when every slot has reached capacity.
+      for (const [date, slotMap] of dateSlotCampCount.entries()) {
+        const fullSlots = [...slotMap.values()].filter(
+          (n) => n >= PRIVATE_SLOT_CAPACITY,
+        ).length;
+        if (fullSlots >= PRIVATE_SLOTS.length) blockedDates.add(date);
       }
     }
 
@@ -132,21 +154,30 @@ export default function AvailabilityCalendar({
     }
 
     return Array.from(blockedDates).map((d) => new Date(d + "T00:00:00"));
-  }, [blocks, type, occupancy, inventoryKey, stayDurationDays]);
+  }, [blocks, type, occupancy, inventoryKey, stayDurationDays, camp]);
 
   useEffect(() => {
     if (!selected || type !== "private" || !onAvailableSlotsChange) return;
     // Use date-fns `format` (local time) rather than toISOString() which
     // shifts to UTC and can silently skip a day in timezones ahead of UTC.
     const dateStr = format(selected, "yyyy-MM-dd");
-    const blockedSlotsForDate = new Set(
-      blocks
-        .filter((b) => b.date === dateStr && b.time_slot)
-        .map((b) => b.time_slot as string),
+    // Count existing private-slot blocks per slot for the selected camp
+    // (or overall if no camp yet). A slot is unavailable only once it has
+    // hit PRIVATE_SLOT_CAPACITY, since the camps run several trainers in
+    // parallel. Full-day blocks fall through to the calendar-level grey
+    // out above, not here.
+    const slotCounts = new Map<string, number>();
+    for (const b of blocks) {
+      if (b.date !== dateStr || !b.time_slot) continue;
+      if (b.type !== "private-slot") continue;
+      if (camp && b.camp && b.camp !== camp) continue;
+      slotCounts.set(b.time_slot, (slotCounts.get(b.time_slot) ?? 0) + 1);
+    }
+    const available = PRIVATE_SLOTS.filter(
+      (s) => (slotCounts.get(s) ?? 0) < PRIVATE_SLOT_CAPACITY,
     );
-    const available = PRIVATE_SLOTS.filter((s) => !blockedSlotsForDate.has(s));
     onAvailableSlotsChange(available);
-  }, [selected, blocks, type, onAvailableSlotsChange]);
+  }, [selected, blocks, type, onAvailableSlotsChange, camp]);
 
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);

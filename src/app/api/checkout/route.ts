@@ -7,6 +7,7 @@ import { getInventoryKey } from "@/lib/admin/inventory";
 import { checkRangeAvailability } from "@/lib/admin/availability";
 import {
   PRIVATE_BOOKING_CUTOFF_HOURS,
+  PRIVATE_SLOT_CAPACITY,
   isSlotWithinCutoff,
 } from "@/content/schedule";
 
@@ -47,8 +48,7 @@ export async function POST(request: Request) {
       );
     }
 
-    // Enforce 12h cutoff for online private bookings. Below the cutoff the
-    // client must reach us on WhatsApp so we can coordinate on short notice.
+    // Private bookings: enforce the 12h lead time + per-camp slot capacity.
     if (data.type === "private" && data.time_slot) {
       const slotDate = new Date(`${data.start_date}T00:00:00`);
       if (isSlotWithinCutoff(slotDate, data.time_slot)) {
@@ -57,6 +57,32 @@ export async function POST(request: Request) {
             error: `Online booking requires at least ${PRIVATE_BOOKING_CUTOFF_HOURS}h notice. Please contact us on WhatsApp.`,
           },
           { status: 400 },
+        );
+      }
+
+      const supabaseCheck = createAdminClient();
+      const { count, error: countError } = await supabaseCheck
+        .from("availability_blocks")
+        .select("id", { count: "exact", head: true })
+        .eq("type", "private-slot")
+        .eq("is_blocked", true)
+        .eq("date", data.start_date)
+        .eq("time_slot", data.time_slot)
+        .eq("camp", data.camp);
+      if (countError) {
+        console.error("Capacity check failed:", countError);
+        return NextResponse.json(
+          { error: "Could not verify slot availability. Please try again." },
+          { status: 500 },
+        );
+      }
+      if ((count ?? 0) >= PRIVATE_SLOT_CAPACITY) {
+        return NextResponse.json(
+          {
+            error:
+              "This slot is fully booked at the selected camp. Please pick another time or camp.",
+          },
+          { status: 409 },
         );
       }
     }
@@ -119,6 +145,7 @@ export async function POST(request: Request) {
           date: data.start_date,
           type: "private-slot",
           time_slot: data.time_slot,
+          camp: data.camp,
           is_blocked: true,
           reason: `Booking ${booking.id}`,
         });

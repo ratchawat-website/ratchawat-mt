@@ -125,6 +125,7 @@ export async function POST(request: Request) {
         date: data.start_date,
         type: "private-slot",
         time_slot: data.time_slot,
+        camp: data.camp,
         is_blocked: true,
         reason: `Booking ${booking.id}`,
       });

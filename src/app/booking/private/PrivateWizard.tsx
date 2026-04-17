@@ -244,6 +244,7 @@ export default function PrivateWizard() {
               setTimeSlot(null);
             }}
             onAvailableSlotsChange={setAvailableSlots}
+            camp={camp ?? undefined}
           />
           {date && (() => {
             const slotStates = PRIVATE_SLOTS.map((slot) => {
