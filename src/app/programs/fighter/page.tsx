@@ -8,13 +8,26 @@ import {
   organizationSchema,
   courseSchema,
 } from "@/components/seo/SchemaOrg";
-import { Swords, Zap, Brain, Timer, Dumbbell, Shield } from "lucide-react";
+import {
+  Swords,
+  Zap,
+  Brain,
+  Timer,
+  Dumbbell,
+  Shield,
+  HandCoins,
+  ListChecks,
+  UserCheck,
+  CalendarCheck,
+  MapPin,
+  Check,
+} from "lucide-react";
 import Link from "next/link";
 
 export const metadata = generatePageMeta({
-  title: "Fighter Program Koh Samui | Train to Fight - Ratchawat Muay Thai",
+  title: "Fighter Program Koh Samui | Keep Your Full Fight Purse - Ratchawat",
   description:
-    "Intensive Muay Thai fighter program at Ratchawat Koh Samui. Fight preparation, sparring, conditioning. For serious athletes ready to compete.",
+    "Fighter program at Ratchawat Plai Laem, Koh Samui. Structured prep, 2 sessions/day, conditioning, fight organization. Keep 100% of your fight purse. 9,500 THB/month.",
   path: "/programs/fighter",
 });
 
@@ -24,9 +37,61 @@ const SITE_URL =
 const fighterCourse = courseSchema({
   name: "Fighter Training Program",
   description:
-    "Intensive Muay Thai fighter program at Ratchawat Koh Samui for athletes preparing to compete.",
+    "Fighter program at Ratchawat Plai Laem, Koh Samui. Structured preparation, 2 sessions per day, kettlebell conditioning, fight organization, and corner support. Fighters keep 100% of their fight purse.",
   url: `${SITE_URL}/programs/fighter`,
 });
+
+const differentiators = [
+  {
+    icon: HandCoins,
+    title: "Keep Your Full Fight Purse",
+    description:
+      "You take home 100% of what the promoter pays. No camp commission, no hidden deductions. What you earn in the ring is what ends up in your pocket.",
+    featured: true,
+  },
+  {
+    icon: ListChecks,
+    title: "Structured Preparation",
+    description:
+      "A written plan built around your fight date. Morning technique, afternoon sparring, conditioning slotted between. Not a pick-and-choose class timetable.",
+  },
+  {
+    icon: UserCheck,
+    title: "Personalized Coaching",
+    description:
+      "Trainers track your progress session by session. They know your weaknesses, your opponent, and what to fix before the next round. Corrections made for you, not for the room.",
+  },
+  {
+    icon: Dumbbell,
+    title: "Real Conditioning Block",
+    description:
+      "Kettlebell circuits, strength, and cardio two to three times a week. Separate from pad work. The engine building that fighters actually need.",
+  },
+  {
+    icon: CalendarCheck,
+    title: "Fight Organization",
+    description:
+      "We match you with fights at the right level and the right moment. Weigh-ins, logistics, paperwork, and your corner on fight night are handled by the camp.",
+  },
+  {
+    icon: MapPin,
+    title: "Plai Laem Only, Fighters Only",
+    description:
+      "The program runs at one camp, with fighters. No tourist group classes, no split focus. The space, trainers, and schedule are built around ring preparation.",
+  },
+];
+
+const whatsIncluded = [
+  "Two sessions a day, six days a week",
+  "Structured fight-preparation program",
+  "Kettlebell and conditioning 2 to 3 times per week",
+  "Fight organization and matchmaking",
+  "Weekly stretch / yoga class",
+  "Weekly ice bath recovery",
+  "Corner support on fight night",
+  "Access to both camps (Bo Phut + Plai Laem)",
+  "Full fight purse, no camp commission",
+];
 
 const trainingBlocks = [
   {
@@ -105,17 +170,17 @@ export default function FighterProgramPage() {
           <div>
             <div className="flex items-center gap-3 mb-4"><span className="w-8 h-[2px] bg-primary" /><span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">OVERVIEW</span><span className="w-8 h-[2px] bg-primary" /></div>
             <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface mb-6">
-              The Program
+              Built for Fighters, Not Tourists
             </h2>
             <div className="space-y-4 text-on-surface-variant text-base sm:text-lg leading-relaxed">
               <p>
-                The fighter program is how Ratchawat trains people who want to step into the ring. It is not a course you sign up for, it is a commitment. Two or three sessions a day, six days a week, for as long as you are here.
+                Group classes teach you Muay Thai. They do not prepare you to fight. Sparring volume, conditioning, matchmaking, a corner on fight night — none of that is in a drop-in timetable.
               </p>
               <p>
-                Mornings focus on technique and pad work. Afternoons are for sparring and clinch. In between, there is conditioning. Trainers build your program around your fight date if you have one, or work with you to get ring-ready if you do not.
+                The fighter program is the opposite: a structured, strict month of training built around your fight date and run at our Plai Laem camp only. Morning run into technique and pad work, afternoon sparring, kettlebell and conditioning two to three times a week. Written plan, daily tracking, real corrections.
               </p>
               <p>
-                Past fighters from Ratchawat have competed in local Koh Samui shows and regional events across southern Thailand. Some came in with years of experience. Others built up from scratch over a few months.
+                Ratchawat fighters have stepped into the ring at Rajadamnern Stadium, One Lumpinee, and RWS. If you come in with experience, we sharpen what you already have. If you come in to get ring-ready for the first time, we build you up session by session.
               </p>
             </div>
           </div>
@@ -126,8 +191,54 @@ export default function FighterProgramPage() {
         </div>
       </section>
 
-      {/* Training Schedule */}
+      {/* Why This Program / Differentiators */}
       <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20 bg-surface-lowest/50">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex items-center gap-3 mb-4"><span className="w-8 h-[2px] bg-primary" /><span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">WHY THIS PROGRAM</span><span className="w-8 h-[2px] bg-primary" /></div>
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface mb-8">
+            What You Get That You Will Not Find Elsewhere
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {differentiators.map((item, i) => {
+              const isFeatured = item.featured;
+              return (
+                <div
+                  key={item.title}
+                  className={`relative rounded-[var(--radius-card)] p-6 transition-colors ${
+                    isFeatured
+                      ? "bg-primary/10 border-2 border-primary"
+                      : "bg-surface-lowest/60 border-2 border-outline-variant"
+                  }`}
+                >
+                  {isFeatured && (
+                    <span className="absolute -top-3 left-6 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-surface bg-primary rounded">
+                      Unique to Ratchawat
+                    </span>
+                  )}
+                  <div className="flex items-center gap-3 mb-3">
+                    <item.icon
+                      size={28}
+                      className={isFeatured ? "text-primary" : "text-primary"}
+                    />
+                    <span className="text-xs font-mono text-on-surface-variant">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                  </div>
+                  <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-2">
+                    {item.title}
+                  </h3>
+                  <p className="text-on-surface-variant text-sm leading-relaxed">
+                    {item.description}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Training Schedule */}
+      <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center gap-3 mb-4"><span className="w-8 h-[2px] bg-primary" /><span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">DAILY SCHEDULE</span><span className="w-8 h-[2px] bg-primary" /></div>
           <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface mb-8">
@@ -155,7 +266,7 @@ export default function FighterProgramPage() {
       </section>
 
       {/* Prerequisites */}
-      <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20">
+      <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20 bg-surface-lowest/50">
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center gap-3 mb-4"><span className="w-8 h-[2px] bg-primary" /><span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">PREREQUISITES</span><span className="w-8 h-[2px] bg-primary" /></div>
           <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface mb-8">
@@ -218,14 +329,14 @@ export default function FighterProgramPage() {
       <section className="py-12 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-3xl mx-auto">
           <p className="text-on-surface-variant text-base leading-relaxed text-center">
-            Ratchawat&apos;s fighter program in Koh Samui is an intensive training camp for athletes preparing for Muay Thai competition. The program includes technique refinement, sparring, conditioning, and fight strategy with experienced Thai trainers. Past students have won local and regional competitions.
+            The Ratchawat fighter program runs at our Plai Laem camp in Koh Samui, Thailand, for 9,500 THB per month. Training includes two sessions a day six days a week, kettlebell and conditioning, fight organization, corner support, and weekly stretch and ice bath recovery. Fighters keep 100% of their fight purse (no camp commission). Ratchawat fighters have competed at Rajadamnern Stadium, One Lumpinee, and RWS.
           </p>
         </div>
       </section>
 
       <CTABanner
         title="Ready to Fight?"
-        description="Monthly fighter program 9,500 THB. Training 2x/day, fight support included."
+        description="9,500 THB/month at Plai Laem. Full purse, corner support, structured prep. Room and bungalow tiers available."
         buttonText="Apply Now"
         href="/booking/fighter?package=fighter-monthly"
         ghostText="View All Prices"
