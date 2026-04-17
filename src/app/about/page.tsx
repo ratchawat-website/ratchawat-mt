@@ -5,7 +5,7 @@ import CTABanner from "@/components/ui/CTABanner";
 import ImagePlaceholder from "@/components/ui/ImagePlaceholder";
 import JsonLd from "@/components/seo/JsonLd";
 import { organizationSchema } from "@/components/seo/SchemaOrg";
-import { Heart, Shield, Users, Star } from "lucide-react";
+import { Heart, Shield, Users, Star, Trophy } from "lucide-react";
 import Link from "next/link";
 
 export const metadata = generatePageMeta({
@@ -24,7 +24,7 @@ const aboutPageSchema = {
   name: "About Chor Ratchawat Muay Thai",
   url: `${SITE_URL}/about`,
   description:
-    "Chor Ratchawat Muay Thai Gym is a family-run training camp in Koh Samui with two locations in Bo Phut and Plai Laem.",
+    "Chor Ratchawat Muay Thai Gym is a family-run training camp in Koh Samui since 2020, with two locations in Bo Phut and Plai Laem. Fighters have competed at Rajadamnern Stadium, One Lumpinee, and RWS.",
 };
 
 const values = [
@@ -70,7 +70,7 @@ export default function AboutPage() {
             About Chor Ratchawat Muay Thai
           </h1>
           <p className="mt-4 text-on-surface-variant text-lg max-w-2xl mx-auto">
-            A family-run Muay Thai camp on Koh Samui. Two locations, a dozen trainers, and a reputation built one student at a time.
+            A family-run Muay Thai camp on Koh Samui since 2020. Two locations, a dozen trainers, and a reputation built one student at a time.
           </p>
         </div>
       </section>
@@ -85,13 +85,16 @@ export default function AboutPage() {
             </h2>
             <div className="space-y-4 text-on-surface-variant text-base sm:text-lg leading-relaxed">
               <p>
-                Ratchawat started in Bo Phut. A small gym on Soi Sunday, a few bags, a ring, and a trainer named Kruu Wat who wanted to teach Muay Thai the right way. No shortcuts, no gimmicks.
+                Ratchawat started in 2020 in Bo Phut. A small space, a handful of beginners, and two pairs of gloves. Kruu Wat had been training since he was a boy and wanted to teach the way he had learned: traditional Muay Thai, no shortcuts.
               </p>
               <p>
-                Word got around. Travelers training for a week told friends. Fighters came to prepare for bouts. Families brought their kids. The gym filled up, so a second location opened in Plai Laem, near Big Buddha. Bigger space, same approach.
+                Word got around. Travelers training for a week told friends. The gym filled up fast. When Bo Phut could not grow any more, Kruu Wat opened a second camp in Plai Laem near Big Buddha: a bigger space for fighters and a proper base to prepare them for the ring.
               </p>
               <p>
-                Today Ratchawat runs two camps with a dozen trainers. The gym is still family-run. Kruu Wat still teaches every day. The philosophy has not changed: train hard, treat people well, keep it real.
+                Kruu Wat is passionate about Muay Thai and about passing on the culture the traditional way. Beyond the techniques, what matters at the camp is respect, sportsmanship, and care for the person. Inside the ring and outside of it.
+              </p>
+              <p>
+                Today Ratchawat runs two camps with a dozen trainers and fighters of all levels, from complete beginners to professionals. The gym is still family-run. Kruu Wat still teaches every day.
               </p>
             </div>
           </div>
@@ -102,8 +105,47 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Our Values */}
+      {/* Ring Results */}
       <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20 bg-surface-lowest/50">
+        <div className="max-w-4xl mx-auto">
+          <div className="flex items-center gap-3 mb-4"><span className="w-8 h-[2px] bg-primary" /><span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">RING RESULTS</span><span className="w-8 h-[2px] bg-primary" /></div>
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface mb-6">
+            Our Fighters at Major Thai Stadiums
+          </h2>
+          <div className="space-y-4 text-on-surface-variant text-base sm:text-lg leading-relaxed mb-6">
+            <p>
+              Ratchawat fighters have stepped into the ring at some of the most
+              respected venues in Thailand. We prepare each athlete with a
+              structured program, the right corner, and a fight schedule built
+              around their level.
+            </p>
+          </div>
+          <ul className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <li className="flex items-center gap-3 rounded-lg border-2 border-outline-variant bg-surface-lowest/60 px-4 py-3">
+              <Trophy size={20} className="text-primary shrink-0" />
+              <span className="text-on-surface font-semibold">Rajadamnern Stadium</span>
+            </li>
+            <li className="flex items-center gap-3 rounded-lg border-2 border-outline-variant bg-surface-lowest/60 px-4 py-3">
+              <Trophy size={20} className="text-primary shrink-0" />
+              <span className="text-on-surface font-semibold">One Lumpinee</span>
+            </li>
+            <li className="flex items-center gap-3 rounded-lg border-2 border-outline-variant bg-surface-lowest/60 px-4 py-3">
+              <Trophy size={20} className="text-primary shrink-0" />
+              <span className="text-on-surface font-semibold">RWS</span>
+            </li>
+          </ul>
+          <p className="mt-6 text-on-surface-variant text-sm">
+            Interested in fighting?{" "}
+            <Link href="/programs/fighter" className="text-primary hover:text-primary-dim transition-colors font-medium">
+              See the fighter program
+            </Link>
+            .
+          </p>
+        </div>
+      </section>
+
+      {/* Our Values */}
+      <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center justify-center gap-3 mb-4"><span className="w-8 h-[2px] bg-primary" /><span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">WHAT WE STAND FOR</span><span className="w-8 h-[2px] bg-primary" /></div>
           <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface mb-8">
@@ -177,7 +219,7 @@ export default function AboutPage() {
       <section className="py-12 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-3xl mx-auto">
           <p className="text-on-surface-variant text-base leading-relaxed text-center">
-            Chor Ratchawat Muay Thai Gym is a family-run training camp in Koh Samui, Thailand, rated 5.0 out of 5 stars on Google with 396 reviews across its Bo Phut and Plai Laem camps. The gym is known for its welcoming atmosphere, qualified Thai trainers, and programs for all levels from complete beginners to professional fighters.
+            Chor Ratchawat Muay Thai Gym is a family-run training camp in Koh Samui, Thailand, founded in 2020 by Kruu Wat. Rated 5.0 out of 5 stars on Google with 396 reviews across its Bo Phut and Plai Laem camps. Our fighters have competed at Rajadamnern Stadium, One Lumpinee, and RWS. The gym welcomes all levels, from complete beginners to professional fighters.
           </p>
         </div>
       </section>
