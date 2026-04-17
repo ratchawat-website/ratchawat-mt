@@ -6,6 +6,7 @@ export const BookingTypeSchema = z.enum([
   "private",
   "camp-stay",
   "fighter",
+  "dtv",
 ]);
 
 export const CampSchema = z.enum(["bo-phut", "plai-laem", "both"]);

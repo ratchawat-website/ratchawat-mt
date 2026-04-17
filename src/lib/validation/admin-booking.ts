@@ -2,7 +2,7 @@ import { z } from "zod";
 import { PRIVATE_SLOTS } from "@/lib/config/slots";
 
 export const AdminBookingSchema = z.object({
-  type: z.enum(["training", "private", "camp-stay", "fighter"]),
+  type: z.enum(["training", "private", "camp-stay", "fighter", "dtv"]),
   price_id: z.string().min(1),
   camp: z.enum(["bo-phut", "plai-laem", "both"]),
   start_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Invalid date format"),

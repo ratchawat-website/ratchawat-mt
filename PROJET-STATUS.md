@@ -28,13 +28,13 @@
 - Rating: 5.0/5 (396 Google reviews: 255 Bo Phut + 141 Plai Laem)
 - Drop-in (adult): 400 THB | Drop-in (kids 8-13 group / 3-13 private): 300 THB
 - Monthly (1x/day): 5,500 THB | Monthly (2x/day): 7,000 THB
-- Monthly kids unlimited: 2,500 THB | Resident: 3,000 THB/month (1 session/day) — sole tier
+- Monthly kids unlimited: 2,500 THB | Resident: 3,000 THB/month (1 session/day) — sole tier, Stripe `prod_ULq6vblPmCin40`
 - Private 1-on-1 adult: 800 THB | Private group (2-3 max) adult: 600 THB/person
 - Private 1-on-1 kids: 600 THB | Private group (2-3 kids max): 400 THB/kid
 - Fighter Program: 9,500 THB/month (Plai Laem only)
 - Camp Stay (Plai Laem): 8,000 THB/1wk -- 15,000 THB/2wks -- 18,000 THB/month
 - Bodyweight area: 100 THB drop-in, 900 THB/month
-- DTV packages (pending Wave 5): 20,000 THB (2x/wk) | 25,000 THB (4x/wk) | 33,000 THB (unlimited) -- all 6 months
+- DTV packages: 20,000 THB (2x/wk, `dtv-6m-2x`) | 25,000 THB (4x/wk, `dtv-6m-4x`) | 33,000 THB (unlimited, `dtv-6m-unlimited`) -- all 6 months, Stripe products created 2026-04-17, full form/checkout flow pending Wave 5
 
 | Layer | Technology | Version |
 |-------|-----------|---------|

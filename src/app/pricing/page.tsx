@@ -58,8 +58,10 @@ export default function PricingPage() {
               { name: "Private Lesson Kids 1-on-1", price: 600, description: "60-minute solo private session for kids" },
               { name: "Private Lesson Kids Group", price: 400, description: "60-minute group private session for kids" },
               { name: "Fighter Program Monthly", price: 9500, description: "Full fighter prep: 2x/day training, yoga, ice bath, fight organisation and corner support" },
-              { name: "Resident Pack 10 Classes", price: 3000, description: "10 classes for Koh Samui residents" },
-              { name: "Resident Pack 20 Classes", price: 5500, description: "20 classes for Koh Samui residents" },
+              { name: "Resident Monthly (1x/day)", price: 3000, description: "Monthly 1 session per day for Koh Samui residents" },
+              { name: "DTV 6-Month Training — 2 sessions/week", price: 20000, description: "DTV visa package, 2 sessions/week for 6 months" },
+              { name: "DTV 6-Month Training — 4 sessions/week", price: 25000, description: "DTV visa package, 4 sessions/week for 6 months" },
+              { name: "DTV 6-Month Training — Unlimited", price: 33000, description: "DTV visa package, unlimited training for 6 months" },
               { name: "Bodyweight Area Drop-in", price: 100, description: "Single-day access to bodyweight area" },
               { name: "Bodyweight Area Monthly", price: 900, description: "Monthly access to bodyweight area" },
             ],
@@ -552,12 +554,12 @@ export default function PricingPage() {
             <span className="w-8 h-[2px] bg-primary" />
           </div>
           <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface text-center mb-8">
-            Resident Rates
+            Resident Rate
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div className="max-w-md mx-auto">
             <GlassCard>
               <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-4">
-                10 Classes
+                Monthly (1x/day)
               </h3>
               <div className="mb-4">
                 <span className="font-serif text-3xl lg:text-4xl font-bold text-primary">
@@ -569,35 +571,13 @@ export default function PricingPage() {
               </div>
               <ul className="space-y-2 text-sm text-on-surface-variant mb-6">
                 <li className="flex items-center gap-2">
-                  <Check size={16} className="text-primary shrink-0" /> 10 group classes
+                  <Check size={16} className="text-primary shrink-0" /> 1 group session per day
                 </li>
                 <li className="flex items-center gap-2">
-                  <Check size={16} className="text-primary shrink-0" /> For Koh Samui residents
+                  <Check size={16} className="text-primary shrink-0" /> 6 days a week (Mon-Sat)
                 </li>
-              </ul>
-              <Link
-                href="/contact"
-                className="btn-primary w-full justify-center"
-              >
-                Contact Us <span className="btn-arrow">&rarr;</span>
-              </Link>
-            </GlassCard>
-
-            <GlassCard>
-              <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-4">
-                20 Classes
-              </h3>
-              <div className="mb-4">
-                <span className="font-serif text-3xl lg:text-4xl font-bold text-primary">
-                  5,500 THB
-                </span>
-                <span className="text-on-surface-variant text-sm ml-2">
-                  (~$163 USD)
-                </span>
-              </div>
-              <ul className="space-y-2 text-sm text-on-surface-variant mb-6">
                 <li className="flex items-center gap-2">
-                  <Check size={16} className="text-primary shrink-0" /> 20 group classes
+                  <Check size={16} className="text-primary shrink-0" /> Both locations
                 </li>
                 <li className="flex items-center gap-2">
                   <Check size={16} className="text-primary shrink-0" /> For Koh Samui residents
@@ -613,6 +593,83 @@ export default function PricingPage() {
           </div>
           <p className="text-center mt-6 text-on-surface-variant text-sm">
             Proof of residence required. Contact us to activate your resident rate.
+          </p>
+        </div>
+      </section>
+
+      {/* DTV Visa Packages */}
+      <section className="py-16 sm:py-20 px-6 sm:px-10 md:px-16 lg:px-20 bg-surface-lowest/50">
+        <div className="max-w-5xl mx-auto">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <span className="w-8 h-[2px] bg-primary" />
+            <span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">LONG STAY</span>
+            <span className="w-8 h-[2px] bg-primary" />
+          </div>
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface text-center mb-4">
+            DTV Visa Training Packages
+          </h2>
+          <p className="text-on-surface-variant text-sm text-center max-w-2xl mx-auto mb-8">
+            Six-month training packages that include the official enrollment letter required for your
+            Destination Thailand Visa application. Documents provided within 24 hours of payment.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <GlassCard>
+              <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-3">2 sessions/week</h3>
+              <div className="mb-4">
+                <span className="font-serif text-3xl lg:text-4xl font-bold text-primary">20,000 THB</span>
+                <span className="text-on-surface-variant text-sm ml-2">/ 6 months</span>
+              </div>
+              <ul className="space-y-2 text-sm text-on-surface-variant mb-6">
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" /> 2 group sessions per week</li>
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" /> Both camps (Bo Phut + Plai Laem)</li>
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" /> Bodyweight area access</li>
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" /> Full DTV documents assistance</li>
+              </ul>
+              <Link href="/visa/dtv" className="btn-primary w-full justify-center">
+                Apply <span className="btn-arrow">&rarr;</span>
+              </Link>
+            </GlassCard>
+
+            <GlassCard>
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="font-serif text-lg font-bold text-on-surface uppercase">4 sessions/week</h3>
+                <span className="badge-underline badge-orange">Popular</span>
+              </div>
+              <div className="mb-4">
+                <span className="font-serif text-3xl lg:text-4xl font-bold text-primary">25,000 THB</span>
+                <span className="text-on-surface-variant text-sm ml-2">/ 6 months</span>
+              </div>
+              <ul className="space-y-2 text-sm text-on-surface-variant mb-6">
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" /> 4 group sessions per week</li>
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" /> Both camps (Bo Phut + Plai Laem)</li>
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" /> Bodyweight area access</li>
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" /> Full DTV documents assistance</li>
+              </ul>
+              <Link href="/visa/dtv" className="btn-primary w-full justify-center">
+                Apply <span className="btn-arrow">&rarr;</span>
+              </Link>
+            </GlassCard>
+
+            <GlassCard>
+              <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-3">Unlimited</h3>
+              <div className="mb-4">
+                <span className="font-serif text-3xl lg:text-4xl font-bold text-primary">33,000 THB</span>
+                <span className="text-on-surface-variant text-sm ml-2">/ 6 months</span>
+              </div>
+              <ul className="space-y-2 text-sm text-on-surface-variant mb-6">
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" /> Unlimited training (1-2 sessions/day)</li>
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" /> Both camps (Bo Phut + Plai Laem)</li>
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" /> Bodyweight area access</li>
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" /> Full DTV documents assistance</li>
+              </ul>
+              <Link href="/visa/dtv" className="btn-primary w-full justify-center">
+                Apply <span className="btn-arrow">&rarr;</span>
+              </Link>
+            </GlassCard>
+          </div>
+          <p className="text-center mt-6 text-on-surface-variant text-xs max-w-2xl mx-auto">
+            No refund if the visa is refused, but a training voucher at our camp is provided instead.
+            See <Link href="/visa/dtv" className="text-primary hover:text-primary-dim">the DTV page</Link> for the full process.
           </p>
         </div>
       </section>

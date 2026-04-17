@@ -2,7 +2,8 @@ export type BookingType =
   | "training"
   | "private"
   | "camp-stay"
-  | "fighter";
+  | "fighter"
+  | "dtv";
 
 export type PriceCategory =
   | "group"
@@ -13,7 +14,8 @@ export type PriceCategory =
   | "bodyweight"
   | "fighter"
   | "accommodation"
-  | "camp-stay";
+  | "camp-stay"
+  | "dtv";
 
 export interface PriceItem {
   id: string;
@@ -210,37 +212,19 @@ export const PRICES: PriceItem[] = [
 
   // --- RESIDENT (KOH SAMUI) ---
   {
-    id: "resident-10",
-    stripeProductId: "prod_UJh4ul51Pe9DJz",
-    stripePriceId: "price_1TL3gIRu1Uc6NzUvH77Uf9pM",
-    name: "Resident 10 Classes",
-    nameShort: "Resident 10x",
+    id: "resident-monthly",
+    stripeProductId: "prod_ULq6vblPmCin40",
+    stripePriceId: "price_1TN8QNRu1Uc6NzUv6dv3JV9X",
+    name: "Resident Monthly (1x/day)",
+    nameShort: "Resident Monthly",
     category: "resident",
     price: 3000,
     currency: "THB",
-    unit: "10 classes",
-    description: "For Koh Samui residents. 10-class punch card, no expiry.",
+    unit: "month",
+    description: "For Koh Samui residents. One session per day for one month. Mon-Sat (closed Sunday).",
     includes: [
-      "10 group sessions",
-      "Both locations",
-      "All equipment provided",
-    ],
-    notes: "Proof of Koh Samui residency required.",
-    bookingType: "training",
-  },
-  {
-    id: "resident-20",
-    stripeProductId: "prod_UJh4bqa2s1V8Ra",
-    stripePriceId: "price_1TL3gJRu1Uc6NzUvVC2DjREX",
-    name: "Resident 20 Classes",
-    nameShort: "Resident 20x",
-    category: "resident",
-    price: 5500,
-    currency: "THB",
-    unit: "20 classes",
-    description: "For Koh Samui residents. 20-class punch card, no expiry. Best resident value.",
-    includes: [
-      "20 group sessions",
+      "1 group session per day",
+      "6 days a week",
       "Both locations",
       "All equipment provided",
     ],
@@ -501,6 +485,72 @@ export const PRICES: PriceItem[] = [
     ],
     notes: "Plai Laem camp only. Electricity charged separately. Only 1 bungalow available on-site.",
     bookingType: "fighter",
+  },
+
+  // --- DTV (DESTINATION THAILAND VISA) ---
+  {
+    id: "dtv-6m-2x",
+    stripeProductId: "prod_ULq6zbKfLZPmDu",
+    stripePriceId: "price_1TN8QPRu1Uc6NzUvW1lu8xqG",
+    name: "DTV 6-Month Training — 2 sessions/week",
+    nameShort: "DTV 2x/week",
+    category: "dtv",
+    price: 20000,
+    currency: "THB",
+    unit: "6 months",
+    description: "DTV visa training package. 2 group sessions per week for 6 months. Includes official enrollment letter for your DTV application.",
+    includes: [
+      "2 group sessions per week",
+      "6 months of training",
+      "Training at both camps (Bo Phut + Plai Laem)",
+      "Free access to the bodyweight area",
+      "Full assistance with DTV visa documents",
+    ],
+    notes: "Documents provided within 24h of payment. No refund if visa refused, but training voucher offered.",
+    bookingType: "dtv",
+  },
+  {
+    id: "dtv-6m-4x",
+    stripeProductId: "prod_ULq62BJNOUYXM4",
+    stripePriceId: "price_1TN8QSRu1Uc6NzUvoure00Gl",
+    name: "DTV 6-Month Training — 4 sessions/week",
+    nameShort: "DTV 4x/week",
+    category: "dtv",
+    price: 25000,
+    currency: "THB",
+    unit: "6 months",
+    description: "DTV visa training package. 4 group sessions per week for 6 months. Includes official enrollment letter for your DTV application.",
+    includes: [
+      "4 group sessions per week",
+      "6 months of training",
+      "Training at both camps (Bo Phut + Plai Laem)",
+      "Free access to the bodyweight area",
+      "Full assistance with DTV visa documents",
+    ],
+    notes: "Documents provided within 24h of payment. No refund if visa refused, but training voucher offered.",
+    popular: true,
+    bookingType: "dtv",
+  },
+  {
+    id: "dtv-6m-unlimited",
+    stripeProductId: "prod_ULq6MBRnzz8Fe7",
+    stripePriceId: "price_1TN8QURu1Uc6NzUvLn9Wj0qr",
+    name: "DTV 6-Month Training — Unlimited",
+    nameShort: "DTV Unlimited",
+    category: "dtv",
+    price: 33000,
+    currency: "THB",
+    unit: "6 months",
+    description: "DTV visa training package. Unlimited training (1-2 sessions per day) for 6 months. Includes official enrollment letter for your DTV application.",
+    includes: [
+      "Unlimited training (1-2 sessions per day)",
+      "6 months of training",
+      "Training at both camps (Bo Phut + Plai Laem)",
+      "Free access to the bodyweight area",
+      "Full assistance with DTV visa documents",
+    ],
+    notes: "Documents provided within 24h of payment. No refund if visa refused, but training voucher offered.",
+    bookingType: "dtv",
   },
 ];
 
