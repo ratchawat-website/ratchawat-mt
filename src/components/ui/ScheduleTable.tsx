@@ -3,7 +3,7 @@ import GlassCard from "./GlassCard";
 interface ScheduleSlot {
   time: string;
   duration: string;
-  type: "group" | "private";
+  type: "group" | "private" | "fighter";
   label: string;
 }
 
@@ -25,12 +25,19 @@ const TYPE_STYLES = {
     text: "text-green-500",
     label: "Private",
   },
+  fighter: {
+    bg: "bg-red-500/10 border-red-500/20",
+    dot: "bg-red-500",
+    text: "text-red-500",
+    label: "Fighter",
+  },
 };
 
 export default function ScheduleTable({
   schedule,
   className = "",
 }: ScheduleTableProps) {
+  const hasFighter = schedule.some((s) => s.type === "fighter");
   return (
     <div className={className}>
       <GlassCard hover={false}>
@@ -93,6 +100,12 @@ export default function ScheduleTable({
             <span className="w-2 h-2 rounded-full bg-green-500" />
             Private Lesson
           </div>
+          {hasFighter && (
+            <div className="flex items-center gap-2 text-xs text-on-surface-variant">
+              <span className="w-2 h-2 rounded-full bg-red-500" />
+              Fighter Program
+            </div>
+          )}
           <div className="flex items-center gap-2 text-xs text-on-surface-variant">
             <span className="w-2 h-2 rounded-full bg-red-400" />
             Sunday Closed

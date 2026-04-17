@@ -19,14 +19,9 @@ const STEPS = ["Info", "Tier", "Camp & Date", "Contact", "Review"];
 
 const CAMPS = [
   {
-    id: "bo-phut" as const,
-    name: "Bo Phut",
-    description: "Soi Sunday, near Fisherman's Village",
-  },
-  {
     id: "plai-laem" as const,
     name: "Plai Laem",
-    description: "Plai Laem Soi 13, near Big Buddha",
+    description: "Plai Laem Soi 13, near Big Buddha. Fighter program runs here only.",
   },
 ];
 
@@ -55,17 +50,15 @@ export default function FighterWizard() {
 
   const [step, setStep] = useState(0);
   const [priceId, setPriceId] = useState<string | null>(null);
-  const [camp, setCamp] = useState<"bo-phut" | "plai-laem" | null>(null);
+  const [camp, setCamp] = useState<"plai-laem" | null>("plai-laem");
   const [date, setDate] = useState<Date | undefined>();
   const [contact, setContact] = useState<ContactInfo>(DEFAULT_CONTACT);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Auto-lock Plai Laem when a stay tier is picked
+  // Fighter program runs at Plai Laem only — camp stays locked to plai-laem.
   useEffect(() => {
-    if (isStayTier(priceId)) {
-      setCamp("plai-laem");
-    }
+    setCamp("plai-laem");
   }, [priceId]);
 
   const selectedTier = priceId ? getPriceById(priceId) : null;
@@ -257,12 +250,11 @@ export default function FighterWizard() {
                 />
                 <div>
                   <p className="font-serif text-base font-semibold text-on-surface">
-                    Plai Laem - Accommodation included
+                    Plai Laem only
                   </p>
                   <p className="text-on-surface-variant text-sm mt-1">
-                    You stay at Plai Laem camp on-site. Training access at
-                    both Plai Laem and Bo Phut is included in the fighter
-                    program.
+                    The fighter program runs at our Plai Laem camp only, where
+                    you also stay on-site. Two sessions a day, six days a week.
                   </p>
                 </div>
               </div>

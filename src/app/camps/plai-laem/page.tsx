@@ -47,34 +47,43 @@ const plaiLaemLocation = sportsActivityLocationSchema({
   geo: { latitude: 9.5718233, longitude: 100.0725812 },
   telephone: "+66630802876",
   url: `${SITE_URL}/camps/plai-laem`,
-  openingHours: [
-    "Mo-Fr 08:00-20:00",
-    "Sa 08:00-12:00",
-  ],
+  openingHours: ["Mo-Sa 07:00-18:30"],
 });
 
 const schedule = [
   {
-    time: "8:00",
-    duration: "8:00 - 9:00 (1 hour)",
-    type: "private" as const,
-    label: "Private Lesson",
-  },
-  {
-    time: "9:30",
-    duration: "9:30 - 10:30 (1 hour)",
-    type: "group" as const,
-    label: "Group Class",
-  },
-  {
-    time: "11:00",
-    duration: "11:00 - 17:00 (by appointment)",
+    time: "7:00",
+    duration: "7:00 - 9:00 (1h slots)",
     type: "private" as const,
     label: "Private Lessons",
   },
   {
+    time: "7:30",
+    duration: "7:30 - 10:00 (2h30)",
+    type: "fighter" as const,
+    label: "Fighter Program",
+  },
+  {
+    time: "9:00",
+    duration: "9:00 - 10:30 (1h30)",
+    type: "group" as const,
+    label: "Group Class",
+  },
+  {
+    time: "10:00",
+    duration: "10:00 - 17:00 (1h slots)",
+    type: "private" as const,
+    label: "Private Lessons",
+  },
+  {
+    time: "16:00",
+    duration: "16:00 - 18:30 (2h30)",
+    type: "fighter" as const,
+    label: "Fighter Program",
+  },
+  {
     time: "17:00",
-    duration: "17:00 - 18:30 (1.5 hours)",
+    duration: "17:00 - 18:30 (1h30)",
     type: "group" as const,
     label: "Group Class",
   },

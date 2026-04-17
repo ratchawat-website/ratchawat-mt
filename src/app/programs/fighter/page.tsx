@@ -31,27 +31,27 @@ const fighterCourse = courseSchema({
 const trainingBlocks = [
   {
     icon: Timer,
-    title: "Morning Session",
-    time: "8:00 AM",
-    description: "Running, shadow boxing, technique drills, pad work. The technical session.",
-  },
-  {
-    icon: Dumbbell,
-    title: "Strength & Conditioning",
-    time: "10:00 AM",
-    description: "Bodyweight circuits, core work, bag rounds. Building the engine.",
+    title: "Morning Run",
+    time: "7:30 AM",
+    description: "Running to start the day, then straight into the morning training block.",
   },
   {
     icon: Swords,
-    title: "Afternoon Session",
-    time: "4:00 PM",
-    description: "Sparring, clinch work, fight strategy. Putting it all together under pressure.",
+    title: "Morning Training",
+    time: "8:00 - 10:00",
+    description: "Technique drills, pad work, and clinch. Structured around your fight schedule.",
+  },
+  {
+    icon: Dumbbell,
+    title: "Conditioning",
+    time: "2-3x / week",
+    description: "Kettlebell circuits, strength, and conditioning. The work that keeps you in the ring longer.",
   },
   {
     icon: Zap,
-    title: "Evening Session",
-    time: "6:00 PM",
-    description: "Pad work with a trainer, extra rounds, and conditioning finishers.",
+    title: "Afternoon Session",
+    time: "4:00 - 6:30 PM",
+    description: "Running followed by sparring, bag rounds, and targeted work. Six days a week, Plai Laem only.",
   },
 ];
 
@@ -89,12 +89,12 @@ export default function FighterProgramPage() {
       {/* Page Header */}
       <section className="py-12 sm:py-16 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="flex items-center justify-center gap-3 mb-4"><span className="w-8 h-[2px] bg-primary" /><span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">FIGHTER CAMP</span><span className="w-8 h-[2px] bg-primary" /></div>
+          <div className="flex items-center justify-center gap-3 mb-4"><span className="w-8 h-[2px] bg-primary" /><span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">FIGHTER CAMP · PLAI LAEM ONLY</span><span className="w-8 h-[2px] bg-primary" /></div>
           <h1 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-on-surface">
             Fighter Training Program
           </h1>
           <p className="mt-4 text-on-surface-variant text-lg max-w-2xl mx-auto">
-            For athletes who want to compete. Two to three sessions a day, six days a week.
+            For athletes who want to compete. Two sessions a day, six days a week, Plai Laem only.
           </p>
         </div>
       </section>

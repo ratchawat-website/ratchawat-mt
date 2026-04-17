@@ -158,7 +158,7 @@ export default function GroupAdultsPage() {
           </h2>
           <div className="space-y-4 text-on-surface-variant text-base sm:text-lg leading-relaxed">
             <p>
-              Group classes run at 8 AM, 4 PM, and 6 PM Monday through Friday, with a morning session on Saturday. Sunday is rest day. Check the full timetable on the{" "}
+              Group classes run at 9:00 AM and 5:00 PM, Monday through Saturday. Sunday is rest day. Check the full timetable on the{" "}
               <Link href="/camps/bo-phut#schedule" className="text-primary hover:text-primary-dim transition-colors font-medium">Bo Phut</Link>
               {" "}or{" "}
               <Link href="/camps/plai-laem#schedule" className="text-primary hover:text-primary-dim transition-colors font-medium">Plai Laem</Link>

@@ -80,7 +80,7 @@ Note: Fighter+Room confirmed at 20,000 THB (2026-04-12).
 
 **Date formatting** — unified via `src/lib/utils/date-format.ts`. Short format `formatDateShort` (Apr 12, 2026) for tables, cards, lists. Long format `formatDateLong` (Saturday, April 12, 2026) for review steps and detail pages.
 
-**Private lesson time slots:** `08:00, 11:00, 12:00, 13:00, 14:00, 15:00, 16:00` (7 slots). Centralized in `src/lib/config/slots.ts`.
+**Private lesson time slots:** `07:00, 08:00, 10:00, 11:00, 12:00, 13:00, 14:00, 15:00, 16:00` (9 slots). Source of truth: `src/content/schedule.ts` (`PRIVATE_SLOT_TIMES`), re-exported by `src/lib/config/slots.ts` for consumers.
 
 ---
 
@@ -133,7 +133,7 @@ create table bookings (
 **Notes on bookings schema:**
 - `type` dropped the 'accommodation' value (no prices exist for that type)
 - `num_participants` added for Private Group bookings (2-3 people, prices per person)
-- `time_slot` added for Private lessons (09:00 / 11:00 / 14:00 / 16:00)
+- `time_slot` added for Private lessons (see `PRIVATE_SLOT_TIMES` in `src/content/schedule.ts`)
 - `camp` accepts 'both' for Camp Stay bookings (client stays at Plai Laem but trains at either camp)
 
 ### Table: availability_blocks

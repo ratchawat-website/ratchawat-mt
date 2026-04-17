@@ -192,7 +192,7 @@ export default function PricingPage() {
               </div>
               <ul className="space-y-2 text-sm text-on-surface-variant mb-6">
                 <li className="flex items-center gap-2">
-                  <Check size={16} className="text-primary shrink-0" /> 1 session per day, 7 days
+                  <Check size={16} className="text-primary shrink-0" /> 1 session per day, 6 days
                 </li>
                 <li className="flex items-center gap-2">
                   <Check size={16} className="text-primary shrink-0" /> Morning or afternoon
@@ -224,7 +224,7 @@ export default function PricingPage() {
               </div>
               <ul className="space-y-2 text-sm text-on-surface-variant mb-6">
                 <li className="flex items-center gap-2">
-                  <Check size={16} className="text-primary shrink-0" /> Morning + afternoon, 7 days
+                  <Check size={16} className="text-primary shrink-0" /> Morning + afternoon, 6 days
                 </li>
                 <li className="flex items-center gap-2">
                   <Check size={16} className="text-primary shrink-0" /> Maximum training volume
@@ -345,7 +345,7 @@ export default function PricingPage() {
                 <li className="flex items-start justify-between gap-4">
                   <div className="flex items-start gap-2 text-on-surface-variant">
                     <Check size={16} className="text-primary shrink-0 mt-0.5" />
-                    <span>Small group private session (60 min)</span>
+                    <span>Small group private session (60 min, 3 people max)</span>
                   </div>
                   <span className="font-bold text-primary shrink-0">600 THB</span>
                 </li>
@@ -374,7 +374,7 @@ export default function PricingPage() {
                 <li className="flex items-start justify-between gap-4">
                   <div className="flex items-start gap-2 text-on-surface-variant">
                     <Check size={16} className="text-primary shrink-0 mt-0.5" />
-                    <span>Small group private session (60 min)</span>
+                    <span>Small group private session (60 min, 3 kids max)</span>
                   </div>
                   <span className="font-bold text-primary shrink-0">400 THB</span>
                 </li>

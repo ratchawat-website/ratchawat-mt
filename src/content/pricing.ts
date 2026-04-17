@@ -278,13 +278,13 @@ export const PRICES: PriceItem[] = [
     price: 600,
     currency: "THB",
     unit: "person/session",
-    description: "Private session for 2-3 people with one trainer. Price per person.",
+    description: "Private session for 2-3 people with one trainer (3 people max). Price per person.",
     includes: [
       "60 minutes with 1 trainer",
-      "For 2-3 participants",
+      "For 2-3 participants (3 max)",
       "All equipment provided",
     ],
-    notes: "Price per person. Minimum 2 participants.",
+    notes: "Price per person. Minimum 2, maximum 3 participants.",
     bookingType: "private",
   },
 
@@ -317,13 +317,13 @@ export const PRICES: PriceItem[] = [
     price: 400,
     currency: "THB",
     unit: "kid/session",
-    description: "Private kids session for 2-3 children with one trainer. Price per kid.",
+    description: "Private kids session for 2-3 children with one trainer (3 kids max). Price per kid.",
     includes: [
       "60 minutes with 1 trainer",
-      "For 2-3 kids aged 8-13",
+      "For 2-3 kids aged 3-13 (3 max)",
       "All equipment provided",
     ],
-    notes: "Price per kid. Minimum 2 participants.",
+    notes: "Price per kid. Minimum 2, maximum 3 participants. Under 8, private only.",
     bookingType: "private",
   },
 

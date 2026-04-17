@@ -99,7 +99,7 @@ const contactInfo = [
   {
     icon: Clock,
     label: "Hours",
-    value: "8:00 AM - 8:00 PM, 6 days/week",
+    value: "7:00 AM - 6:30 PM, 6 days/week (closed Sunday)",
     href: null,
   },
 ];
@@ -232,7 +232,7 @@ export default function ContactPage() {
               address="Soi Sunday Tambon Bo Put, Ko Samui District, Surat Thani 84320"
               phone="+66 63 080 2876"
               email="chor.ratchawat@gmail.com"
-              hours="8:00 AM - 8:00 PM, 6 days/week"
+              hours="7:00 AM - 6:30 PM, 6 days/week (closed Sunday)"
               mapEmbedUrl="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3933!2d100.0344246!3d9.5553391!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zOcKwMzMnMTkuMiJOIDEwMMKwMDInMDQuMCJF!5e0!3m2!1sen!2sth!4v1"
               campPageHref="/camps/bo-phut"
             />
@@ -241,7 +241,7 @@ export default function ContactPage() {
               address="20, 33 หมู่ที่ 5 ปลายแหลม ซอย 13, Tambon Bo Put, Amphoe Ko Samui, Surat Thani 84320"
               phone="+66 63 080 2876"
               email="chor.ratchawat@gmail.com"
-              hours="8:00 AM - 8:00 PM, 6 days/week"
+              hours="7:00 AM - 6:30 PM, 6 days/week (closed Sunday)"
               mapEmbedUrl="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1966!2d100.0725812!3d9.5718233!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zOcKwMzQnMTguNiJOIDEwMMKwMDQnMjEuMyJF!5e0!3m2!1sen!2sth!4v1"
               campPageHref="/camps/plai-laem"
             />
@@ -281,7 +281,7 @@ export default function ContactPage() {
             >
               Plai Laem
             </Link>{" "}
-            (Plai Laem Soi 13). Open 6 days a week, 8 AM to 8 PM.
+            (Plai Laem Soi 13). Open 6 days a week (closed Sunday), training from 7:00 AM to 6:30 PM.
           </p>
         </div>
       </section>

@@ -160,7 +160,7 @@ Description: Choose your Muay Thai program at Ratchawat Koh Samui. Group classes
 **Schema :** Liste de `Course` avec liens vers les sous-pages
 
 **Passage GEO :**
-> Ratchawat Muay Thai offers four training programs: adult group classes, kids classes, private 1-on-1 lessons with Thai trainers, and an intensive fighter program for competitive athletes. All programs are available at both the Bo Phut and Plai Laem locations in Koh Samui.
+> Ratchawat Muay Thai offers four training programs: adult group classes, kids classes, private 1-on-1 lessons with Thai trainers, and an intensive fighter program for competitive athletes. Group and private classes run at both Bo Phut and Plai Laem, six days a week. The fighter program runs at Plai Laem only.
 
 **Liens internes :** /programs/group-adults, /programs/group-kids, /programs/private, /programs/fighter
 

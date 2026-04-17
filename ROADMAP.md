@@ -3,7 +3,7 @@
 > **Source of truth for what to build.** Read this at the start of every session alongside PROJET-STATUS.md.
 > Update task statuses as work progresses. Never start work without checking the current phase.
 
-**Last updated:** 2026-04-16
+**Last updated:** 2026-04-17
 **Current phase:** Phase 5 — Pages & Content Completion
 
 > **Phase ordering (post-Phase 4 restructure, 2026-04-15):** Before go-live we split the generic "Security & Quality" bucket into 4 sequential phases (5 → 8) so work happens in the right order. Go-live (Phase 9) is the FINAL phase, unblocked only when all content, media, SEO, and security/perf/a11y work is done. Do not skip ahead.
@@ -197,20 +197,21 @@ Admin logs in, views all bookings with filters, updates status, manages availabi
 
 ### Tasks
 
+- [x] **Wave 1 — Fondations (2026-04-17)**: centralized schedule in `src/content/schedule.ts` (group 9:00–10:30 + 17:00–18:30; private 1h slots 7:00–17:00; fighter 7:30–10:00 + 16:00–18:30). Propagated to `/camps/*`, `/programs/*`, `/booking/fighter` (locked Plai Laem), `/pricing`, `/contact`, `llms.txt`, `llms-full.txt`. Homepage "Est. 2023" → "Since 2020". "7 days" → "6 days". Kids group 8–13 + private 3–13 (under 8 private only). Small group private 3 people max. Fighter program now Plai Laem only across all surfaces. Removed stale 90-day visa link from llms-full. `PRIVATE_SLOTS` now 9 slots (added 07:00, 10:00). `ScheduleTable` supports `fighter` type. `openingHours` schema Mo-Sa 07:00–18:30.
 - [~] `/team` — **Structure built 2026-04-16 with placeholders** (Option A: Hero founder card + camp-filtered grid, 12 trainers, Schema.org Person per trainer, date-demo-ready). Centralized data in `src/content/trainers.ts`, also used by homepage circular gallery. **PENDING**: real names for 5 unknown trainers (7 confirmed: Kruu Wat + Tae, Kuan, Kit, Sing, Mam, Mon), real bios for all 12, real specialties, real photos. Bios and TBD names must be replaced before launch.
-- [ ] `/about` — full content audit: story, founders, mission, philosophy. Partial update done 2026-04-16 (rating + Kruu Wat spelling). Still needs /humanizer pass + hero image + trainer list alignment with rebuilt `/team`.
-- [ ] `/visa/dtv` — content accuracy, DTV 180-day eligibility, required docs, booking CTA, GEO passage
-- [ ] `/visa/90-days` — ED visa content, durations, documents provided, GEO passage
-- [ ] `/programs/group-adults` — verify pricing, schedule (Mon-Sat), drop-in 400 THB, GEO passage
-- [ ] `/programs/group-kids` — verify pricing 300 THB drop-in / 2500 THB monthly, age range 5-15
-- [ ] `/programs/private` — verify pricing 800 THB solo / 600 THB group, time slots (8:00 + 11:00-16:00). Kroo → Kruu spelling normalized 2026-04-16. Trainer name list in page needs sync with rebuilt `/team`.
-- [ ] `/programs/fighter` — verify pricing 9500 THB, tier structure, fighter+stay options (20,000 / 25,500 THB)
+- [ ] `/about` — **Wave 3 pending**: integrate Kruu Wat story (started Bo Phut 2020, expanded Plai Laem, fighters at Rajadamnern/One Lumpinee/RSW). Partial update done 2026-04-16 (rating + Kruu Wat spelling). /humanizer + hero image still pending.
+- [ ] `/visa/dtv` — **Wave 5 (biggest piece)**: rebuild with 3 DTV packages (20K/25K/33K THB), application form (14 fields), Stripe checkout, Resend email with docs within 24h, confirmation. Docs provided within 24h after payment.
+- [x] `/visa/90-days` — **TO BE DELETED Wave 5**. Client confirms DTV only. Removed from llms-full 2026-04-17.
+- [x] `/programs/group-adults` — schedule corrected (9:00 AM + 5:00 PM, Mon-Sat) 2026-04-17. Pricing, GEO still to verify.
+- [x] `/programs/group-kids` — ages corrected to 8–13 group + 3–7 private 2026-04-17. Pricing verification pending.
+- [ ] `/programs/private` — verify pricing 800 THB solo / 600 THB group (3 max), slots now 9 (7:00, 8:00, 10:00–16:00). Kroo → Kruu spelling normalized 2026-04-16. Trainer name list in page needs sync with rebuilt `/team`. Add 12h booking cutoff + WhatsApp fallback (Wave 6).
+- [x] `/programs/fighter` — schedule updated 2026-04-17 (7:30 AM morning + 4:00–6:30 PM afternoon), Plai Laem only badge, kettlebell block, title "Two sessions a day" narrative. **Wave 4 pending**: expand discours on "full fight purse" USP, justify 9,500 THB.
 - [ ] `/faq` — full audit (partial update 2026-04-16: removed MuayThaiMap + stale trainer reference from female-friendly answer)
 - [x] `/gallery` — **REMOVED 2026-04-16**. Photos and updates now live on Instagram/Facebook. Page deleted, footer link removed, sitemap entry removed. No redirect (site not deployed).
 - [x] `/reviews` — **DONE 2026-04-16**. Real Google reviews (12 curated + 3 featured homepage), filter tabs (All/Bo Phut/Plai Laem), per-camp stats (5.0 / 255 Bo Phut + 5.0 / 141 Plai Laem = 396 total), language flags on non-EN, Schema.org per-camp AggregateRating + individual Review entries with `inLanguage`, GBP canonical URLs (`maps.app.goo.gl`), month-year dates (no "X weeks ago" staleness), `reviewDisplayDate()` helper via date-fns. Also fixed stale 9.3/131/MuayThaiMap references across `/about`, `/faq`, `llms.txt`, `llms-full.txt`. Homepage testimonials + AggregateRating + `organizationSchema.sameAs` also updated.
 - [x] `/services` — **REMOVED 2026-04-16**. Page supprimée, footer + sitemap nettoyés. Content redundant with `/programs`.
 - [x] `/contact` — **VERIFIED 2026-04-16**. Addresses, GPS coords, phone, email, hours, map embeds all correct. Schema.org ContactPage + Organization + per-camp LocalBusiness present. Fixed social handle inconsistency: `organizationSchema.sameAs` + `llms-full.txt` aligned with `/contact` page's canonical handles (Facebook `/Chor.RatchawatMuayThaiGym`, Instagram `/chor.ratchawatmuaythai`, TikTok `/@chor.ratchawat`). **⚠ TODO** : confirm with owner that these are the REAL social URLs (couldn't verify without access).
-- [ ] `/pricing` — full audit post-Phase 4 (camp-stay 4 cards, fighter+stay section)
+- [~] `/pricing` — Wave 1 done 2026-04-17: "7 days" → "6 days", "3 people/kids max" on small group private. **Wave 2 pending**: remove 20-session resident package (keep only 3,000 THB / 1 month), add 3 DTV products (20K/25K/33K THB), justify fighter 9,500 THB.
 - [ ] Run `/humanizer` on every visible copy block
 - [ ] Update `Navigation.tsx` and `Footer.tsx` if any new pages are added
 

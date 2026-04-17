@@ -3,8 +3,8 @@
 > **This file is the primary reference for the project.**
 > Each agent must read it at the start of a conversation and update it after each modification.
 
-**Last updated:** 2026-04-13
-**Phase:** Phase 6 -- Go-live preparation (Phase 4 + audit complete, Phase 5 partial).
+**Last updated:** 2026-04-17
+**Phase:** Phase 5 -- Pages & Content (Wave 1 complete: schedule + constants fondations).
 **Pre-go-live config:** Read `GO-LIVE-CHECKLIST.md` before any production deployment.
 **Project status:** Production refonte accepted by client. Maquette phase complete. Building toward full deployment (no live deployment until all 6 phases complete).
 **Rebuilt from:** https://ratchawatmuaythai.com/
@@ -23,16 +23,18 @@
 **Business info:**
 - Phone: +66 63 080 2876
 - Email: chor.ratchawat@gmail.com
-- Hours: 8:00 AM - 8:00 PM, 6 days/week
-- Rating: 9.3/10 on MuayThaiMap (131 Google reviews)
-- Drop-in (adult): 400 THB | Drop-in (kids 8-13): 300 THB
+- Hours (training): 7:00 AM - 6:30 PM, 6 days/week (closed Sunday)
+- Schedule: Group 9:00-10:30 + 17:00-18:30 | Private 1h slots 7:00-17:00 (outside group hours) | Fighter 7:30-10:00 + 16:00-18:30 (Plai Laem only)
+- Rating: 5.0/5 (396 Google reviews: 255 Bo Phut + 141 Plai Laem)
+- Drop-in (adult): 400 THB | Drop-in (kids 8-13 group / 3-13 private): 300 THB
 - Monthly (1x/day): 5,500 THB | Monthly (2x/day): 7,000 THB
-- Monthly kids unlimited: 2,500 THB | Resident 10x: 3,000 THB | Resident 20x: 5,500 THB
-- Private 1-on-1 adult: 800 THB | Private group (2-3) adult: 600 THB/person
-- Private 1-on-1 kids: 600 THB | Private group kids: 400 THB/kid
-- Fighter Program: 9,500 THB/month
+- Monthly kids unlimited: 2,500 THB | Resident: 3,000 THB/month (1 session/day) — sole tier
+- Private 1-on-1 adult: 800 THB | Private group (2-3 max) adult: 600 THB/person
+- Private 1-on-1 kids: 600 THB | Private group (2-3 kids max): 400 THB/kid
+- Fighter Program: 9,500 THB/month (Plai Laem only)
 - Camp Stay (Plai Laem): 8,000 THB/1wk -- 15,000 THB/2wks -- 18,000 THB/month
 - Bodyweight area: 100 THB drop-in, 900 THB/month
+- DTV packages (pending Wave 5): 20,000 THB (2x/wk) | 25,000 THB (4x/wk) | 33,000 THB (unlimited) -- all 6 months
 
 | Layer | Technology | Version |
 |-------|-----------|---------|

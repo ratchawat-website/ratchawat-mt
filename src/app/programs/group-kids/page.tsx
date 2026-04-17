@@ -83,7 +83,7 @@ export default function GroupKidsPage() {
             Kids Muay Thai Classes
           </h1>
           <p className="mt-4 text-on-surface-variant text-lg max-w-2xl mx-auto">
-            Ages 5 to 15. Safe, structured, and actually fun. No experience needed.
+            Group classes for ages 8 to 13. Younger kids (3 to 7) train through private sessions. Safe, structured, and actually fun. No experience needed.
           </p>
         </div>
       </section>
