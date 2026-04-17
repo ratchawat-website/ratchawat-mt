@@ -5,6 +5,10 @@ import { BookingRequestSchema } from "@/lib/validation/booking";
 import { getPriceById } from "@/content/pricing";
 import { getInventoryKey } from "@/lib/admin/inventory";
 import { checkRangeAvailability } from "@/lib/admin/availability";
+import {
+  PRIVATE_BOOKING_CUTOFF_HOURS,
+  isSlotWithinCutoff,
+} from "@/content/schedule";
 
 function getStripe(): Stripe {
   if (!process.env.STRIPE_SECRET_KEY) {
@@ -41,6 +45,20 @@ export async function POST(request: Request) {
         { error: "Price not yet set for this item" },
         { status: 500 },
       );
+    }
+
+    // Enforce 12h cutoff for online private bookings. Below the cutoff the
+    // client must reach us on WhatsApp so we can coordinate on short notice.
+    if (data.type === "private" && data.time_slot) {
+      const slotDate = new Date(`${data.start_date}T00:00:00`);
+      if (isSlotWithinCutoff(slotDate, data.time_slot)) {
+        return NextResponse.json(
+          {
+            error: `Online booking requires at least ${PRIVATE_BOOKING_CUTOFF_HOURS}h notice. Please contact us on WhatsApp.`,
+          },
+          { status: 400 },
+        );
+      }
     }
 
     const totalAmount = pkg.price * data.num_participants;

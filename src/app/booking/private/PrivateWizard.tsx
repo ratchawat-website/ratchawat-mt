@@ -9,10 +9,16 @@ import ContactInfoForm, {
   isContactInfoValid,
 } from "@/components/booking/ContactInfoForm";
 import BookingReview from "@/components/booking/BookingReview";
-import { MapPin } from "lucide-react";
+import { MapPin, MessageCircle } from "lucide-react";
 import { getPricesByBookingType, getPriceById } from "@/content/pricing";
 import { PRIVATE_SLOTS } from "@/lib/config/slots";
+import {
+  PRIVATE_BOOKING_WHATSAPP_FALLBACK,
+  buildWhatsAppUrl,
+  isSlotWithinCutoff,
+} from "@/content/schedule";
 import { formatDateLong } from "@/lib/utils/date-format";
+import { format } from "date-fns";
 
 const STEPS = ["Session type", "Camp", "Date & Time", "Contact", "Review"];
 
@@ -111,7 +117,7 @@ export default function PrivateWizard() {
           price_id: selectedPackage.id,
           type: "private",
           camp,
-          start_date: date.toISOString().split("T")[0],
+          start_date: format(date, "yyyy-MM-dd"),
           time_slot: timeSlot,
           num_participants: contact.numParticipants,
           client_name: contact.name,
@@ -239,20 +245,34 @@ export default function PrivateWizard() {
             }}
             onAvailableSlotsChange={setAvailableSlots}
           />
-          {date && (
-            <div>
-              <p className="text-sm font-medium text-on-surface mb-3">
-                Available time slots
-              </p>
-              <div className="grid grid-cols-4 gap-2">
-                {PRIVATE_SLOTS.map((slot) => {
-                  const isAvailable = availableSlots.includes(slot);
-                  return (
+          {date && (() => {
+            const slotStates = PRIVATE_SLOTS.map((slot) => {
+              const withinCutoff = isSlotWithinCutoff(date, slot);
+              const isAvailable =
+                availableSlots.includes(slot) && !withinCutoff;
+              return { slot, isAvailable, withinCutoff };
+            });
+            const anyCutoffBlocked = slotStates.some((s) => s.withinCutoff);
+            const waMessage = `Hi, I would like to book a private session on ${formatDateLong(
+              date,
+            )} but it is less than 12 hours away. Can you confirm availability?`;
+            return (
+              <div>
+                <p className="text-sm font-medium text-on-surface mb-3">
+                  Available time slots
+                </p>
+                <div className="grid grid-cols-4 gap-2">
+                  {slotStates.map(({ slot, isAvailable, withinCutoff }) => (
                     <button
                       type="button"
                       key={slot}
                       disabled={!isAvailable}
                       onClick={() => setTimeSlot(slot)}
+                      aria-label={
+                        withinCutoff
+                          ? `${slot} — less than 12 hours away, book by WhatsApp`
+                          : slot
+                      }
                       className={`rounded-[var(--radius-input)] py-3 text-sm font-semibold border-2 transition-colors ${
                         timeSlot === slot
                           ? "border-primary bg-primary text-white"
@@ -263,11 +283,37 @@ export default function PrivateWizard() {
                     >
                       {slot}
                     </button>
-                  );
-                })}
+                  ))}
+                </div>
+                {anyCutoffBlocked && (
+                  <div className="mt-4 flex items-start gap-3 rounded-[var(--radius-card)] border-2 border-primary/30 bg-primary/5 p-4">
+                    <MessageCircle
+                      size={20}
+                      className="text-primary shrink-0 mt-0.5"
+                      aria-hidden="true"
+                    />
+                    <div className="text-sm">
+                      <p className="font-semibold text-on-surface mb-1">
+                        Need to book last-minute?
+                      </p>
+                      <p className="text-on-surface-variant mb-2">
+                        {PRIVATE_BOOKING_WHATSAPP_FALLBACK}
+                      </p>
+                      <a
+                        href={buildWhatsAppUrl(waMessage)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-primary hover:text-primary-dim font-semibold inline-flex items-center gap-1"
+                      >
+                        Message us on WhatsApp
+                        <span aria-hidden="true">&rarr;</span>
+                      </a>
+                    </div>
+                  </div>
+                )}
               </div>
-            </div>
-          )}
+            );
+          })()}
         </div>
       )}
 

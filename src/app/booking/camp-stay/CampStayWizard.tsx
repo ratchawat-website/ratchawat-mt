@@ -12,6 +12,7 @@ import ContactInfoForm, {
 import BookingReview from "@/components/booking/BookingReview";
 import { getPricesByBookingType, getPriceById } from "@/content/pricing";
 import { formatDateLong } from "@/lib/utils/date-format";
+import { format } from "date-fns";
 
 const STEPS = ["Package", "Check-in", "Contact", "Review"];
 
@@ -100,8 +101,8 @@ export default function CampStayWizard() {
           price_id: selectedPackage.id,
           type: "camp-stay",
           camp: "both",
-          start_date: checkIn.toISOString().split("T")[0],
-          end_date: checkOut.toISOString().split("T")[0],
+          start_date: format(checkIn, "yyyy-MM-dd"),
+          end_date: format(checkOut, "yyyy-MM-dd"),
           num_participants: 1,
           client_name: contact.name,
           client_email: contact.email,

@@ -11,6 +11,7 @@ import ContactInfoForm, {
 import BookingReview from "@/components/booking/BookingReview";
 import { MapPin } from "lucide-react";
 import { getPricesByBookingType, getPriceById } from "@/content/pricing";
+import { format } from "date-fns";
 
 const STEPS = ["Package", "Camp", "Date", "Contact", "Review"];
 
@@ -89,7 +90,7 @@ export default function TrainingWizard() {
           price_id: selectedPackage.id,
           type: "training",
           camp,
-          start_date: date.toISOString().split("T")[0],
+          start_date: format(date, "yyyy-MM-dd"),
           num_participants: 1,
           client_name: contact.name,
           client_email: contact.email,

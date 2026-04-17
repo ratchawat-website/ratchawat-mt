@@ -14,6 +14,7 @@ import { MapPin, Swords, Brain, Shield, Zap, Info } from "lucide-react";
 import { getPricesByBookingType, getPriceById } from "@/content/pricing";
 import type { InventoryKey } from "@/lib/admin/inventory";
 import { formatDateLong } from "@/lib/utils/date-format";
+import { format } from "date-fns";
 
 const STEPS = ["Info", "Tier", "Camp & Date", "Contact", "Review"];
 
@@ -85,7 +86,7 @@ export default function FighterWizard() {
           price_id: selectedTier.id,
           type: "fighter",
           camp,
-          start_date: date.toISOString().split("T")[0],
+          start_date: format(date, "yyyy-MM-dd"),
           num_participants: 1,
           client_name: contact.name,
           client_email: contact.email,

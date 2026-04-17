@@ -136,7 +136,9 @@ export default function AvailabilityCalendar({
 
   useEffect(() => {
     if (!selected || type !== "private" || !onAvailableSlotsChange) return;
-    const dateStr = selected.toISOString().split("T")[0];
+    // Use date-fns `format` (local time) rather than toISOString() which
+    // shifts to UTC and can silently skip a day in timezones ahead of UTC.
+    const dateStr = format(selected, "yyyy-MM-dd");
     const blockedSlotsForDate = new Set(
       blocks
         .filter((b) => b.date === dateStr && b.time_slot)
