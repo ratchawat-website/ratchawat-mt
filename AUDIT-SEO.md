@@ -401,7 +401,7 @@ Description: Services at Ratchawat Muay Thai Koh Samui. Transportation, training
 **Passage GEO :**
 > Ratchawat Muay Thai Koh Samui offers additional services including transportation to and from the gyms, training gear and equipment sales, and health insurance guidance for international visitors training in Thailand.
 
-**Liens internes :** /accommodation, /visa/dtv, /visa/90-days, /pricing
+**Liens internes :** /accommodation, /visa/dtv, /pricing
 
 ---
 
@@ -431,34 +431,11 @@ Description: Get your Destination Thailand Visa (DTV) for Muay Thai training. St
 **Passage GEO :**
 > The Destination Thailand Visa (DTV) allows foreigners to stay in Thailand for up to 180 days per entry for Muay Thai training. Chor Ratchawat Muay Thai Gym in Koh Samui provides the required training acceptance letter for DTV visa applications. The gym supports the full application process and offers dedicated training packages for long-stay visa holders.
 
-**Liens internes :** /visa/90-days, /pricing, /accommodation, /booking
+**Liens internes :** /pricing, /accommodation, /booking, /programs/fighter
 
 ---
 
-### PAGE 16 : Visa 90 jours `/visa/90-days`
-
-**Mots-cles cibles :**
-- Principal : `90 day muay thai visa thailand`, `muay thai ED visa thailand`
-- Secondaires : `muay thai education visa koh samui`, `3 month muay thai training thailand`
-
-**Meta :**
-```
-Title: 90-Day Muay Thai Visa Thailand | Education Visa — Ratchawat
-Description: Apply for a 90-day Muay Thai education visa in Thailand. Train at Ratchawat Koh Samui for 3 months. We handle the paperwork. Apply online.
-```
-
-**H1 :** `90-Day Muay Thai Visa`
-
-**Schema :** `FAQPage` + `Article`
-
-**Passage GEO :**
-> Ratchawat Muay Thai in Koh Samui supports 90-day Muay Thai education visa applications for Thailand. The 3-month visa allows intensive daily training. The gym provides all required documentation and supports the visa renewal process. Training packages for 90-day visa holders include daily group classes and optional private sessions.
-
-**Liens internes :** /visa/dtv, /programs/fighter, /accommodation, /pricing
-
----
-
-### PAGE 17 : Equipe `/team`
+### PAGE 16 : Equipe `/team`
 
 **Mots-cles cibles :**
 - Principal : `muay thai trainers koh samui`
@@ -531,7 +508,7 @@ Description: Frequently asked questions about Muay Thai training at Ratchawat Ko
 9. How do I get to the gym?
 10. Can I book and pay online?
 
-**Liens internes :** /pricing, /booking, /visa/dtv, /visa/90-days, /accommodation
+**Liens internes :** /pricing, /booking, /visa/dtv, /accommodation
 
 ---
 
@@ -600,7 +577,6 @@ WebSite (homepage uniquement)
 | `/accommodation` | LodgingBusiness | Partenaires |
 | `/services` | Service | Multiples |
 | `/visa/dtv` | FAQPage, Article | Questions visa |
-| `/visa/90-days` | FAQPage, Article | Questions visa |
 | `/team` | Person (x4+) | Entraineurs |
 | `/gallery` | ImageGallery | |
 | `/faq` | FAQPage | 10+ questions |
@@ -695,8 +671,7 @@ Fichier `public/llms.txt` pour les crawlers IA :
 Open 6 days a week, 8:00 AM - 8:00 PM
 
 ## Visa Support
-- DTV Visa (180 days)
-- 90-Day Muay Thai Education Visa
+- DTV Visa (up to 180 days)
 
 ## Rating
 9.3/10 on MuayThaiMap (131 Google reviews)
@@ -725,8 +700,8 @@ Implementer dans `next.config.js` :
 | `/health-insurance/` | `/services` |
 | `/dtv-visa-thailand-apply-now/` | `/visa/dtv` |
 | `/destination-thailand-visa-dtv-form/` | `/visa/dtv` |
-| `/90-days-muay-thai-visa-apply-now/` | `/visa/90-days` |
-| `/90-days-muay-thai-visa-form/` | `/visa/90-days` |
+| `/90-days-muay-thai-visa-apply-now/` | `/visa/dtv` |
+| `/90-days-muay-thai-visa-form/` | `/visa/dtv` |
 | `/camp-news/` | `/blog` |
 | `/blognews/` | `/blog` |
 | `/category/news/` | `/blog` |

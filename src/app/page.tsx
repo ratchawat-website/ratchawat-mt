@@ -58,7 +58,7 @@ const features = [
     icon: FileCheck,
     title: "Visa Support",
     description:
-      "Long-stay training? We provide documentation for DTV visa (180 days) and ED visa (90 days) applications.",
+      "Long-stay training? We provide documentation and application support for the Thailand DTV visa (up to 180 days).",
   },
 ];
 

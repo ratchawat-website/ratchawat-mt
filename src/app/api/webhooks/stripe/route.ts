@@ -4,8 +4,11 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import {
   sendBookingConfirmationEmail,
   sendAdminNotificationEmail,
+  sendDtvApplicationReceivedEmail,
+  sendDtvAdminNotificationEmail,
 } from "@/lib/email/send";
 import type { BookingEmailData } from "@/lib/email/types";
+import type { DtvApplicationEmailData } from "@/lib/email/templates/DTVApplicationReceived";
 
 function getStripe(): Stripe {
   if (!process.env.STRIPE_SECRET_KEY) {
@@ -39,7 +42,65 @@ export async function POST(request: Request) {
 
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session;
-    const bookingId = session.metadata?.booking_id;
+    const meta = session.metadata ?? {};
+
+    // DTV application flow
+    if (meta.type === "dtv") {
+      const applicationId = meta.dtv_application_id;
+      if (!applicationId) {
+        console.error("Missing dtv_application_id in session metadata");
+        return NextResponse.json({ received: true });
+      }
+
+      const { data: app, error: dtvErr } = await supabase
+        .from("dtv_applications")
+        .update({
+          status: "paid",
+          stripe_session_id: session.id,
+          stripe_payment_intent_id:
+            typeof session.payment_intent === "string"
+              ? session.payment_intent
+              : null,
+          stripe_payment_status: session.payment_status,
+        })
+        .eq("id", applicationId)
+        .select("*")
+        .single();
+
+      if (dtvErr || !app) {
+        console.error("Failed to update DTV application:", dtvErr);
+        return NextResponse.json({ received: true });
+      }
+
+      const appData: DtvApplicationEmailData = {
+        id: app.id,
+        first_name: app.first_name,
+        last_name: app.last_name,
+        email: app.email,
+        phone: app.phone,
+        nationality: app.nationality,
+        passport_number: app.passport_number,
+        passport_expiry: app.passport_expiry,
+        currently_in_thailand: app.currently_in_thailand,
+        training_start_date: app.training_start_date,
+        arrival_date: app.arrival_date,
+        price_id: app.price_id,
+        price_amount: app.price_amount,
+      };
+
+      try {
+        await Promise.all([
+          sendDtvApplicationReceivedEmail(appData),
+          sendDtvAdminNotificationEmail(appData),
+        ]);
+      } catch (emailErr) {
+        console.error("DTV email send failed:", emailErr);
+      }
+
+      return NextResponse.json({ received: true });
+    }
+
+    const bookingId = meta.booking_id;
 
     if (!bookingId) {
       console.error("Missing booking_id in session metadata");
@@ -119,13 +180,18 @@ export async function POST(request: Request) {
     }
   } else if (event.type === "checkout.session.expired") {
     const session = event.data.object as Stripe.Checkout.Session;
-    const bookingId = session.metadata?.booking_id;
+    const meta = session.metadata ?? {};
 
-    if (bookingId) {
+    if (meta.type === "dtv" && meta.dtv_application_id) {
+      await supabase
+        .from("dtv_applications")
+        .update({ status: "cancelled" })
+        .eq("id", meta.dtv_application_id);
+    } else if (meta.booking_id) {
       await supabase
         .from("bookings")
         .update({ status: "cancelled" })
-        .eq("id", bookingId);
+        .eq("id", meta.booking_id);
     }
   }
 

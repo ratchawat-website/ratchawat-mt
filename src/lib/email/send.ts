@@ -2,6 +2,11 @@ import { Resend } from "resend";
 import { render } from "@react-email/render";
 import { BookingConfirmed } from "./templates/BookingConfirmed";
 import { BookingNotification } from "./templates/BookingNotification";
+import {
+  DTVApplicationReceived,
+  type DtvApplicationEmailData,
+} from "./templates/DTVApplicationReceived";
+import { DTVAdminNotification } from "./templates/DTVAdminNotification";
 import type { BookingEmailData } from "./types";
 import { getPriceById } from "@/content/pricing";
 
@@ -47,6 +52,51 @@ export async function sendAdminNotificationEmail(booking: BookingEmailData) {
     from: getFromAddress(),
     to: adminEmail,
     subject: `New booking: ${packageName} - ${booking.client_name}`,
+    html,
+  });
+}
+
+export async function sendDtvApplicationReceivedEmail(
+  application: DtvApplicationEmailData,
+) {
+  const resend = getResend();
+  const pkg = getPriceById(application.price_id);
+  const packageName = pkg?.name ?? application.price_id;
+
+  const html = await render(
+    DTVApplicationReceived({ application, packageName }),
+  );
+
+  return resend.emails.send({
+    from: getFromAddress(),
+    to: application.email,
+    subject:
+      "Your DTV training application at Chor Ratchawat - documents within 24h",
+    html,
+  });
+}
+
+export async function sendDtvAdminNotificationEmail(
+  application: DtvApplicationEmailData,
+) {
+  const resend = getResend();
+  const pkg = getPriceById(application.price_id);
+  const packageName = pkg?.name ?? application.price_id;
+
+  const adminEmail = process.env.ADMIN_EMAIL ?? "chor.ratchawat@gmail.com";
+
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://ratchawatmuaythai.com";
+  const adminDashboardUrl = `${siteUrl}/admin/dtv-applications/${application.id}`;
+
+  const html = await render(
+    DTVAdminNotification({ application, packageName, adminDashboardUrl }),
+  );
+
+  return resend.emails.send({
+    from: getFromAddress(),
+    to: adminEmail,
+    subject: `[DTV] ${application.first_name} ${application.last_name} — ${packageName} — ${application.price_amount.toLocaleString("en-US")} THB paid`,
     html,
   });
 }

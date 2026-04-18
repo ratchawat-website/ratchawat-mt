@@ -3,7 +3,7 @@
 > **Technical reference.** Read this before writing any backend code, touching integrations, or designing new booking flows.
 > This file documents decisions that are fixed. If you need to change something here, discuss with RD first.
 
-**Last updated:** 2026-04-12
+**Last updated:** 2026-04-18
 
 ---
 
@@ -219,7 +219,49 @@ Prices with `priceTodo` set (currently `fighter-stay-room-monthly` and `fighter-
 
 **Booking confirmed (client):** Booking summary, dates, camp address, what to bring, WhatsApp contact.
 **Booking notification (admin):** New booking alert with full client + booking details.
-Templates live in `src/lib/email/`.
+**DTV application received (client):** Package summary, applicant details, 24h docs reminder, embassy fee reminder, voucher-on-refusal disclaimer.
+**DTV admin notification:** Same template sent to admin for every new paid DTV application.
+Templates live in `src/lib/email/templates/`.
+
+---
+
+## 7b. DTV Visa Flow (Phase 5 Wave 5)
+
+```
+/visa/dtv                    Content page — Soft Power, 3 packages, docs, process, FAQ
+/visa/dtv/apply              Single-page form (14 fields, 4 sections)
+/visa/dtv/confirmed          Post-payment confirmation (?session_id=)
+POST /api/visa/dtv/apply     Zod validation → insert dtv_applications → Stripe Session
+```
+
+**Table:** `dtv_applications` (separate from `bookings` because of passport + arrival_date + visa-specific fields). RLS mirrors `bookings` — admin `select`/`update`, inserts via service role only. Migration: `supabase/migrations/20260417000001_dtv_applications.sql`.
+
+**Packages:** `dtv-6m-2x` (20K THB), `dtv-6m-4x` (25K THB, popular), `dtv-6m-unlimited` (33K THB). Source of truth: `src/content/pricing.ts` `category === 'dtv'`.
+
+**Stripe metadata:** `{ type: 'dtv', dtv_application_id: <uuid> }` — the webhook branches on `type === 'dtv'` before touching `bookings`.
+
+**Validation highlights:** passport expiry must be at least 6 months out from today; arrival date must be on or before training start date; commitment checkbox must be `true` (Zod literal).
+
+**Refund policy (documented in copy + email):** No refund if visa is refused, training voucher of the same value issued instead.
+
+**Official portal:** All customer-facing surfaces (site + email) link to `https://thaievisa.go.th/` — the Thai e-visa portal where the applicant uploads our documents and pays the 10,000 THB embassy fee.
+
+**Admin flow:**
+```
+/admin/dtv-applications             List with status filter, 24h SLA badge on overdue rows
+/admin/dtv-applications/[id]        Detail + actions
+POST /api/admin/dtv-applications/[id]/status        — transitions: paid → docs_sent | cancelled | refused_voucher_issued
+POST /api/admin/dtv-applications/[id]/notes         — admin_notes column
+POST /api/admin/dtv-applications/[id]/resend-email  — re-send DTVApplicationReceived to client
+```
+
+**Status machine:**
+- `pending` (row exists, payment not complete) → `cancelled` on `checkout.session.expired`
+- `paid` (webhook received) → `docs_sent` (sets `docs_sent_at`) | `cancelled` | `refused_voucher_issued`
+- `docs_sent` → `refused_voucher_issued`
+- `cancelled` and `refused_voucher_issued` are terminal.
+
+**Admin notification email is a separate template** (`DTVAdminNotification.tsx`) from the client confirmation (`DTVApplicationReceived.tsx`): subject `[DTV] Name — Package — Amount paid`, full client contact card (email + phone + WhatsApp + nationality), passport, travel, 24h SLA reminder, link back to the admin dashboard detail page.
 
 ---
 

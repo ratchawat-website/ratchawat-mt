@@ -55,7 +55,6 @@ export default function Footer() {
             <li><Link href="/about" className={linkClasses}>About</Link></li>
             <li><Link href="/accommodation" className={linkClasses}>Accommodation</Link></li>
             <li><Link href="/visa/dtv" className={linkClasses}>DTV Visa</Link></li>
-            <li><Link href="/visa/90-days" className={linkClasses}>90-Day Visa</Link></li>
             <li><Link href="/faq" className={linkClasses}>FAQ</Link></li>
           </ul>
         </div>

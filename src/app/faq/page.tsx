@@ -119,9 +119,7 @@ export default function FAQPage() {
             </p>
             <p>
               <Link href="/visa/dtv" className="text-primary hover:text-primary-dim transition-colors font-medium">DTV visa</Link>
-              {" "}and{" "}
-              <Link href="/visa/90-days" className="text-primary hover:text-primary-dim transition-colors font-medium">90-day visa</Link>
-              {" "}: how we can help with your Thai visa application.
+              {" "}: how we can help with your Thailand long-stay visa application.
             </p>
             <p>
               <Link href="/accommodation" className="text-primary hover:text-primary-dim transition-colors font-medium">Accommodation</Link>
