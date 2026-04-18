@@ -5,6 +5,7 @@ import { format } from "date-fns";
 import { X, Lock } from "lucide-react";
 import { PRIVATE_SLOTS } from "@/lib/config/slots";
 import { INVENTORY } from "@/lib/admin/inventory";
+import { PRIVATE_SLOT_CAPACITY } from "@/content/schedule";
 
 export interface BlockRecord {
   id: string;
@@ -12,6 +13,8 @@ export interface BlockRecord {
   type: string;
   time_slot: string | null;
   reason: string | null;
+  camp: "bo-phut" | "plai-laem" | null;
+  is_blocked: boolean;
 }
 
 interface Props {
@@ -242,18 +245,39 @@ export default function AdminDayDrawer({
             <h3 className="text-xs font-semibold uppercase tracking-widest text-on-surface-variant mb-3">
               Private Session Slots
             </h3>
-            <div className="grid grid-cols-2 gap-2">
+            <p className="text-[11px] text-on-surface-variant mb-3">
+              Occupancy per camp ({PRIVATE_SLOT_CAPACITY} trainers max). Toggle
+              blocks the slot for everyone.
+            </p>
+            <div className="grid grid-cols-1 gap-2">
               {PRIVATE_SLOTS.map((slot) => {
                 const existing = hasExactBlock("private-slot", slot);
                 const key = `slot-${slot}`;
                 const isLoading = loading === key;
+                const boPhutCount = blocks.filter(
+                  (b) =>
+                    b.type === "private-slot" &&
+                    b.time_slot === slot &&
+                    b.is_blocked &&
+                    b.camp === "bo-phut",
+                ).length;
+                const plaiLaemCount = blocks.filter(
+                  (b) =>
+                    b.type === "private-slot" &&
+                    b.time_slot === slot &&
+                    b.is_blocked &&
+                    b.camp === "plai-laem",
+                ).length;
+                const boPhutFull = boPhutCount >= PRIVATE_SLOT_CAPACITY;
+                const plaiLaemFull = plaiLaemCount >= PRIVATE_SLOT_CAPACITY;
+
                 return (
                   <button
                     key={slot}
                     onClick={() => toggleSlotBlock(slot)}
                     disabled={isLoading}
                     className={[
-                      "flex items-center justify-between px-3 py-2.5 rounded-lg border-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-primary",
+                      "flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg border-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-primary text-left",
                       existing
                         ? "border-red-500 bg-red-500/10 text-red-300 hover:bg-red-500/20"
                         : "border-outline-variant bg-surface-lowest text-on-surface hover:border-primary/50",
@@ -262,8 +286,37 @@ export default function AdminDayDrawer({
                       .filter(Boolean)
                       .join(" ")}
                   >
-                    <span>{slot}</span>
-                    <span className="text-[10px] font-bold uppercase">
+                    <span className="font-semibold shrink-0">{slot}</span>
+                    <span className="flex-1 flex items-center justify-end gap-2 text-[11px] font-semibold">
+                      <span
+                        className={
+                          existing
+                            ? "text-red-300"
+                            : boPhutFull
+                              ? "text-red-400"
+                              : boPhutCount > 0
+                                ? "text-amber-400"
+                                : "text-on-surface-variant"
+                        }
+                      >
+                        BP {boPhutCount}/{PRIVATE_SLOT_CAPACITY}
+                      </span>
+                      <span className="text-on-surface-variant/40">·</span>
+                      <span
+                        className={
+                          existing
+                            ? "text-red-300"
+                            : plaiLaemFull
+                              ? "text-red-400"
+                              : plaiLaemCount > 0
+                                ? "text-amber-400"
+                                : "text-on-surface-variant"
+                        }
+                      >
+                        PL {plaiLaemCount}/{PRIVATE_SLOT_CAPACITY}
+                      </span>
+                    </span>
+                    <span className="text-[10px] font-bold uppercase shrink-0 w-10 text-right">
                       {isLoading ? "..." : existing ? "ON" : "OFF"}
                     </span>
                   </button>

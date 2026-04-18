@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import PasswordChangeForm from "@/components/admin/PasswordChangeForm";
 
 export default async function AdminAccountPage() {
   const supabase = await createClient();
@@ -7,8 +8,8 @@ export default async function AdminAccountPage() {
   } = await supabase.auth.getUser();
 
   return (
-    <div className="max-w-lg">
-      <h1 className="font-serif text-2xl font-bold text-on-surface uppercase mb-6">
+    <div className="max-w-lg space-y-6">
+      <h1 className="font-serif text-2xl font-bold text-on-surface uppercase">
         Account
       </h1>
 
@@ -35,9 +36,7 @@ export default async function AdminAccountPage() {
         </div>
       </div>
 
-      <p className="mt-4 text-xs text-on-surface-variant">
-        To change your password, use Supabase Dashboard or contact the developer.
-      </p>
+      <PasswordChangeForm />
     </div>
   );
 }

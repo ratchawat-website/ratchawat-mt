@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { LogOut, User } from "lucide-react";
+import { ArrowUpLeft, LogOut, User } from "lucide-react";
 
 interface Props {
   email: string;
@@ -57,8 +57,18 @@ export default function AdminUserMenu({ email }: Props) {
             Account
           </button>
           <button
+            onClick={() => {
+              setOpen(false);
+              router.push("/");
+            }}
+            className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-on-surface-variant hover:text-on-surface hover:bg-surface-low transition-colors"
+          >
+            <ArrowUpLeft size={16} />
+            Back to site
+          </button>
+          <button
             onClick={handleSignOut}
-            className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-400 hover:text-red-300 hover:bg-surface-low transition-colors"
+            className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-400 hover:text-red-300 hover:bg-surface-low transition-colors border-t border-outline-variant mt-1"
           >
             <LogOut size={16} />
             Sign out
