@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useSyncExternalStore } from "react";
 import Image from "next/image";
 
 export interface Trainer {
@@ -16,6 +16,24 @@ interface TeamCircularGalleryProps {
   autoRotateSpeed?: number;
 }
 
+function subscribeMedia(query: string) {
+  return (callback: () => void) => {
+    const mq = window.matchMedia(query);
+    mq.addEventListener("change", callback);
+    return () => mq.removeEventListener("change", callback);
+  };
+}
+function getMediaSnapshot(query: string) {
+  return window.matchMedia(query).matches;
+}
+const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
+const MOBILE_QUERY = "(max-width: 767px)";
+const subscribeReducedMotion = subscribeMedia(REDUCED_MOTION_QUERY);
+const subscribeMobile = subscribeMedia(MOBILE_QUERY);
+const getReducedMotion = () => getMediaSnapshot(REDUCED_MOTION_QUERY);
+const getMobile = () => getMediaSnapshot(MOBILE_QUERY);
+const getServerSnapshot = () => false;
+
 const MOMENTUM_FRICTION = 0.94;
 const MOMENTUM_EPSILON = 0.02;
 const COOLDOWN_MS = 800;
@@ -27,11 +45,11 @@ export default function TeamCircularGallery({
   trainers,
   autoRotateSpeed = -0.05,
 }: TeamCircularGalleryProps) {
-  const [mounted, setMounted] = useState(false);
   const [rotation, setRotation] = useState(0);
-  const [reducedMotion, setReducedMotion] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
   const [hintVisible, setHintVisible] = useState(true);
+  const reducedMotion = useSyncExternalStore(subscribeReducedMotion, getReducedMotion, getServerSnapshot);
+  const isMobile = useSyncExternalStore(subscribeMobile, getMobile, getServerSnapshot);
+  const mounted = useSyncExternalStore(subscribeMobile, () => true, getServerSnapshot);
 
   const sectionRef = useRef<HTMLDivElement>(null);
   const rafRef = useRef<number | null>(null);
@@ -44,23 +62,6 @@ export default function TeamCircularGallery({
   const lastPointerXRef = useRef(0);
   const lastPointerTimeRef = useRef(0);
   const arrowStep = 360 / Math.max(trainers.length, 1);
-
-  useEffect(() => {
-    setMounted(true);
-    const mm = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const mbl = window.matchMedia("(max-width: 767px)");
-    const apply = () => {
-      setReducedMotion(mm.matches);
-      setIsMobile(mbl.matches);
-    };
-    apply();
-    mm.addEventListener("change", apply);
-    mbl.addEventListener("change", apply);
-    return () => {
-      mm.removeEventListener("change", apply);
-      mbl.removeEventListener("change", apply);
-    };
-  }, []);
 
   useEffect(() => {
     if (!mounted) return;

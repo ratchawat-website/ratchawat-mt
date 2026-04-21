@@ -407,16 +407,23 @@ export default function PricingPage() {
             <span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">FIGHTER</span>
             <span className="w-8 h-[2px] bg-primary" />
           </div>
-          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface text-center mb-8">
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface text-center mb-4">
             Fighter Program
           </h2>
+          <p className="text-center text-on-surface-variant text-sm max-w-2xl mx-auto mb-8">
+            Monthly 2x/day group training is 7,000 THB. The Fighter Program adds fight prep,
+            conditioning, recovery, matchmaking, and lets you keep your full fight purse for 2,500 THB more.
+          </p>
           <GlassCard>
-            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
-              <div>
+            <div className="flex flex-col lg:flex-row items-start justify-between gap-6">
+              <div className="flex-1">
+                <div className="mb-2">
+                  <span className="badge-underline badge-orange">Keep 100% of your fight purse</span>
+                </div>
                 <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-2">
                   Fighter Monthly
                 </h3>
-                <div className="mb-4">
+                <div className="mb-5">
                   <span className="font-serif text-4xl lg:text-5xl font-bold text-primary">
                     9,500 THB
                   </span>
@@ -426,23 +433,35 @@ export default function PricingPage() {
                 </div>
                 <ul className="space-y-2 text-sm text-on-surface-variant">
                   <li className="flex items-center gap-2">
-                    <Check size={16} className="text-primary shrink-0" /> 2 training sessions per day
+                    <Check size={16} className="text-primary shrink-0" aria-hidden="true" /> Two sessions a day, six days a week
                   </li>
                   <li className="flex items-center gap-2">
-                    <Check size={16} className="text-primary shrink-0" /> Weekly yoga session
+                    <Check size={16} className="text-primary shrink-0" aria-hidden="true" /> Structured fight-preparation program
                   </li>
                   <li className="flex items-center gap-2">
-                    <Check size={16} className="text-primary shrink-0" /> Weekly ice bath recovery
+                    <Check size={16} className="text-primary shrink-0" aria-hidden="true" /> Kettlebell and conditioning 2 to 3 times per week
                   </li>
                   <li className="flex items-center gap-2">
-                    <Check size={16} className="text-primary shrink-0" /> Fight organisation and matchmaking
+                    <Check size={16} className="text-primary shrink-0" aria-hidden="true" /> Fight organisation and matchmaking
                   </li>
                   <li className="flex items-center gap-2">
-                    <Check size={16} className="text-primary shrink-0" /> Corner support on fight day
+                    <Check size={16} className="text-primary shrink-0" aria-hidden="true" /> Weekly stretch / yoga class
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Check size={16} className="text-primary shrink-0" aria-hidden="true" /> Weekly ice bath recovery
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Check size={16} className="text-primary shrink-0" aria-hidden="true" /> Corner support on fight night
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Check size={16} className="text-primary shrink-0" aria-hidden="true" /> Access to both camps (Bo Phut + Plai Laem)
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Check size={16} className="text-primary shrink-0" aria-hidden="true" /> Full fight purse, no camp commission
                   </li>
                 </ul>
               </div>
-              <div className="flex flex-col gap-3 shrink-0">
+              <div className="flex flex-col gap-3 shrink-0 w-full lg:w-auto">
                 <Link
                   href="/booking/fighter?package=fighter-monthly"
                   className="btn-primary justify-center"
@@ -458,6 +477,34 @@ export default function PricingPage() {
               </div>
             </div>
           </GlassCard>
+
+          {/* Value breakdown */}
+          <div className="mt-8 bg-surface border-2 border-outline-variant rounded-xl p-6">
+            <h3 className="font-serif text-sm font-bold text-on-surface uppercase tracking-widest mb-4 text-center">
+              What&apos;s included that you&apos;d pay extra for elsewhere
+            </h3>
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 text-sm text-on-surface-variant max-w-2xl mx-auto">
+              <li className="flex items-center justify-between gap-3">
+                <span>Weekly stretch / yoga class</span>
+                <span className="text-primary font-semibold whitespace-nowrap">~500 THB</span>
+              </li>
+              <li className="flex items-center justify-between gap-3">
+                <span>Kettlebell and conditioning session</span>
+                <span className="text-primary font-semibold whitespace-nowrap">~500 THB</span>
+              </li>
+              <li className="flex items-center justify-between gap-3">
+                <span>Ice bath recovery</span>
+                <span className="text-primary font-semibold whitespace-nowrap">150 THB</span>
+              </li>
+              <li className="flex items-center justify-between gap-3">
+                <span>Fight matchmaking fees</span>
+                <span className="text-primary font-semibold whitespace-nowrap">~2,000 THB</span>
+              </li>
+            </ul>
+            <p className="text-center text-xs text-on-surface-variant mt-4">
+              Plus the fight purse most camps keep 30 to 50% of. At Ratchawat you keep it all.
+            </p>
+          </div>
         </div>
       </section>
 

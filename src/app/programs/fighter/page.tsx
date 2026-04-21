@@ -20,7 +20,6 @@ import {
   UserCheck,
   CalendarCheck,
   MapPin,
-  Check,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -79,18 +78,6 @@ const differentiators = [
     description:
       "The program runs at one camp, with fighters. No tourist group classes, no split focus. The space, trainers, and schedule are built around ring preparation.",
   },
-];
-
-const whatsIncluded = [
-  "Two sessions a day, six days a week",
-  "Structured fight-preparation program",
-  "Kettlebell and conditioning 2 to 3 times per week",
-  "Fight organization and matchmaking",
-  "Weekly stretch / yoga class",
-  "Weekly ice bath recovery",
-  "Corner support on fight night",
-  "Access to both camps (Bo Phut + Plai Laem)",
-  "Full fight purse, no camp commission",
 ];
 
 const trainingBlocks = [
