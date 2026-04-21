@@ -46,3 +46,6 @@ next-env.d.ts
 
 # git worktrees
 .worktrees/
+
+# Internal notes (not for deploy)
+meeting-infos-client.md
