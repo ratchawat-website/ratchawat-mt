@@ -461,7 +461,7 @@ export default function AccommodationPage() {
             <span className="w-8 h-[2px] bg-primary" />
           </div>
           <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface mb-8">
-            The Camp Stay Experience
+            Why Stay On-Site
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {benefits.map((benefit, i) => (

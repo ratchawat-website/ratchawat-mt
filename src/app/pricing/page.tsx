@@ -80,8 +80,8 @@ export default function PricingPage() {
             Muay Thai Training Prices
           </h1>
           <p className="mt-4 text-on-surface-variant text-lg max-w-2xl mx-auto">
-            Transparent pricing for every training goal. All prices include
-            access to both Bo Phut and Plai Laem camps.
+            Drop-in, weekly, monthly, plus stay and visa packages. No hidden fees.
+            All prices include access to both Bo Phut and Plai Laem camps.
           </p>
         </div>
       </section>

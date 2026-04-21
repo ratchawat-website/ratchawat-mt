@@ -306,7 +306,7 @@ export default function PlaiLaemCampPage() {
               address="20, 33 หมู่ที่ 5 ปลายแหลม ซอย 13, Tambon Bo Put, Amphoe Ko Samui, Surat Thani 84320"
               phone="+66 63 080 2876"
               email="chor.ratchawat@gmail.com"
-              hours="8:00 AM - 8:00 PM, 6 days/week"
+              hours="7:00 AM - 6:30 PM, Mon to Sat"
               mapEmbedUrl="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1966!2d100.0725812!3d9.5718233!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zOcKwMzQnMTguNiJOIDEwMMKwMDQnMjEuMyJF!5e0!3m2!1sen!2sth!4v1"
             />
           </div>
@@ -317,7 +317,7 @@ export default function PlaiLaemCampPage() {
       <section className="py-12 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-3xl mx-auto">
           <p className="text-on-surface-variant text-base leading-relaxed text-center">
-            Ratchawat Muay Thai Plai Laem is the newer, larger location in Koh Samui, near Big Buddha. The facility features a full Muay Thai training area plus a bodyweight section. Daily group and private classes run from 8 AM to 8 PM. Address: 20, 33 หมู่ที่ 5 ปลายแหลม ซอย 13, Tambon Bo Put, Amphoe Ko Samui, Surat Thani 84320.
+            Ratchawat Muay Thai Plai Laem is the newer, larger Ratchawat location in Koh Samui, near Big Buddha. Full Muay Thai training area plus a bodyweight section with pull-up and dip bars. Group and private classes run Monday to Saturday, 7 AM to 6:30 PM. The Fighter Program runs at this camp only. Address: 20, 33 หมู่ที่ 5 ปลายแหลม ซอย 13, Tambon Bo Put, Amphoe Ko Samui, Surat Thani 84320.
           </p>
         </div>
       </section>
