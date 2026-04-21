@@ -91,7 +91,7 @@ export default function AboutPage() {
                 Word got around. Travelers training for a week told friends. The gym filled up fast. When Bo Phut could not grow any more, Kruu Wat opened a second camp in Plai Laem near Big Buddha: a bigger space for fighters and a proper base to prepare them for the ring.
               </p>
               <p>
-                Kruu Wat is passionate about Muay Thai and about passing on the culture the traditional way. Beyond the techniques, what matters at the camp is respect, sportsmanship, and care for the person. Inside the ring and outside of it.
+                Kruu Wat is passionate about Muay Thai and about passing on the culture the traditional way. Technique matters, but so does how you carry yourself. Respect and sportsmanship are not optional at the camp, inside the ring or outside.
               </p>
               <p>
                 Today Ratchawat runs two camps with a dozen trainers and fighters of all levels, from complete beginners to professionals. The gym is still family-run. Kruu Wat still teaches every day.

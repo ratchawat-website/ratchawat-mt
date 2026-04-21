@@ -46,19 +46,19 @@ const features = [
     icon: MapPin,
     title: "Two Locations",
     description:
-      "Train at Bo Phut or Plai Laem. Both camps offer full equipment, ring access, and experienced trainers.",
+      "Train at Bo Phut or Plai Laem. Both camps have a ring, bags, pads, and experienced Thai trainers.",
   },
   {
     icon: Users,
     title: "All Levels Welcome",
     description:
-      "From your first session to professional fight prep. Our trainers adapt every class to your skill level.",
+      "First class or getting ready for a fight, trainers adapt the session to what you actually need.",
   },
   {
     icon: FileCheck,
     title: "Visa Support",
     description:
-      "Long-stay training? We provide documentation and application support for the Thailand DTV visa (up to 180 days).",
+      "Staying long-term? We help you get the documents for the Thailand DTV visa, up to 180 days.",
   },
 ];
 
@@ -72,19 +72,19 @@ const programs = [
   {
     title: "Private Lessons",
     description:
-      "One-on-one sessions with our top trainers tailored to your goals and experience.",
+      "One-on-one sessions with our trainers, built around your goals and your level.",
     href: "/programs/private",
   },
   {
     title: "Kids Program",
     description:
-      "Safe, fun classes for children aged 5-15 focused on discipline, fitness, and fundamentals.",
+      "Group classes for kids 8-13 (private from age 3). Technique, fitness, and respect of the sport.",
     href: "/programs/group-kids",
   },
   {
     title: "Fighter Program",
     description:
-      "Intensive camp for those preparing for amateur or professional fights in Thailand.",
+      "Serious prep for fighters competing in Thailand, amateur or pro. You keep your full purse.",
     href: "/programs/fighter",
   },
 ];
@@ -93,7 +93,7 @@ const camps = [
   {
     name: "Bo Phut",
     description:
-      "Our original street gym near Fisherman's Village. Small, intimate, and full of family energy. Perfect for those who want authentic Thai training in a close-knit atmosphere.",
+      "Our original street gym near Fisherman's Village. Small, busy with locals, and noisy in the good way. This is where Ratchawat started.",
     href: "/camps/bo-phut",
     image: "/images/camp-bophut/camp-view.jpeg",
     imageAlt: "Ratchawat Bo Phut camp, street gym near Fisherman's Village",
@@ -101,7 +101,7 @@ const camps = [
   {
     name: "Plai Laem",
     description:
-      "A larger space near Big Buddha with a dedicated bodyweight training area. More room, more equipment, same Ratchawat spirit. Ideal for serious sessions.",
+      "Larger gym near Big Buddha, with a dedicated bodyweight and conditioning zone. More floor space, more equipment, same trainers.",
     href: "/camps/plai-laem",
     image: "/images/camp-plai-laem/camp-view.png",
     imageAlt: "Ratchawat Plai Laem camp, larger training facility near Big Buddha",
@@ -139,7 +139,7 @@ export default function HomePage() {
         title="RATCHAWAT"
         titleLine2="MUAY THAI"
         outlineLine2
-        subtitle="Train at the heart of Koh Samui. Two camps. All levels."
+        subtitle="Muay Thai in Koh Samui. Two camps. Every level."
         ctaText="Start Training"
         ctaHref="/booking"
         ghostText="View Pricing"
@@ -262,7 +262,7 @@ export default function HomePage() {
                     Training Prices
                   </h2>
                   <p className="text-on-surface-variant text-sm mt-1">
-                    Affordable training for every budget
+                    Drop-in, weekly, monthly. No hidden fees.
                   </p>
                 </div>
               </div>
@@ -432,7 +432,7 @@ export default function HomePage() {
 
       <CTABanner
         title="Book Your First Session"
-        description="Start training at Ratchawat Koh Samui today"
+        description="Train at Ratchawat Koh Samui. Pick a date, we see you on the mat."
         buttonText="Book Now"
         href="/booking"
         ghostText="View Pricing"
