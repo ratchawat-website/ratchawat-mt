@@ -166,7 +166,7 @@ export default function GroupKidsPage() {
       <section className="py-12 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-3xl mx-auto">
           <p className="text-on-surface-variant text-base leading-relaxed text-center">
-            Ratchawat Muay Thai in Koh Samui offers specialized kids classes designed for children. The program focuses on fundamentals, discipline, confidence-building, and fitness in a safe, family-friendly environment. Several young Ratchawat students have won local competitions.
+            Ratchawat Muay Thai in Koh Samui runs kids classes for ages 8 to 13 as group sessions and 3 to 7 as private lessons. Classes cover Muay Thai basics, fitness, and gym discipline. Several young Ratchawat students have won local competitions.
           </p>
         </div>
       </section>

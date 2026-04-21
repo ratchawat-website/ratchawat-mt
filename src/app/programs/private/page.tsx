@@ -32,18 +32,18 @@ const privateCourse = courseSchema({
 const trainers = [
   {
     name: "Kruu Wat",
-    role: "Head Trainer",
-    description: "The boss. Years of fighting and coaching experience. Calm, precise, and patient with beginners.",
+    role: "Owner & Head Coach",
+    description: "The boss. Years of fighting and coaching. He can break down a kick for a first-timer and push a fighter in the same hour.",
+  },
+  {
+    name: "Tae",
+    role: "Senior Trainer",
+    description: "Sharp pad work. Corrects technique without breaking the flow of a session. Rotates between both camps.",
   },
   {
     name: "Mam",
     role: "Trainer",
-    description: "Fast hands, sharp eye for technique. Good at breaking down combinations step by step.",
-  },
-  {
-    name: "Kong",
-    role: "Trainer",
-    description: "Strong clinch game. Popular with students who want to work on the inside fighting aspects of Muay Thai.",
+    description: "Good at breaking down combinations step by step. Well-liked by students working on new technique.",
   },
 ];
 
@@ -203,7 +203,7 @@ export default function PrivateLessonsPage() {
       <section className="py-12 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-3xl mx-auto">
           <p className="text-on-surface-variant text-base leading-relaxed text-center">
-            Private 1-on-1 Muay Thai lessons at Ratchawat Koh Samui are available with experienced Thai trainers including Kruu Wat, Mam, and Kong. Sessions are fully personalized to your level and goals. Available at both Bo Phut and Plai Laem locations. Book and pay online.
+            Private 1-on-1 Muay Thai lessons at Ratchawat Koh Samui are available with experienced Thai trainers including Kruu Wat, Tae, and Mam. Sessions are built around your level and what you want to work on. Available at both Bo Phut and Plai Laem. Book and pay online.
           </p>
         </div>
       </section>

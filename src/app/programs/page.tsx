@@ -33,10 +33,10 @@ const programs = [
   {
     title: "Kids Classes",
     description:
-      "Structured Muay Thai for children. Builds confidence, discipline, and fitness in a safe environment. Several young students have gone on to win local competitions.",
+      "Muay Thai for kids 8 to 13 in groups, or private from age 3. Real technique, safe pace, Thai coaches used to teaching children. Several have gone on to win local fights.",
     href: "/programs/group-kids",
     icon: Baby,
-    level: "Ages 5-15",
+    level: "Ages 8-13 (group), 3+ (private)",
     duration: "1 hour",
   },
   {
@@ -84,7 +84,7 @@ export default function ProgramsPage() {
             Training Programs
           </h1>
           <p className="mt-4 text-on-surface-variant text-lg max-w-2xl mx-auto">
-            Four programs, two camps, one goal: get you training. Pick the one that fits where you are right now.
+            Four programs across two camps. Pick the one that fits where you are right now.
           </p>
         </div>
       </section>
