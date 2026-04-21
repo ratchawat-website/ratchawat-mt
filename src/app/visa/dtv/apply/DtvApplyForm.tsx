@@ -424,7 +424,7 @@ export default function DtvApplyForm() {
           {submitting
             ? "Redirecting to payment..."
             : selected && selected.price
-              ? `Continue to payment — ${selected.price.toLocaleString("en-US")} THB`
+              ? `Continue to payment: ${selected.price.toLocaleString("en-US")} THB`
               : "Continue to payment"}
           <span className="btn-arrow">&rarr;</span>
         </button>

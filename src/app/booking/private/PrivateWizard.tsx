@@ -271,7 +271,7 @@ export default function PrivateWizard() {
                       onClick={() => setTimeSlot(slot)}
                       aria-label={
                         withinCutoff
-                          ? `${slot} — less than 12 hours away, book by WhatsApp`
+                          ? `${slot}, less than 12 hours away, book by WhatsApp`
                           : slot
                       }
                       className={`rounded-[var(--radius-input)] py-3 text-sm font-semibold border-2 transition-colors ${

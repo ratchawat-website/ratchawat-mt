@@ -161,7 +161,7 @@ export default function FighterProgramPage() {
             </h2>
             <div className="space-y-4 text-on-surface-variant text-base sm:text-lg leading-relaxed">
               <p>
-                Group classes teach you Muay Thai. They do not prepare you to fight. Sparring volume, conditioning, matchmaking, a corner on fight night — none of that is in a drop-in timetable.
+                Group classes teach you Muay Thai. They do not prepare you to fight. Sparring volume, conditioning, matchmaking, a corner on fight night: none of that is in a drop-in timetable.
               </p>
               <p>
                 The fighter program is the opposite: a structured, strict month of training built around your fight date and run at our Plai Laem camp only. Morning run into technique and pad work, afternoon sparring, kettlebell and conditioning two to three times a week. Written plan, daily tracking, real corrections.
