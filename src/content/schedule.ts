@@ -43,9 +43,23 @@ export const PRIVATE_SLOT_TIMES = [
   "16:00",
 ] as const;
 
-export const PRIVATE_BOOKING_CUTOFF_HOURS = 12;
+/**
+ * Online private-session booking cutoffs.
+ * Default slots: 2 hours notice. Early-morning slots (7:00, 8:00): 12 hours
+ * notice, since trainers and admin commute before the session starts.
+ */
+export const PRIVATE_BOOKING_CUTOFF_HOURS_DEFAULT = 2;
+export const PRIVATE_BOOKING_CUTOFF_HOURS_EARLY = 12;
+export const EARLY_MORNING_SLOTS = ["07:00", "08:00"] as const;
+
+export function getCutoffHoursForSlot(slot: string): number {
+  return (EARLY_MORNING_SLOTS as readonly string[]).includes(slot)
+    ? PRIVATE_BOOKING_CUTOFF_HOURS_EARLY
+    : PRIVATE_BOOKING_CUTOFF_HOURS_DEFAULT;
+}
+
 export const PRIVATE_BOOKING_WHATSAPP_FALLBACK =
-  "Less than 12 hours before the session? Send us a WhatsApp message and we will get back to you.";
+  "Slot too close for online booking? Send us a WhatsApp message and we will get back to you. Note: 7:00 and 8:00 sessions need 12 hours notice; later slots only need 2 hours.";
 
 /**
  * Maximum simultaneous private sessions the camp can run per time slot,
@@ -67,15 +81,15 @@ export function buildWhatsAppUrl(message?: string): string {
 }
 
 /**
- * Returns true when the given slot (HH:mm) on `date` starts in less than
- * `PRIVATE_BOOKING_CUTOFF_HOURS` from now. Applies to any date: sessions
- * must always be booked at least 12 hours in advance online. Below the
- * cutoff the client must reach out on WhatsApp instead.
+ * Returns true when the given slot (HH:mm) on `date` starts in less than the
+ * cutoff that applies to that slot (12h for 7:00 and 8:00, 2h for the rest).
+ * Below the cutoff the client must reach out on WhatsApp instead of booking
+ * online.
  */
 export function isSlotWithinCutoff(date: Date, slot: string): boolean {
   const [hh, mm] = slot.split(":").map(Number);
   const slotDate = new Date(date);
   slotDate.setHours(hh, mm, 0, 0);
-  const cutoffMs = PRIVATE_BOOKING_CUTOFF_HOURS * 60 * 60 * 1000;
+  const cutoffMs = getCutoffHoursForSlot(slot) * 60 * 60 * 1000;
   return slotDate.getTime() - Date.now() < cutoffMs;
 }

@@ -6,9 +6,9 @@ import { getPriceById } from "@/content/pricing";
 import { getInventoryKey } from "@/lib/admin/inventory";
 import { checkRangeAvailability } from "@/lib/admin/availability";
 import {
-  PRIVATE_BOOKING_CUTOFF_HOURS,
   PRIVATE_SLOT_CAPACITY,
   isSlotWithinCutoff,
+  getCutoffHoursForSlot,
 } from "@/content/schedule";
 
 function getStripe(): Stripe {
@@ -48,13 +48,15 @@ export async function POST(request: Request) {
       );
     }
 
-    // Private bookings: enforce the 12h lead time + per-camp slot capacity.
+    // Private bookings: enforce slot-aware lead time (12h for 7:00/8:00,
+    // 2h otherwise) + per-camp slot capacity.
     if (data.type === "private" && data.time_slot) {
       const slotDate = new Date(`${data.start_date}T00:00:00`);
       if (isSlotWithinCutoff(slotDate, data.time_slot)) {
+        const cutoff = getCutoffHoursForSlot(data.time_slot);
         return NextResponse.json(
           {
-            error: `Online booking requires at least ${PRIVATE_BOOKING_CUTOFF_HOURS}h notice. Please contact us on WhatsApp.`,
+            error: `Online booking requires at least ${cutoff}h notice for this slot. Please contact us on WhatsApp.`,
           },
           { status: 400 },
         );

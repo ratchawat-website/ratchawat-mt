@@ -21,8 +21,10 @@ import {
   Armchair,
   Palmtree,
   Refrigerator,
+  MessageCircle,
 } from "lucide-react";
 import Link from "next/link";
+import { buildWhatsAppUrl, CAMP_WHATSAPP_DISPLAY } from "@/content/schedule";
 
 export const metadata = generatePageMeta({
   title: "Muay Thai Accommodation Koh Samui | Train & Stay - Ratchawat",
@@ -446,6 +448,38 @@ export default function AccommodationPage() {
                 Apply Now <span className="btn-arrow">&rarr;</span>
               </Link>
             </GlassCard>
+          </div>
+        </div>
+      </section>
+
+      {/* Special requests + bank transfer */}
+      <section className="py-12 px-6 sm:px-10 md:px-16 lg:px-20">
+        <div className="max-w-4xl mx-auto">
+          <div className="flex items-start gap-4 rounded-[var(--radius-card)] border-2 border-primary/30 bg-primary/5 p-6">
+            <MessageCircle
+              size={28}
+              className="text-primary shrink-0 mt-0.5"
+              aria-hidden="true"
+            />
+            <div>
+              <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-2">
+                Special request or bank transfer?
+              </h3>
+              <p className="text-on-surface-variant text-sm sm:text-base leading-relaxed mb-3">
+                Custom dates, longer stay, group of friends, or you would rather pay by bank transfer (Wise or international wire) instead of card? Contact us directly on WhatsApp and we will set it up.
+              </p>
+              <a
+                href={buildWhatsAppUrl(
+                  "Hi, I have a question about accommodation at Plai Laem camp.",
+                )}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary hover:text-primary-dim font-semibold inline-flex items-center gap-1 text-sm"
+              >
+                WhatsApp {CAMP_WHATSAPP_DISPLAY}
+                <span className="btn-arrow">&rarr;</span>
+              </a>
+            </div>
           </div>
         </div>
       </section>

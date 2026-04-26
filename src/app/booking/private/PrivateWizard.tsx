@@ -14,6 +14,7 @@ import { getPricesByBookingType, getPriceById } from "@/content/pricing";
 import { PRIVATE_SLOTS } from "@/lib/config/slots";
 import {
   PRIVATE_BOOKING_WHATSAPP_FALLBACK,
+  getCutoffHoursForSlot,
   buildWhatsAppUrl,
   isSlotWithinCutoff,
 } from "@/content/schedule";
@@ -249,21 +250,22 @@ export default function PrivateWizard() {
           {date && (() => {
             const slotStates = PRIVATE_SLOTS.map((slot) => {
               const withinCutoff = isSlotWithinCutoff(date, slot);
+              const cutoffHours = getCutoffHoursForSlot(slot);
               const isAvailable =
                 availableSlots.includes(slot) && !withinCutoff;
-              return { slot, isAvailable, withinCutoff };
+              return { slot, isAvailable, withinCutoff, cutoffHours };
             });
             const anyCutoffBlocked = slotStates.some((s) => s.withinCutoff);
             const waMessage = `Hi, I would like to book a private session on ${formatDateLong(
               date,
-            )} but it is less than 12 hours away. Can you confirm availability?`;
+            )} but it is too close for online booking. Can you confirm availability?`;
             return (
               <div>
                 <p className="text-sm font-medium text-on-surface mb-3">
                   Available time slots
                 </p>
                 <div className="grid grid-cols-4 gap-2">
-                  {slotStates.map(({ slot, isAvailable, withinCutoff }) => (
+                  {slotStates.map(({ slot, isAvailable, withinCutoff, cutoffHours }) => (
                     <button
                       type="button"
                       key={slot}
@@ -271,7 +273,7 @@ export default function PrivateWizard() {
                       onClick={() => setTimeSlot(slot)}
                       aria-label={
                         withinCutoff
-                          ? `${slot}, less than 12 hours away, book by WhatsApp`
+                          ? `${slot}, less than ${cutoffHours} hours away, book by WhatsApp`
                           : slot
                       }
                       className={`rounded-[var(--radius-input)] py-3 text-sm font-semibold border-2 transition-colors ${
