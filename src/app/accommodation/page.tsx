@@ -42,6 +42,9 @@ const lodgingSchema = {
   name: "Ratchawat Muay Thai Camp Stay - Plai Laem",
   description:
     "On-site accommodation at Ratchawat Muay Thai Plai Laem camp in Koh Samui. Rooms with private bathroom, air conditioning, Wi-Fi, and pool-view balcony. All-inclusive training and stay packages.",
+  url: `${SITE_URL}/accommodation`,
+  image: `${SITE_URL}/images/room/pool.jpg`,
+  telephone: "+66-63-080-2876",
   address: {
     "@type": "PostalAddress",
     streetAddress: "20/33 Moo 5, Plai Laem Soi 13, Tambon Bo Put",
@@ -50,8 +53,15 @@ const lodgingSchema = {
     postalCode: "84320",
     addressCountry: "TH",
   },
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: 9.5697,
+    longitude: 100.0664,
+  },
   priceRange: "฿฿",
   numberOfRooms: 8,
+  checkinTime: "14:00",
+  checkoutTime: "11:00",
   amenityFeature: [
     { "@type": "LocationFeatureSpecification", name: "Air conditioning", value: true },
     { "@type": "LocationFeatureSpecification", name: "Wi-Fi", value: true },
@@ -60,6 +70,13 @@ const lodgingSchema = {
     { "@type": "LocationFeatureSpecification", name: "Balcony", value: true },
     { "@type": "LocationFeatureSpecification", name: "Fridge", value: true },
   ],
+  aggregateRating: {
+    "@type": "AggregateRating",
+    ratingValue: 5.0,
+    reviewCount: 396,
+    bestRating: 5,
+    worstRating: 1,
+  },
   parentOrganization: {
     "@type": "Organization",
     name: "Chor Ratchawat Muay Thai Gym",
