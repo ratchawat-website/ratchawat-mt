@@ -26,6 +26,7 @@ export default function ContactForm() {
     email: "",
     subject: "General Inquiry",
     message: "",
+    website: "",
   });
   const [status, setStatus] = useState<FormStatus>("idle");
 
@@ -42,7 +43,7 @@ export default function ContactForm() {
 
       if (!res.ok) throw new Error("Failed to send");
       setStatus("success");
-      setFormData({ name: "", email: "", subject: "General Inquiry", message: "" });
+      setFormData({ name: "", email: "", subject: "General Inquiry", message: "", website: "" });
     } catch {
       setStatus("error");
     }
@@ -93,6 +94,18 @@ export default function ContactForm() {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Honeypot: bots typically fill all visible fields. Real users will not see this. */}
+        <div aria-hidden="true" className="absolute left-[-10000px] w-px h-px overflow-hidden">
+          <label htmlFor="website">Website</label>
+          <input
+            id="website"
+            type="text"
+            tabIndex={-1}
+            autoComplete="off"
+            value={formData.website}
+            onChange={(e) => setFormData({ ...formData, website: e.target.value })}
+          />
+        </div>
         <div>
           <label htmlFor="name" className={labelClasses}>Name</label>
           <input

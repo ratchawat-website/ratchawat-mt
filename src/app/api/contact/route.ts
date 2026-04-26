@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
+import { ContactRequestSchema, escapeHtml } from "@/lib/validation/contact";
 
 function getResend() {
   return new Resend(process.env.RESEND_API_KEY);
@@ -7,14 +8,21 @@ function getResend() {
 
 export async function POST(request: Request) {
   try {
-    const { name, email, message, subject } = await request.json();
+    const body = await request.json();
 
-    if (!name || !email || !message) {
+    const parsed = ContactRequestSchema.safeParse(body);
+    if (!parsed.success) {
       return NextResponse.json(
-        { error: "Name, email, and message are required" },
-        { status: 400 }
+        { error: "Invalid contact request", issues: parsed.error.issues },
+        { status: 400 },
       );
     }
+    const { name, email, subject, message } = parsed.data;
+
+    const safeName = escapeHtml(name);
+    const safeEmail = escapeHtml(email);
+    const safeSubject = escapeHtml(subject);
+    const safeMessage = escapeHtml(message).replace(/\n/g, "<br>");
 
     const resend = getResend();
 
@@ -24,10 +32,10 @@ export async function POST(request: Request) {
       subject: `[Ratchawat Muay Thai] Contact - ${subject || "New message"}`,
       html: `
         <h2>New contact message</h2>
-        <p><strong>From:</strong> ${name} (${email})</p>
-        ${subject ? `<p><strong>Subject:</strong> ${subject}</p>` : ""}
+        <p><strong>From:</strong> ${safeName} (${safeEmail})</p>
+        ${subject ? `<p><strong>Subject:</strong> ${safeSubject}</p>` : ""}
         <p><strong>Message:</strong></p>
-        <p>${message.replace(/\n/g, "<br>")}</p>
+        <p>${safeMessage}</p>
       `,
     });
 
@@ -36,7 +44,7 @@ export async function POST(request: Request) {
       to: email,
       subject: "Ratchawat Muay Thai - We received your message",
       html: `
-        <p>Hi ${name},</p>
+        <p>Hi ${safeName},</p>
         <p>Thank you for contacting us. We received your message and will get back to you shortly.</p>
         <p>Best regards,<br>The Ratchawat Muay Thai Team</p>
       `,
@@ -47,7 +55,7 @@ export async function POST(request: Request) {
     console.error("Contact form error:", error);
     return NextResponse.json(
       { error: "Failed to send message" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
