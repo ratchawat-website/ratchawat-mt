@@ -70,7 +70,7 @@ export default function AboutPage() {
             About Chor Ratchawat Muay Thai
           </h1>
           <p className="mt-4 text-on-surface-variant text-lg max-w-2xl mx-auto">
-            A family-run Muay Thai camp on Koh Samui since 2020. Two locations, a dozen trainers, and a reputation built one student at a time.
+            A family-run Muay Thai camp on Koh Samui since 2020. Two locations, ten Thai trainers, and a reputation built one student at a time.
           </p>
         </div>
       </section>
@@ -85,16 +85,16 @@ export default function AboutPage() {
             </h2>
             <div className="space-y-4 text-on-surface-variant text-base sm:text-lg leading-relaxed">
               <p>
-                Ratchawat started in 2020 in Bo Phut. A small space, a handful of beginners, and two pairs of gloves. Kruu Wat had been training since he was a boy and wanted to teach the way he had learned: traditional Muay Thai, no shortcuts.
+                Ratchawat started in 2020 in Bo Phut. A small space, a handful of beginners, and two pairs of gloves. Kru Ratchawat had been training since he was a boy and wanted to teach the way he had learned: traditional Muay Thai, no shortcuts.
               </p>
               <p>
-                Word got around. Travelers training for a week told friends. The gym filled up fast. When Bo Phut could not grow any more, Kruu Wat opened a second camp in Plai Laem near Big Buddha: a bigger space for fighters and a proper base to prepare them for the ring.
+                Word got around. Travelers training for a week told friends. The gym filled up fast. When Bo Phut could not grow any more, Kru Ratchawat opened a second camp in Plai Laem near Big Buddha: a bigger space for fighters and a proper base to prepare them for the ring.
               </p>
               <p>
-                Kruu Wat is passionate about Muay Thai and about passing on the culture the traditional way. Technique matters, but so does how you carry yourself. Respect and sportsmanship are not optional at the camp, inside the ring or outside.
+                Kru Ratchawat is passionate about Muay Thai and about passing on the culture the traditional way. Technique matters, but so does how you carry yourself. Respect and sportsmanship are not optional at the camp, inside the ring or outside.
               </p>
               <p>
-                Today Ratchawat runs two camps with a dozen trainers and fighters of all levels, from complete beginners to professionals. The gym is still family-run. Kruu Wat still teaches every day.
+                Today Ratchawat runs two camps with ten Thai trainers and fighters of all levels, from complete beginners to professionals. The gym is still family-run. Kru Ratchawat still teaches every day.
               </p>
             </div>
           </div>
@@ -219,7 +219,7 @@ export default function AboutPage() {
       <section className="py-12 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-3xl mx-auto">
           <p className="text-on-surface-variant text-base leading-relaxed text-center">
-            Chor Ratchawat Muay Thai Gym is a family-run training camp in Koh Samui, Thailand, founded in 2020 by Kruu Wat. Rated 5.0 out of 5 stars on Google with 396 reviews across its Bo Phut and Plai Laem camps. Our fighters have competed at Rajadamnern Stadium, One Lumpinee, and RWS. The gym welcomes all levels, from complete beginners to professional fighters.
+            Chor Ratchawat Muay Thai Gym is a family-run training camp in Koh Samui, Thailand, founded in 2020 by Kru Ratchawat. Rated 5.0 out of 5 stars on Google with 396 reviews across its Bo Phut and Plai Laem camps. Our fighters have competed at Rajadamnern Stadium, One Lumpinee, and RWS. The gym welcomes all levels, from complete beginners to professional fighters.
           </p>
         </div>
       </section>

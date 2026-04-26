@@ -2,7 +2,7 @@ import { generatePageMeta } from "@/lib/seo/meta";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import GlassCard from "@/components/ui/GlassCard";
 import CTABanner from "@/components/ui/CTABanner";
-import ImagePlaceholder from "@/components/ui/ImagePlaceholder";
+import Image from "next/image";
 import JsonLd from "@/components/seo/JsonLd";
 import {
   organizationSchema,
@@ -31,19 +31,25 @@ const privateCourse = courseSchema({
 
 const trainers = [
   {
-    name: "Kruu Wat",
-    role: "Owner & Head Coach",
-    description: "The boss. Years of fighting and coaching. He can break down a kick for a first-timer and push a fighter in the same hour.",
+    name: "Kru Ratchawat",
+    role: "Founder & Head Coach",
+    description: "25 years in Muay Thai, 450 fights, 15 years coaching. C-license certified. Calm and technical, demanding when it matters.",
+    image: "/images/trainers/trainer-ratchawat.jpeg",
+    imageAlt: "Kru Ratchawat, founder and head coach of Ratchawat Muay Thai",
   },
   {
-    name: "Tae",
-    role: "Senior Trainer",
-    description: "Sharp pad work. Corrects technique without breaking the flow of a session. Rotates between both camps.",
+    name: "Kru Kuan",
+    role: "Head Trainer, Bo Phut",
+    description: "Three-time Muay Thai champion, 280 fights. Knee fighter with a sharp clinch. Runs the most demanding pad rounds at the camp.",
+    image: "/images/trainers/trainer-kuan.jpeg",
+    imageAlt: "Kru Kuan, head trainer at Ratchawat Bo Phut",
   },
   {
-    name: "Mam",
+    name: "Kru Mam",
     role: "Trainer",
-    description: "Good at breaking down combinations step by step. Well-liked by students working on new technique.",
+    description: "Southern Thailand Champion at 126 lbs, 500 fights, 20 years in the ring. Knee fighter, pad work specialist.",
+    image: "/images/trainers/trainer-mam.jpeg",
+    imageAlt: "Kru Mam, trainer at Ratchawat Plai Laem",
   },
 ];
 
@@ -142,7 +148,15 @@ export default function PrivateLessonsPage() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {trainers.map((trainer) => (
               <GlassCard key={trainer.name}>
-                <ImagePlaceholder category="team" aspectRatio="aspect-square" className="mb-4" />
+                <div className="relative aspect-square rounded-card overflow-hidden mb-4">
+                  <Image
+                    src={trainer.image}
+                    alt={trainer.imageAlt}
+                    fill
+                    sizes="(max-width: 640px) 100vw, 33vw"
+                    className="object-cover"
+                  />
+                </div>
                 <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-1">
                   {trainer.name}
                 </h3>
@@ -203,7 +217,7 @@ export default function PrivateLessonsPage() {
       <section className="py-12 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-3xl mx-auto">
           <p className="text-on-surface-variant text-base leading-relaxed text-center">
-            Private 1-on-1 Muay Thai lessons at Ratchawat Koh Samui are available with experienced Thai trainers including Kruu Wat, Tae, and Mam. Sessions are built around your level and what you want to work on. Available at both Bo Phut and Plai Laem. Book and pay online.
+            Private 1-on-1 Muay Thai lessons at Ratchawat Koh Samui are available with experienced Thai trainers including Kru Ratchawat (Founder), Kru Kuan (Head Trainer Bo Phut), and Kru Mam (Southern Thailand Champion). Sessions are built around your level and what you want to work on. Available at both Bo Phut and Plai Laem. Book and pay online.
           </p>
         </div>
       </section>

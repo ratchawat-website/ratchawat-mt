@@ -15,9 +15,9 @@ import {
 import { TOTAL_REVIEWS, OVERALL_RATING } from "@/content/reviews";
 
 export const metadata = generatePageMeta({
-  title: "Muay Thai Trainers Koh Samui | Ratchawat Team \u2014 12 Thai Coaches",
+  title: "Muay Thai Trainers Koh Samui | Ratchawat Team \u2014 10 Thai Coaches",
   description:
-    "Meet the Ratchawat Muay Thai team. 12 Thai trainers across our Bo Phut and Plai Laem camps. Led by founder Kruu Wat. All levels welcome.",
+    "Meet the Ratchawat Muay Thai team. 10 Thai trainers across our Bo Phut and Plai Laem camps. Led by founder Kru Ratchawat. All levels welcome.",
   path: "/team",
 });
 
@@ -66,7 +66,7 @@ export default function TeamPage() {
             Meet the Trainers
           </h1>
           <p className="mt-4 text-on-surface-variant text-lg max-w-2xl mx-auto">
-            A dozen Thai trainers across our Bo Phut and Plai Laem camps. All
+            Ten Thai trainers across our Bo Phut and Plai Laem camps. All
             fighters or ex-fighters. All teaching in English. They are the
             reason students keep coming back.
           </p>
@@ -231,10 +231,11 @@ export default function TeamPage() {
       <section className="py-12 px-6 sm:px-10 md:px-16 lg:px-20 bg-surface-lowest/50">
         <div className="max-w-3xl mx-auto">
           <p className="text-on-surface-variant text-base leading-relaxed text-center">
-            The Ratchawat Muay Thai team in Koh Samui includes 12 Thai
-            trainers across two camps, led by founder Kruu Wat. Active trainers
-            confirmed in recent Google reviews include Tae, Kuan, Kit, Sing,
-            Mam, and Mon. The team teaches group classes, private 1-on-1
+            The Ratchawat Muay Thai team in Koh Samui includes 10 Thai trainers
+            across two camps, led by founder Kru Ratchawat. The roster: Kru
+            Ratchawat (Founder), Kru Kuan (Head Trainer Bo Phut), Kru Mam, Kru
+            Kit, Kru Kheng, Kru Dam, Kru Tae, Kru Sing, Kru Jet, and Kru Tan
+            (Kids Instructor). The team teaches group classes, private 1-on-1
             sessions, kids programs, and fighter preparation in English at both
             the Bo Phut and Plai Laem camps.
           </p>

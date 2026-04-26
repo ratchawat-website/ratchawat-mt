@@ -49,3 +49,4 @@ next-env.d.ts
 
 # Internal notes (not for deploy)
 meeting-infos-client.md
+trainers.md

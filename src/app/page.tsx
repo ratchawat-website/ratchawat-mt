@@ -11,7 +11,7 @@ import {
   CAMP_LABELS,
   reviewDisplayDate,
 } from "@/content/reviews";
-import { trainers as allTrainers } from "@/content/trainers";
+import { homepageTrainers } from "@/content/trainers";
 import JsonLd from "@/components/seo/JsonLd";
 import {
   organizationSchema,
@@ -110,7 +110,7 @@ const camps = [
 
 const testimonials = featuredHomepageReviews;
 
-const trainers = allTrainers.map((t) => ({
+const trainers = homepageTrainers.map((t) => ({
   name: t.name,
   role: t.role,
   image: t.image,
