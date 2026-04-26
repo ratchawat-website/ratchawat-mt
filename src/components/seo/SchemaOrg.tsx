@@ -14,7 +14,6 @@ export function organizationSchema(): Record<string, unknown> {
     sameAs: [
       "https://www.facebook.com/Chor.RatchawatMuayThaiGym",
       "https://www.instagram.com/chor.ratchawatmuaythai",
-      "https://www.tiktok.com/@chor.ratchawat",
       "https://maps.app.goo.gl/yxkGkZtzkn1Lq48Y9",
       "https://maps.app.goo.gl/fLdyZsRm9r5WRCU86",
     ],

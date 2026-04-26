@@ -545,7 +545,7 @@ Organization
 ├── url: "https://ratchawatmuaythai.com"
 ├── telephone: "+66630802876"
 ├── email: "chor.ratchawat@gmail.com"
-├── sameAs: [facebook, instagram, tiktok]
+├── sameAs: [facebook, instagram]
 ├── aggregateRating: { ratingValue: 9.3, reviewCount: 131 }
 └── location: [
       SportsActivityLocation (Bo Phut),

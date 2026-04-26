@@ -204,14 +204,6 @@ export default function ContactPage() {
                   >
                     Instagram
                   </a>
-                  <a
-                    href="https://www.tiktok.com/@chor.ratchawat"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-on-surface-variant text-sm hover:text-primary transition-colors"
-                  >
-                    TikTok
-                  </a>
                 </div>
               </div>
             </GlassCard>

@@ -17,7 +17,6 @@ export default function Footer() {
         <div className="flex gap-5">
           <a href="https://facebook.com/Chor.RatchawatMuayThaiGym" target="_blank" rel="noopener noreferrer" className="text-on-surface-variant hover:text-primary transition-colors text-xs font-medium" aria-label="Facebook">FB</a>
           <a href="https://instagram.com/chor.ratchawatmuaythai" target="_blank" rel="noopener noreferrer" className="text-on-surface-variant hover:text-primary transition-colors text-xs font-medium" aria-label="Instagram">IG</a>
-          <a href="https://tiktok.com/@chor.ratchawat" target="_blank" rel="noopener noreferrer" className="text-on-surface-variant hover:text-primary transition-colors text-xs font-medium" aria-label="TikTok">TT</a>
         </div>
       </div>
 
