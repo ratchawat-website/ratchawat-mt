@@ -71,15 +71,20 @@ export default function Navigation({ isAdmin = false }: NavigationProps) {
             {navItems.map((item) =>
               item.children ? (
                 <div key={item.label} className="relative group">
-                  <button className="flex items-center gap-1 text-[11px] font-sans font-medium uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors">
+                  <button
+                    className="flex items-center gap-1 text-[11px] font-sans font-medium uppercase tracking-widest text-on-surface-variant hover:text-primary transition-colors"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                  >
                     {item.label}
                     <ChevronDown
                       size={12}
-                      className="transition-transform duration-200 group-hover:rotate-180"
+                      aria-hidden="true"
+                      className="transition-transform duration-200 group-hover:rotate-180 group-focus-within:rotate-180"
                     />
                   </button>
                   {/* Dropdown */}
-                  <div className="absolute top-full left-1/2 -translate-x-1/2 pt-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 pt-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition-all duration-200">
                     <div className="bg-surface-lowest border border-white/10 rounded-lg shadow-lg shadow-black/30 py-2 min-w-[160px]">
                       {/* Top accent */}
                       <div className="absolute top-3 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#ff660030] to-transparent rounded-t-lg" />
@@ -118,15 +123,17 @@ export default function Navigation({ isAdmin = false }: NavigationProps) {
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="md:hidden text-on-surface"
-            aria-label="Toggle menu"
+            aria-label={isOpen ? "Close menu" : "Open menu"}
+            aria-expanded={isOpen}
+            aria-controls="mobile-menu"
           >
-            {isOpen ? <X size={22} /> : <Menu size={22} />}
+            {isOpen ? <X size={22} aria-hidden="true" /> : <Menu size={22} aria-hidden="true" />}
           </button>
         </div>
 
         {/* Mobile menu */}
         {isOpen && (
-          <div className="md:hidden border-t border-white/5 px-5 py-4 space-y-1">
+          <div id="mobile-menu" className="md:hidden border-t border-white/5 px-5 py-4 space-y-1">
             {navItems.map((item) =>
               item.children ? (
                 <div key={item.label}>
