@@ -274,14 +274,17 @@ First Name, Last Name, Country of Origin/Nationality, Phone (WhatsApp), Email, P
 
 - [x] **Done 2026-04-13/14** — see history below
 - [x] **Homepage Meet the Team (`TeamCircularGallery`)** — done 2026-04-26. All 10 trainers shown in circular gallery with real photos from `/public/images/trainers/`.
-- [ ] **Plai Laem dedicated "Our Two Camps" homepage photo** (currently reuses `camp-view.png` — needs a distinct hero-style shot)
-- [ ] **Bo Phut — "The Gym" section**: 2 square placeholders remaining in `/camps/bo-phut`
-- [ ] **`/team` page**: full trainer portraits + any group shots
-- [ ] **`/about` page**: founder/story photos if page added in Phase 5
-- [ ] Audit remaining `ImagePlaceholder` usage across all pages, replace or remove
-- [ ] Verify every `<Image>` has correct `sizes`, `alt`, `width`/`height` or `fill`
-- [ ] Compress sources, prefer WebP/AVIF
-- [ ] Above-the-fold images use `priority`
+- [x] **Plai Laem "Our Two Camps" homepage photo** — done 2026-04-26. `camp-view.png` (3.5 MB) compressed to `camp-view.jpg` (547 KB, -85%) and reused on homepage + `/camps/plai-laem`. Client confirmed photo is correct.
+- [x] **Bo Phut — "The Gym" section** — done 2026-04-26. 2 square placeholders replaced with `camp-inside.jpeg` + `camp-inside-2.jpeg`.
+- [x] **`/about` page** — done 2026-04-26. Single 9:16 portrait of Kru Ratchawat (`trainer-ratachawat-2.jpeg`).
+- [x] **`/programs/group-adults`** — done 2026-04-26. Single 9:16 image (`group-adult.jpg`).
+- [x] **`/programs/group-kids`** — done 2026-04-26. Single 9:16 image (`groupf-kids.jpg`).
+- [x] **`/programs/fighter`** — done 2026-04-26. Single 9:16 image (`program-fighter.jpg`).
+- [x] **Audit `ImagePlaceholder` usage** — done 2026-04-26. Zero usage remains in production pages.
+- [x] **`<Image>` config audit** — done 2026-04-26. All 18 `<Image>` tags verified with `alt`, `sizes`, `fill` or explicit dimensions.
+- [x] **Compress sources** — done 2026-04-26. `camp-view.png` 3.5 MB → 547 KB. `camp-inside.jpg` 930 KB → 820 KB. `ring-view.jpg` 831 KB → 719 KB. `trainer-kit` 652 → 562 KB. `trainer-jet` 627 → 540 KB.
+- [x] **`/team` page** — done 2026-04-26. All 10 trainer portraits use real photos from `/public/images/trainers/`.
+- [x] **Above-the-fold `priority` audit** — done 2026-04-26. `HeroSection` (homepage) and `/team` featured trainer use `priority`. All other first `<Image>` tags sit below intro text blocks (textual hero), so lazy loading is correct.
 - [ ] **Legal pages content** — replace placeholder copy on `/privacy` and `/terms` with the full, owner-validated legal text (data processors, cancellation/refund policy, training-risk waiver, DTV refund-voucher clause, booking/payment terms, governing law). Required for Stripe live mode and EU/UK visitors. Once real content lands, flip `noIndex` to `false` on both pages and bump sitemap priority if appropriate.
 
 ### Done (history)

@@ -2,7 +2,6 @@ import { generatePageMeta } from "@/lib/seo/meta";
 import HeroSection from "@/components/ui/HeroSection";
 import GlassCard from "@/components/ui/GlassCard";
 import CTABanner from "@/components/ui/CTABanner";
-import ImagePlaceholder from "@/components/ui/ImagePlaceholder";
 import TeamCircularGallery from "@/components/sections/TeamCircularGallery";
 import {
   featuredHomepageReviews,
@@ -103,7 +102,7 @@ const camps = [
     description:
       "Larger gym near Big Buddha, with a dedicated bodyweight and conditioning zone. More floor space, more equipment, same trainers.",
     href: "/camps/plai-laem",
-    image: "/images/camp-plai-laem/camp-view.png",
+    image: "/images/camp-plai-laem/camp-view.jpg",
     imageAlt: "Ratchawat Plai Laem camp, larger training facility near Big Buddha",
   },
 ];
@@ -189,23 +188,15 @@ export default function HomePage() {
             {camps.map((camp) => (
               <Link key={camp.name} href={camp.href} className="group">
                 <GlassCard>
-                  {camp.image ? (
-                    <div className="relative aspect-video rounded-card overflow-hidden mb-6">
-                      <Image
-                        src={camp.image}
-                        alt={camp.imageAlt}
-                        fill
-                        sizes="(max-width: 768px) 100vw, 50vw"
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
-                    </div>
-                  ) : (
-                    <ImagePlaceholder
-                      category="gym"
-                      aspectRatio="aspect-video"
-                      className="mb-6"
+                  <div className="relative aspect-video rounded-card overflow-hidden mb-6">
+                    <Image
+                      src={camp.image}
+                      alt={camp.imageAlt}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
-                  )}
+                  </div>
                   <h3 className="font-serif text-xl font-bold text-on-surface uppercase mb-3 group-hover:text-primary transition-colors">
                     {camp.name}
                   </h3>

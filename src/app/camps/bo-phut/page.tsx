@@ -4,7 +4,6 @@ import HeroSection from "@/components/ui/HeroSection";
 import GlassCard from "@/components/ui/GlassCard";
 import CTABanner from "@/components/ui/CTABanner";
 import Image from "next/image";
-import ImagePlaceholder from "@/components/ui/ImagePlaceholder";
 import ScheduleTable from "@/components/ui/ScheduleTable";
 import LocationCard from "@/components/ui/LocationCard";
 import JsonLd from "@/components/seo/JsonLd";
@@ -170,10 +169,25 @@ export default function BoPhutCampPage() {
                   className="object-cover"
                 />
               </div>
-              {/* TODO: replace placeholders with real Bo Phut gym photos */}
               <div className="grid grid-cols-2 gap-4">
-                <ImagePlaceholder category="gym" aspectRatio="aspect-square" />
-                <ImagePlaceholder category="training" aspectRatio="aspect-square" />
+                <div className="relative aspect-square rounded-card overflow-hidden">
+                  <Image
+                    src="/images/camp-bophut/camp-inside.jpeg"
+                    alt="Inside Bo Phut camp, ring and bag area"
+                    fill
+                    sizes="(max-width: 1024px) 50vw, 25vw"
+                    className="object-cover"
+                  />
+                </div>
+                <div className="relative aspect-square rounded-card overflow-hidden">
+                  <Image
+                    src="/images/camp-bophut/camp-inside-2.jpeg"
+                    alt="Bo Phut camp training floor, heavy bags"
+                    fill
+                    sizes="(max-width: 1024px) 50vw, 25vw"
+                    className="object-cover"
+                  />
+                </div>
               </div>
             </div>
           </div>

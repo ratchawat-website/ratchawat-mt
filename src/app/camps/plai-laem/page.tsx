@@ -186,7 +186,7 @@ export default function PlaiLaemCampPage() {
             <div className="space-y-4">
               <div className="relative aspect-video rounded-card overflow-hidden">
                 <Image
-                  src="/images/camp-plai-laem/camp-view.png"
+                  src="/images/camp-plai-laem/camp-view.jpg"
                   alt="Ratchawat Plai Laem gym, full training facility near Big Buddha"
                   fill
                   sizes="(max-width: 1024px) 100vw, 50vw"

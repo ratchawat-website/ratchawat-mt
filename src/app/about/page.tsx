@@ -2,7 +2,7 @@ import { generatePageMeta } from "@/lib/seo/meta";
 import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import GlassCard from "@/components/ui/GlassCard";
 import CTABanner from "@/components/ui/CTABanner";
-import ImagePlaceholder from "@/components/ui/ImagePlaceholder";
+import Image from "next/image";
 import JsonLd from "@/components/seo/JsonLd";
 import { organizationSchema } from "@/components/seo/SchemaOrg";
 import { Heart, Shield, Users, Star, Trophy } from "lucide-react";
@@ -98,9 +98,14 @@ export default function AboutPage() {
               </p>
             </div>
           </div>
-          <div className="space-y-4">
-            <ImagePlaceholder category="team" aspectRatio="aspect-video" />
-            <ImagePlaceholder category="gym" aspectRatio="aspect-video" />
+          <div className="relative aspect-[9/16] rounded-card overflow-hidden">
+            <Image
+              src="/images/trainers/trainer-ratachawat-2.jpeg"
+              alt="Kru Ratchawat, founder of Chor Ratchawat Muay Thai Gym"
+              fill
+              sizes="(max-width: 1024px) 100vw, 40vw"
+              className="object-cover"
+            />
           </div>
         </div>
       </section>
