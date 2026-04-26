@@ -79,7 +79,11 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang="en" className={`${barlowCondensed.variable} ${inter.variable}`}>
+    <html
+      lang="en"
+      data-scroll-behavior="smooth"
+      className={`${barlowCondensed.variable} ${inter.variable}`}
+    >
       <body className="bg-[#0a0a0a]">
         <ConditionalLayout isAdmin={isAdmin}>{children}</ConditionalLayout>
       </body>
