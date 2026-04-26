@@ -30,6 +30,8 @@ const trainerSchemas = trainers.map((t) => ({
   name: t.name,
   jobTitle: t.role,
   description: t.bio,
+  nationality: { "@type": "Country", name: "Thailand" },
+  image: t.image ? `${SITE_URL}${t.image}` : undefined,
   worksFor: {
     "@type": "Organization",
     name: "Chor Ratchawat Muay Thai Gym",
@@ -41,6 +43,17 @@ const trainerSchemas = trainers.map((t) => ({
     name: `Chor.Ratchawat Muay Thai ${c === "bo-phut" ? "Bo Phut" : "Plai Laem"}`,
     url: `${SITE_URL}/camps/${c}`,
   })),
+  ...(t.certifications &&
+    t.certifications.length > 0 && {
+      hasCredential: t.certifications.map((c) => ({
+        "@type": "EducationalOccupationalCredential",
+        credentialCategory: "certification",
+        name: c,
+      })),
+    }),
+  ...(t.totalFights && {
+    description: `${t.bio} Professional record: ${t.totalFights} fights${t.yearsExperience ? `, ${t.yearsExperience} years experience` : ""}.`,
+  }),
 }));
 
 export default function TeamPage() {
