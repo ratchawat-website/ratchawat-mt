@@ -285,7 +285,7 @@ First Name, Last Name, Country of Origin/Nationality, Phone (WhatsApp), Email, P
 - [x] **Compress sources** — done 2026-04-26. `camp-view.png` 3.5 MB → 547 KB. `camp-inside.jpg` 930 KB → 820 KB. `ring-view.jpg` 831 KB → 719 KB. `trainer-kit` 652 → 562 KB. `trainer-jet` 627 → 540 KB.
 - [x] **`/team` page** — done 2026-04-26. All 10 trainer portraits use real photos from `/public/images/trainers/`.
 - [x] **Above-the-fold `priority` audit** — done 2026-04-26. `HeroSection` (homepage) and `/team` featured trainer use `priority`. All other first `<Image>` tags sit below intro text blocks (textual hero), so lazy loading is correct.
-- [ ] **Legal pages content** — replace placeholder copy on `/privacy` and `/terms` with the full, owner-validated legal text (data processors, cancellation/refund policy, training-risk waiver, DTV refund-voucher clause, booking/payment terms, governing law). Required for Stripe live mode and EU/UK visitors. Once real content lands, flip `noIndex` to `false` on both pages and bump sitemap priority if appropriate.
+- [x] **Legal pages content (provisional)** — done 2026-04-26. `/privacy` and `/terms` rewritten with full sectioned content using reasonable Thai/EU-aware defaults: who we are, what we collect, processors (Stripe, Supabase, Resend, Vercel), 2-year retention, GDPR rights, international transfers; booking/payment, cancellation matrix per program type, DTV voucher clause, training risk waiver, accommodation rules (check-in 14:00, check-out 11:00, electricity 8 THB/unit), conduct, photo consent, liability cap, governing law (Thai / Surat Thani jurisdiction). `noIndex: true` kept until owner validates the text. After validation: flip `noIndex` to `false` and bump sitemap priority.
 
 ### Done (history)
 
