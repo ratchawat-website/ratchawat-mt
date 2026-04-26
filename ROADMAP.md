@@ -191,7 +191,7 @@ Admin logs in, views all bookings with filters, updates status, manages availabi
 
 ## Phase 5 — Pages & Content Completion
 
-**Status:** PENDING
+**Status:** DONE 2026-04-26
 **Goal:** Every public page built, audited, and polished. Content matches reality (real prices, real addresses, real copy). All visible text passes through `/humanizer`.
 **Blocker:** Phase 4 complete.
 
@@ -214,7 +214,7 @@ Admin logs in, views all bookings with filters, updates status, manages availabi
 - [x] `/contact` — **VERIFIED 2026-04-16, social handles confirmed 2026-04-26**. Addresses, GPS coords, phone, email, hours, map embeds all correct. Schema.org ContactPage + Organization + per-camp LocalBusiness present. Canonical social handles: Facebook `/Chor.RatchawatMuayThaiGym`, Instagram `/chor.ratchawatmuaythai`. **TikTok removed 2026-04-26** (client confirmed no TikTok presence): cleaned from Footer, /contact page, `organizationSchema.sameAs`, `llms-full.txt`, AUDIT-SEO.md.
 - [x] `/pricing` — Wave 1 done 2026-04-17: "7 days" → "6 days", "3 people/kids max" on small group private. Wave 2 done 2026-04-17: resident-10 + resident-20 Stripe products archived, new `resident-monthly` (3,000 THB / 1x/day) created, 3 DTV products created (`dtv-6m-2x` 20K, `dtv-6m-4x` 25K, `dtv-6m-unlimited` 33K). `src/content/pricing.ts` updated with new entries, BookingType/PriceCategory enums extended with `dtv`, Zod schemas updated. `/pricing` now shows single Resident card + new DTV section. **Wave 4 done 2026-04-21**: Fighter Program section densified to justify 9,500 THB. Added anchor line comparing to monthly 2x/day (7,000 THB → 9,500 THB for +2,500 THB). USP badge "Keep 100% of your fight purse". Bullets expanded from 5 to 9 (aligned with `/programs/fighter`). New "What's included that you'd pay extra for elsewhere" breakdown card: yoga ~500 THB, kettlebell ~500 THB, ice bath 150 THB, matchmaking ~2,000 THB + note on 30-50% purse commission elsewhere. Also fixed 3 lint errors pre-existing in `TeamCircularGallery.tsx` (refactored to `useSyncExternalStore`) and cleaned 2 warnings in `/programs/fighter` (unused `Check` import + dead `whatsIncluded` constant).
 - [x] Run `/humanizer` on every visible copy block — **done 2026-04-21**. Full pass in 5 batches (A: homepage + /about + /team; B: /programs/*; C: /pricing + /accommodation + /camps/*; D: /booking/* + /visa/dtv/* audit-only; E: /reviews + /contact audit-only). Removed AI tells: "at the heart of", "every budget", "top trainers", "family energy", "same Ratchawat spirit", "Ideal for", rule-of-three promotional stacks, "The Camp Stay Experience". Bonus factual corrections: kids ages 5-15 → 8-13 group / 3+ private (homepage + /programs hub); camp hours 8 AM-8 PM → 7 AM-6:30 PM Mon-Sat (/camps/bo-phut + /camps/plai-laem, aligned with schedule + schema); trainer Kong (inexistant) → Tae (confirmed) on /programs/private + GEO passage. Also removed em dashes from 4 visible copy locations per CLAUDE.md rule. Commits: `272e386`, `2c941cc`, `eca11f0`, `448131b`.
-- [ ] Update `Navigation.tsx` and `Footer.tsx` if any new pages are added
+- [x] Update `Navigation.tsx` and `Footer.tsx` if any new pages are added — **2026-04-26**: audit OK, both already cover all 16 public routes. Two Footer links (`/privacy`, `/terms`) previously pointed to non-existent routes; created stub pages with short placeholder copy (booking/payment/cancellation/training-risk basics + DTV refund-voucher policy). Stubs are `noIndex: true`. **Real legal content to be drafted in Phase 6** (see Phase 6 task).
 
 ### Success criteria
 
@@ -282,6 +282,7 @@ First Name, Last Name, Country of Origin/Nationality, Phone (WhatsApp), Email, P
 - [ ] Verify every `<Image>` has correct `sizes`, `alt`, `width`/`height` or `fill`
 - [ ] Compress sources, prefer WebP/AVIF
 - [ ] Above-the-fold images use `priority`
+- [ ] **Legal pages content** — replace placeholder copy on `/privacy` and `/terms` with the full, owner-validated legal text (data processors, cancellation/refund policy, training-risk waiver, DTV refund-voucher clause, booking/payment terms, governing law). Required for Stripe live mode and EU/UK visitors. Once real content lands, flip `noIndex` to `false` on both pages and bump sitemap priority if appropriate.
 
 ### Done (history)
 
