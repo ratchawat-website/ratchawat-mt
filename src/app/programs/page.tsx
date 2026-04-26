@@ -128,7 +128,7 @@ export default function ProgramsPage() {
       <section className="py-12 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-3xl mx-auto">
           <p className="text-on-surface-variant text-base leading-relaxed text-center">
-            Ratchawat Muay Thai offers four training programs: adult group classes, kids classes, private 1-on-1 lessons with Thai trainers, and an intensive fighter program for competitive athletes. Group and private classes run at both Bo Phut and Plai Laem, six days a week. The fighter program runs at Plai Laem only.
+            Chor Ratchawat Muay Thai in Koh Samui offers four training programs: adult group classes (from 400 THB drop-in, 5,500 THB monthly), kids classes ages 8-13 (300 THB drop-in, 2,500 THB monthly), private 1-on-1 lessons (800 THB per 60-minute session), and the Fighter Program (9,500 THB per month). Group and private classes run at both Bo Phut and Plai Laem six days a week, with morning sessions at 9:00 and evening at 17:00. The Fighter Program runs at Plai Laem only.
           </p>
         </div>
       </section>
