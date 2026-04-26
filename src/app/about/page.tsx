@@ -100,7 +100,7 @@ export default function AboutPage() {
           </div>
           <div className="relative aspect-[9/16] rounded-card overflow-hidden">
             <Image
-              src="/images/trainers/trainer-ratachawat-2.jpeg"
+              src="/images/trainers/trainer-ratchawat-2.jpeg"
               alt="Kru Ratchawat, founder of Chor Ratchawat Muay Thai Gym"
               fill
               sizes="(max-width: 1024px) 100vw, 40vw"

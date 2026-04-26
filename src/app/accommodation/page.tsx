@@ -97,7 +97,7 @@ const bungalowPhotos = [
   { src: "/images/bungalow/bungalow.jpeg", caption: "Bungalow", alt: "Private bungalow exterior at Ratchawat Plai Laem" },
   { src: "/images/bungalow/bungalow-room.jpeg", caption: "Bedroom", alt: "King-size bed in private bungalow" },
   { src: "/images/bungalow/bungalow-bathroom.jpeg", caption: "Bathroom", alt: "Private bathroom in bungalow" },
-  { src: "/images/bungalow/bungalow-kitchette.jpeg", caption: "Kitchenette", alt: "Fitted kitchenette in bungalow" },
+  { src: "/images/bungalow/bungalow-kitchenette.jpeg", caption: "Kitchenette", alt: "Fitted kitchenette in bungalow" },
   { src: "/images/bungalow/bungalow-living-room.jpeg", caption: "Living area", alt: "Living and dining area in bungalow" },
   { src: "/images/bungalow/bungalow-storage.jpeg", caption: "Storage", alt: "Storage and dressing area in bungalow" },
   { src: "/images/bungalow/bungalow-terrace.jpeg", caption: "Terrace", alt: "Private terrace with pool view" },

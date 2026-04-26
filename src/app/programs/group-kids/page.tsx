@@ -110,7 +110,7 @@ export default function GroupKidsPage() {
           </div>
           <div className="relative aspect-[9/16] rounded-card overflow-hidden">
             <Image
-              src="/images/programs/groupf-kids.jpg"
+              src="/images/programs/group-kids.jpg"
               alt="Kids Muay Thai class at Ratchawat camp"
               fill
               sizes="(max-width: 1024px) 100vw, 40vw"
