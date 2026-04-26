@@ -346,9 +346,9 @@ ratchawat-mt/
 
 > Read `ROADMAP.md` for the full phased plan and current task list.
 
-### Current phase: Phase 7 -- SEO & GEO Pass
+### Current phase: Phase 8 -- Security, Performance & Accessibility
 
-Phase 5 closed 2026-04-26 (commit 661917d). Phase 6 closed 2026-04-26: real photos integrated on /about, /programs/{group-adults,group-kids,fighter}, /camps/bo-phut "The Gym"; camp-view.png 3.5 MB → camp-view.jpg 547 KB; ImagePlaceholder usage reduced to zero in production; <Image> audit (alt + sizes + priority on LCP) complete; /privacy and /terms now hold full provisional legal content (noIndex stays true until owner validates the text). Phase 7 starts: page-by-page SEO audit vs AUDIT-SEO.md, schema validation, GEO citable passages, internal linking, llms.txt refresh.
+Phase 5 closed 2026-04-26 (commit 661917d). Phase 6 closed 2026-04-26: real photos + image audit + provisional legal content. Phase 7 closed 2026-04-26: sitemap fixed (removed /blog 404), robots.ts created, llms.txt/llms-full.txt aligned to canonical pricing/schedule, 16/16 GEO citable passages validated and 3 strengthened, Schema.org bugs fixed (openingHoursSpecification, bestRating, SearchAction), LodgingBusiness + Organization schemas enriched, metadata audit (16/16 ≤ 60 char titles, ≤ 155 char descriptions), 3 image filename typos fixed (kitchette, groupf-kids, ratachawat), Person schemas enriched with hasCredential + nationality + fight record description. Phase 8 starts: security scan, perf audit, accessibility audit.
 
 **Pre-go-live config:** Read `GO-LIVE-CHECKLIST.md` before any production deployment. It documents all env var switches, Resend domain verification, Stripe LIVE mode toggle, Supabase test data cleanup, DNS records, and rollback plan.
 

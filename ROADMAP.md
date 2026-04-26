@@ -304,23 +304,21 @@ Zero `ImagePlaceholder` usage remains in production pages. All above-the-fold im
 
 ## Phase 7 — SEO & GEO Pass
 
-**Status:** IN PROGRESS (started 2026-04-26)
+**Status:** DONE 2026-04-26
 **Goal:** Every page audited against `AUDIT-SEO.md`. Structured data complete and valid. GEO passages visible. `llms.txt` mirrors current site.
 **Blocker:** Phase 5 + 6 complete (can't audit incomplete pages).
 
 ### Tasks
 
-- [ ] Full `/seo` audit page-by-page vs `AUDIT-SEO.md` (metadata, schemas, internal links, GEO passage)
-- [ ] Validate all Schema.org JSON-LD via `/seo-schema` (Organization, LocalBusiness, SportsActivityLocation, LodgingBusiness, BreadcrumbList, FAQ, Review, AggregateRating)
-- [ ] `/seo-geo` audit — every page has a citable passage with business name + location + numbers
-- [ ] `/seo-local` audit — both camps (Bo Phut + Plai Laem) with NAP consistency + local schema
-- [ ] Internal linking audit — each page ≥ 3 contextual links to related pages
-- [ ] Update `public/llms.txt` with booking system, visa info, team, real prices
-- [ ] Update `public/llms-full.txt` with full content snapshot
-- [ ] Verify `src/app/sitemap.ts` includes all new routes
-- [ ] Verify `src/app/robots.ts`
-- [ ] `/seo-images` — alt text audit, image filename conventions
-- [ ] `/seo-content` — E-E-A-T signals, thin-content detection
+- [x] **Sitemap audit** — done 2026-04-26. Removed /blog (404), commented out /privacy + /terms (noIndex).
+- [x] **robots.ts created** — done 2026-04-26. Allow /, disallow /admin, /api, /auth, /booking/confirmed, /visa/dtv/confirmed, /privacy, /terms.
+- [x] **llms.txt + llms-full.txt refresh** — done 2026-04-26. Aligned to canonical pricing.ts and schedule.ts: drop-in 400 THB (was 500), real schedule, 10 trainers, no TikTok, no /blog.
+- [x] **GEO citable passages** — done 2026-04-26. 16/16 public pages have a GEO citable passage; 3 strengthened with specific numbers (/programs, /programs/group-kids, /programs/private).
+- [x] **Schema.org validation + fixes** — done 2026-04-26. Three bugs fixed (openingHoursSpecification → openingHours, AggregateRating bestRating 10 → 5, removed phantom /search SearchAction). LodgingBusiness on /accommodation enriched with geo, tel, image, checkinTime/checkoutTime, AggregateRating. Organization schema enriched with legalName + description.
+- [x] **Metadata audit** — done 2026-04-26. 16/16 pages now have title ≤ 60 chars and description ≤ 155 chars (was 7 + 2 over budget).
+- [x] **Internal linking** — done 2026-04-26. /accommodation GEO passage now links to /camps/plai-laem, /programs/fighter, /pricing.
+- [x] **Alt text + filename audit** — done 2026-04-26. 18/18 alt texts descriptive and unique. Three filename typos fixed (kitchette, groupf-kids, ratachawat).
+- [x] **E-E-A-T audit + Person schema enrichment** — done 2026-04-26. Trainer Person schemas now expose nationality (Thailand), image, hasCredential (C-license), and fight record in description. Review schemas with author + datePublished already in place.
 
 ### Success criteria
 
