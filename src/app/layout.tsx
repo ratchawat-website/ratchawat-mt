@@ -33,18 +33,9 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     siteName: "Ratchawat Muay Thai",
-    images: [
-      {
-        url: "/images/home/hero-trainers.webp",
-        width: 1200,
-        height: 630,
-        alt: "Chor Ratchawat Muay Thai Gym, Koh Samui",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
-    images: ["/images/home/hero-trainers.webp"],
   },
   manifest: "/site.webmanifest",
   robots: {
