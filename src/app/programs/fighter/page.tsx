@@ -24,9 +24,9 @@ import {
 import Link from "next/link";
 
 export const metadata = generatePageMeta({
-  title: "Fighter Program Koh Samui | Keep Your Full Fight Purse - Ratchawat",
+  title: "Fighter Program Koh Samui | Ratchawat - 9,500 THB/Month",
   description:
-    "Fighter program at Ratchawat Plai Laem, Koh Samui. Structured prep, 2 sessions/day, conditioning, fight organization. Keep 100% of your fight purse. 9,500 THB/month.",
+    "Fighter program at Ratchawat Plai Laem, Koh Samui. Structured prep, 2 sessions/day, conditioning, fight organisation. Keep 100% of your fight purse.",
   path: "/programs/fighter",
 });
 

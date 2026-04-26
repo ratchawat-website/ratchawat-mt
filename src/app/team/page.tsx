@@ -15,7 +15,7 @@ import {
 import { TOTAL_REVIEWS, OVERALL_RATING } from "@/content/reviews";
 
 export const metadata = generatePageMeta({
-  title: "Muay Thai Trainers Koh Samui | Ratchawat Team \u2014 10 Thai Coaches",
+  title: "Muay Thai Trainers Koh Samui | Ratchawat - 10 Thai Coaches",
   description:
     "Meet the Ratchawat Muay Thai team. 10 Thai trainers across our Bo Phut and Plai Laem camps. Led by founder Kru Ratchawat. All levels welcome.",
   path: "/team",

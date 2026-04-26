@@ -534,7 +534,28 @@ export default function AccommodationPage() {
       <section className="py-12 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-3xl mx-auto">
           <p className="text-on-surface-variant text-base leading-relaxed text-center">
-            Chor Ratchawat Muay Thai offers on-site accommodation at its Plai Laem camp in Koh Samui. The camp has 7 standard rooms and 1 private bungalow. Standard rooms include a double bed, private bathroom, air conditioning, Wi-Fi, and a private balcony with pool view. The private bungalow adds a king-size bed, a fitted kitchenette, a living and dining area, and a private terrace over the shared pool. Camp Stay packages start at 8,000 THB per week for a room and 23,000 THB per month for the bungalow, and combine unlimited group training with accommodation in one price.
+            Chor Ratchawat Muay Thai offers on-site accommodation at its{" "}
+            <Link
+              href="/camps/plai-laem"
+              className="text-primary hover:text-primary-dim transition-colors"
+            >
+              Plai Laem camp
+            </Link>{" "}
+            in Koh Samui. The camp has 7 standard rooms and 1 private bungalow. Standard rooms include a double bed, private bathroom, air conditioning, Wi-Fi, and a private balcony with pool view. The private bungalow adds a king-size bed, a fitted kitchenette, a living and dining area, and a private terrace over the shared pool. Camp Stay packages start at 8,000 THB per week for a room and 23,000 THB per month for the bungalow, and combine unlimited group training with accommodation in one price. Fighters can combine the{" "}
+            <Link
+              href="/programs/fighter"
+              className="text-primary hover:text-primary-dim transition-colors"
+            >
+              Fighter Program
+            </Link>{" "}
+            with a room (20,000 THB/month) or the bungalow (25,500 THB/month). See full{" "}
+            <Link
+              href="/pricing"
+              className="text-primary hover:text-primary-dim transition-colors"
+            >
+              pricing
+            </Link>{" "}
+            for all packages.
           </p>
         </div>
       </section>

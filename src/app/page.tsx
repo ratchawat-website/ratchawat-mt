@@ -29,7 +29,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 export const metadata = generatePageMeta({
-  title: "Muay Thai Camp Koh Samui | Chor Ratchawat - Bo Phut & Plai Laem",
+  title: "Muay Thai Koh Samui | Chor Ratchawat - Bo Phut & Plai Laem",
   description:
     "Train Muay Thai at Chor Ratchawat Gym in Koh Samui. Two locations in Bo Phut & Plai Laem. Group, private & kids classes. Book online today.",
   path: "/",

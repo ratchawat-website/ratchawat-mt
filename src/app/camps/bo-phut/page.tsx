@@ -22,7 +22,7 @@ import {
 import Link from "next/link";
 
 export const metadata = generatePageMeta({
-  title: "Muay Thai Bo Phut Koh Samui | Ratchawat \u2014 Street Gym Vibes",
+  title: "Muay Thai Bo Phut Koh Samui | Ratchawat Street Gym",
   description:
     "Train Muay Thai at Ratchawat Bo Phut, near Fisherman's Village, Koh Samui. Intimate gym with authentic street atmosphere. Daily schedule & classes.",
   path: "/camps/bo-phut",

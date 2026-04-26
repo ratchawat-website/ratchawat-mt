@@ -11,7 +11,7 @@ import { Users, Baby, UserCheck, Swords } from "lucide-react";
 import Link from "next/link";
 
 export const metadata = generatePageMeta({
-  title: "Muay Thai Programs Koh Samui | Group, Private, Kids & Fighter",
+  title: "Muay Thai Programs Koh Samui | Group, Private & Fighter",
   description:
     "Choose your Muay Thai program at Ratchawat Koh Samui. Group classes, private lessons, kids training, and fighter camp. All levels welcome.",
   path: "/programs",

@@ -24,7 +24,7 @@ import {
 import Link from "next/link";
 
 export const metadata = generatePageMeta({
-  title: "Muay Thai Plai Laem Koh Samui | Ratchawat \u2014 Full Gym & Bodyweight",
+  title: "Muay Thai Plai Laem Koh Samui | Ratchawat Full Gym",
   description:
     "Train Muay Thai at Ratchawat Plai Laem, Koh Samui. Full gym with bodyweight area. Group & private classes daily. Near Big Buddha.",
   path: "/camps/plai-laem",

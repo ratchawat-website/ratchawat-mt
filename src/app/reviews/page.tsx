@@ -17,7 +17,7 @@ import {
 } from "@/content/reviews";
 
 export const metadata = generatePageMeta({
-  title: "Reviews | Ratchawat Muay Thai Koh Samui \u2014 5.0/5, 396 avis",
+  title: "Reviews | Ratchawat Muay Thai Koh Samui - 5.0/5, 396 avis",
   description:
     "5.0 out of 5 stars across 396 Google reviews. Real student reviews from Ratchawat Muay Thai Bo Phut and Plai Laem camps in Koh Samui.",
   path: "/reviews",

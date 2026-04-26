@@ -12,7 +12,7 @@ import { UserCheck, Target, Clock, Flame } from "lucide-react";
 import Link from "next/link";
 
 export const metadata = generatePageMeta({
-  title: "Private Muay Thai Lessons Koh Samui | 1-on-1 Training - Ratchawat",
+  title: "Private Muay Thai Lessons Koh Samui | 1-on-1 - Ratchawat",
   description:
     "Book private Muay Thai lessons in Koh Samui with experienced Thai trainers. Personalized 1-on-1 sessions. All levels. Book & pay online.",
   path: "/programs/private",

@@ -14,7 +14,7 @@ import Link from "next/link";
 export const metadata = generatePageMeta({
   title: "Muay Thai Prices Koh Samui | Ratchawat - From 400 THB",
   description:
-    "Muay Thai training prices at Ratchawat Koh Samui. Drop-in 400 THB, weekly and monthly packages, private lessons, fighter program. Transparent pricing, no hidden fees.",
+    "Muay Thai prices at Ratchawat Koh Samui. Drop-in 400 THB, weekly and monthly packages, private 800 THB, fighter 9,500 THB. No hidden fees.",
   path: "/pricing",
 });
 
