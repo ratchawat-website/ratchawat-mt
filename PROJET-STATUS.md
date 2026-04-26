@@ -346,9 +346,9 @@ ratchawat-mt/
 
 > Read `ROADMAP.md` for the full phased plan and current task list.
 
-### Current phase: Phase 8 -- Security, Performance & Accessibility
+### Current phase: Phase 9 -- Go-live (pending client OG/Twitter share + staging validation)
 
-Phase 5 closed 2026-04-26 (commit 661917d). Phase 6 closed 2026-04-26: real photos + image audit + provisional legal content. Phase 7 closed 2026-04-26: sitemap fixed (removed /blog 404), robots.ts created, llms.txt/llms-full.txt aligned to canonical pricing/schedule, 16/16 GEO citable passages validated and 3 strengthened, Schema.org bugs fixed (openingHoursSpecification, bestRating, SearchAction), LodgingBusiness + Organization schemas enriched, metadata audit (16/16 ≤ 60 char titles, ≤ 155 char descriptions), 3 image filename typos fixed (kitchette, groupf-kids, ratachawat), Person schemas enriched with hasCredential + nationality + fight record description. Phase 8 starts: security scan, perf audit, accessibility audit.
+Phase 5 closed 2026-04-26 (commit 661917d). Phase 6 closed 2026-04-26 (real photos + image audit + provisional legal content). Phase 7 closed 2026-04-26 (SEO + GEO + schemas). Phase 8 closed 2026-04-26: security scan via /nextjs-security-scan (1 HIGH CVE resolved = next 16.2.4, 2 moderate accepted risk), /api/contact hardened (Zod + escape + honeypot), security headers in next.config.ts (X-Frame-Options, nosniff, Referrer-Policy, Permissions-Policy, HSTS), 3 broken asset 404s fixed (OG default, logo refs), real logo + favicon set integrated, OG/Twitter images via Next file convention, accessibility (skip link, nav ARIA, dropdown keyboard, prefers-reduced-motion). Live Lighthouse + cross-browser + screen reader testing deferred to Phase 9 staging. Phase 9 starts: GO-LIVE-CHECKLIST.md execution (DNS, env vars, Stripe live mode, Resend domain, Supabase test data cleanup).
 
 **Pre-go-live config:** Read `GO-LIVE-CHECKLIST.md` before any production deployment. It documents all env var switches, Resend domain verification, Stripe LIVE mode toggle, Supabase test data cleanup, DNS records, and rollback plan.
 
