@@ -266,7 +266,7 @@ First Name, Last Name, Country of Origin/Nationality, Phone (WhatsApp), Email, P
 
 ## Phase 6 — Photos & Media Assets
 
-**Status:** PARTIAL (started 2026-04-13)
+**Status:** DONE 2026-04-26 (legal text pending owner validation, non-blocking)
 **Goal:** All placeholder images replaced with real photos. `next/image` used everywhere with proper `alt`, `sizes`, and weights optimized.
 **Blocker:** Phase 5 complete (can't photograph content pages that don't exist).
 
@@ -304,7 +304,7 @@ Zero `ImagePlaceholder` usage remains in production pages. All above-the-fold im
 
 ## Phase 7 — SEO & GEO Pass
 
-**Status:** PENDING
+**Status:** IN PROGRESS (started 2026-04-26)
 **Goal:** Every page audited against `AUDIT-SEO.md`. Structured data complete and valid. GEO passages visible. `llms.txt` mirrors current site.
 **Blocker:** Phase 5 + 6 complete (can't audit incomplete pages).
 

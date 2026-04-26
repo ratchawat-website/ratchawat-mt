@@ -346,9 +346,9 @@ ratchawat-mt/
 
 > Read `ROADMAP.md` for the full phased plan and current task list.
 
-### Current phase: Phase 6 -- Go-live
+### Current phase: Phase 7 -- SEO & GEO Pass
 
-Phase 4 (Admin Dashboard) + post-audit (14 tasks) complete. Phase 5 partial: Zod validation done, fighter price confirmed. Remaining Phase 5 tasks (security scan, rate limiting, Lighthouse, real photos) deferred to post-launch or ongoing. See `ROADMAP.md` for Phase 6 task checklist and `GO-LIVE-CHECKLIST.md` for deployment steps.
+Phase 5 closed 2026-04-26 (commit 661917d). Phase 6 closed 2026-04-26: real photos integrated on /about, /programs/{group-adults,group-kids,fighter}, /camps/bo-phut "The Gym"; camp-view.png 3.5 MB → camp-view.jpg 547 KB; ImagePlaceholder usage reduced to zero in production; <Image> audit (alt + sizes + priority on LCP) complete; /privacy and /terms now hold full provisional legal content (noIndex stays true until owner validates the text). Phase 7 starts: page-by-page SEO audit vs AUDIT-SEO.md, schema validation, GEO citable passages, internal linking, llms.txt refresh.
 
 **Pre-go-live config:** Read `GO-LIVE-CHECKLIST.md` before any production deployment. It documents all env var switches, Resend domain verification, Stripe LIVE mode toggle, Supabase test data cleanup, DNS records, and rollback plan.
 
