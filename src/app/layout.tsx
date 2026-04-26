@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   ),
   title: {
     default:
-      "Muay Thai Camp Koh Samui | Chor Ratchawat - Bo Phut & Plai Laem",
+      "Muay Thai Koh Samui | Chor Ratchawat - Bo Phut & Plai Laem",
     template: "%s | Ratchawat Muay Thai",
   },
   description:
@@ -33,9 +33,18 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     siteName: "Ratchawat Muay Thai",
+    images: [
+      {
+        url: "/images/home/hero-trainers.webp",
+        width: 1200,
+        height: 630,
+        alt: "Chor Ratchawat Muay Thai Gym, Koh Samui",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
+    images: ["/images/home/hero-trainers.webp"],
   },
   robots: {
     index: true,

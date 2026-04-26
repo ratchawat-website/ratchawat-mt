@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://ratchawatmuaythai.com";
 const SITE_NAME = "Ratchawat Muay Thai";
-const DEFAULT_OG_IMAGE = `${SITE_URL}/images/og-default.jpg`;
+const DEFAULT_OG_IMAGE = `${SITE_URL}/images/home/hero-trainers.webp`;
 
 interface PageMetaOptions {
   title: string;
