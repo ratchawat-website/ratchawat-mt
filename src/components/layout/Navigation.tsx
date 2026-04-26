@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { Menu, X, ChevronDown } from "lucide-react";
 import AdminNavButton from "@/components/admin/AdminNavButton";
@@ -52,8 +53,16 @@ export default function Navigation({ isAdmin = false }: NavigationProps) {
           <Link
             href="/"
             className="font-serif text-base font-semibold text-on-surface tracking-tight flex items-center gap-2"
+            aria-label="Chor Ratchawat Muay Thai - Home"
           >
-            <span className="inline-block w-1.5 h-1.5 bg-primary rotate-45" />
+            <Image
+              src="/images/logo.png"
+              alt=""
+              width={32}
+              height={32}
+              className="h-8 w-8 object-contain"
+              priority
+            />
             RATCHAWAT
           </Link>
 

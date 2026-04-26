@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 const linkClasses = "text-xs text-[#777] hover:text-primary transition-colors";
@@ -10,8 +11,14 @@ export default function Footer() {
 
       {/* Brand row */}
       <div className="max-w-7xl mx-auto px-6 sm:px-10 md:px-16 lg:px-20 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-surface-lowest">
-        <Link href="/" className="font-serif text-base font-semibold text-on-surface tracking-tight flex items-center gap-2">
-          <span className="inline-block w-1.5 h-1.5 bg-primary rotate-45" />
+        <Link href="/" className="font-serif text-base font-semibold text-on-surface tracking-tight flex items-center gap-2" aria-label="Chor Ratchawat Muay Thai - Home">
+          <Image
+            src="/images/logo.png"
+            alt=""
+            width={32}
+            height={32}
+            className="h-8 w-8 object-contain"
+          />
           RATCHAWAT MUAY THAI
         </Link>
         <div className="flex gap-5">

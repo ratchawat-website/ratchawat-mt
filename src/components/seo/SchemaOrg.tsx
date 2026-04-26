@@ -13,7 +13,7 @@ export function organizationSchema(): Record<string, unknown> {
     description:
       "Family-run Muay Thai training camp in Koh Samui, Thailand. Two locations in Bo Phut and Plai Laem. Rated 5.0 out of 5 on Google with 396 verified reviews. Open Monday to Saturday since 2020.",
     url: SITE_URL,
-    logo: `${SITE_URL}/favicon.ico`,
+    logo: `${SITE_URL}/images/logo.png`,
     sameAs: [
       "https://www.facebook.com/Chor.RatchawatMuayThaiGym",
       "https://www.instagram.com/chor.ratchawatmuaythai",
@@ -103,7 +103,7 @@ export function articleSchema(options: {
       name: SITE_NAME,
       logo: {
         "@type": "ImageObject",
-        url: `${SITE_URL}/favicon.ico`,
+        url: `${SITE_URL}/images/logo.png`,
       },
     },
     inLanguage: SITE_LANG,
