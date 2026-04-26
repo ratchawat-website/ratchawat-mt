@@ -12,7 +12,6 @@ export interface Trainer {
   imageAlt: string;
   pos?: string;
   featured?: boolean;
-  homepageFeatured?: boolean;
   yearsExperience?: number;
   totalFights?: number;
   fightingStyle?: string;
@@ -35,7 +34,6 @@ export const trainers: Trainer[] = [
     image: "/images/trainers/trainer-ratchawat.jpeg",
     imageAlt: "Kru Ratchawat, founder and head coach of Ratchawat Muay Thai",
     featured: true,
-    homepageFeatured: true,
   },
   {
     id: "kuan",
@@ -49,7 +47,6 @@ export const trainers: Trainer[] = [
     certifications: ["C-license Muay Thai trainer"],
     image: "/images/trainers/trainer-kuan.jpeg",
     imageAlt: "Kru Kuan, head trainer at Ratchawat Bo Phut",
-    homepageFeatured: true,
   },
   {
     id: "mam",
@@ -63,7 +60,6 @@ export const trainers: Trainer[] = [
     yearsExperience: 20,
     image: "/images/trainers/trainer-mam.jpeg",
     imageAlt: "Kru Mam, trainer at Ratchawat Plai Laem",
-    homepageFeatured: true,
   },
   {
     id: "kit",
@@ -155,7 +151,6 @@ export const trainers: Trainer[] = [
 
 export const featuredTrainer = trainers.find((t) => t.featured);
 export const teamMembers = trainers.filter((t) => !t.featured);
-export const homepageTrainers = trainers.filter((t) => t.homepageFeatured);
 
 export function trainerCampLabel(trainer: Trainer): string {
   if (trainer.camps.length >= 2) return "Both camps";

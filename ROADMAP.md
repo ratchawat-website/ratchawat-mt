@@ -273,7 +273,7 @@ First Name, Last Name, Country of Origin/Nationality, Phone (WhatsApp), Email, P
 ### Tasks
 
 - [x] **Done 2026-04-13/14** — see history below
-- [x] **Homepage Meet the Team (`TeamCircularGallery`)** — done 2026-04-26. 3 featured trainers per client request (Kru Ratchawat, Kru Kuan, Kru Mam) instead of all 10. New `homepageTrainers` export in `src/content/trainers.ts` filters by `homepageFeatured: true` flag. Photos: `/public/images/trainers/trainer-{ratchawat,kuan,mam}.jpeg`.
+- [x] **Homepage Meet the Team (`TeamCircularGallery`)** — done 2026-04-26. All 10 trainers shown in circular gallery with real photos from `/public/images/trainers/`.
 - [ ] **Plai Laem dedicated "Our Two Camps" homepage photo** (currently reuses `camp-view.png` — needs a distinct hero-style shot)
 - [ ] **Bo Phut — "The Gym" section**: 2 square placeholders remaining in `/camps/bo-phut`
 - [ ] **`/team` page**: full trainer portraits + any group shots
