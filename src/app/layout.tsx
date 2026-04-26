@@ -46,6 +46,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     images: ["/images/home/hero-trainers.webp"],
   },
+  manifest: "/site.webmanifest",
   robots: {
     index: true,
     follow: true,
