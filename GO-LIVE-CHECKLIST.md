@@ -228,15 +228,36 @@ Exact values will be provided by Vercel and Resend dashboards when you connect t
 
 ---
 
-## 7. Security hardening (Phase 5 items, verify before go-live)
+## 7. Security hardening (Phase 5/8 items, verify before go-live)
 
-These are tracked in the renumbered Phase 5 (Security & Quality), but verify each one before flipping the DNS.
+These are tracked in Phase 5 + Phase 8 of the roadmap. The P0 audit was closed 2026-04-27 (see PROJET-STATUS.md). Two items were intentionally deferred to this checklist:
+
+### 7.1 Stripe LIVE webhook endpoint (P0 follow-up)
+
+The webhook handler is hardened (signature, idempotency, race-safe cancellation) but **no permanent webhook endpoint exists in Stripe** — local testing relied on `stripe listen` CLI forwarding. Without a permanent endpoint, paid bookings will stay `pending` forever in production.
+
+- [ ] Create endpoint in Stripe LIVE mode pointing to the deployed URL:
+  ```
+  stripe webhook_endpoints create --live \
+    --url "https://ratchawatmuaythai.com/api/webhooks/stripe" \
+    --enabled-events checkout.session.completed,checkout.session.expired
+  ```
+- [ ] Copy the returned `whsec_...` into Vercel `STRIPE_WEBHOOK_SECRET` (production env)
+- [ ] Trigger a real test transaction post-deploy and verify the booking flips to `confirmed` + emails arrive
+
+### 7.2 Supabase Leaked Password Protection (P0 follow-up)
+
+Supabase advisor flagged `auth_leaked_password_protection` disabled.
+
+- [ ] Dashboard → Authentication → Policies → enable **Leaked Password Protection** (HaveIBeenPwned check, free, single toggle)
+
+### 7.3 Other items
 
 - [ ] **Rate limiting** on `/api/checkout` and `/api/webhooks/stripe` (Vercel Edge Middleware or Upstash Redis)
 - [ ] **CORS** config on API routes — only allow same-origin
-- [ ] **Zod validation** hardening — every API route has explicit Zod validation (currently only `/api/checkout`)
-- [ ] **Next.js audit fix**: GHSA-q4gf-8mx6-v5v3 (Next.js 16.0.0 DoS) — upgrade to `next@16.2.3` or later with `npm audit fix --force`
-- [ ] **`/nextjs-security-scan`** skill — run full scan and address all critical + high findings
+- [x] **Zod validation hardening** — done 2026-04-26: `BookingRequestSchema`, `AdminBookingSchema`, `ContactRequestSchema`, DTV schema all in place
+- [x] **Next.js audit fix** GHSA-q4gf-8mx6-v5v3 — done 2026-04-26 (bumped to 16.2.4)
+- [x] **`/nextjs-security-scan`** — done 2026-04-26 (1 HIGH resolved, 2 moderate accepted risk documented)
 - [ ] **Lighthouse targets**: Performance ≥ 90, Accessibility ≥ 95, Best Practices ≥ 90, SEO = 100
 
 ---

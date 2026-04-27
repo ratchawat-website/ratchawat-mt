@@ -10,6 +10,9 @@ import {
 import type { BookingEmailData } from "@/lib/email/types";
 import type { DtvApplicationEmailData } from "@/lib/email/templates/DTVApplicationReceived";
 
+// Stripe.webhooks.constructEvent uses Node crypto and is not Edge-safe.
+export const runtime = "nodejs";
+
 function getStripe(): Stripe {
   if (!process.env.STRIPE_SECRET_KEY) {
     throw new Error("STRIPE_SECRET_KEY is not set");
@@ -18,6 +21,15 @@ function getStripe(): Stripe {
 }
 
 export async function POST(request: Request) {
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+  if (!webhookSecret) {
+    console.error("STRIPE_WEBHOOK_SECRET is not set; rejecting webhook");
+    return NextResponse.json(
+      { error: "Webhook misconfigured" },
+      { status: 500 },
+    );
+  }
+
   const signature = request.headers.get("stripe-signature");
   if (!signature) {
     return NextResponse.json({ error: "Missing signature" }, { status: 400 });
@@ -28,17 +40,28 @@ export async function POST(request: Request) {
   const stripe = getStripe();
   let event: Stripe.Event;
   try {
-    event = stripe.webhooks.constructEvent(
-      body,
-      signature,
-      process.env.STRIPE_WEBHOOK_SECRET!,
-    );
+    event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
   } catch (err) {
     console.error("Webhook signature verification failed:", err);
     return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
   }
 
   const supabase = createAdminClient();
+
+  // Idempotency: insert event.id into processed_stripe_events.
+  // Unique violation (23505) means we have already handled this event;
+  // return 200 so Stripe stops retrying.
+  const { error: dedupErr } = await supabase
+    .from("processed_stripe_events")
+    .insert({ event_id: event.id, event_type: event.type });
+
+  if (dedupErr) {
+    if (dedupErr.code === "23505") {
+      return NextResponse.json({ received: true, duplicate: true });
+    }
+    console.error("Dedup insert failed:", dedupErr);
+    return NextResponse.json({ error: "Dedup failed" }, { status: 500 });
+  }
 
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session;
@@ -182,16 +205,20 @@ export async function POST(request: Request) {
     const session = event.data.object as Stripe.Checkout.Session;
     const meta = session.metadata ?? {};
 
+    // Race-safe: only cancel if still pending. Prevents an out-of-order
+    // `expired` event from undoing a successful `completed`.
     if (meta.type === "dtv" && meta.dtv_application_id) {
       await supabase
         .from("dtv_applications")
         .update({ status: "cancelled" })
-        .eq("id", meta.dtv_application_id);
+        .eq("id", meta.dtv_application_id)
+        .eq("status", "pending");
     } else if (meta.booking_id) {
       await supabase
         .from("bookings")
         .update({ status: "cancelled" })
-        .eq("id", meta.booking_id);
+        .eq("id", meta.booking_id)
+        .eq("status", "pending");
     }
   }
 

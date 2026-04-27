@@ -48,11 +48,12 @@ create index if not exists dtv_applications_status_idx on dtv_applications (stat
 -- which bypasses RLS. No anon insert policy is granted, to prevent direct
 -- REST submissions that would skip Zod validation.
 -- Mirrors the `bookings` RLS model (see 20260411000000_init.sql).
+-- Read/update restricted to admins only via is_admin() (see 20260413000000_admin_profiles.sql).
 
 alter table dtv_applications enable row level security;
 
 create policy "admin_read_dtv_applications" on dtv_applications
-  for select to authenticated using (true);
+  for select to authenticated using (is_admin());
 
 create policy "admin_update_dtv_applications" on dtv_applications
-  for update to authenticated using (true);
+  for update to authenticated using (is_admin()) with check (is_admin());

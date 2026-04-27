@@ -51,15 +51,20 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const isAdminRoute = request.nextUrl.pathname.startsWith("/admin");
-  const isAdminLogin = request.nextUrl.pathname === "/admin/login";
+  const pathname = request.nextUrl.pathname;
+  const isAdminPage = pathname.startsWith("/admin");
+  const isAdminLogin = pathname === "/admin/login";
+  // /api/admin/signout is intentionally exempt: we want sign-out to succeed
+  // even when the session is already invalid.
+  const isAdminApi =
+    pathname.startsWith("/api/admin") && pathname !== "/api/admin/signout";
 
-  // Admin routes (except /admin/login) require an authenticated admin user
-  if (isAdminRoute && !isAdminLogin) {
+  // Admin pages (except /admin/login) require an authenticated admin user
+  if (isAdminPage && !isAdminLogin) {
     if (!user) {
       const url = request.nextUrl.clone();
       url.pathname = "/admin/login";
-      url.searchParams.set("redirect", request.nextUrl.pathname);
+      url.searchParams.set("redirect", pathname);
       return propagateAuthCookies(supabaseResponse, NextResponse.redirect(url));
     }
 
@@ -70,6 +75,24 @@ export async function updateSession(request: NextRequest) {
       url.pathname = "/admin/login";
       url.searchParams.set("error", "not_admin");
       return propagateAuthCookies(supabaseResponse, NextResponse.redirect(url));
+    }
+  }
+
+  // Admin API routes: same auth, but return JSON 401 instead of redirecting
+  // so future routes can rely on the gate without re-implementing the check.
+  if (isAdminApi) {
+    if (!user) {
+      return propagateAuthCookies(
+        supabaseResponse,
+        NextResponse.json({ error: "Unauthorized" }, { status: 401 }),
+      );
+    }
+    const { data: isAdmin } = await supabase.rpc("is_admin");
+    if (!isAdmin) {
+      return propagateAuthCookies(
+        supabaseResponse,
+        NextResponse.json({ error: "Unauthorized" }, { status: 401 }),
+      );
     }
   }
 
