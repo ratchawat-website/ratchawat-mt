@@ -87,14 +87,14 @@ export default function AdminDayDrawer({
   }
 
   async function toggleSlotBlock(slot: string) {
-    const existing = hasExactBlock("private-slot", slot);
+    const existing = hasExactBlock("private-slot-closure", slot);
     const key = `slot-${slot}`;
     setLoading(key);
     try {
       if (existing) {
         await removeBlock(existing.id);
       } else {
-        await createBlock(dateStr, "private-slot", slot, reason || null);
+        await createBlock(dateStr, "private-slot-closure", slot, reason || null);
       }
       onRefresh();
     } finally {
@@ -251,7 +251,7 @@ export default function AdminDayDrawer({
             </p>
             <div className="grid grid-cols-1 gap-2">
               {PRIVATE_SLOTS.map((slot) => {
-                const existing = hasExactBlock("private-slot", slot);
+                const existing = hasExactBlock("private-slot-closure", slot);
                 const key = `slot-${slot}`;
                 const isLoading = loading === key;
                 const boPhutCount = blocks.filter(

@@ -55,7 +55,7 @@ export default function AvailabilityCalendar({
     // - camp-stay / fighter are only blocked by full closures
     const blockTypes =
       type === "private"
-        ? ["full", "private", "private-slot"]
+        ? ["full", "private", "private-slot", "private-slot-closure"]
         : ["full"];
     const blocksPromise = supabase
       .from("availability_blocks")
@@ -98,10 +98,18 @@ export default function AvailabilityCalendar({
     // camps at capacity). For simple full-day blocks we just flag the
     // date.
     const dateSlotCampCount = new Map<string, Map<string, number>>();
+    // Hard closures (admin "block this slot for everyone"): one row is
+    // enough to disable the slot regardless of trainer capacity.
+    const dateHardClosedSlots = new Map<string, Set<string>>();
 
     for (const block of blocks) {
       if (block.type === "full" || block.type === "private" || !block.time_slot) {
         blockedDates.add(block.date);
+      } else if (block.type === "private-slot-closure") {
+        if (!dateHardClosedSlots.has(block.date)) {
+          dateHardClosedSlots.set(block.date, new Set());
+        }
+        dateHardClosedSlots.get(block.date)!.add(block.time_slot);
       } else if (block.type === "private-slot") {
         // Only count blocks relevant to the selected camp (or all if no
         // camp filter yet; in that case any camp counts).
@@ -115,12 +123,22 @@ export default function AvailabilityCalendar({
     }
 
     if (type === "private") {
-      // A day is fully blocked only when every slot has reached capacity.
-      for (const [date, slotMap] of dateSlotCampCount.entries()) {
-        const fullSlots = [...slotMap.values()].filter(
-          (n) => n >= PRIVATE_SLOT_CAPACITY,
-        ).length;
-        if (fullSlots >= PRIVATE_SLOTS.length) blockedDates.add(date);
+      // A day is fully blocked when every slot is either at capacity or
+      // hard-closed by admin.
+      const allDates = new Set<string>([
+        ...dateSlotCampCount.keys(),
+        ...dateHardClosedSlots.keys(),
+      ]);
+      for (const date of allDates) {
+        const slotMap = dateSlotCampCount.get(date) ?? new Map<string, number>();
+        const closedSet = dateHardClosedSlots.get(date) ?? new Set<string>();
+        const unavailableSlots = new Set<string>(closedSet);
+        for (const [slot, n] of slotMap.entries()) {
+          if (n >= PRIVATE_SLOT_CAPACITY) unavailableSlots.add(slot);
+        }
+        if (unavailableSlots.size >= PRIVATE_SLOTS.length) {
+          blockedDates.add(date);
+        }
       }
     }
 
@@ -167,14 +185,21 @@ export default function AvailabilityCalendar({
     // parallel. Full-day blocks fall through to the calendar-level grey
     // out above, not here.
     const slotCounts = new Map<string, number>();
+    const hardClosedSlots = new Set<string>();
     for (const b of blocks) {
       if (b.date !== dateStr || !b.time_slot) continue;
+      if (b.type === "private-slot-closure") {
+        hardClosedSlots.add(b.time_slot);
+        continue;
+      }
       if (b.type !== "private-slot") continue;
       if (camp && b.camp && b.camp !== camp) continue;
       slotCounts.set(b.time_slot, (slotCounts.get(b.time_slot) ?? 0) + 1);
     }
     const available = PRIVATE_SLOTS.filter(
-      (s) => (slotCounts.get(s) ?? 0) < PRIVATE_SLOT_CAPACITY,
+      (s) =>
+        !hardClosedSlots.has(s) &&
+        (slotCounts.get(s) ?? 0) < PRIVATE_SLOT_CAPACITY,
     );
     onAvailableSlotsChange(available);
   }, [selected, blocks, type, onAvailableSlotsChange, camp]);

@@ -64,6 +64,33 @@ export async function POST(request: Request) {
       }
 
       const supabaseCheck = createAdminClient();
+
+      // Hard closure: admin toggled the slot off for everyone, regardless
+      // of the per-camp trainer capacity. One row is enough to refuse.
+      const { count: closureCount, error: closureError } = await supabaseCheck
+        .from("availability_blocks")
+        .select("id", { count: "exact", head: true })
+        .eq("type", "private-slot-closure")
+        .eq("is_blocked", true)
+        .eq("date", data.start_date)
+        .eq("time_slot", data.time_slot);
+      if (closureError) {
+        console.error("Closure check failed:", closureError);
+        return NextResponse.json(
+          { error: "Could not verify slot availability. Please try again." },
+          { status: 500 },
+        );
+      }
+      if ((closureCount ?? 0) > 0) {
+        return NextResponse.json(
+          {
+            error:
+              "This slot is closed on the selected date. Please pick another time.",
+          },
+          { status: 409 },
+        );
+      }
+
       const { count, error: countError } = await supabaseCheck
         .from("availability_blocks")
         .select("id", { count: "exact", head: true })
