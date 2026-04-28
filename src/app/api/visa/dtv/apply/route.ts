@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { DtvApplicationSchema } from "@/lib/validation/dtv-application";
-import { getPriceById } from "@/content/pricing";
+import { getPriceById, getStripePriceId } from "@/content/pricing";
 
 function getStripe(): Stripe {
   if (!process.env.STRIPE_SECRET_KEY) {
@@ -24,7 +24,8 @@ export async function POST(request: Request) {
     const data = parsed.data;
 
     const pkg = getPriceById(data.price_id);
-    if (!pkg || pkg.category !== "dtv" || !pkg.stripePriceId || pkg.price === null) {
+    const stripePriceId = pkg ? getStripePriceId(pkg) : undefined;
+    if (!pkg || pkg.category !== "dtv" || !stripePriceId || pkg.price === null) {
       return NextResponse.json(
         { error: "Invalid DTV package" },
         { status: 400 },
@@ -73,7 +74,7 @@ export async function POST(request: Request) {
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       payment_method_types: ["card"],
-      line_items: [{ price: pkg.stripePriceId, quantity: 1 }],
+      line_items: [{ price: stripePriceId, quantity: 1 }],
       metadata: {
         dtv_application_id: application.id,
         type: "dtv",

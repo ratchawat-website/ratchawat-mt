@@ -17,11 +17,15 @@ function getResend(): Resend {
   return new Resend(process.env.RESEND_API_KEY);
 }
 
-const FROM_DEV = "Ratchawat Muay Thai <onboarding@resend.dev>";
-const FROM_PROD = "Ratchawat Muay Thai <bookings@ratchawatmuaythai.com>";
+const FROM_FALLBACK_DEV = "Ratchawat Muay Thai <onboarding@resend.dev>";
+const FROM_FALLBACK_PROD = "Ratchawat Muay Thai <bookings@ratchawatmuaythai.com>";
 
 function getFromAddress(): string {
-  return process.env.NODE_ENV === "production" ? FROM_PROD : FROM_DEV;
+  if (process.env.RESEND_BOOKINGS_FROM) return process.env.RESEND_BOOKINGS_FROM;
+  if (process.env.RESEND_FROM_EMAIL) return process.env.RESEND_FROM_EMAIL;
+  return process.env.NODE_ENV === "production"
+    ? FROM_FALLBACK_PROD
+    : FROM_FALLBACK_DEV;
 }
 
 export async function sendBookingConfirmationEmail(booking: BookingEmailData) {

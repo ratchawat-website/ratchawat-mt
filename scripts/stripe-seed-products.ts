@@ -4,16 +4,18 @@
  * Creates Stripe Products + Prices for every PriceItem in pricing.ts
  * (excluding bodyweight items, which are in-person only).
  *
- * Writes generated stripeProductId and stripePriceId back into
- * src/content/pricing.ts via in-place regex replacement.
+ * Detects the Stripe mode from STRIPE_SECRET_KEY prefix (sk_test_ vs sk_live_)
+ * and writes IDs to the matching field set:
+ *   - sk_test_  -> stripeProductIdTest / stripePriceIdTest
+ *   - sk_live_  -> stripeProductIdLive / stripePriceIdLive
  *
- * Idempotent: re-running skips entries that already have stripeProductId.
+ * Idempotent: skips entries that already have IDs for the current mode.
  *
  * Usage:
  *   npm run stripe:seed
  *
  * Required env (in .env.local):
- *   STRIPE_SECRET_KEY (test mode key: sk_test_...)
+ *   STRIPE_SECRET_KEY (sk_test_... for test, sk_live_... for live)
  */
 
 import Stripe from "stripe";
@@ -25,31 +27,40 @@ config({ path: ".env.local" });
 
 import { PRICES } from "../src/content/pricing";
 
-if (!process.env.STRIPE_SECRET_KEY) {
+const secretKey = process.env.STRIPE_SECRET_KEY;
+if (!secretKey) {
   console.error(
     "ERROR: STRIPE_SECRET_KEY is not set. Add it to .env.local before running.",
   );
   process.exit(1);
 }
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+const isLive = secretKey.startsWith("sk_live_");
+const mode = isLive ? "LIVE" : "TEST";
+const productField = isLive ? "stripeProductIdLive" : "stripeProductIdTest";
+const priceField = isLive ? "stripePriceIdLive" : "stripePriceIdTest";
+
+const stripe = new Stripe(secretKey);
 
 const PRICING_FILE = path.resolve(process.cwd(), "src/content/pricing.ts");
 
 async function main() {
+  console.log(`Stripe mode detected: ${mode}`);
+  console.log(`Writing to fields: ${productField} / ${priceField}\n`);
+
   const toSeed = PRICES.filter(
     (p) =>
       p.price !== null &&
-      !p.stripeProductId &&
+      !p[productField as keyof typeof p] &&
       !p.id.startsWith("bodyweight-"),
   );
 
   if (toSeed.length === 0) {
-    console.log("Nothing to seed. All products already have Stripe IDs.");
+    console.log(`Nothing to seed. All products already have ${mode} Stripe IDs.`);
     return;
   }
 
-  console.log(`Seeding ${toSeed.length} Stripe products...`);
+  console.log(`Seeding ${toSeed.length} Stripe products in ${mode} mode...`);
 
   let fileContent = fs.readFileSync(PRICING_FILE, "utf8");
 
@@ -80,20 +91,22 @@ async function main() {
       currency: "thb",
     });
 
-    // Inject stripeProductId + stripePriceId right after the id: line
-    // The PriceItem object starts at indent 2 inside the PRICES array.
+    // Inject the new fields right after the id: line, preserving any existing
+    // sibling fields (e.g. test IDs when seeding live).
     const idPattern = new RegExp(
       `(\\s{4}id:\\s*"${item.id.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&")}",)`,
     );
 
     fileContent = fileContent.replace(
       idPattern,
-      `$1\n    stripeProductId: "${product.id}",\n    stripePriceId: "${price.id}",`,
+      `$1\n    ${productField}: "${product.id}",\n    ${priceField}: "${price.id}",`,
     );
   }
 
   fs.writeFileSync(PRICING_FILE, fileContent, "utf8");
-  console.log("Done. Updated src/content/pricing.ts with Stripe IDs.");
+  console.log(
+    `\nDone. Updated src/content/pricing.ts with ${mode} Stripe IDs.`,
+  );
 }
 
 main().catch((err) => {

@@ -31,16 +31,42 @@ export interface PriceItem {
   notes?: string;
   popular?: boolean;
   bookingType: BookingType;
-  stripeProductId?: string;
-  stripePriceId?: string;
+  stripeProductIdTest?: string;
+  stripePriceIdTest?: string;
+  stripeProductIdLive?: string;
+  stripePriceIdLive?: string;
+}
+
+/**
+ * Returns true if the current Stripe environment is LIVE mode.
+ * Determined by the STRIPE_SECRET_KEY prefix.
+ */
+export function isStripeLiveMode(): boolean {
+  return process.env.STRIPE_SECRET_KEY?.startsWith("sk_live_") ?? false;
+}
+
+/**
+ * Returns the Stripe price ID for the current mode (test or live).
+ */
+export function getStripePriceId(item: PriceItem): string | undefined {
+  return isStripeLiveMode() ? item.stripePriceIdLive : item.stripePriceIdTest;
+}
+
+/**
+ * Returns the Stripe product ID for the current mode (test or live).
+ */
+export function getStripeProductId(item: PriceItem): string | undefined {
+  return isStripeLiveMode() ? item.stripeProductIdLive : item.stripeProductIdTest;
 }
 
 export const PRICES: PriceItem[] = [
   // --- GROUP TRAINING (ADULT) ---
   {
     id: "drop-in-adult",
-    stripeProductId: "prod_UJh4fbwG6ygUrF",
-    stripePriceId: "price_1TL3gARu1Uc6NzUvSgLsgmaY",
+    stripeProductIdLive: "prod_UQ39bJ9bD4ZL9L",
+    stripePriceIdLive: "price_1TRD39Ru1Uc6NzUvtZVJAY26",
+    stripeProductIdTest: "prod_UJh4fbwG6ygUrF",
+    stripePriceIdTest: "price_1TL3gARu1Uc6NzUvSgLsgmaY",
     name: "Drop-in Session (Adult)",
     nameShort: "Drop-in",
     category: "group",
@@ -57,8 +83,10 @@ export const PRICES: PriceItem[] = [
   },
   {
     id: "weekly-1x",
-    stripeProductId: "prod_UJh4CP5HQSTSqk",
-    stripePriceId: "price_1TL3gBRu1Uc6NzUv83Hbyk6Y",
+    stripeProductIdLive: "prod_UQ3932FZmwqVb1",
+    stripePriceIdLive: "price_1TRD3BRu1Uc6NzUvkhc3AX8l",
+    stripeProductIdTest: "prod_UJh4CP5HQSTSqk",
+    stripePriceIdTest: "price_1TL3gBRu1Uc6NzUv83Hbyk6Y",
     name: "1 Week — 1 Session/Day",
     nameShort: "1 Week (1x/day)",
     category: "group",
@@ -76,8 +104,10 @@ export const PRICES: PriceItem[] = [
   },
   {
     id: "weekly-2x",
-    stripeProductId: "prod_UJh4QBRiRLrJt7",
-    stripePriceId: "price_1TL3gBRu1Uc6NzUv8rRlkrBC",
+    stripeProductIdLive: "prod_UQ39ySbLkrhztS",
+    stripePriceIdLive: "price_1TRD3CRu1Uc6NzUvfZXduyXe",
+    stripeProductIdTest: "prod_UJh4QBRiRLrJt7",
+    stripePriceIdTest: "price_1TL3gBRu1Uc6NzUv8rRlkrBC",
     name: "1 Week — 2 Sessions/Day",
     nameShort: "1 Week (2x/day)",
     category: "group",
@@ -95,8 +125,10 @@ export const PRICES: PriceItem[] = [
   },
   {
     id: "biweekly-1x",
-    stripeProductId: "prod_UJh4VvVcXVZEc5",
-    stripePriceId: "price_1TL3gCRu1Uc6NzUvijdQUZ76",
+    stripeProductIdLive: "prod_UQ39AOlPWOXOzh",
+    stripePriceIdLive: "price_1TRD3DRu1Uc6NzUvaBIWbQi0",
+    stripeProductIdTest: "prod_UJh4VvVcXVZEc5",
+    stripePriceIdTest: "price_1TL3gCRu1Uc6NzUvijdQUZ76",
     name: "2 Weeks — 1 Session/Day",
     nameShort: "2 Weeks (1x/day)",
     category: "group",
@@ -114,8 +146,10 @@ export const PRICES: PriceItem[] = [
   },
   {
     id: "biweekly-2x",
-    stripeProductId: "prod_UJh4USRFja6dBB",
-    stripePriceId: "price_1TL3gDRu1Uc6NzUv1JfSXzm5",
+    stripeProductIdLive: "prod_UQ39Xw3BjBY3oB",
+    stripePriceIdLive: "price_1TRD3DRu1Uc6NzUvTuN1iBwR",
+    stripeProductIdTest: "prod_UJh4USRFja6dBB",
+    stripePriceIdTest: "price_1TL3gDRu1Uc6NzUv1JfSXzm5",
     name: "2 Weeks — 2 Sessions/Day",
     nameShort: "2 Weeks (2x/day)",
     category: "group",
@@ -133,8 +167,10 @@ export const PRICES: PriceItem[] = [
   },
   {
     id: "monthly-1x",
-    stripeProductId: "prod_UJh4tcv5VCdNFj",
-    stripePriceId: "price_1TL3gERu1Uc6NzUvwlwr6UwK",
+    stripeProductIdLive: "prod_UQ39NLAv6ccFbD",
+    stripePriceIdLive: "price_1TRD3ERu1Uc6NzUvXbklitRS",
+    stripeProductIdTest: "prod_UJh4tcv5VCdNFj",
+    stripePriceIdTest: "price_1TL3gERu1Uc6NzUvwlwr6UwK",
     name: "Monthly — 1 Session/Day",
     nameShort: "Monthly (1x/day)",
     category: "group",
@@ -153,8 +189,10 @@ export const PRICES: PriceItem[] = [
   },
   {
     id: "monthly-2x",
-    stripeProductId: "prod_UJh4L3MEKITK8L",
-    stripePriceId: "price_1TL3gFRu1Uc6NzUvLOHIOWeb",
+    stripeProductIdLive: "prod_UQ39tImtug8HdL",
+    stripePriceIdLive: "price_1TRD3FRu1Uc6NzUv08HWo6VO",
+    stripeProductIdTest: "prod_UJh4L3MEKITK8L",
+    stripePriceIdTest: "price_1TL3gFRu1Uc6NzUvLOHIOWeb",
     name: "Monthly — 2 Sessions/Day",
     nameShort: "Monthly (2x/day)",
     category: "group",
@@ -174,8 +212,10 @@ export const PRICES: PriceItem[] = [
   // --- GROUP TRAINING (KIDS 8-13) ---
   {
     id: "drop-in-kids",
-    stripeProductId: "prod_UJh4gSFTIJxxtY",
-    stripePriceId: "price_1TL3gHRu1Uc6NzUvM8naG1Zn",
+    stripeProductIdLive: "prod_UQ392aGxd98N1k",
+    stripePriceIdLive: "price_1TRD3GRu1Uc6NzUv3J4Xt7HQ",
+    stripeProductIdTest: "prod_UJh4gSFTIJxxtY",
+    stripePriceIdTest: "price_1TL3gHRu1Uc6NzUvM8naG1Zn",
     name: "Drop-in Session (Kids 8-13)",
     nameShort: "Kids Drop-in",
     category: "kids",
@@ -192,8 +232,10 @@ export const PRICES: PriceItem[] = [
   },
   {
     id: "monthly-kids",
-    stripeProductId: "prod_UJh4xE2AR2ebdg",
-    stripePriceId: "price_1TL3gHRu1Uc6NzUvzC4sqdAr",
+    stripeProductIdLive: "prod_UQ39vxYtnlI0bg",
+    stripePriceIdLive: "price_1TRD3HRu1Uc6NzUvaOCpBpXf",
+    stripeProductIdTest: "prod_UJh4xE2AR2ebdg",
+    stripePriceIdTest: "price_1TL3gHRu1Uc6NzUvzC4sqdAr",
     name: "Monthly Unlimited (Kids 8-13)",
     nameShort: "Kids Monthly",
     category: "kids",
@@ -213,8 +255,10 @@ export const PRICES: PriceItem[] = [
   // --- RESIDENT (KOH SAMUI) ---
   {
     id: "resident-monthly",
-    stripeProductId: "prod_ULq6vblPmCin40",
-    stripePriceId: "price_1TN8QNRu1Uc6NzUv6dv3JV9X",
+    stripeProductIdLive: "prod_UQ39bsWnHDziaK",
+    stripePriceIdLive: "price_1TRD3IRu1Uc6NzUvoq60oYwC",
+    stripeProductIdTest: "prod_ULq6vblPmCin40",
+    stripePriceIdTest: "price_1TN8QNRu1Uc6NzUv6dv3JV9X",
     name: "Resident Monthly (1x/day)",
     nameShort: "Resident Monthly",
     category: "resident",
@@ -236,8 +280,10 @@ export const PRICES: PriceItem[] = [
   // --- PRIVATE LESSONS (ADULT) ---
   {
     id: "private-adult-solo",
-    stripeProductId: "prod_UJh4kc75JQna2q",
-    stripePriceId: "price_1TL3gKRu1Uc6NzUvwM0juIF7",
+    stripeProductIdLive: "prod_UQ39owOxBWuLAA",
+    stripePriceIdLive: "price_1TRD3JRu1Uc6NzUv2pbpGHgY",
+    stripeProductIdTest: "prod_UJh4kc75JQna2q",
+    stripePriceIdTest: "price_1TL3gKRu1Uc6NzUvwM0juIF7",
     name: "Private Lesson 1-on-1 (Adult)",
     nameShort: "Private 1-on-1",
     category: "private-adult",
@@ -254,8 +300,10 @@ export const PRICES: PriceItem[] = [
   },
   {
     id: "private-adult-group",
-    stripeProductId: "prod_UJh47v38QjpAfA",
-    stripePriceId: "price_1TL3gLRu1Uc6NzUvLoCZSVze",
+    stripeProductIdLive: "prod_UQ39nAneq8uwpM",
+    stripePriceIdLive: "price_1TRD3KRu1Uc6NzUvE8ttkuuK",
+    stripeProductIdTest: "prod_UJh47v38QjpAfA",
+    stripePriceIdTest: "price_1TL3gLRu1Uc6NzUvLoCZSVze",
     name: "Private Group 2-3 (Adult)",
     nameShort: "Private Group",
     category: "private-adult",
@@ -275,8 +323,10 @@ export const PRICES: PriceItem[] = [
   // --- PRIVATE LESSONS (KIDS) ---
   {
     id: "private-kids-solo",
-    stripeProductId: "prod_UJh4BkRQsTY603",
-    stripePriceId: "price_1TL3gMRu1Uc6NzUvFopE0wpO",
+    stripeProductIdLive: "prod_UQ395g1pkRYDgX",
+    stripePriceIdLive: "price_1TRD3LRu1Uc6NzUvgDqsyHae",
+    stripeProductIdTest: "prod_UJh4BkRQsTY603",
+    stripePriceIdTest: "price_1TL3gMRu1Uc6NzUvFopE0wpO",
     name: "Private Lesson 1-on-1 (Kids)",
     nameShort: "Private Kids 1-on-1",
     category: "private-kids",
@@ -293,8 +343,10 @@ export const PRICES: PriceItem[] = [
   },
   {
     id: "private-kids-group",
-    stripeProductId: "prod_UJh4A9p61wAlWG",
-    stripePriceId: "price_1TL3gNRu1Uc6NzUv0rpMvyh7",
+    stripeProductIdLive: "prod_UQ39i83UkG3lrN",
+    stripePriceIdLive: "price_1TRD3MRu1Uc6NzUvVGhrPMgV",
+    stripeProductIdTest: "prod_UJh4A9p61wAlWG",
+    stripePriceIdTest: "price_1TL3gNRu1Uc6NzUv0rpMvyh7",
     name: "Private Group 2-3 (Kids)",
     nameShort: "Private Kids Group",
     category: "private-kids",
@@ -346,8 +398,10 @@ export const PRICES: PriceItem[] = [
   // --- FIGHTER PROGRAM ---
   {
     id: "fighter-monthly",
-    stripeProductId: "prod_UJh4O6smKPIYsg",
-    stripePriceId: "price_1TL3gNRu1Uc6NzUvzlmTzvWd",
+    stripeProductIdLive: "prod_UQ39xbLUk5bqGh",
+    stripePriceIdLive: "price_1TRD3MRu1Uc6NzUv5pJdXXij",
+    stripeProductIdTest: "prod_UJh4O6smKPIYsg",
+    stripePriceIdTest: "price_1TL3gNRu1Uc6NzUvzlmTzvWd",
     name: "Fighter Program (Monthly)",
     nameShort: "Fighter Program",
     category: "fighter",
@@ -369,8 +423,10 @@ export const PRICES: PriceItem[] = [
   // --- ACCOMMODATION + TRAINING (PLAI LAEM ONLY) ---
   {
     id: "camp-stay-1week",
-    stripeProductId: "prod_UJh4o6oaXIjRTW",
-    stripePriceId: "price_1TL3gORu1Uc6NzUvnurFcy0E",
+    stripeProductIdLive: "prod_UQ39fpssgNHVci",
+    stripePriceIdLive: "price_1TRD3NRu1Uc6NzUvH02ZbT4c",
+    stripeProductIdTest: "prod_UJh4o6oaXIjRTW",
+    stripePriceIdTest: "price_1TL3gORu1Uc6NzUvnurFcy0E",
     name: "Camp Stay — 1 Week (Room)",
     nameShort: "Camp Stay 1 Week (Room)",
     category: "camp-stay",
@@ -389,8 +445,10 @@ export const PRICES: PriceItem[] = [
   },
   {
     id: "camp-stay-2weeks",
-    stripeProductId: "prod_UJh45hlO9IayCF",
-    stripePriceId: "price_1TL3gPRu1Uc6NzUvg1pqGorN",
+    stripeProductIdLive: "prod_UQ39O7NGK8TrbV",
+    stripePriceIdLive: "price_1TRD3ORu1Uc6NzUv1f9AVnuG",
+    stripeProductIdTest: "prod_UJh45hlO9IayCF",
+    stripePriceIdTest: "price_1TL3gPRu1Uc6NzUvg1pqGorN",
     name: "Camp Stay — 2 Weeks (Room)",
     nameShort: "Camp Stay 2 Weeks (Room)",
     category: "camp-stay",
@@ -410,8 +468,10 @@ export const PRICES: PriceItem[] = [
   },
   {
     id: "camp-stay-1month",
-    stripeProductId: "prod_UJh4aT5o6LteUz",
-    stripePriceId: "price_1TL3gQRu1Uc6NzUvxoKyvZpw",
+    stripeProductIdLive: "prod_UQ39hLmxRvqhGU",
+    stripePriceIdLive: "price_1TRD3PRu1Uc6NzUv4vIa8LWR",
+    stripeProductIdTest: "prod_UJh4aT5o6LteUz",
+    stripePriceIdTest: "price_1TL3gQRu1Uc6NzUvxoKyvZpw",
     name: "Camp Stay - 1 Month (Room)",
     nameShort: "Camp Stay 1 Month (Room)",
     category: "camp-stay",
@@ -429,8 +489,10 @@ export const PRICES: PriceItem[] = [
   },
   {
     id: "camp-stay-bungalow-monthly",
-    stripeProductId: "prod_UJh4vu405OIsux",
-    stripePriceId: "price_1TL3gRRu1Uc6NzUvjfriPKij",
+    stripeProductIdLive: "prod_UQ39V05toGzoLb",
+    stripePriceIdLive: "price_1TRD3QRu1Uc6NzUvYD10StqY",
+    stripeProductIdTest: "prod_UJh4vu405OIsux",
+    stripePriceIdTest: "price_1TL3gRRu1Uc6NzUvjfriPKij",
     name: "Camp Stay - 1 Month (Bungalow)",
     nameShort: "Camp Stay 1 Month (Bungalow)",
     category: "camp-stay",
@@ -450,8 +512,10 @@ export const PRICES: PriceItem[] = [
   // --- FIGHTER PROGRAM + ACCOMMODATION ---
   {
     id: "fighter-stay-room-monthly",
-    stripeProductId: "prod_UJh4sXBzENDjwN",
-    stripePriceId: "price_1TL3gSRu1Uc6NzUvgqxHaCps",
+    stripeProductIdLive: "prod_UQ39cv8wj2lvDw",
+    stripePriceIdLive: "price_1TRD3RRu1Uc6NzUvZpzbuiLT",
+    stripeProductIdTest: "prod_UJh4sXBzENDjwN",
+    stripePriceIdTest: "price_1TL3gSRu1Uc6NzUvgqxHaCps",
     name: "Fighter Program + Room (Monthly)",
     nameShort: "Fighter + Room",
     category: "camp-stay",
@@ -469,8 +533,10 @@ export const PRICES: PriceItem[] = [
   },
   {
     id: "fighter-stay-bungalow-monthly",
-    stripeProductId: "prod_UJh4Z54nNAmlWn",
-    stripePriceId: "price_1TL3gTRu1Uc6NzUvatELfWUz",
+    stripeProductIdLive: "prod_UQ39jtKaTvxkR0",
+    stripePriceIdLive: "price_1TRD3SRu1Uc6NzUvwBtntXGH",
+    stripeProductIdTest: "prod_UJh4Z54nNAmlWn",
+    stripePriceIdTest: "price_1TL3gTRu1Uc6NzUvatELfWUz",
     name: "Fighter Program + Bungalow (Monthly)",
     nameShort: "Fighter + Bungalow",
     category: "camp-stay",
@@ -490,8 +556,10 @@ export const PRICES: PriceItem[] = [
   // --- DTV (DESTINATION THAILAND VISA) ---
   {
     id: "dtv-6m-2x",
-    stripeProductId: "prod_ULq6zbKfLZPmDu",
-    stripePriceId: "price_1TN8QPRu1Uc6NzUvW1lu8xqG",
+    stripeProductIdLive: "prod_UQ39OSrZnNfDu1",
+    stripePriceIdLive: "price_1TRD3TRu1Uc6NzUvlozpAtXk",
+    stripeProductIdTest: "prod_ULq6zbKfLZPmDu",
+    stripePriceIdTest: "price_1TN8QPRu1Uc6NzUvW1lu8xqG",
     name: "DTV 6-Month Training — 2 sessions/week",
     nameShort: "DTV 2x/week",
     category: "dtv",
@@ -511,8 +579,10 @@ export const PRICES: PriceItem[] = [
   },
   {
     id: "dtv-6m-4x",
-    stripeProductId: "prod_ULq62BJNOUYXM4",
-    stripePriceId: "price_1TN8QSRu1Uc6NzUvoure00Gl",
+    stripeProductIdLive: "prod_UQ39E1w8mlcEOh",
+    stripePriceIdLive: "price_1TRD3TRu1Uc6NzUv8WDIz5L1",
+    stripeProductIdTest: "prod_ULq62BJNOUYXM4",
+    stripePriceIdTest: "price_1TN8QSRu1Uc6NzUvoure00Gl",
     name: "DTV 6-Month Training — 4 sessions/week",
     nameShort: "DTV 4x/week",
     category: "dtv",
@@ -533,8 +603,10 @@ export const PRICES: PriceItem[] = [
   },
   {
     id: "dtv-6m-unlimited",
-    stripeProductId: "prod_ULq6MBRnzz8Fe7",
-    stripePriceId: "price_1TN8QURu1Uc6NzUvLn9Wj0qr",
+    stripeProductIdLive: "prod_UQ39BLXafzsVyT",
+    stripePriceIdLive: "price_1TRD3URu1Uc6NzUvaPrTe8nb",
+    stripeProductIdTest: "prod_ULq6MBRnzz8Fe7",
+    stripePriceIdTest: "price_1TN8QURu1Uc6NzUvLn9Wj0qr",
     name: "DTV 6-Month Training — Unlimited",
     nameShort: "DTV Unlimited",
     category: "dtv",

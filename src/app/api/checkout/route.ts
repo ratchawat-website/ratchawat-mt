@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { BookingRequestSchema } from "@/lib/validation/booking";
-import { getPriceById } from "@/content/pricing";
+import { getPriceById, getStripePriceId } from "@/content/pricing";
 import { getInventoryKey } from "@/lib/admin/inventory";
 import { checkRangeAvailability } from "@/lib/admin/availability";
 import {
@@ -35,9 +35,10 @@ export async function POST(request: Request) {
     if (!pkg) {
       return NextResponse.json({ error: "Unknown price_id" }, { status: 400 });
     }
-    if (!pkg.stripePriceId) {
+    const stripePriceId = getStripePriceId(pkg);
+    if (!stripePriceId) {
       return NextResponse.json(
-        { error: "Stripe price not configured. Run npm run stripe:seed." },
+        { error: "Stripe price not configured for current mode. Run npm run stripe:seed." },
         { status: 500 },
       );
     }
@@ -173,7 +174,7 @@ export async function POST(request: Request) {
       payment_method_types: ["card"],
       line_items: [
         {
-          price: pkg.stripePriceId,
+          price: stripePriceId,
           quantity: data.num_participants,
         },
       ],

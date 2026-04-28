@@ -3,8 +3,8 @@
 > **Source of truth for what to build.** Read this at the start of every session alongside PROJET-STATUS.md.
 > Update task statuses as work progresses. Never start work without checking the current phase.
 
-**Last updated:** 2026-04-17
-**Current phase:** Phase 5 — Pages & Content Completion
+**Last updated:** 2026-04-28
+**Current phase:** Phase 9 — Go-live (in progress)
 
 > **Phase ordering (post-Phase 4 restructure, 2026-04-15):** Before go-live we split the generic "Security & Quality" bucket into 4 sequential phases (5 → 8) so work happens in the right order. Go-live (Phase 9) is the FINAL phase, unblocked only when all content, media, SEO, and security/perf/a11y work is done. Do not skip ahead.
 
@@ -358,33 +358,90 @@ All AUDIT-SEO.md requirements met for every route. `llms.txt` reflects current s
 
 ## Phase 9 — Go-live
 
-**Status:** PENDING
+**Status:** IN PROGRESS (started 2026-04-27)
 **Goal:** Site live at ratchawatmuaythai.com.
 **Blocker:** Phases 5, 6, 7, 8 all complete.
-**Reference:** **`GO-LIVE-CHECKLIST.md`** at the project root is the authoritative pre-launch checklist. Read it from start to finish before executing any task in this phase. It documents every env var switch, dashboard action, DNS record, and rollback step that was deferred from Phase 3. Do not skip items.
+**Reference:** **`GO-LIVE-CHECKLIST.md`** at the project root is the authoritative pre-launch checklist.
 
-### Tasks
+### Current blocker
 
-- [ ] Read `GO-LIVE-CHECKLIST.md` end to end
-- [ ] Analyze Bluehost domain situation (checklist §5.1)
-- [ ] Transfer domain or update nameservers
-- [ ] Resend domain verification (`ratchawatmuaythai.com`) — checklist §3
-- [ ] Stripe LIVE mode switch + create webhook endpoint + seed live products — checklist §1.2 + §2
-- [ ] Decide Supabase migration vs keep current — checklist §1.1 + §4
-- [ ] Clean Supabase test data (availability_blocks, smoke test bookings) — checklist §4.1
-- [ ] Deploy to Vercel (production)
-- [ ] Set all environment variables in Vercel — checklist §1
-- [ ] Switch `ADMIN_EMAIL` from RD's dev address to `chor.ratchawat@gmail.com` — checklist §1.4
-- [ ] Add 301 redirections in `next.config.js` — checklist §5.3
-- [ ] Verify Google Search Console — checklist §6.2
-- [ ] Configure Google Analytics (migrate G-SVH7KPWM2S or create new) — checklist §6.1
-- [ ] Update 2 Google Business Profile fiches with new URLs — checklist §6.3
-- [ ] Smoke test all booking flows on production — checklist §9
-- [ ] Monitor for 48h post-launch — checklist §10 rollback plan ready
+Domain registrar transfer in progress (Bluehost → Cloudflare). Status "Wait for your domain to be released" since 2026-04-28. Auto-approve max 5 days, completes by ~2026-05-03. DNS already controlled via Cloudflare nameservers, so DNS records can be configured before transfer fully completes.
+
+### A. Infrastructure — accounts & external services
+
+- [x] **Cloudflare account created** (2026-04-27) with `ratchawat.website@gmail.com` + 2FA active.
+- [x] **Vercel account created** (2026-04-27) with `ratchawat.website@gmail.com` + 2FA. Repo `ratchawat-mt` connected, first deploy live on `*.vercel.app` URL.
+- [x] **Resend account + domain verification** — `ratchawatmuaythai.com` verified on Resend (DKIM/SPF/DMARC records added in Cloudflare DNS, validated 2026-04-28). Sending from `contact@ratchawatmuaythai.com` works in prod (no longer sandbox).
+- [x] **Stripe LIVE mode** activated. LIVE secret + publishable keys generated.
+- [x] **Stripe LIVE webhook endpoint** created, pointing to Vercel URL. Signing secret captured.
+- [x] **Stripe LIVE products seeded** (2026-04-28) — 24 products created in LIVE Stripe account. Refactored `pricing.ts` schema to dual-mode: split `stripeProductId`/`stripePriceId` into parallel `*Test` + `*Live` fields. New helpers `isStripeLiveMode()`, `getStripePriceId(item)`, `getStripeProductId(item)` detect mode via `STRIPE_SECRET_KEY` prefix and return matching IDs. `/api/checkout` and `/api/visa/dtv/apply` updated to use the helper. Seed script auto-detects mode and writes to correct field. Local dev with TEST keys + Vercel prod with LIVE keys now coexist without manual swap.
+
+### B. Domain transfer (Bluehost → Cloudflare)
+
+- [x] Obtained EPP/auth code from previous developer (2026-04-27).
+- [x] Domain unlocked at Bluehost (2026-04-27).
+- [x] Cloudflare nameservers (`damiete` + `michelle`) replaced Bluehost nameservers (2026-04-27).
+- [x] Cloudflare registrar transfer initiated + paid ~$10.44 (2026-04-28).
+- [ ] **Wait for Bluehost release** (auto-approves within 5 days, by ~2026-05-03).
+- [ ] Final transfer confirmation email from Cloudflare.
+
+### C. DNS records (Cloudflare → Vercel)
+
+- [ ] Add `A` record `@` → `76.76.21.21` (Vercel IP), proxy **DNS only** (grey cloud).
+- [ ] Add `CNAME` record `www` → `cname.vercel-dns.com`, proxy **DNS only**.
+- [ ] In Vercel project settings, add `ratchawatmuaythai.com` + `www.ratchawatmuaythai.com` as production domains.
+- [ ] Wait for SSL certificate issuance (Let's Encrypt via Vercel, 5-30 min).
+- [ ] Verify `https://ratchawatmuaythai.com` serves the site.
+
+### D. Vercel environment variables (production)
+
+- [x] `NEXT_PUBLIC_SITE_URL=https://ratchawatmuaythai.com`
+- [x] `NEXT_PUBLIC_SUPABASE_URL` + `NEXT_PUBLIC_SUPABASE_ANON_KEY` + `SUPABASE_SERVICE_ROLE_KEY`
+- [x] `STRIPE_SECRET_KEY` (LIVE), `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` (LIVE), `STRIPE_WEBHOOK_SECRET` (LIVE)
+- [x] `RESEND_API_KEY`
+- [x] `RESEND_FROM_EMAIL=Ratchawat Muay Thai <contact@ratchawatmuaythai.com>` (added 2026-04-28 after domain verification)
+- [x] `ADMIN_EMAIL=chor.ratchawat@gmail.com` (final value, not RD's dev address)
+- [ ] Optional: `RESEND_BOOKINGS_FROM=Ratchawat Muay Thai <bookings@ratchawatmuaythai.com>` if separate sender for booking confirmations is desired.
+
+### E. Code-level fixes during go-live
+
+- [x] **`/api/contact` — env-driven config** (2026-04-28): `RESEND_FROM_EMAIL` + `ADMIN_EMAIL` now read from env, with `replyTo` set to visitor email; admin send error now bubbles up as 500 (was silently swallowed).
+- [x] **`/lib/email/send.ts` — env-driven config** (2026-04-28): cascade `RESEND_BOOKINGS_FROM` → `RESEND_FROM_EMAIL` → NODE_ENV fallback. Eliminates hardcoded `bookings@` and the dev/prod NODE_ENV branch when env vars are set.
+
+### F. Pre-launch validation (production environment)
+
+- [ ] **Stripe webhook live delivery test** — Stripe Dashboard → Webhooks → "Send test webhook" → expect 200.
+- [ ] **Real-card booking smoke test** — small amount (e.g. drop-in 400 THB), all 4 booking types: training, private, fighter, camp-stay. Verify booking row in Supabase, client + admin emails delivered. Refund via Stripe Dashboard.
+- [ ] **DTV application smoke test** — submit form, complete payment, verify `dtv_applications` row + admin notification + client confirmation.
+- [ ] **Contact form smoke test** on production domain.
+- [ ] **Admin login** on production with real admin user.
+
+### G. Pre-launch validation (deferred from Phase 8)
+
+- [ ] **Live Lighthouse run** on production URL — targets Performance ≥ 90, Accessibility ≥ 95, Best Practices ≥ 90, SEO = 100.
+- [ ] **Live cross-browser test** — iPhone Safari, Android Chrome, desktop Safari/Chrome/Firefox, throttled 3G.
+- [ ] **Live screen reader test** — VoiceOver + NVDA on /, /booking, /contact, /accommodation.
+
+### H. Data & content cleanup
+
+- [ ] **Clean Supabase test data** — purge `bookings`, `availability_blocks`, `dtv_applications`, `processed_stripe_events` rows from dev/test runs (task #57).
+- [ ] **Real legal content validation** — `/privacy` and `/terms` currently provisional with `noIndex: true`. Owner reviews, then flip `noIndex: false` + add to sitemap.
+
+### I. Search & analytics
+
+- [ ] **Google Search Console** — add property, verify via DNS TXT record on Cloudflare, submit sitemap `https://ratchawatmuaythai.com/sitemap.xml`.
+- [ ] **Google Analytics** — decide migration of `G-SVH7KPWM2S` or new GA4 property; add tracking ID env var + integrate.
+- [ ] **301 redirects** for old WordPress URLs — add to `next.config.ts` if old URL list provided (checklist §5.3).
+- [ ] **Google Business Profile** — update both Bo Phut + Plai Laem listings with new website URL and any updated NAP/hours.
+
+### J. Post-launch
+
+- [ ] **48h monitoring** — Vercel logs, Stripe events, Resend deliverability, Supabase advisor warnings.
+- [ ] **Rollback plan ready** — checklist §10 documented, Cloudflare DNS revert path confirmed.
 
 ### Success criteria
 
-Site accessible at ratchawatmuaythai.com. All booking flows confirmed working in production. All sign-off rows in `GO-LIVE-CHECKLIST.md` checked.
+Site accessible at ratchawatmuaythai.com over HTTPS. All 4 booking flows + DTV + contact form confirmed working with real card on production. All sign-off rows in `GO-LIVE-CHECKLIST.md` checked.
 
 ---
 
