@@ -25,7 +25,7 @@ export default function DtvApplyPage() {
       <section className="py-10 sm:py-14 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-10">
-            <h1 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-semibold text-on-surface">
+            <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-on-surface">
               Apply for your DTV visa
             </h1>
             <p className="mt-3 text-on-surface-variant text-base sm:text-lg">

@@ -26,7 +26,7 @@ export default function FighterBookingPage() {
 
       <section className="py-12 sm:py-16 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="font-serif text-3xl sm:text-4xl font-bold text-on-surface uppercase">
+          <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-on-surface uppercase">
             Apply to the Fighter Program
           </h1>
           <p className="mt-4 text-on-surface-variant text-lg max-w-2xl mx-auto">
