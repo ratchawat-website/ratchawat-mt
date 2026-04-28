@@ -38,6 +38,12 @@ export const CAMP_STATS = {
 export const TOTAL_REVIEWS =
   CAMP_STATS["bo-phut"].reviewCount + CAMP_STATS["plai-laem"].reviewCount;
 
+// Display string used in user-facing copy. The numeric TOTAL_REVIEWS stays for
+// schema.org reviewCount (which requires an integer); the display value is
+// rounded to a stable threshold so the site does not need updating each time
+// new Google reviews come in.
+export const TOTAL_REVIEWS_DISPLAY = "400+";
+
 export const OVERALL_RATING = 5.0;
 
 export const reviews: Review[] = [

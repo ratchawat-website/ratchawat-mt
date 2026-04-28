@@ -11,7 +11,7 @@ export function organizationSchema(): Record<string, unknown> {
     name: SITE_NAME,
     legalName: "Chor Ratchawat Muay Thai Gym",
     description:
-      "Family-run Muay Thai training camp in Koh Samui, Thailand. Two locations in Bo Phut and Plai Laem. Rated 5.0 out of 5 on Google with 396 verified reviews. Open Monday to Saturday since 2020.",
+      "Family-run Muay Thai training camp in Koh Samui, Thailand. Two locations in Bo Phut and Plai Laem. Rated 5.0 out of 5 on Google with 400+ verified reviews. Open Monday to Saturday since 2020.",
     url: SITE_URL,
     logo: `${SITE_URL}/images/logo.png`,
     sameAs: [

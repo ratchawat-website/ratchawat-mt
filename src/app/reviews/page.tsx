@@ -11,15 +11,15 @@ import {
   CAMP_LABELS,
   CAMP_GBP_URLS,
   CAMP_STATS,
-  TOTAL_REVIEWS,
+  TOTAL_REVIEWS_DISPLAY,
   OVERALL_RATING,
   reviewHighlightTags,
 } from "@/content/reviews";
 
 export const metadata = generatePageMeta({
-  title: "Reviews | Ratchawat Muay Thai Koh Samui - 5.0/5, 396 avis",
+  title: "Reviews | Ratchawat Muay Thai Koh Samui - 5.0/5, 400+ avis",
   description:
-    "5.0 out of 5 stars across 396 Google reviews. Real student reviews from Ratchawat Muay Thai Bo Phut and Plai Laem camps in Koh Samui.",
+    "5.0 out of 5 stars across 400+ Google reviews. Real student reviews from Ratchawat Muay Thai Bo Phut and Plai Laem camps in Koh Samui.",
   path: "/reviews",
 });
 
@@ -91,7 +91,7 @@ export default function ReviewsPage() {
             </span>
             <span className="w-8 h-[2px] bg-primary" />
           </div>
-          <h1 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-on-surface">
+          <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-on-surface">
             What Our Students Say
           </h1>
           <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
@@ -110,7 +110,7 @@ export default function ReviewsPage() {
               </span>
             </div>
             <span className="text-on-surface-variant text-sm">
-              {TOTAL_REVIEWS} Google reviews across both camps
+              {TOTAL_REVIEWS_DISPLAY} Google reviews across both camps
             </span>
           </div>
           <p className="mt-4 text-on-surface-variant text-base max-w-2xl mx-auto">
@@ -143,7 +143,7 @@ export default function ReviewsPage() {
               rel="noopener noreferrer"
               className="btn-ghost"
             >
-              Bo Phut on Google ({CAMP_STATS["bo-phut"].reviewCount} reviews)
+              Bo Phut on Google
             </a>
             <a
               href={CAMP_GBP_URLS["plai-laem"]}
@@ -151,7 +151,7 @@ export default function ReviewsPage() {
               rel="noopener noreferrer"
               className="btn-ghost"
             >
-              Plai Laem on Google ({CAMP_STATS["plai-laem"].reviewCount} reviews)
+              Plai Laem on Google
             </a>
           </div>
         </div>
@@ -222,11 +222,10 @@ export default function ReviewsPage() {
         <div className="max-w-3xl mx-auto">
           <p className="text-on-surface-variant text-base leading-relaxed text-center">
             Chor Ratchawat Muay Thai in Koh Samui is rated 5.0 out of 5 stars on
-            Google, with {CAMP_STATS["bo-phut"].reviewCount} reviews at the Bo
-            Phut camp and {CAMP_STATS["plai-laem"].reviewCount} reviews at the
-            Plai Laem camp, for a total of {TOTAL_REVIEWS} Google reviews.
-            Students repeatedly mention patient trainers, beginner-friendly
-            classes, clean facilities, and a welcoming international community.
+            Google across both Bo Phut and Plai Laem camps, with {TOTAL_REVIEWS_DISPLAY}{" "}
+            verified Google reviews in total. Students repeatedly mention
+            patient trainers, beginner-friendly classes, clean facilities, and
+            a welcoming international community.
           </p>
         </div>
       </section>

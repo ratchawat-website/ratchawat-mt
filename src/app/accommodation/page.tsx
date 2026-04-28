@@ -5,6 +5,7 @@ import CTABanner from "@/components/ui/CTABanner";
 import Image from "next/image";
 import JsonLd from "@/components/seo/JsonLd";
 import { organizationSchema } from "@/components/seo/SchemaOrg";
+import { TOTAL_REVIEWS } from "@/content/reviews";
 import {
   BedDouble,
   Bath,
@@ -73,7 +74,7 @@ const lodgingSchema = {
   aggregateRating: {
     "@type": "AggregateRating",
     ratingValue: 5.0,
-    reviewCount: 396,
+    reviewCount: TOTAL_REVIEWS,
     bestRating: 5,
     worstRating: 1,
   },
@@ -176,7 +177,7 @@ export default function AccommodationPage() {
           <div className="mb-4">
             <span className="badge-underline badge-orange">PLAI LAEM CAMP ONLY</span>
           </div>
-          <h1 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-semibold text-on-surface">
+          <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-on-surface">
             Stay at the Camp
           </h1>
           <p className="mt-4 text-on-surface-variant text-lg max-w-2xl mx-auto">

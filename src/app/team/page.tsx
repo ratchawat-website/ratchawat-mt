@@ -12,7 +12,7 @@ import {
   teamMembers,
   trainerCampLabel,
 } from "@/content/trainers";
-import { TOTAL_REVIEWS, OVERALL_RATING } from "@/content/reviews";
+import { TOTAL_REVIEWS_DISPLAY, OVERALL_RATING } from "@/content/reviews";
 
 export const metadata = generatePageMeta({
   title: "Muay Thai Trainers Koh Samui | Ratchawat - 10 Thai Coaches",
@@ -75,7 +75,7 @@ export default function TeamPage() {
             </span>
             <span className="w-8 h-[2px] bg-primary" />
           </div>
-          <h1 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-on-surface">
+          <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-on-surface">
             Meet the Trainers
           </h1>
           <p className="mt-4 text-on-surface-variant text-lg max-w-2xl mx-auto">
@@ -97,7 +97,7 @@ export default function TeamPage() {
               <strong className="text-primary font-bold">
                 {OVERALL_RATING.toFixed(1)}/5
               </strong>{" "}
-              on {TOTAL_REVIEWS} Google reviews
+              on {TOTAL_REVIEWS_DISPLAY} Google reviews
             </span>
           </div>
         </div>
@@ -136,7 +136,7 @@ export default function TeamPage() {
                       FOUNDER
                     </span>
                   </div>
-                  <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-on-surface uppercase mb-2">
+                  <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-on-surface uppercase mb-2">
                     {featuredTrainer.name}
                   </h2>
                   <p className="mb-5">

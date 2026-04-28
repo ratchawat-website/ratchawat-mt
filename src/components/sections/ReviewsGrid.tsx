@@ -140,7 +140,7 @@ export default function ReviewsGrid({ reviews }: ReviewsGridProps) {
                 </span>
               </div>
               <p className="text-on-surface-variant text-xs mt-1">
-                Based on {stats.reviewCount} Google reviews
+                Verified Google reviews
               </p>
             </GlassCard>
           );

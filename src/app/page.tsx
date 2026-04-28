@@ -7,6 +7,7 @@ import {
   featuredHomepageReviews,
   OVERALL_RATING,
   TOTAL_REVIEWS,
+  TOTAL_REVIEWS_DISPLAY,
   CAMP_LABELS,
   reviewDisplayDate,
 } from "@/content/reviews";
@@ -39,7 +40,7 @@ const features = [
   {
     icon: Star,
     title: `Rated ${OVERALL_RATING.toFixed(1)}/5`,
-    description: `${TOTAL_REVIEWS} verified Google reviews across both camps. Bo Phut and Plai Laem both hold a perfect 5-star rating.`,
+    description: `${TOTAL_REVIEWS_DISPLAY} verified Google reviews across both camps. Bo Phut and Plai Laem both hold a perfect 5-star rating.`,
   },
   {
     icon: MapPin,
@@ -290,54 +291,66 @@ export default function HomePage() {
             What Our Students Say
           </h2>
           <p className="text-on-surface-variant text-center mb-12">
-            {OVERALL_RATING.toFixed(1)}/5 stars from {TOTAL_REVIEWS} Google reviews
+            {OVERALL_RATING.toFixed(1)}/5 stars from {TOTAL_REVIEWS_DISPLAY} Google reviews
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div
+            className="flex md:grid md:grid-cols-3 gap-6 overflow-x-auto md:overflow-visible snap-x snap-mandatory scroll-smooth -mx-6 sm:-mx-10 px-6 sm:px-10 md:mx-0 md:px-0 pb-4 md:pb-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            role="region"
+            aria-label="Student reviews carousel"
+          >
             {testimonials.map((testimonial) => (
-              <GlassCard key={testimonial.id}>
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex gap-1">
-                    {Array.from({ length: testimonial.rating }).map((_, i) => (
-                      <Star
-                        key={i}
-                        size={16}
-                        className="text-primary fill-primary"
-                      />
-                    ))}
+              <div
+                key={testimonial.id}
+                className="snap-center shrink-0 w-[85%] sm:w-[60%] md:w-auto md:shrink"
+              >
+                <GlassCard className="h-full">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex gap-1">
+                      {Array.from({ length: testimonial.rating }).map((_, i) => (
+                        <Star
+                          key={i}
+                          size={16}
+                          className="text-primary fill-primary"
+                        />
+                      ))}
+                    </div>
+                    <span className="badge-underline badge-neutral text-[10px]">
+                      {CAMP_LABELS[testimonial.camp]}
+                    </span>
                   </div>
-                  <span className="badge-underline badge-neutral text-[10px]">
-                    {CAMP_LABELS[testimonial.camp]}
-                  </span>
-                </div>
-                <Quote
-                  size={20}
-                  className="text-primary/30 mb-2"
-                  strokeWidth={1.5}
-                />
-                <p className="text-[#ccc] text-sm leading-relaxed italic mb-4">
-                  {testimonial.text}
-                </p>
-                <div className="border-t border-outline-variant pt-4 flex items-center justify-between">
-                  <div>
-                    <p className="font-serif text-[13px] font-bold text-on-surface flex items-center gap-2">
-                      {testimonial.author}
-                      {testimonial.flag && (
-                        <span
-                          aria-label={`${testimonial.language.toUpperCase()} review`}
-                          className="text-sm"
-                        >
-                          {testimonial.flag}
-                        </span>
-                      )}
-                    </p>
-                    <p className="text-[#666] text-[10px]">
-                      {reviewDisplayDate(testimonial)}
-                    </p>
+                  <Quote
+                    size={20}
+                    className="text-primary/30 mb-2"
+                    strokeWidth={1.5}
+                  />
+                  <p className="text-[#ccc] text-sm leading-relaxed italic mb-4">
+                    {testimonial.text}
+                  </p>
+                  <div className="border-t border-outline-variant pt-4 flex items-center justify-between">
+                    <div>
+                      <p className="font-serif text-[13px] font-bold text-on-surface flex items-center gap-2">
+                        {testimonial.author}
+                        {testimonial.flag && (
+                          <span
+                            aria-label={`${testimonial.language.toUpperCase()} review`}
+                            className="text-sm"
+                          >
+                            {testimonial.flag}
+                          </span>
+                        )}
+                      </p>
+                      <p className="text-[#666] text-[10px]">
+                        {reviewDisplayDate(testimonial)}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              </GlassCard>
+                </GlassCard>
+              </div>
             ))}
           </div>
+          <p className="md:hidden text-center text-on-surface-variant text-[11px] mt-3 uppercase tracking-[0.18em]">
+            Swipe to see more &rarr;
+          </p>
           <div className="text-center mt-8">
             <Link href="/reviews" className="btn-link">
               Read more reviews <span className="btn-arrow">&rarr;</span>
