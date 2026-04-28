@@ -47,6 +47,9 @@ next-env.d.ts
 # git worktrees
 .worktrees/
 
+# Lighthouse audit artifacts (local-only)
+.lighthouse/
+
 # Internal notes (not for deploy)
 meeting-infos-client.md
 trainers.md
