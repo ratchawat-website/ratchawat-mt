@@ -138,7 +138,14 @@ export default function ContactForm() {
             id="subject"
             value={formData.subject}
             onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-            className={inputClasses}
+            className={`${inputClasses} appearance-none pr-10`}
+            style={{
+              backgroundImage:
+                "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23999' stroke-width='2'><path stroke-linecap='round' stroke-linejoin='round' d='M6 9l6 6 6-6'/></svg>\")",
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: "right 0.85rem center",
+              backgroundSize: "1rem 1rem",
+            }}
           >
             {subjects.map((s) => (
               <option key={s} value={s}>{s}</option>
