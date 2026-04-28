@@ -20,6 +20,9 @@ import {
   Calendar,
   Send,
   Check,
+  Home,
+  MessageCircle,
+  ArrowRight,
 } from "lucide-react";
 import Link from "next/link";
 import { getPricesByCategory } from "@/content/pricing";
@@ -200,7 +203,7 @@ export default function DTVVisaPage() {
       <section className="py-12 sm:py-16 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-4xl mx-auto text-center">
           <SectionLabel label="Destination Thailand Visa" />
-          <h1 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-semibold text-on-surface">
+          <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-on-surface">
             Train Muay Thai in Thailand for up to 180 days
           </h1>
           <p className="mt-4 text-on-surface-variant text-lg max-w-2xl mx-auto">
@@ -419,23 +422,49 @@ export default function DTVVisaPage() {
       </section>
 
       {/* See Also */}
-      <section className="py-12 px-6 sm:px-10 md:px-16 lg:px-20 bg-surface-lowest/50">
-        <div className="max-w-4xl mx-auto text-center text-on-surface-variant text-base">
-          <p>
-            Need a place to stay?{" "}
-            <Link href="/accommodation" className="btn-link">
-              Accommodation options <span className="btn-arrow">&rarr;</span>
-            </Link>
-            {" "}near both camps.{" "}
-            <Link href="/pricing" className="btn-link">
-              Full pricing <span className="btn-arrow">&rarr;</span>
-            </Link>
-            {" "}or{" "}
-            <Link href="/contact" className="btn-link">
-              contact us <span className="btn-arrow">&rarr;</span>
-            </Link>
-            {" "}with questions.
+      <section className="py-12 sm:py-16 px-6 sm:px-10 md:px-16 lg:px-20 bg-surface-lowest/50">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface text-center mb-2">
+            Plan your stay
+          </h2>
+          <p className="text-on-surface-variant text-center text-sm mb-8 max-w-2xl mx-auto">
+            Once your DTV is approved, here is what to sort out next.
           </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-3xl mx-auto">
+            <Link
+              href="/accommodation"
+              className="group flex flex-col rounded-card border-2 border-outline-variant bg-surface-lowest/60 p-6 hover:border-primary transition-colors"
+            >
+              <Home size={22} className="text-primary mb-4" />
+              <h3 className="font-serif text-base font-bold text-on-surface mb-2 uppercase tracking-tight">
+                Where to sleep
+              </h3>
+              <p className="text-on-surface-variant text-sm leading-relaxed mb-4 flex-1">
+                On-site rooms and a bungalow at our Plai Laem camp. Walk to training in under a minute.
+              </p>
+              <span className="inline-flex items-center gap-1.5 text-primary text-xs font-semibold uppercase tracking-[0.18em] group-hover:gap-2 transition-all">
+                Accommodation
+                <ArrowRight size={14} />
+              </span>
+            </Link>
+
+            <Link
+              href="/contact"
+              className="group flex flex-col rounded-card border-2 border-outline-variant bg-surface-lowest/60 p-6 hover:border-primary transition-colors"
+            >
+              <MessageCircle size={22} className="text-primary mb-4" />
+              <h3 className="font-serif text-base font-bold text-on-surface mb-2 uppercase tracking-tight">
+                Still have questions?
+              </h3>
+              <p className="text-on-surface-variant text-sm leading-relaxed mb-4 flex-1">
+                We answer DTV questions every week. WhatsApp, email, or contact form, your choice.
+              </p>
+              <span className="inline-flex items-center gap-1.5 text-primary text-xs font-semibold uppercase tracking-[0.18em] group-hover:gap-2 transition-all">
+                Contact us
+                <ArrowRight size={14} />
+              </span>
+            </Link>
+          </div>
         </div>
       </section>
 

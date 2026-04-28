@@ -5,7 +5,7 @@ import CTABanner from "@/components/ui/CTABanner";
 import Image from "next/image";
 import JsonLd from "@/components/seo/JsonLd";
 import { organizationSchema } from "@/components/seo/SchemaOrg";
-import { Heart, Shield, Users, Star, Trophy } from "lucide-react";
+import { Heart, Shield, Users, Star, Trophy, User, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 export const metadata = generatePageMeta({
@@ -50,7 +50,7 @@ const values = [
     icon: Star,
     title: "Reputation Earned",
     description:
-      "5.0 out of 5 stars on Google, with 396 reviews across our two camps. We did not get there through marketing. Students leave, write something honest, and others read it.",
+      "5.0 out of 5 stars on Google, with 400+ reviews across our two camps. We did not get there through marketing. Students leave, write something honest, and others read it.",
   },
 ];
 
@@ -66,7 +66,7 @@ export default function AboutPage() {
       {/* Page Header */}
       <section className="py-12 sm:py-16 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-semibold text-on-surface">
+          <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-on-surface">
             About Chor Ratchawat Muay Thai
           </h1>
           <p className="mt-4 text-on-surface-variant text-lg max-w-2xl mx-auto">
@@ -77,35 +77,77 @@ export default function AboutPage() {
 
       {/* Our Story */}
       <section className="pb-16 sm:pb-20 px-6 sm:px-10 md:px-16 lg:px-20">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-          <div>
-            <div className="flex items-center gap-3 mb-4"><span className="w-8 h-[2px] bg-primary" /><span className="text-xs uppercase tracking-[0.19em] text-primary font-semibold">OUR STORY</span><span className="w-8 h-[2px] bg-primary" /></div>
-            <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold text-on-surface mb-6">
-              Our Story
-            </h2>
-            <div className="space-y-4 text-on-surface-variant text-base sm:text-lg leading-relaxed">
-              <p>
-                Ratchawat started in 2020 in Bo Phut. A small space, a handful of beginners, and two pairs of gloves. Kru Ratchawat had been training since he was a boy and wanted to teach the way he had learned: traditional Muay Thai, no shortcuts.
-              </p>
-              <p>
-                Word got around. Travelers training for a week told friends. The gym filled up fast. When Bo Phut could not grow any more, Kru Ratchawat opened a second camp in Plai Laem near Big Buddha: a bigger space for fighters and a proper base to prepare them for the ring.
-              </p>
-              <p>
-                Kru Ratchawat is passionate about Muay Thai and about passing on the culture the traditional way. Technique matters, but so does how you carry yourself. Respect and sportsmanship are not optional at the camp, inside the ring or outside.
-              </p>
-              <p>
-                Today Ratchawat runs two camps with ten Thai trainers and fighters of all levels, from complete beginners to professionals. The gym is still family-run. Kru Ratchawat still teaches every day.
-              </p>
+        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 items-stretch">
+          {/* Left column: badge, headline, copy, stats, CTA */}
+          <div className="flex flex-col">
+            <div className="inline-flex items-center gap-2 self-start rounded-full border-2 border-outline-variant bg-surface-lowest/60 px-3.5 py-1.5 mb-6">
+              <User size={14} className="text-on-surface-variant" />
+              <span className="text-[11px] uppercase tracking-[0.22em] text-on-surface-variant font-semibold">
+                Our Story
+              </span>
             </div>
+
+            <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-extrabold text-on-surface leading-[1.05] mb-6">
+              A family-run camp,{" "}
+              <span className="text-primary">on a Thai island.</span>
+            </h2>
+
+            <p className="text-on-surface-variant text-base sm:text-lg leading-relaxed mb-8 max-w-xl">
+              Ratchawat started in 2020 in Bo Phut. A small space, a handful of beginners, two pairs of gloves. Kru Ratchawat teaches the way he learned as a boy: traditional Muay Thai, no shortcuts. The gym now runs two camps on Koh Samui with ten Thai trainers. Beginners and pro fighters train side by side.
+            </p>
+
+            <div className="h-px bg-outline-variant mb-6" />
+
+            <dl className="grid grid-cols-3 gap-4 sm:gap-6 mb-8">
+              <div>
+                <dt className="text-[10px] sm:text-[11px] uppercase tracking-[0.18em] text-on-surface-variant font-semibold mb-2">
+                  Founded
+                </dt>
+                <dd className="font-serif text-2xl sm:text-3xl font-extrabold text-on-surface">
+                  2020
+                </dd>
+              </div>
+              <div>
+                <dt className="text-[10px] sm:text-[11px] uppercase tracking-[0.18em] text-on-surface-variant font-semibold mb-2">
+                  Thai Trainers
+                </dt>
+                <dd className="font-serif text-2xl sm:text-3xl font-extrabold text-on-surface">
+                  10
+                </dd>
+              </div>
+              <div>
+                <dt className="text-[10px] sm:text-[11px] uppercase tracking-[0.18em] text-on-surface-variant font-semibold mb-2">
+                  Camps
+                </dt>
+                <dd className="font-serif text-2xl sm:text-3xl font-extrabold text-on-surface">
+                  2
+                </dd>
+              </div>
+            </dl>
+
+            <Link
+              href="/team"
+              className="inline-flex items-center gap-2 self-start rounded-full border-2 border-outline-variant bg-surface-lowest/60 hover:border-primary hover:text-primary transition-colors px-5 py-2.5 text-sm font-semibold text-on-surface"
+            >
+              Meet the team
+              <ArrowRight size={16} />
+            </Link>
           </div>
-          <div className="relative aspect-[9/16] rounded-card overflow-hidden">
+
+          {/* Right column: image card with coordinate annotations */}
+          <div className="relative rounded-card overflow-hidden border-2 border-outline-variant bg-surface-lowest min-h-[420px] lg:min-h-full">
             <Image
               src="/images/trainers/trainer-ratchawat-2.jpeg"
-              alt="Kru Ratchawat, founder of Chor Ratchawat Muay Thai Gym"
+              alt="Kru Ratchawat, founder of Chor Ratchawat Muay Thai Gym in Koh Samui"
               fill
-              sizes="(max-width: 1024px) 100vw, 40vw"
+              sizes="(max-width: 1024px) 100vw, 50vw"
               className="object-cover"
+              priority
             />
+            <div className="absolute inset-0 bg-gradient-to-b from-surface/40 via-transparent to-surface/80" />
+            <span className="absolute bottom-4 left-5 font-mono text-[11px] tracking-wider text-on-surface/70">
+              [ KRU RATCHAWAT — KOH SAMUI ]
+            </span>
           </div>
         </div>
       </section>
@@ -206,7 +248,7 @@ export default function AboutPage() {
           </h2>
           <div className="space-y-4 text-on-surface-variant text-base sm:text-lg leading-relaxed">
             <p>
-              Ratchawat holds a 5.0 out of 5 star rating on Google at both camps. Bo Phut has 255 reviews. Plai Laem has 141 reviews. That adds up to 396 verified reviews with a perfect average.
+              Ratchawat holds a 5.0 out of 5 star rating on Google at both camps, with 400+ verified reviews in total across Bo Phut and Plai Laem.
             </p>
             <p>
               The gym is listed as beginner-friendly, female-friendly, and kid-friendly with English-speaking trainers. Read what students have written on our{" "}
@@ -224,7 +266,7 @@ export default function AboutPage() {
       <section className="py-12 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-3xl mx-auto">
           <p className="text-on-surface-variant text-base leading-relaxed text-center">
-            Chor Ratchawat Muay Thai Gym is a family-run training camp in Koh Samui, Thailand, founded in 2020 by Kru Ratchawat. Rated 5.0 out of 5 stars on Google with 396 reviews across its Bo Phut and Plai Laem camps. Our fighters have competed at Rajadamnern Stadium, One Lumpinee, and RWS. The gym welcomes all levels, from complete beginners to professional fighters.
+            Chor Ratchawat Muay Thai Gym is a family-run training camp in Koh Samui, Thailand, founded in 2020 by Kru Ratchawat. Rated 5.0 out of 5 stars on Google with 400+ reviews across its Bo Phut and Plai Laem camps. Our fighters have competed at Rajadamnern Stadium, One Lumpinee, and RWS. The gym welcomes all levels, from complete beginners to professional fighters.
           </p>
         </div>
       </section>
