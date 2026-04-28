@@ -432,9 +432,10 @@ Remaining: full smoke test of remaining booking types, Lighthouse on prod, Searc
 
 ### I. Search & analytics
 
-- [ ] **Google Search Console** — add property, verify via DNS TXT record on Cloudflare, submit sitemap `https://ratchawatmuaythai.com/sitemap.xml`.
-- [ ] **Google Analytics** — decide migration of `G-SVH7KPWM2S` or new GA4 property; add tracking ID env var + integrate.
-- [ ] **301 redirects** for old WordPress URLs — add to `next.config.ts` if old URL list provided (checklist §5.3).
+- [x] **Google Search Console** (2026-04-28) — property added, sitemap `https://ratchawatmuaythai.com/sitemap.xml` submitted by user.
+- [~] **Google Analytics** — DEFERRED. Decision: not added at launch (privacy-first stance, can be added later if needed).
+- [x] **301 redirects** (2026-04-28) — 24 legacy WordPress URLs routed to current pages via `next.config.ts redirects()`. Each entry registered with and without trailing slash. Targets corrected for routes that no longer exist on the new site (`/services` → `/programs`, `/transportation-solutions` + `/health-insurance` → `/contact`, `/blog` family → `/`, `/gallery` → `/`).
+- [x] **robots.txt hardening** (2026-04-28) — added legacy WordPress paths to disallow list (`/wp-admin/`, `/wp-content/`, `/wp-includes/`, `/wp-json/`, `/xmlrpc.php`, `/feed/`, `/?s=`, `/search`) on top of existing app-specific disallows.
 - [ ] **Google Business Profile** — update both Bo Phut + Plai Laem listings with new website URL and any updated NAP/hours.
 
 ### J. Post-launch

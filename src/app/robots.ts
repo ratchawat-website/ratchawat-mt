@@ -17,6 +17,16 @@ export default function robots(): MetadataRoute.Robots {
           "/visa/dtv/confirmed",
           "/privacy",
           "/terms",
+          // Legacy WordPress paths (no longer served, but block crawlers
+          // from probing them just in case anything ever leaks).
+          "/wp-admin/",
+          "/wp-content/",
+          "/wp-includes/",
+          "/wp-json/",
+          "/xmlrpc.php",
+          "/feed/",
+          "/?s=",
+          "/search",
         ],
       },
     ],
