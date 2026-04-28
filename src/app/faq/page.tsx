@@ -30,7 +30,7 @@ const faqs = [
   {
     question: "What time are the classes?",
     answer:
-      "Group classes run at 9:00 AM and 5:00 PM, Monday to Saturday. Sunday is rest day. Private lessons can be booked at 7:00, 8:00, or between 10:00 and 17:00, any day Monday to Saturday.",
+      "Group classes run at 9:00 AM and 5:00 PM, Monday to Saturday. Sunday is rest day. Private lessons can be booked at 7:00, 8:00, or between 11:00 and 17:00, any day Monday to Saturday.",
   },
   {
     question: "Can I drop in for a single session?",

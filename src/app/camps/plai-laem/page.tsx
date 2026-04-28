@@ -70,8 +70,8 @@ const schedule = [
     label: "Group Class",
   },
   {
-    time: "10:00",
-    duration: "10:00 - 17:00 (1h slots)",
+    time: "11:00",
+    duration: "11:00 - 17:00 (1h slots)",
     type: "private" as const,
     label: "Private Lessons",
   },

@@ -18,7 +18,7 @@ export const SCHEDULE = {
   },
   private: {
     morning: { start: "7:00", end: "9:00", duration: "1h slots" },
-    afternoon: { start: "10:00", end: "17:00", duration: "1h slots" },
+    afternoon: { start: "11:00", end: "17:00", duration: "1h slots" },
     location: "both",
   },
   fighter: {
@@ -30,11 +30,10 @@ export const SCHEDULE = {
 
 // Private session slots (hourly). Derived to stay aligned with SCHEDULE.private.
 // Morning: 7:00, 8:00 (before group class at 9:00).
-// Afternoon: 10:00 through 16:00 (before group class at 17:00).
+// Afternoon: 11:00 through 16:00 (before group class at 17:00).
 export const PRIVATE_SLOT_TIMES = [
   "07:00",
   "08:00",
-  "10:00",
   "11:00",
   "12:00",
   "13:00",
