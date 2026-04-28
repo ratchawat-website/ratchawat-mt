@@ -3,7 +3,7 @@
 > **Source of truth for what to build.** Read this at the start of every session alongside PROJET-STATUS.md.
 > Update task statuses as work progresses. Never start work without checking the current phase.
 
-**Last updated:** 2026-04-28
+**Last updated:** 2026-04-28 (site live, post-launch hardening in progress)
 **Current phase:** Phase 9 — Go-live (in progress)
 
 > **Phase ordering (post-Phase 4 restructure, 2026-04-15):** Before go-live we split the generic "Security & Quality" bucket into 4 sequential phases (5 → 8) so work happens in the right order. Go-live (Phase 9) is the FINAL phase, unblocked only when all content, media, SEO, and security/perf/a11y work is done. Do not skip ahead.
@@ -363,9 +363,11 @@ All AUDIT-SEO.md requirements met for every route. `llms.txt` reflects current s
 **Blocker:** Phases 5, 6, 7, 8 all complete.
 **Reference:** **`GO-LIVE-CHECKLIST.md`** at the project root is the authoritative pre-launch checklist.
 
-### Current blocker
+### Current state (2026-04-28)
 
-Domain registrar transfer in progress (Bluehost → Cloudflare). Status "Wait for your domain to be released" since 2026-04-28. Auto-approve max 5 days, completes by ~2026-05-03. DNS already controlled via Cloudflare nameservers, so DNS records can be configured before transfer fully completes.
+Site is **LIVE** at `https://ratchawatmuaythai.com` with valid SSL. Real-card booking smoke test passed (drop-in 400 THB → Supabase booking confirmed → admin + client emails delivered → refunded). Production database cleaned of all test data. Domain registrar transfer (Bluehost → Cloudflare) still in flight (auto-approves by ~2026-05-03), but does not block anything since Cloudflare already controls DNS.
+
+Remaining: full smoke test of remaining booking types, Lighthouse on prod, Search Console + Analytics + GBP, real legal content validation, post-launch monitoring.
 
 ### A. Infrastructure — accounts & external services
 
@@ -385,13 +387,13 @@ Domain registrar transfer in progress (Bluehost → Cloudflare). Status "Wait fo
 - [ ] **Wait for Bluehost release** (auto-approves within 5 days, by ~2026-05-03).
 - [ ] Final transfer confirmation email from Cloudflare.
 
-### C. DNS records (Cloudflare → Vercel)
+### C. DNS records (Cloudflare → Vercel) ✅ DONE 2026-04-28
 
-- [ ] Add `A` record `@` → `76.76.21.21` (Vercel IP), proxy **DNS only** (grey cloud).
-- [ ] Add `CNAME` record `www` → `cname.vercel-dns.com`, proxy **DNS only**.
-- [ ] In Vercel project settings, add `ratchawatmuaythai.com` + `www.ratchawatmuaythai.com` as production domains.
-- [ ] Wait for SSL certificate issuance (Let's Encrypt via Vercel, 5-30 min).
-- [ ] Verify `https://ratchawatmuaythai.com` serves the site.
+- [x] `A` record `@` → Vercel IP, proxy **DNS only** (grey cloud).
+- [x] `CNAME` record `www` → `cname.vercel-dns.com`, proxy **DNS only**.
+- [x] Vercel project settings: `ratchawatmuaythai.com` + `www.ratchawatmuaythai.com` added as production domains.
+- [x] SSL certificate issued by Let's Encrypt via Vercel.
+- [x] `https://ratchawatmuaythai.com` serves the site, www → apex redirect working.
 
 ### D. Vercel environment variables (production)
 
@@ -410,11 +412,12 @@ Domain registrar transfer in progress (Bluehost → Cloudflare). Status "Wait fo
 
 ### F. Pre-launch validation (production environment)
 
-- [ ] **Stripe webhook live delivery test** — Stripe Dashboard → Webhooks → "Send test webhook" → expect 200.
-- [ ] **Real-card booking smoke test** — small amount (e.g. drop-in 400 THB), all 4 booking types: training, private, fighter, camp-stay. Verify booking row in Supabase, client + admin emails delivered. Refund via Stripe Dashboard.
+- [x] **Stripe webhook LIVE delivery validated** (2026-04-28) — note: Stripe Dashboard does not expose a "Send test event" button in LIVE mode, so validation was done via a real-card payment. Drop-in 400 THB booking → webhook fired → booking transitioned to `confirmed` in Supabase → 200 OK in Stripe webhook attempts log → emails delivered → refunded via Dashboard.
+- [x] **Real-card booking smoke test (training type)** (2026-04-28) — drop-in 400 THB validated end-to-end + refunded.
+- [ ] **Remaining booking types smoke test** — private, fighter, camp-stay still untested with real cards. Each requires a real card + refund cycle.
 - [ ] **DTV application smoke test** — submit form, complete payment, verify `dtv_applications` row + admin notification + client confirmation.
-- [ ] **Contact form smoke test** on production domain.
-- [ ] **Admin login** on production with real admin user.
+- [ ] **Contact form smoke test** on production domain (`https://ratchawatmuaythai.com/contact`).
+- [ ] **Admin login** on `https://ratchawatmuaythai.com/admin/login` with real admin user.
 
 ### G. Pre-launch validation (deferred from Phase 8)
 
@@ -424,7 +427,7 @@ Domain registrar transfer in progress (Bluehost → Cloudflare). Status "Wait fo
 
 ### H. Data & content cleanup
 
-- [ ] **Clean Supabase test data** — purge `bookings`, `availability_blocks`, `dtv_applications`, `processed_stripe_events` rows from dev/test runs (task #57).
+- [x] **Clean Supabase test data** (2026-04-28) — purged 4 bookings + 5 availability_blocks + 5 processed_stripe_events. `dtv_applications` already empty. `profiles` (1 admin row) preserved. Production database now clean.
 - [ ] **Real legal content validation** — `/privacy` and `/terms` currently provisional with `noIndex: true`. Owner reviews, then flip `noIndex: false` + add to sitemap.
 
 ### I. Search & analytics
