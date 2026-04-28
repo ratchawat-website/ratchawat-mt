@@ -115,6 +115,17 @@
     color: var(--color-on-surface);
   }
 
+  /* WCAG 1.4.1 — inline links must not rely on color alone.
+     Underline anchors that sit inside flowing text paragraphs.
+     Excludes button-styled anchors (.btn-*). Footer/menu link lists
+     are not flagged by Lighthouse because they are in list contexts,
+     so we keep the rule scoped to paragraph contexts only. */
+  p a:not([class*="btn-"]):not(.no-underline) {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+  }
+
   :focus-visible {
     outline: 2px solid var(--color-primary);
     outline-offset: 2px;
@@ -246,7 +257,11 @@
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    background-color: var(--color-primary);
+    /* WCAG AA contrast: #b34700 vs #ffffff = 5.5:1 (pass).
+       Bright #ff6600 only reaches 2.97:1 with white, so we use the
+       darker brand orange for the resting state and let it brighten
+       on hover. */
+    background-color: var(--color-primary-deep);
     color: var(--color-on-primary);
     border-radius: var(--radius-btn);
     padding: 0.8125rem 1.75rem;
@@ -262,7 +277,7 @@
   }
 
   .btn-primary:hover {
-    background-color: var(--color-primary-dim);
+    background-color: var(--color-primary);
     transform: translateY(-1px);
     box-shadow: 0 4px 16px rgba(var(--color-primary-rgb), 0.25);
   }

@@ -41,7 +41,10 @@ export default function GlassCard({
 
       <div className="relative p-6 sm:p-8">
         {number && (
-          <span className="absolute top-4 right-4 font-serif text-5xl font-bold leading-none text-primary opacity-[var(--filigree-opacity)] transition-opacity duration-300 group-hover/card:opacity-[var(--filigree-opacity-hover)] select-none">
+          <span
+            aria-hidden="true"
+            className="absolute top-4 right-4 font-serif text-5xl font-bold leading-none text-primary opacity-[var(--filigree-opacity)] transition-opacity duration-300 group-hover/card:opacity-[var(--filigree-opacity-hover)] select-none"
+          >
             {number}
           </span>
         )}

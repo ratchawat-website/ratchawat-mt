@@ -65,7 +65,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-6 sm:px-10 md:px-16 lg:px-20 py-12 grid grid-cols-2 sm:grid-cols-4 gap-8">
         {/* Training */}
         <div>
-          <h4 className="text-[9px] font-semibold uppercase tracking-[0.19em] text-primary mb-4">Training</h4>
+          <h2 className="text-[9px] font-semibold uppercase tracking-[0.19em] text-primary mb-4">Training</h2>
           <ul className="space-y-2.5">
             <li><Link href="/programs" className={linkClasses}>Programs</Link></li>
             <li><Link href="/programs/group-adults" className={linkClasses}>Group Classes</Link></li>
@@ -79,7 +79,7 @@ export default function Footer() {
 
         {/* Camps */}
         <div>
-          <h4 className="text-[9px] font-semibold uppercase tracking-[0.19em] text-primary mb-4">Camps</h4>
+          <h2 className="text-[9px] font-semibold uppercase tracking-[0.19em] text-primary mb-4">Camps</h2>
           <ul className="space-y-2.5">
             <li><Link href="/camps/bo-phut" className={linkClasses}>Bo Phut</Link></li>
             <li><Link href="/camps/plai-laem" className={linkClasses}>Plai Laem</Link></li>
@@ -90,7 +90,7 @@ export default function Footer() {
 
         {/* Info */}
         <div>
-          <h4 className="text-[9px] font-semibold uppercase tracking-[0.19em] text-primary mb-4">Info</h4>
+          <h2 className="text-[9px] font-semibold uppercase tracking-[0.19em] text-primary mb-4">Info</h2>
           <ul className="space-y-2.5">
             <li><Link href="/about" className={linkClasses}>About</Link></li>
             <li><Link href="/accommodation" className={linkClasses}>Accommodation</Link></li>
@@ -101,7 +101,7 @@ export default function Footer() {
 
         {/* Contact */}
         <div>
-          <h4 className="text-[9px] font-semibold uppercase tracking-[0.19em] text-primary mb-4">Contact</h4>
+          <h2 className="text-[9px] font-semibold uppercase tracking-[0.19em] text-primary mb-4">Contact</h2>
           <ul className="space-y-2.5">
             <li><a href="tel:+66630802876" className={linkClasses}>+66 63 080 2876</a></li>
             <li><a href="mailto:chor.ratchawat@gmail.com" className={linkClasses}>chor.ratchawat@gmail.com</a></li>
