@@ -6,6 +6,10 @@ function getResend() {
   return new Resend(process.env.RESEND_API_KEY);
 }
 
+const FROM_ADDRESS =
+  process.env.RESEND_FROM_EMAIL ?? "Ratchawat Muay Thai <onboarding@resend.dev>";
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? "chor.ratchawat@gmail.com";
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
@@ -26,9 +30,10 @@ export async function POST(request: Request) {
 
     const resend = getResend();
 
-    await resend.emails.send({
-      from: "contact@ratchawatmuaythai.com",
-      to: "chor.ratchawat@gmail.com",
+    const adminResult = await resend.emails.send({
+      from: FROM_ADDRESS,
+      to: ADMIN_EMAIL,
+      replyTo: email,
       subject: `[Ratchawat Muay Thai] Contact - ${subject || "New message"}`,
       html: `
         <h2>New contact message</h2>
@@ -39,8 +44,16 @@ export async function POST(request: Request) {
       `,
     });
 
-    await resend.emails.send({
-      from: "contact@ratchawatmuaythai.com",
+    if (adminResult.error) {
+      console.error("Resend admin send error:", adminResult.error);
+      return NextResponse.json(
+        { error: "Failed to send admin notification", detail: adminResult.error },
+        { status: 500 },
+      );
+    }
+
+    const userResult = await resend.emails.send({
+      from: FROM_ADDRESS,
       to: email,
       subject: "Ratchawat Muay Thai - We received your message",
       html: `
@@ -49,6 +62,10 @@ export async function POST(request: Request) {
         <p>Best regards,<br>The Ratchawat Muay Thai Team</p>
       `,
     });
+
+    if (userResult.error) {
+      console.error("Resend user confirmation error:", userResult.error);
+    }
 
     return NextResponse.json({ success: true });
   } catch (error) {
