@@ -26,9 +26,9 @@ const TYPE_STYLES = {
     label: "Private",
   },
   fighter: {
-    bg: "bg-red-500/10 border-red-500/20",
-    dot: "bg-red-500",
-    text: "text-red-500",
+    bg: "bg-blue-500/10 border-blue-500/20",
+    dot: "bg-blue-500",
+    text: "text-blue-500",
     label: "Fighter",
   },
 };

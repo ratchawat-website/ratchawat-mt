@@ -63,7 +63,7 @@ export default function Navigation({ isAdmin = false }: NavigationProps) {
               className="h-8 w-8 object-contain"
               priority
             />
-            RATCHAWAT
+            RATCHAWAT MUAY THAI
           </Link>
 
           {/* Desktop nav */}

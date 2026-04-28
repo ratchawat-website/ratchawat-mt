@@ -1,6 +1,24 @@
 import Image from "next/image";
 import Link from "next/link";
 
+function FacebookIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className={className}>
+      <path d="M13.5 21v-7.5h2.5l.4-3h-2.9V8.6c0-.9.3-1.5 1.5-1.5H16.5V4.4c-.3 0-1.3-.1-2.4-.1-2.4 0-4 1.4-4 4.1V10.5H7.5v3h2.6V21h3.4z" />
+    </svg>
+  );
+}
+
+function InstagramIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className={className}>
+      <rect x="3" y="3" width="18" height="18" rx="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
 const linkClasses = "text-xs text-[#777] hover:text-primary transition-colors";
 
 export default function Footer() {
@@ -21,9 +39,25 @@ export default function Footer() {
           />
           RATCHAWAT MUAY THAI
         </Link>
-        <div className="flex gap-5">
-          <a href="https://facebook.com/Chor.RatchawatMuayThaiGym" target="_blank" rel="noopener noreferrer" className="text-on-surface-variant hover:text-primary transition-colors text-xs font-medium" aria-label="Facebook">FB</a>
-          <a href="https://instagram.com/chor.ratchawatmuaythai" target="_blank" rel="noopener noreferrer" className="text-on-surface-variant hover:text-primary transition-colors text-xs font-medium" aria-label="Instagram">IG</a>
+        <div className="flex gap-3">
+          <a
+            href="https://facebook.com/Chor.RatchawatMuayThaiGym"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center w-9 h-9 rounded-full border-2 border-outline-variant text-on-surface-variant hover:text-primary hover:border-primary transition-colors"
+            aria-label="Facebook"
+          >
+            <FacebookIcon className="w-4 h-4" />
+          </a>
+          <a
+            href="https://instagram.com/chor.ratchawatmuaythai"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center w-9 h-9 rounded-full border-2 border-outline-variant text-on-surface-variant hover:text-primary hover:border-primary transition-colors"
+            aria-label="Instagram"
+          >
+            <InstagramIcon className="w-4 h-4" />
+          </a>
         </div>
       </div>
 
