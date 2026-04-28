@@ -7,7 +7,7 @@ import { Matcher } from "react-day-picker";
 import { PRIVATE_SLOTS } from "@/lib/config/slots";
 import { PRIVATE_SLOT_CAPACITY } from "@/content/schedule";
 import { INVENTORY, type InventoryKey } from "@/lib/admin/inventory";
-import { addDays, format } from "date-fns";
+import { addDays, format, startOfToday } from "date-fns";
 
 interface AvailabilityBlock {
   date: string;
@@ -179,8 +179,10 @@ export default function AvailabilityCalendar({
     onAvailableSlotsChange(available);
   }, [selected, blocks, type, onAvailableSlotsChange, camp]);
 
-  const tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
+  // Private sessions can be booked same-day: the per-slot cutoff (2h, or 12h
+  // for 7:00/8:00 slots) handles which slots are still bookable today, so the
+  // calendar must keep today selectable. Camp stays remain next-day-onward.
+  const minDate = type === "private" ? startOfToday() : addDays(startOfToday(), 1);
 
   if (loading) {
     return (
@@ -192,7 +194,7 @@ export default function AvailabilityCalendar({
     <DatePicker
       selected={selected}
       onSelect={onSelect}
-      minDate={tomorrow}
+      minDate={minDate}
       disabledDays={disabledDays}
     />
   );
