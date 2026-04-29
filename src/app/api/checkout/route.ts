@@ -5,6 +5,8 @@ import { BookingRequestSchema } from "@/lib/validation/booking";
 import { getPriceById, getStripePriceId } from "@/content/pricing";
 import { getInventoryKey } from "@/lib/admin/inventory";
 import { checkRangeAvailability } from "@/lib/admin/availability";
+import { getCheckoutOrigin } from "@/lib/utils/origin";
+import { verifyTurnstile } from "@/lib/security/turnstile";
 import {
   PRIVATE_SLOT_CAPACITY,
   isSlotWithinCutoff,
@@ -20,7 +22,15 @@ function getStripe(): Stripe {
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
+    const body = (await request.json()) as Record<string, unknown>;
+
+    const captcha = await verifyTurnstile(
+      typeof body?.cf_turnstile_token === "string"
+        ? body.cf_turnstile_token
+        : null,
+      request,
+    );
+    if (captcha) return captcha;
 
     const parsed = BookingRequestSchema.safeParse(body);
     if (!parsed.success) {
@@ -181,19 +191,7 @@ export async function POST(request: Request) {
         });
     }
 
-    // Build success/cancel URLs from the actual request origin.
-    // This works in dev (localhost:3000) and prod without depending on
-    // NEXT_PUBLIC_SITE_URL, which is set for SSR metadata and may legitimately
-    // point to the production domain even when we are running locally.
-    const origin =
-      request.headers.get("origin") ??
-      (() => {
-        const host = request.headers.get("host");
-        const proto =
-          request.headers.get("x-forwarded-proto") ??
-          (host?.startsWith("localhost") ? "http" : "https");
-        return host ? `${proto}://${host}` : "http://localhost:3000";
-      })();
+    const origin = getCheckoutOrigin(request);
 
     const stripe = getStripe();
     const session = await stripe.checkout.sessions.create({

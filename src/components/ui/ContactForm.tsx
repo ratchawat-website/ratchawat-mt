@@ -3,6 +3,11 @@
 import { useState, FormEvent } from "react";
 import { Loader2, CheckCircle, AlertCircle } from "lucide-react";
 import GlassCard from "./GlassCard";
+import TurnstileWidget from "@/components/security/TurnstileWidget";
+import {
+  TURNSTILE_ENABLED,
+  useTurnstile,
+} from "@/components/security/use-turnstile";
 
 type FormStatus = "idle" | "sending" | "success" | "error";
 
@@ -26,26 +31,35 @@ export default function ContactForm() {
     email: "",
     subject: "General Inquiry",
     message: "",
-    website: "",
   });
   const [status, setStatus] = useState<FormStatus>("idle");
+  const captcha = useTurnstile();
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (!captcha.ready) {
+      setStatus("error");
+      return;
+    }
     setStatus("sending");
 
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          cf_turnstile_token: captcha.token,
+        }),
       });
 
       if (!res.ok) throw new Error("Failed to send");
       setStatus("success");
-      setFormData({ name: "", email: "", subject: "General Inquiry", message: "", website: "" });
+      setFormData({ name: "", email: "", subject: "General Inquiry", message: "" });
+      captcha.reset();
     } catch {
       setStatus("error");
+      captcha.reset();
     }
   }
 
@@ -94,18 +108,6 @@ export default function ContactForm() {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Honeypot: bots typically fill all visible fields. Real users will not see this. */}
-        <div aria-hidden="true" className="absolute left-[-10000px] w-px h-px overflow-hidden">
-          <label htmlFor="website">Website</label>
-          <input
-            id="website"
-            type="text"
-            tabIndex={-1}
-            autoComplete="off"
-            value={formData.website}
-            onChange={(e) => setFormData({ ...formData, website: e.target.value })}
-          />
-        </div>
         <div>
           <label htmlFor="name" className={labelClasses}>Name</label>
           <input
@@ -166,9 +168,17 @@ export default function ContactForm() {
           />
         </div>
 
+        <TurnstileWidget
+          onVerify={captcha.onVerify}
+          onExpire={captcha.onExpire}
+          action="contact"
+        />
+
         <button
           type="submit"
-          disabled={status === "sending"}
+          disabled={
+            status === "sending" || (TURNSTILE_ENABLED && !captcha.ready)
+          }
           className="btn-primary w-full justify-center disabled:opacity-60 disabled:cursor-not-allowed"
         >
           {status === "sending" ? (

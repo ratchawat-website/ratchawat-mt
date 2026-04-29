@@ -6,6 +6,11 @@ import Link from "next/link";
 import { MessageCircle } from "lucide-react";
 import { getPricesByCategory, getPriceById } from "@/content/pricing";
 import { buildWhatsAppUrl } from "@/content/schedule";
+import TurnstileWidget from "@/components/security/TurnstileWidget";
+import {
+  TURNSTILE_ENABLED,
+  useTurnstile,
+} from "@/components/security/use-turnstile";
 
 type DtvPriceId = "dtv-6m-2x" | "dtv-6m-4x" | "dtv-6m-unlimited";
 
@@ -110,6 +115,7 @@ export default function DtvApplyForm() {
   const [apiError, setApiError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [cancelled, setCancelled] = useState(false);
+  const captcha = useTurnstile();
 
   useEffect(() => {
     const pkg = searchParams.get("package");
@@ -143,6 +149,10 @@ export default function DtvApplyForm() {
       el?.scrollIntoView({ behavior: "smooth", block: "center" });
       return;
     }
+    if (!captcha.ready) {
+      setApiError("Please complete the captcha before submitting.");
+      return;
+    }
 
     setSubmitting(true);
     setApiError(null);
@@ -163,6 +173,7 @@ export default function DtvApplyForm() {
           arrival_date: form.arrival_date,
           price_id: form.price_id,
           committed: form.committed,
+          cf_turnstile_token: captcha.token,
         }),
       });
       const data = await res.json();
@@ -415,10 +426,16 @@ export default function DtvApplyForm() {
         </div>
       )}
 
+      <TurnstileWidget
+        onVerify={captcha.onVerify}
+        onExpire={captcha.onExpire}
+        action="dtv-apply"
+      />
+
       <div className="flex flex-col sm:flex-row items-center gap-4 pt-2">
         <button
           type="submit"
-          disabled={submitting}
+          disabled={submitting || (TURNSTILE_ENABLED && !captcha.ready)}
           className="btn-primary w-full sm:w-auto justify-center disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {submitting

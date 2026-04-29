@@ -18,6 +18,8 @@ import {
   buildWhatsAppUrl,
   isSlotWithinCutoff,
 } from "@/content/schedule";
+import TurnstileWidget from "@/components/security/TurnstileWidget";
+import { useTurnstile } from "@/components/security/use-turnstile";
 import { formatDateLong } from "@/lib/utils/date-format";
 import { format } from "date-fns";
 
@@ -65,6 +67,7 @@ export default function PrivateWizard() {
   const [contact, setContact] = useState<ContactInfo>(DEFAULT_CONTACT);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const captcha = useTurnstile();
 
   // Consume `?package=` on mount only. Running once prevents the effect from
   // re-firing later and snapping the step back when the user clicks Continue.
@@ -102,7 +105,7 @@ export default function PrivateWizard() {
     if (step === 1) return !!camp;
     if (step === 2) return !!date && !!timeSlot;
     if (step === 3) return isContactInfoValid(contact);
-    if (step === 4) return isContactInfoValid(contact);
+    if (step === 4) return isContactInfoValid(contact) && captcha.ready;
     return false;
   };
 
@@ -126,6 +129,7 @@ export default function PrivateWizard() {
           client_phone: contact.phone,
           client_nationality: contact.nationality || undefined,
           notes: contact.notes || undefined,
+          cf_turnstile_token: captcha.token,
         }),
       });
       const data = await res.json();
@@ -365,6 +369,11 @@ export default function PrivateWizard() {
             ]}
             totalAmount={totalAmount}
             note={isGroup ? "Price per person for group sessions." : undefined}
+          />
+          <TurnstileWidget
+            onVerify={captcha.onVerify}
+            onExpire={captcha.onExpire}
+            action="booking-private"
           />
           {error && (
             <div className="bg-primary/10 border-2 border-primary/30 rounded-[var(--radius-card)] p-4">

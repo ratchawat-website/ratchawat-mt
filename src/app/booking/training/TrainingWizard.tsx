@@ -12,6 +12,8 @@ import BookingReview from "@/components/booking/BookingReview";
 import { MapPin } from "lucide-react";
 import { getPricesByBookingType, getPriceById } from "@/content/pricing";
 import { format } from "date-fns";
+import TurnstileWidget from "@/components/security/TurnstileWidget";
+import { useTurnstile } from "@/components/security/use-turnstile";
 
 const STEPS = ["Package", "Camp", "Date", "Contact", "Review"];
 
@@ -53,6 +55,7 @@ export default function TrainingWizard() {
   const [contact, setContact] = useState<ContactInfo>(DEFAULT_CONTACT);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const captcha = useTurnstile();
 
   // Consume `?package=` on mount only. Running once prevents the effect from
   // re-firing later and snapping the step back when the user clicks Continue.
@@ -74,7 +77,7 @@ export default function TrainingWizard() {
     if (step === 1) return !!camp;
     if (step === 2) return !!date;
     if (step === 3) return isContactInfoValid(contact);
-    if (step === 4) return isContactInfoValid(contact);
+    if (step === 4) return isContactInfoValid(contact) && captcha.ready;
     return false;
   };
 
@@ -97,6 +100,7 @@ export default function TrainingWizard() {
           client_phone: contact.phone,
           client_nationality: contact.nationality || undefined,
           notes: contact.notes || undefined,
+          cf_turnstile_token: captcha.token,
         }),
       });
       const data = await res.json();
@@ -272,6 +276,11 @@ export default function TrainingWizard() {
               { label: "Contact", value: contact.email },
             ]}
             totalAmount={selectedPackage.price ?? 0}
+          />
+          <TurnstileWidget
+            onVerify={captcha.onVerify}
+            onExpire={captcha.onExpire}
+            action="booking-training"
           />
           {error && (
             <div className="bg-primary/10 border-2 border-primary/30 rounded-[var(--radius-card)] p-4">

@@ -13,6 +13,8 @@ import BookingReview from "@/components/booking/BookingReview";
 import { getPricesByBookingType, getPriceById } from "@/content/pricing";
 import { formatDateLong } from "@/lib/utils/date-format";
 import { format } from "date-fns";
+import TurnstileWidget from "@/components/security/TurnstileWidget";
+import { useTurnstile } from "@/components/security/use-turnstile";
 
 const STEPS = ["Package", "Check-in", "Contact", "Review"];
 
@@ -60,6 +62,7 @@ export default function CampStayWizard() {
   const [contact, setContact] = useState<ContactInfo>(DEFAULT_CONTACT);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const captcha = useTurnstile();
 
   // Consume `?package=` on mount only. Running once prevents the effect from
   // re-firing later and snapping the step back when the user clicks Continue.
@@ -85,7 +88,7 @@ export default function CampStayWizard() {
     if (step === 0) return !!priceId;
     if (step === 1) return !!checkIn;
     if (step === 2) return isContactInfoValid(contact);
-    if (step === 3) return isContactInfoValid(contact);
+    if (step === 3) return isContactInfoValid(contact) && captcha.ready;
     return false;
   };
 
@@ -109,6 +112,7 @@ export default function CampStayWizard() {
           client_phone: contact.phone,
           client_nationality: contact.nationality || undefined,
           notes: contact.notes || undefined,
+          cf_turnstile_token: captcha.token,
         }),
       });
       const data = await res.json();
@@ -244,6 +248,11 @@ export default function CampStayWizard() {
             ]}
             totalAmount={selectedPackage.price ?? 0}
             note={selectedPackage.notes ?? undefined}
+          />
+          <TurnstileWidget
+            onVerify={captcha.onVerify}
+            onExpire={captcha.onExpire}
+            action="booking-camp-stay"
           />
           {error && (
             <div className="bg-primary/10 border-2 border-primary/30 rounded-[var(--radius-card)] p-4">

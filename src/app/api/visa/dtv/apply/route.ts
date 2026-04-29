@@ -3,6 +3,8 @@ import Stripe from "stripe";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { DtvApplicationSchema } from "@/lib/validation/dtv-application";
 import { getPriceById, getStripePriceId } from "@/content/pricing";
+import { getCheckoutOrigin } from "@/lib/utils/origin";
+import { verifyTurnstile } from "@/lib/security/turnstile";
 
 function getStripe(): Stripe {
   if (!process.env.STRIPE_SECRET_KEY) {
@@ -13,7 +15,16 @@ function getStripe(): Stripe {
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
+    const body = (await request.json()) as Record<string, unknown>;
+
+    const captcha = await verifyTurnstile(
+      typeof body?.cf_turnstile_token === "string"
+        ? body.cf_turnstile_token
+        : null,
+      request,
+    );
+    if (captcha) return captcha;
+
     const parsed = DtvApplicationSchema.safeParse(body);
     if (!parsed.success) {
       return NextResponse.json(
@@ -60,15 +71,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const origin =
-      request.headers.get("origin") ??
-      (() => {
-        const host = request.headers.get("host");
-        const proto =
-          request.headers.get("x-forwarded-proto") ??
-          (host?.startsWith("localhost") ? "http" : "https");
-        return host ? `${proto}://${host}` : "http://localhost:3000";
-      })();
+    const origin = getCheckoutOrigin(request);
 
     const stripe = getStripe();
     const session = await stripe.checkout.sessions.create({

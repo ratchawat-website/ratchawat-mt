@@ -1,8 +1,25 @@
 # Checklist sécurité pré-lancement — Ratchawat Muay Thai
 
-> **Stack** : Next.js 14 + Supabase + Stripe + Resend + Vercel
-> **Contexte** : site avec booking + paiement (acompte 30% Stripe Checkout)
+> **Stack** : Next.js 16 + Supabase + Stripe + Resend + Vercel
+> **Contexte** : site avec booking + paiement Stripe Checkout
 > **À faire** : passer cette checklist intégralement avant la mise en LIVE Stripe
+
+## ✅ État au 2026-04-29
+
+**P0** (8/8) — voir entrée 2026-04-27 dans `PROJET-STATUS.md` §4.
+
+**P1** :
+- ✅ P1.1 Validation Zod : `bookings`, `dtv-application`, `contact`, `availability` (admin), `admin-booking`. Toutes les routes POST publiques + admin couvertes.
+- ✅ P1.2 + P1.3 Rate limiting / anti-bot : remplacé par Cloudflare Turnstile (Managed Mode) sur `/api/contact`, `/api/checkout`, `/api/visa/dtv/apply`. Verify serveur via `siteverify`. No-op fallback si `TURNSTILE_SECRET_KEY` absente.
+- ✅ P1.4 Headers : HSTS preload, X-Frame-Options DENY, X-Content-Type-Options nosniff, Referrer-Policy strict, Permissions-Policy restrictive, **CSP** ajoutée (script-src/connect-src/frame-src/form-action ciblés Stripe + Supabase + Turnstile + Google Maps ; `'unsafe-eval'` autorisé en dev uniquement pour Turbopack HMR).
+- ⏳ P1.5 DKIM/SPF/DMARC Resend — pending domain verification (Phase 9).
+- ⏳ P1.6 Privacy/ToS — pages existent, cookie banner si Analytics ajouté plus tard.
+- ✅ P1.7 `npm audit` : 5 modérées transitives (postcss < 8.5.10 via Next, uuid < 14 via svix→resend), aucune exploitable dans cette app, aucun fix non-breaking dispo.
+- ⏳ P1.8 Tests fonctionnels — partiellement faits en dev (smoke test sécurité 2026-04-29). Refaire en preview Vercel : host header injection + CSP en prod.
+
+**Bonus 2026-04-29** :
+- JsonLd `</script>` escape (defense-in-depth XSS).
+- `getCheckoutOrigin` helper : Stripe redirect URLs viennent de `NEXT_PUBLIC_SITE_URL` en prod, jamais des headers de la requête.
 
 ## 📊 Comment lire cette checklist
 

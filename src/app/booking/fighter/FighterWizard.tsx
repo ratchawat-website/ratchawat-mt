@@ -15,6 +15,8 @@ import { getPricesByBookingType, getPriceById } from "@/content/pricing";
 import type { InventoryKey } from "@/lib/admin/inventory";
 import { formatDateLong } from "@/lib/utils/date-format";
 import { format } from "date-fns";
+import TurnstileWidget from "@/components/security/TurnstileWidget";
+import { useTurnstile } from "@/components/security/use-turnstile";
 
 const STEPS = ["Info", "Tier", "Camp & Date", "Contact", "Review"];
 
@@ -56,6 +58,7 @@ export default function FighterWizard() {
   const [contact, setContact] = useState<ContactInfo>(DEFAULT_CONTACT);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const captcha = useTurnstile();
 
   // Fighter program runs at Plai Laem only — camp stays locked to plai-laem.
   useEffect(() => {
@@ -70,7 +73,7 @@ export default function FighterWizard() {
     if (step === 1) return !!priceId;
     if (step === 2) return !!camp && !!date;
     if (step === 3) return isContactInfoValid(contact);
-    if (step === 4) return isContactInfoValid(contact);
+    if (step === 4) return isContactInfoValid(contact) && captcha.ready;
     return false;
   };
 
@@ -93,6 +96,7 @@ export default function FighterWizard() {
           client_phone: contact.phone,
           client_nationality: contact.nationality || undefined,
           notes: contact.notes || undefined,
+          cf_turnstile_token: captcha.token,
         }),
       });
       const data = await res.json();
@@ -360,6 +364,11 @@ export default function FighterWizard() {
                 ? "This price is approximate. The gym will confirm the final amount after you book."
                 : undefined
             }
+          />
+          <TurnstileWidget
+            onVerify={captcha.onVerify}
+            onExpire={captcha.onExpire}
+            action="booking-fighter"
           />
           {error && (
             <div className="bg-primary/10 border-2 border-primary/30 rounded-[var(--radius-card)] p-4">

@@ -13,8 +13,6 @@ export const ContactRequestSchema = z.object({
     .trim()
     .min(10, "Message too short")
     .max(5000, "Message too long"),
-  // Honeypot: must be empty. Bots typically fill all visible fields.
-  website: z.string().max(0, "Spam detected").optional().default(""),
 });
 
 export type ContactRequest = z.infer<typeof ContactRequestSchema>;

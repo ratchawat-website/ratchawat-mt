@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import { ContactRequestSchema, escapeHtml } from "@/lib/validation/contact";
+import { verifyTurnstile } from "@/lib/security/turnstile";
 
 function getResend() {
   return new Resend(process.env.RESEND_API_KEY);
@@ -12,10 +13,19 @@ const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? "chor.ratchawat@gmail.com";
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
+    const body = (await request.json()) as Record<string, unknown>;
+
+    const captcha = await verifyTurnstile(
+      typeof body?.cf_turnstile_token === "string"
+        ? body.cf_turnstile_token
+        : null,
+      request,
+    );
+    if (captcha) return captcha;
 
     const parsed = ContactRequestSchema.safeParse(body);
     if (!parsed.success) {
+      console.warn("Contact validation failed:", parsed.error.issues);
       return NextResponse.json(
         { error: "Invalid contact request", issues: parsed.error.issues },
         { status: 400 },

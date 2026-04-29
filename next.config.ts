@@ -1,5 +1,38 @@
 import type { NextConfig } from "next";
 
+// Content Security Policy. 'unsafe-inline' on script-src is required because
+// inline JSON-LD <script> tags are emitted on most pages (see JsonLd.tsx,
+// which already escapes "<" to neutralise breakout). Switching to nonces
+// would require reading the nonce from a request-scoped store on every
+// Server Component render and is not justified on this site.
+//
+// In dev, Turbopack's HMR runtime needs string evaluation to hot-replace
+// React Server Components, so we relax script-src locally only. Production
+// builds keep the strict policy.
+const isDev = process.env.NODE_ENV !== "production";
+const scriptSrc = [
+  "'self'",
+  "'unsafe-inline'",
+  ...(isDev ? ["'unsafe-eval'"] : []),
+  "https://js.stripe.com",
+  "https://challenges.cloudflare.com",
+].join(" ");
+
+const cspDirectives = [
+  "default-src 'self'",
+  `script-src ${scriptSrc}`,
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: blob: https:",
+  "font-src 'self' data:",
+  "connect-src 'self' https://*.supabase.co https://api.stripe.com https://challenges.cloudflare.com",
+  "frame-src https://js.stripe.com https://hooks.stripe.com https://challenges.cloudflare.com https://www.google.com",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self' https://checkout.stripe.com",
+  "frame-ancestors 'none'",
+  "upgrade-insecure-requests",
+].join("; ");
+
 const securityHeaders = [
   { key: "X-Frame-Options", value: "DENY" },
   { key: "X-Content-Type-Options", value: "nosniff" },
@@ -12,6 +45,7 @@ const securityHeaders = [
     key: "Strict-Transport-Security",
     value: "max-age=63072000; includeSubDomains; preload",
   },
+  { key: "Content-Security-Policy", value: cspDirectives },
 ];
 
 // Permanent 301 redirects from the legacy WordPress URL structure.
