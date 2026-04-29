@@ -9,10 +9,9 @@ export const metadata = generatePageMeta({
   description:
     "Privacy policy for Chor Ratchawat Muay Thai Gym in Koh Samui. How we handle booking, contact, and payment data.",
   path: "/privacy",
-  noIndex: true,
 });
 
-const LAST_UPDATED = "26 April 2026";
+const LAST_UPDATED = "29 April 2026";
 
 export default function PrivacyPage() {
   return (
@@ -38,11 +37,15 @@ export default function PrivacyPage() {
                 Who we are
               </h2>
               <p>
-                This site is operated by Chor Ratchawat Muay Thai Gym, a
-                family-run training camp based in Koh Samui, Surat Thani
-                Province, Thailand. When this policy refers to &quot;we&quot;,
-                &quot;us&quot;, or &quot;the gym&quot;, it means Chor Ratchawat
-                Muay Thai Gym. You can reach us at{" "}
+                This site is operated by{" "}
+                <strong className="text-on-surface">
+                  CHOR:RATCHAWAT CO., LTD
+                </strong>
+                , a company registered in Thailand and trading as Chor
+                Ratchawat Muay Thai Gym, a training camp based in Koh Samui,
+                Surat Thani Province. When this policy refers to{" "}
+                &quot;we&quot;, &quot;us&quot;, or &quot;the gym&quot;, it
+                means CHOR:RATCHAWAT CO., LTD. You can reach us at{" "}
                 <a
                   href="mailto:chor.ratchawat@gmail.com"
                   className="text-primary hover:text-primary-dim transition-colors font-medium"
@@ -186,9 +189,10 @@ export default function PrivacyPage() {
                 Contact
               </h2>
               <p>
-                Chor Ratchawat Muay Thai Gym, Koh Samui, Surat Thani 84320,
-                Thailand. Phone +66 63 080 2876. Full addresses for both camps
-                are on the{" "}
+                CHOR:RATCHAWAT CO., LTD — 20, 33 Moo 5, Soi Plai Laem 13,
+                Tambon Bo Put, Koh Samui, Surat Thani (สุราษฎร์ธานี) 84320,
+                Thailand. Phone +66 63 080 2876. Full addresses for both
+                training camps are on the{" "}
                 <Link
                   href="/contact"
                   className="text-primary hover:text-primary-dim transition-colors font-medium"

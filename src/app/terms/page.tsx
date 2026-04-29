@@ -9,10 +9,9 @@ export const metadata = generatePageMeta({
   description:
     "Terms of service for Chor Ratchawat Muay Thai Gym in Koh Samui. Booking, payment, training, and accommodation conditions.",
   path: "/terms",
-  noIndex: true,
 });
 
-const LAST_UPDATED = "26 April 2026";
+const LAST_UPDATED = "29 April 2026";
 
 export default function TermsPage() {
   return (
@@ -39,12 +38,16 @@ export default function TermsPage() {
               </h2>
               <p>
                 When you book a session, an accommodation package, or a DTV
-                application on this site, you enter into an agreement with Chor
-                Ratchawat Muay Thai Gym, a family-run training camp based in
-                Koh Samui, Surat Thani Province, Thailand. By completing a
-                booking you confirm that you are at least 18 years old (or
-                booking on behalf of a child you are responsible for) and that
-                you accept these terms.
+                application on this site, you enter into an agreement with{" "}
+                <strong className="text-on-surface">
+                  CHOR:RATCHAWAT CO., LTD
+                </strong>
+                , a company registered in Thailand (registered office: 20, 33
+                Moo 5, Soi Plai Laem 13, Tambon Bo Put, Koh Samui, Surat
+                Thani 84320, Thailand) trading as Chor Ratchawat Muay Thai
+                Gym. By completing a booking you confirm that you are at
+                least 18 years old (or booking on behalf of a child you are
+                responsible for) and that you accept these terms.
               </p>
             </div>
 
@@ -55,73 +58,53 @@ export default function TermsPage() {
               <p>
                 Online bookings are paid up front through Stripe in Thai Baht.
                 You receive an email confirmation as soon as the payment goes
-                through. Group classes can also be paid on the day at the gym
-                at the standard 400 THB drop-in rate. Private sessions, fighter
-                programs, accommodation, and DTV packages are booked online or
-                directly with us on WhatsApp.
+                through. We also accept cash at the gym and bank transfer
+                (domestic Thai or international wire via Wise) for any
+                booking — sessions, accommodation, fighter programs, or DTV
+                packages. Message us on WhatsApp before paying outside Stripe
+                so we can prepare the right details.
               </p>
               <p className="mt-3">
-                Prices on the site include all applicable Thai taxes. Bank
-                transfer (domestic Thai or international wire via Wise) is
-                possible for accommodation and longer stays, on request.
-                Contact us on WhatsApp before paying that way.
+                Prices on the site include all applicable Thai taxes.
               </p>
             </div>
 
             <div>
               <h2 className="font-serif text-lg font-bold text-on-surface uppercase mb-2">
-                Cancellations and changes
+                Cancellations, changes, and refunds
               </h2>
               <p>
-                Plans change, we get it. The rules below cover the standard
-                cases. For anything else, message us and we will work it out.
+                Plans change, we get it. Once a booking is paid, we do{" "}
+                <strong className="text-on-surface">
+                  not issue cash refunds
+                </strong>{" "}
+                — for any session type, accommodation package, fighter
+                program, or DTV application. Instead, the full amount you
+                paid is converted into a{" "}
+                <strong className="text-on-surface">training voucher</strong>{" "}
+                of the same value, valid for 12 months from the date of the
+                original booking, usable at either of our camps (Bo Phut and
+                Plai Laem) for training or accommodation. The voucher does
+                not cover the embassy fee on DTV applications. It is
+                non-transferable and cannot be exchanged for cash.
               </p>
-              <ul className="mt-3 space-y-2 list-disc pl-5">
-                <li>
-                  <strong className="text-on-surface">Group classes:</strong>{" "}
-                  full refund or free reschedule if you cancel at least 24
-                  hours before the session. Inside 24 hours, the session is
-                  forfeited.
-                </li>
-                <li>
-                  <strong className="text-on-surface">Private sessions:</strong>{" "}
-                  full refund or reschedule if you cancel at least 12 hours
-                  before a 7:00 or 8:00 slot, or at least 2 hours before any
-                  other slot. Late cancellations are forfeited.
-                </li>
-                <li>
-                  <strong className="text-on-surface">
-                    Multi-week packs and unlimited passes:
-                  </strong>{" "}
-                  refundable on a pro-rated basis if you cancel before the pass
-                  starts. Once started, unused sessions can be paused for up to
-                  30 days for medical reasons (with a doctor&apos;s note).
-                </li>
-                <li>
-                  <strong className="text-on-surface">
-                    Fighter Program (monthly):
-                  </strong>{" "}
-                  refundable up to 7 days before the start date. After it
-                  starts, the month is non-refundable, but we will do our best
-                  to accommodate genuine emergencies.
-                </li>
-                <li>
-                  <strong className="text-on-surface">Accommodation:</strong>{" "}
-                  free cancellation up to 14 days before check-in. Inside 14
-                  days, the first night is charged. Inside 48 hours, the full
-                  stay is charged. No-shows are non-refundable.
-                </li>
-              </ul>
               <p className="mt-3">
-                To cancel or reschedule, message us on WhatsApp at +66 63 080
-                2876 or email{" "}
+                Reschedules are free as long as we have a seat or a room
+                available on the new date. Message us on WhatsApp at +66 63
+                080 2876 or email{" "}
                 <a
                   href="mailto:chor.ratchawat@gmail.com"
                   className="text-primary hover:text-primary-dim transition-colors font-medium"
                 >
                   chor.ratchawat@gmail.com
-                </a>
-                . The timestamp of your message is what counts.
+                </a>{" "}
+                with the new date you want — the timestamp of your message is
+                what counts.
+              </p>
+              <p className="mt-3">
+                Nothing in this section limits any mandatory consumer rights
+                you may have under Thai law or, if you booked from the EU or
+                the UK, under your local consumer protection rules.
               </p>
             </div>
 
@@ -136,12 +119,11 @@ export default function TermsPage() {
                 (thaievisa.go.th) and is set by the Thai government, not by us.
               </p>
               <p className="mt-3">
-                If your visa application is refused by the embassy, no cash
-                refund is issued. Instead, we issue a training voucher of the
-                same value as the package fee, valid for 12 months at either
-                of our camps. The voucher covers training and accommodation
-                (not the embassy fee). It is non-transferable and cannot be
-                exchanged for cash.
+                If your visa application is refused by the embassy, the
+                voucher policy described above applies: we issue a training
+                voucher of the same value as the package fee, valid for 12
+                months at either of our camps, covering training and
+                accommodation (not the embassy fee).
               </p>
             </div>
 
