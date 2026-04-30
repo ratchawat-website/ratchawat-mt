@@ -62,7 +62,7 @@ export default function TeamPage() {
       <JsonLd data={[organizationSchema(), ...trainerSchemas]} />
 
       <Breadcrumbs
-        items={[{ label: "Home", href: "/" }, { label: "Team" }]}
+        items={[{ label: "Home", href: "/" }, { label: "Team", href: "/team" }]}
       />
 
       {/* Page Header */}

@@ -86,7 +86,7 @@ export default function BookingPage() {
     <>
       <JsonLd data={[organizationSchema(), bookingSchema]} />
 
-      <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Book" }]} />
+      <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Book", href: "/booking" }]} />
 
       <section className="py-12 sm:py-16 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-4xl mx-auto text-center">

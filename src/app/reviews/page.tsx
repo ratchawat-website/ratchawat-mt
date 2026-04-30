@@ -78,7 +78,7 @@ export default function ReviewsPage() {
       />
 
       <Breadcrumbs
-        items={[{ label: "Home", href: "/" }, { label: "Reviews" }]}
+        items={[{ label: "Home", href: "/" }, { label: "Reviews", href: "/reviews" }]}
       />
 
       {/* Header */}

@@ -77,7 +77,7 @@ export default function GroupAdultsPage() {
         items={[
           { label: "Home", href: "/" },
           { label: "Programs", href: "/programs" },
-          { label: "Group Classes" },
+          { label: "Group Classes", href: "/programs/group-adults" },
         ]}
       />
 

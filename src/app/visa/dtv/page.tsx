@@ -194,8 +194,7 @@ export default function DTVVisaPage() {
       <Breadcrumbs
         items={[
           { label: "Home", href: "/" },
-          { label: "Visa" },
-          { label: "DTV Visa" },
+          { label: "DTV Visa", href: "/visa/dtv" },
         ]}
       />
 

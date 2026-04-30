@@ -117,7 +117,7 @@ export default function ContactPage() {
       />
 
       <Breadcrumbs
-        items={[{ label: "Home", href: "/" }, { label: "Contact" }]}
+        items={[{ label: "Home", href: "/" }, { label: "Contact", href: "/contact" }]}
       />
 
       {/* Page Header */}

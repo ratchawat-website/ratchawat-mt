@@ -88,7 +88,7 @@ export default async function BookingConfirmedPage({ searchParams }: Props) {
         items={[
           { label: "Home", href: "/" },
           { label: "Book", href: "/booking" },
-          { label: "Confirmed" },
+          { label: "Confirmed", href: "/booking/confirmed" },
         ]}
       />
 

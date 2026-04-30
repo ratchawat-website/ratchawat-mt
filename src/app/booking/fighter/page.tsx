@@ -20,7 +20,7 @@ export default function FighterBookingPage() {
         items={[
           { label: "Home", href: "/" },
           { label: "Book", href: "/booking" },
-          { label: "Fighter Program" },
+          { label: "Fighter Program", href: "/booking/fighter" },
         ]}
       />
 

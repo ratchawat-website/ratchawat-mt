@@ -77,9 +77,8 @@ export default async function DtvConfirmedPage({ searchParams }: Props) {
       <Breadcrumbs
         items={[
           { label: "Home", href: "/" },
-          { label: "Visa" },
           { label: "DTV Visa", href: "/visa/dtv" },
-          { label: "Confirmed" },
+          { label: "Confirmed", href: "/visa/dtv/confirmed" },
         ]}
       />
 

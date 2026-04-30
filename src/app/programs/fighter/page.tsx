@@ -134,7 +134,7 @@ export default function FighterProgramPage() {
         items={[
           { label: "Home", href: "/" },
           { label: "Programs", href: "/programs" },
-          { label: "Fighter Program" },
+          { label: "Fighter Program", href: "/programs/fighter" },
         ]}
       />
 

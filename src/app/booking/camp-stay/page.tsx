@@ -20,7 +20,7 @@ export default function CampStayBookingPage() {
         items={[
           { label: "Home", href: "/" },
           { label: "Book", href: "/booking" },
-          { label: "Camp Stay" },
+          { label: "Camp Stay", href: "/booking/camp-stay" },
         ]}
       />
 

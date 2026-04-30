@@ -140,8 +140,7 @@ export default function PlaiLaemCampPage() {
       <Breadcrumbs
         items={[
           { label: "Home", href: "/" },
-          { label: "Camps" },
-          { label: "Plai Laem" },
+          { label: "Plai Laem", href: "/camps/plai-laem" },
         ]}
       />
 

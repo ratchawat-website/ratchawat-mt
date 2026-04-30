@@ -157,7 +157,7 @@ export default function AccommodationPage() {
       <JsonLd data={[organizationSchema(), lodgingSchema]} />
 
       <Breadcrumbs
-        items={[{ label: "Home", href: "/" }, { label: "Accommodation" }]}
+        items={[{ label: "Home", href: "/" }, { label: "Accommodation", href: "/accommodation" }]}
       />
 
       {/* Hero */}

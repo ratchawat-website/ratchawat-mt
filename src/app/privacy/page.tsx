@@ -19,7 +19,7 @@ export default function PrivacyPage() {
       <JsonLd data={[organizationSchema()]} />
 
       <Breadcrumbs
-        items={[{ label: "Home", href: "/" }, { label: "Privacy" }]}
+        items={[{ label: "Home", href: "/" }, { label: "Privacy", href: "/privacy" }]}
       />
 
       <section className="py-12 sm:py-16 px-6 sm:px-10 md:px-16 lg:px-20">

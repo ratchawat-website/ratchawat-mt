@@ -73,7 +73,7 @@ export default function ProgramsPage() {
       <JsonLd data={[organizationSchema(), ...courseSchemas]} />
 
       <Breadcrumbs
-        items={[{ label: "Home", href: "/" }, { label: "Programs" }]}
+        items={[{ label: "Home", href: "/" }, { label: "Programs", href: "/programs" }]}
       />
 
       {/* Page Header */}

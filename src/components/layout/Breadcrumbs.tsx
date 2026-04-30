@@ -3,7 +3,7 @@ import JsonLd from "@/components/seo/JsonLd";
 
 interface BreadcrumbItem {
   label: string;
-  href?: string;
+  href: string;
 }
 interface BreadcrumbsProps {
   items: BreadcrumbItem[];
@@ -16,7 +16,7 @@ export default function Breadcrumbs({ items }: BreadcrumbsProps) {
     "@type": "ListItem" as const,
     position: i + 1,
     name: item.label,
-    ...(item.href ? { item: `${SITE_URL}${item.href}` } : {}),
+    item: `${SITE_URL}${item.href}`,
   }));
   const schema = {
     "@context": "https://schema.org",
@@ -34,27 +34,33 @@ export default function Breadcrumbs({ items }: BreadcrumbsProps) {
         <ol className="flex items-center gap-2 text-[10px] uppercase tracking-[0.125em]">
           {/* Leading accent line */}
           <li className="w-4 h-px bg-primary mr-1" aria-hidden="true" />
-          {items.map((item, i) => (
-            <li key={i} className="flex items-center gap-2">
-              {i > 0 && (
-                <span className="text-outline" aria-hidden="true">
-                  /
-                </span>
-              )}
-              {item.href ? (
-                <Link
-                  href={item.href}
-                  className="text-[#777] hover:text-primary transition-colors"
-                >
-                  {item.label}
-                </Link>
-              ) : (
-                <span className="text-on-surface font-semibold">
-                  {item.label}
-                </span>
-              )}
-            </li>
-          ))}
+          {items.map((item, i) => {
+            const isLast = i === items.length - 1;
+            return (
+              <li key={i} className="flex items-center gap-2">
+                {i > 0 && (
+                  <span className="text-outline" aria-hidden="true">
+                    /
+                  </span>
+                )}
+                {isLast ? (
+                  <span
+                    aria-current="page"
+                    className="text-on-surface font-semibold"
+                  >
+                    {item.label}
+                  </span>
+                ) : (
+                  <Link
+                    href={item.href}
+                    className="text-[#777] hover:text-primary transition-colors"
+                  >
+                    {item.label}
+                  </Link>
+                )}
+              </li>
+            );
+          })}
         </ol>
       </nav>
     </>

@@ -60,7 +60,7 @@ export default function AboutPage() {
       <JsonLd data={[organizationSchema(), aboutPageSchema]} />
 
       <Breadcrumbs
-        items={[{ label: "Home", href: "/" }, { label: "About" }]}
+        items={[{ label: "Home", href: "/" }, { label: "About", href: "/about" }]}
       />
 
       {/* Page Header */}

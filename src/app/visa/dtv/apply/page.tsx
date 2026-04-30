@@ -16,9 +16,8 @@ export default function DtvApplyPage() {
       <Breadcrumbs
         items={[
           { label: "Home", href: "/" },
-          { label: "Visa" },
           { label: "DTV Visa", href: "/visa/dtv" },
-          { label: "Apply" },
+          { label: "Apply", href: "/visa/dtv/apply" },
         ]}
       />
 

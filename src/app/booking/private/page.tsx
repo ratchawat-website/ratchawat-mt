@@ -20,7 +20,7 @@ export default function PrivateBookingPage() {
         items={[
           { label: "Home", href: "/" },
           { label: "Book", href: "/booking" },
-          { label: "Private Lessons" },
+          { label: "Private Lessons", href: "/booking/private" },
         ]}
       />
 

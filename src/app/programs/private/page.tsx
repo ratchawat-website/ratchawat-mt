@@ -85,7 +85,7 @@ export default function PrivateLessonsPage() {
         items={[
           { label: "Home", href: "/" },
           { label: "Programs", href: "/programs" },
-          { label: "Private Lessons" },
+          { label: "Private Lessons", href: "/programs/private" },
         ]}
       />
 

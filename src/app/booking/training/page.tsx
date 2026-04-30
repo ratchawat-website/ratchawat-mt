@@ -20,7 +20,7 @@ export default function TrainingBookingPage() {
         items={[
           { label: "Home", href: "/" },
           { label: "Book", href: "/booking" },
-          { label: "Group Training" },
+          { label: "Group Training", href: "/booking/training" },
         ]}
       />
 

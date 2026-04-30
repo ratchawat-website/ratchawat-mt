@@ -71,7 +71,7 @@ export default function GroupKidsPage() {
         items={[
           { label: "Home", href: "/" },
           { label: "Programs", href: "/programs" },
-          { label: "Kids Classes" },
+          { label: "Kids Classes", href: "/programs/group-kids" },
         ]}
       />
 

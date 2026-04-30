@@ -116,8 +116,7 @@ export default function BoPhutCampPage() {
       <Breadcrumbs
         items={[
           { label: "Home", href: "/" },
-          { label: "Camps" },
-          { label: "Bo Phut" },
+          { label: "Bo Phut", href: "/camps/bo-phut" },
         ]}
       />
 

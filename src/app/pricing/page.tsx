@@ -70,7 +70,7 @@ export default function PricingPage() {
       />
 
       <Breadcrumbs
-        items={[{ label: "Home", href: "/" }, { label: "Pricing" }]}
+        items={[{ label: "Home", href: "/" }, { label: "Pricing", href: "/pricing" }]}
       />
 
       {/* Page Header */}

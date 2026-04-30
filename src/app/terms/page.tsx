@@ -19,7 +19,7 @@ export default function TermsPage() {
       <JsonLd data={[organizationSchema()]} />
 
       <Breadcrumbs
-        items={[{ label: "Home", href: "/" }, { label: "Terms" }]}
+        items={[{ label: "Home", href: "/" }, { label: "Terms", href: "/terms" }]}
       />
 
       <section className="py-12 sm:py-16 px-6 sm:px-10 md:px-16 lg:px-20">

@@ -100,7 +100,7 @@ export default function FAQPage() {
       />
 
       <Breadcrumbs
-        items={[{ label: "Home", href: "/" }, { label: "FAQ" }]}
+        items={[{ label: "Home", href: "/" }, { label: "FAQ", href: "/faq" }]}
       />
 
       {/* Page Header */}
