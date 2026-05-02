@@ -358,16 +358,16 @@ All AUDIT-SEO.md requirements met for every route. `llms.txt` reflects current s
 
 ## Phase 9 — Go-live
 
-**Status:** IN PROGRESS (started 2026-04-27)
+**Status:** ✅ DONE (2026-05-02)
 **Goal:** Site live at ratchawatmuaythai.com.
 **Blocker:** Phases 5, 6, 7, 8 all complete.
 **Reference:** **`GO-LIVE-CHECKLIST.md`** at the project root is the authoritative pre-launch checklist.
 
-### Current state (2026-04-28)
+### Current state (2026-05-02)
 
-Site is **LIVE** at `https://ratchawatmuaythai.com` with valid SSL. Real-card booking smoke test passed (drop-in 400 THB → Supabase booking confirmed → admin + client emails delivered → refunded). Production database cleaned of all test data. Domain registrar transfer (Bluehost → Cloudflare) still in flight (auto-approves by ~2026-05-03), but does not block anything since Cloudflare already controls DNS.
+Site is **LIVE** at `https://ratchawatmuaythai.com` with valid SSL. All booking types and DTV flow validated in production with real cards. Stripe LIVE mode active. Domain transfer Bluehost → Cloudflare completed and renewed past 2026-05. Legal pages (`/privacy`, `/terms`) finalized with the registered entity CHOR:RATCHAWAT CO., LTD, indexed and added to sitemap. Google Business Profile updated on both listings. 48h post-launch monitoring done with no regressions. Pre-launch security hardening shipped (commit `06d9247`): Cloudflare Turnstile on all public forms, CSP, host header injection closed, JsonLd `</script>` escape, Zod on `/api/admin/availability`.
 
-Remaining: full smoke test of remaining booking types, Lighthouse on prod, Search Console + Analytics + GBP, real legal content validation, post-launch monitoring.
+Outstanding (non-blocking, internal hygiene): Lighthouse + cross-browser + screen reader passes on prod (Section G), and the formal rollback-plan write-up in `GO-LIVE-CHECKLIST.md` §10.
 
 ### A. Infrastructure — accounts & external services
 
@@ -384,8 +384,8 @@ Remaining: full smoke test of remaining booking types, Lighthouse on prod, Searc
 - [x] Domain unlocked at Bluehost (2026-04-27).
 - [x] Cloudflare nameservers (`damiete` + `michelle`) replaced Bluehost nameservers (2026-04-27).
 - [x] Cloudflare registrar transfer initiated + paid ~$10.44 (2026-04-28).
-- [ ] **Wait for Bluehost release** (auto-approves within 5 days, by ~2026-05-03).
-- [ ] Final transfer confirmation email from Cloudflare.
+- [x] **Bluehost release confirmed** + transfer completed at Cloudflare (2026-05-02).
+- [x] Domain renewed to push expiry past 2026-05 (auto-renew was cancelled by ex-dev; manual renew done 2026-05-02).
 
 ### C. DNS records (Cloudflare → Vercel) ✅ DONE 2026-04-28
 
@@ -428,7 +428,7 @@ Remaining: full smoke test of remaining booking types, Lighthouse on prod, Searc
 ### H. Data & content cleanup
 
 - [x] **Clean Supabase test data** (2026-04-28) — purged 4 bookings + 5 availability_blocks + 5 processed_stripe_events. `dtv_applications` already empty. `profiles` (1 admin row) preserved. Production database now clean.
-- [ ] **Real legal content validation** — `/privacy` and `/terms` currently provisional with `noIndex: true`. Owner reviews, then flip `noIndex: false` + add to sitemap.
+- [x] **Real legal content validated and indexed** (2026-05-02, commit `5009efb`) — `/privacy` and `/terms` updated with the registered legal entity `CHOR:RATCHAWAT CO., LTD`, registered office address (20, 33 Moo 5 Soi Plai Laem 13, Tambon Bo Put, Koh Samui, Surat Thani 84320), unified cancellation policy (no cash refund → 12-month training voucher valid at both camps, aligned with the DTV refusal rule), payment options (cash + Wise/bank transfer accepted on every booking type). `noIndex` removed, both URLs added to `sitemap.ts`.
 
 ### I. Search & analytics
 
@@ -436,11 +436,11 @@ Remaining: full smoke test of remaining booking types, Lighthouse on prod, Searc
 - [~] **Google Analytics** — DEFERRED. Decision: not added at launch (privacy-first stance, can be added later if needed).
 - [x] **301 redirects** (2026-04-28) — 24 legacy WordPress URLs routed to current pages via `next.config.ts redirects()`. Each entry registered with and without trailing slash. Targets corrected for routes that no longer exist on the new site (`/services` → `/programs`, `/transportation-solutions` + `/health-insurance` → `/contact`, `/blog` family → `/`, `/gallery` → `/`).
 - [x] **robots.txt hardening** (2026-04-28) — added legacy WordPress paths to disallow list (`/wp-admin/`, `/wp-content/`, `/wp-includes/`, `/wp-json/`, `/xmlrpc.php`, `/feed/`, `/?s=`, `/search`) on top of existing app-specific disallows.
-- [ ] **Google Business Profile** — update both Bo Phut + Plai Laem listings with new website URL and any updated NAP/hours.
+- [x] **Google Business Profile updated** (2026-05-02) — both Bo Phut and Plai Laem listings now point to `https://ratchawatmuaythai.com` with the canonical NAP and current hours.
 
 ### J. Post-launch
 
-- [ ] **48h monitoring** — Vercel logs, Stripe events, Resend deliverability, Supabase advisor warnings.
+- [x] **48h monitoring done** (2026-05-02) — Vercel logs, Stripe events, Resend deliverability, and Supabase advisors checked over the 48h window after launch. No regressions, no anomalies.
 - [ ] **Rollback plan ready** — checklist §10 documented, Cloudflare DNS revert path confirmed.
 
 ### Success criteria
