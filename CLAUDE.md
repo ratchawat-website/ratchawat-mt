@@ -128,6 +128,20 @@ public/
 - Protect booking and account routes with middleware (`src/middleware.ts`).
 - Store the session server-side using Supabase SSR helpers.
 
+### Supabase migrations (mandatory template from 2026-10-30)
+
+From **2026-10-30**, Supabase removes the default `public` schema grants on all existing projects. Any new table without explicit `GRANT` statements will be invisible to `supabase-js` and PostgREST.
+
+**Every new migration that creates a table in `public` MUST include:**
+1. `create table public.x (...)`
+2. `alter table public.x enable row level security;`
+3. Explicit `grant ...` per role (least privilege, no permissive `grant all to anon`)
+4. RLS policies
+
+Full template + examples: see `ARCHITECTURE.md` section 6, "Migration template (mandatory from 2026-10-30)".
+
+Existing tables keep their current grants. The 5 production tables (`bookings`, `availability_blocks`, `dtv_applications`, `profiles`, `processed_stripe_events`) are not affected.
+
 ---
 
 ## SEO

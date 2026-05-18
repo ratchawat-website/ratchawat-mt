@@ -3,7 +3,7 @@
 > **Technical reference.** Read this before writing any backend code, touching integrations, or designing new booking flows.
 > This file documents decisions that are fixed. If you need to change something here, discuss with RD first.
 
-**Last updated:** 2026-04-18
+**Last updated:** 2026-05-18
 
 ---
 
@@ -188,6 +188,43 @@ create policy "users_read_own_profile" on profiles
 ```
 
 All admin policies gated by `is_admin()`. Supabase security advisor: 0 lints.
+
+### Migration template (mandatory from 2026-10-30)
+
+Starting **2026-10-30**, Supabase removes the default `public` schema grants to `anon`, `authenticated`, and `service_role` on **all existing projects** (including ours, `rlmeafyvedpsflwohuyy`). Any new table created after that date without explicit grants will be invisible to `supabase-js` and PostgREST, and any attempt to read/write through the Data API will return a `42501` Postgres error.
+
+**Existing tables keep their grants — no action needed on the 5 current tables.** This rule applies only to **future migrations**.
+
+Every new migration that creates a table in `public` MUST follow this template:
+
+```sql
+-- 1. Create table
+create table public.my_table (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now()
+  -- ... other columns
+);
+
+-- 2. Enable RLS (always)
+alter table public.my_table enable row level security;
+
+-- 3. Explicit grants (REQUIRED from 2026-10-30)
+-- Pick only what the app actually needs. Default to least privilege.
+grant select on public.my_table to anon;
+grant select, insert, update on public.my_table to authenticated;
+grant all on public.my_table to service_role;
+
+-- 4. RLS policies
+create policy "..." on public.my_table for select to anon using (...);
+create policy "..." on public.my_table for select to authenticated using (...);
+-- service_role bypasses RLS, no policy needed for it.
+```
+
+**Notes:**
+- If a table is **server-only** (inserts via API routes using `SUPABASE_SERVICE_ROLE_KEY` only), give nothing to `anon` and `authenticated`. Only `service_role` needs grants. Example: `processed_stripe_events`.
+- If a table is **publicly readable** (e.g. `availability_blocks` for the public calendar), `grant select on ... to anon;` is enough.
+- **Never** copy the old permissive default (`grant all on ... to anon`). RLS is a second line of defense, not the only one.
+- After applying a migration, verify with: `SELECT grantee, privilege_type FROM information_schema.role_table_grants WHERE table_schema='public' AND table_name='my_table';`
 
 ### Reading bookings from `/booking/confirmed`
 
