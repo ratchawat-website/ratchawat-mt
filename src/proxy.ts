@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   // Skip Supabase auth if not configured yet
   if (
     !process.env.NEXT_PUBLIC_SUPABASE_URL ||

@@ -125,7 +125,7 @@ public/
 ### Authentication (Supabase Auth)
 
 - Auth is enabled. Supabase handles sign-up, login, password reset.
-- Protect booking and account routes with middleware (`src/middleware.ts`).
+- Protect booking and account routes with the proxy file (`src/proxy.ts`, Next.js 16 convention, formerly `middleware.ts`).
 - Store the session server-side using Supabase SSR helpers.
 
 ### Supabase migrations (mandatory template from 2026-10-30)
