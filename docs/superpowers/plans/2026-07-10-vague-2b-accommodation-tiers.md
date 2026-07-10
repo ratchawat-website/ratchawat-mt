@@ -1216,7 +1216,7 @@ git commit -m "refactor(stay): les pages lisent la grille stay-pricing, fin des 
 
 - [ ] **Step 1: Suite E2E complète (dev + stripe listen, clés TEST)**
 
-1. Room Normal 7 nuits : devis 8,000, Stripe 8,000, payer 4242 -> confirmed, occupation +1 sur 7 nuits.
+1. Room Normal 7 nuits : devis 8,000, Stripe 8,000, payer 4242 -> confirmed, occupation +1 sur 7 nuits. L'email de confirmation affiche « Standard Room » (fallback stayLabelFromPriceId) ET le rappel « Room reservations are non-refundable and non-exchangeable » (le check `price_id.includes("stay")` de la vague 1 matche les nouveaux ids `stay-*`).
 2. Room Normal 15 nuits : 16,140 (breakdown visible : base 15,000 + 1 x 1,140).
 3. Room Normal 6 nuits : bloqué côté UI (minimum) ET côté API (tester via curl : 400 avec le message minimum).
 4. Bungalow Normal 31 nuits : 23,600 ; bungalow 20 nuits : bloqué.

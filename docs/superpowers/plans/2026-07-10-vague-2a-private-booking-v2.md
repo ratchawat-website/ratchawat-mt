@@ -1219,7 +1219,7 @@ Dans `BookingConfirmed.tsx`, remplacer les deux blocs Start date / Time par :
             )}
 ```
 
-(`Total paid` affiche déjà `price_amount`, que le webhook envoie sommé pour un groupe.)
+(`Total paid` affiche déjà `price_amount`, que le webhook envoie sommé pour un groupe. Le bloc de rappel des policies ajouté en vague 1 (Task 11 Step 4b) vit APRÈS la `<Section>` du résumé : il reste en place tel quel, ne pas le déplacer.)
 
 - [ ] **Step 3: Template admin + build**
 

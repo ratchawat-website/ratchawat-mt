@@ -1164,6 +1164,7 @@ git commit -m "feat(dtv): champ date de naissance (formulaire, DB, admin, emails
 - Modify: `src/app/booking/camp-stay/CampStayWizard.tsx` (étape Review : politique Room)
 - Modify: `src/app/booking/fighter/FighterWizard.tsx` (étape Review, tiers stay uniquement : politique Room)
 - Modify: `src/app/booking/private/PrivateWizard.tsx` (étape Review : politique privée)
+- Modify: `src/lib/email/templates/BookingConfirmed.tsx` (rappel de la politique dans l'email client)
 
 **Interfaces:**
 - Consumes: `PRIVATE_CANCELLATION_POLICY`, `ROOM_RESERVATION_POLICY` de `@/content/policies` (Task 9).
@@ -1225,6 +1226,41 @@ Import : `import { PRIVATE_CANCELLATION_POLICY } from "@/content/policies";`
 
 (Adapter `isStayTier` au nom réel de la condition dans le fichier ; la logique existe déjà pour verrouiller le camp sur Plai Laem.)
 
+- [ ] **Step 4b: Rappel de la politique dans l'email de confirmation client**
+
+Le client garde ainsi la politique par écrit (réduit les litiges). Dans `src/lib/email/templates/BookingConfirmed.tsx` (email CLIENT uniquement ; ne pas toucher `BookingNotification`, l'admin connaît ses politiques), juste après la `<Section>` du résumé et avant le premier `<Hr />` :
+
+```tsx
+          {booking.type === "private" && (
+            <Text style={{ fontSize: 12, color: "#999" }}>
+              {PRIVATE_CANCELLATION_POLICY}
+            </Text>
+          )}
+          {includesAccommodation && (
+            <Text style={{ fontSize: 12, color: "#999" }}>
+              {ROOM_RESERVATION_POLICY}
+            </Text>
+          )}
+```
+
+avec, près du haut du composant :
+
+```typescript
+  const includesAccommodation =
+    booking.type === "camp-stay" || booking.price_id.includes("stay");
+```
+
+et l'import :
+
+```typescript
+import {
+  PRIVATE_CANCELLATION_POLICY,
+  ROOM_RESERVATION_POLICY,
+} from "@/content/policies";
+```
+
+Notes : `booking.price_id.includes("stay")` capte les combos `fighter-stay-*` actuels ET les futurs ids `stay-*` de la vague 2b (aucune retouche à prévoir là-bas), tandis que `fighter-monthly` (sans hébergement) et le DTV ne matchent pas. La politique DTV, elle, est déjà traitée dans `DTVApplicationReceived` (Task 9).
+
 - [ ] **Step 5: /humanizer sur le paragraphe Plai Laem**
 
 Passer le paragraphe du Step 1 au /humanizer (PAS les textes de policies : verbatim cliente).
@@ -1237,8 +1273,8 @@ Vérifier `/camps/plai-laem`, `/accommodation`, et les 3 wizards à l'étape Rev
 - [ ] **Step 7: Commit**
 
 ```bash
-git add src/app/camps/plai-laem/page.tsx src/app/accommodation/page.tsx src/app/booking/camp-stay/CampStayWizard.tsx src/app/booking/fighter/FighterWizard.tsx src/app/booking/private/PrivateWizard.tsx
-git commit -m "feat(content): equipements exclusifs Plai Laem, mention Standard Room, policies de reservation sur les 3 wizards"
+git add src/app/camps/plai-laem/page.tsx src/app/accommodation/page.tsx src/app/booking/camp-stay/CampStayWizard.tsx src/app/booking/fighter/FighterWizard.tsx src/app/booking/private/PrivateWizard.tsx src/lib/email/templates/BookingConfirmed.tsx
+git commit -m "feat(content): equipements exclusifs Plai Laem, mention Standard Room, policies sur les wizards et l'email de confirmation"
 ```
 
 ---
@@ -1352,7 +1388,7 @@ git commit -m "refactor(pricing): les pages et schemas lisent pricing.ts, fin de
 - [ ] **Step 1: Suite E2E locale complète**
 
 Avec `npm run dev` + `stripe listen --forward-to localhost:3000/api/webhooks/stripe` (clés TEST) :
-1. Privé solo adulte : wizard complet, Stripe affiche 1,000 THB, payer 4242, booking `confirmed`, email reçu, block créé.
+1. Privé solo adulte : wizard complet, Stripe affiche 1,000 THB, payer 4242, booking `confirmed`, email reçu (avec le rappel de la politique 24h non-refundable), block créé.
 2. Privé groupe 3 adultes : Stripe affiche 1,400 THB (quantity 1), payer, `confirmed`.
 3. 10-pack : Stripe affiche 9,000 THB, payer, `confirmed`.
 4. Admin : créer une résa privée sur le créneau du test 1 (même camp) : OK (2/6). La créer 5 fois de plus : la 7e refuse avec « fully booked (6/6) ».
