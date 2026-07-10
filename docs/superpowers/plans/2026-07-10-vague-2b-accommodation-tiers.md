@@ -1226,9 +1226,11 @@ git commit -m "refactor(stay): les pages lisent la grille stay-pricing, fin des 
 8. Webhook expired sur un stay pending : booking cancelled (pas de block à nettoyer : les stays n'ont pas de private-slot).
 9. `/accommodation`, `/pricing`, `/booking` affichent les montants de la config ; JSON-LD valide.
 
-- [ ] **Step 2: Purge + vérifications**
+- [ ] **Step 2: Purge + vérifications + nettoyage**
 
 Purge des données de test Supabase. Run: `npm run lint && npm run build && npm run test` -> 0 erreur, tous les tests verts (capacity, pricing, schedule, booking, stay, inventory).
+
+Nettoyage : après cette vague, le mode `type="camp-stay"` d'`AvailabilityCalendar` n'a plus de consommateur (les wizards stay utilisent `StayCalendar`). Vérifier avec `grep -rn "AvailabilityCalendar" src/` : s'il ne reste que des usages `type="private"`, retirer la branche camp-stay du composant (props `inventoryKey`/`stayDurationDays`, fetch occupancy, blocage multi-nuits) pour ne pas laisser de code mort.
 
 - [ ] **Step 3: Documentation vivante + commit**
 
