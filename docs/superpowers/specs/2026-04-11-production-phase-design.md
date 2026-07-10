@@ -20,7 +20,7 @@ Four files govern the project. Every agent reads them at session start.
 
 | File | Role | Read when |
 |------|------|-----------|
-| `PROJET-STATUS.md` | State of the codebase. What is built, components, correction history. | Always — first read |
+| `PROJECT-STATUS.md` | State of the codebase. What is built, components, correction history. | Always — first read |
 | `ROADMAP.md` | What to build. Phases, task checklists, statuses, blockers, success criteria. | Always — to know what to do next |
 | `ARCHITECTURE.md` | Technical decisions. Supabase schema, Stripe products, booking system design. | Before touching backend or integrations |
 | `CLAUDE.md` | How to work. Conventions, skills, workflows. References ROADMAP as source of truth for tasks. | Always — instructions |
@@ -308,7 +308,7 @@ Supabase middleware: if no active session, redirect to `/admin/login`.
 - [ ] Update `/accommodation` with real prices (Plai Laem only)
 - [ ] Update `/` homepage pricing preview section
 - [ ] Update SEO metadata (title mentions real price 400 THB not 500)
-- [ ] Update `PROJET-STATUS.md` (production mode, real data)
+- [ ] Update `PROJECT-STATUS.md` (production mode, real data)
 - [ ] Update `CLAUDE.md` (add /nextjs-security-scan to workflow)
 - [ ] Create `ROADMAP.md`
 - [ ] Create `ARCHITECTURE.md`

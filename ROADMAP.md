@@ -1,6 +1,6 @@
 # Ratchawat Muay Thai — Roadmap
 
-> **Source of truth for what to build.** Read this at the start of every session alongside PROJET-STATUS.md.
+> **Source of truth for what to build.** Read this at the start of every session alongside PROJECT-STATUS.md.
 > Update task statuses as work progresses. Never start work without checking the current phase.
 
 **Last updated:** 2026-04-28 (site live, post-launch hardening in progress)
@@ -24,7 +24,7 @@
 - [x] Create `src/content/pricing.ts` — centralized price catalog
 - [x] Create `ROADMAP.md` (this file)
 - [x] Create `ARCHITECTURE.md`
-- [x] Update `PROJET-STATUS.md` — production mode, real prices
+- [x] Update `PROJECT-STATUS.md` — production mode, real prices
 - [x] Update `CLAUDE.md` — add /nextjs-security-scan, reference ROADMAP
 - [x] Update `/pricing` page — complete price restructure (real prices + new sections)
 - [x] Update `/programs/group-adults` — drop-in 400 THB, pricing links
@@ -68,7 +68,7 @@
 - [x] Update `/pricing` page with new Camp Stay section (4 cards)
 - [x] Update `/programs/fighter` with Fighter + Accommodation options mention
 - [x] Sync AUDIT-SEO.md PAGE 13
-- [x] Update PROJET-STATUS.md correction history
+- [x] Update PROJECT-STATUS.md correction history
 - [x] /humanizer pass on visible copy
 - [x] `npm run lint` — 0 errors
 - [x] `npm run build` — 0 errors
@@ -250,12 +250,12 @@ First Name, Last Name, Country of Origin/Nationality, Phone (WhatsApp), Email, P
 
 - [x] **5f — Email template + webhook**: new Resend template `src/lib/email/templates/DTVApplicationReceived.tsx` styled like `BookingConfirmed`. Subject: "Your DTV training application at Chor Ratchawat — we will send your documents within 24h". Content: thank-you, package summary, what happens next (24h docs delivery), embassy fee reminder, "no refund but training voucher if visa refused" disclaimer. Update `src/app/api/webhooks/stripe/route.ts`: detect DTV sessions via `metadata.type === 'dtv'`, update `dtv_applications.status = 'paid'` + `stripe_payment_status = 'paid'`, send email via Resend. On `checkout.session.expired` mark `status = 'cancelled'`.
 
-- [x] **5g — Confirmation + docs + smoke test**: reuse `/booking/confirmed` for the success redirect OR create `/visa/dtv/confirmed` if the copy diverges enough. Run full flow end to end in Stripe test mode (apply, pay with 4242 card, confirm email received, verify DB row). Update PROJET-STATUS.md + ARCHITECTURE.md (new table + endpoint). Commit.
+- [x] **5g — Confirmation + docs + smoke test**: reuse `/booking/confirmed` for the success redirect OR create `/visa/dtv/confirmed` if the copy diverges enough. Run full flow end to end in Stripe test mode (apply, pay with 4242 card, confirm email received, verify DB row). Update PROJECT-STATUS.md + ARCHITECTURE.md (new table + endpoint). Commit.
 
 - [x] **5h — Post-smoke-test hardening (2026-04-18)**: smoke test by user revealed 3 gaps. (1) No mention of the official Thai e-visa portal anywhere → added `https://thaievisa.go.th/` link in `/visa/dtv` step 4 + `/visa/dtv/confirmed` step 2 + client email step 2. (2) Admin notification email was identical to client email (same "Hi X, Thanks for applying..." template) with no contact info → new dedicated template `DTVAdminNotification.tsx`, subject `[DTV] Name — Package — Amount paid`, full contact card (email, phone, WhatsApp, nationality), passport + travel blocks, 24h SLA callout, link to admin detail page. (3) Zero admin visibility on DTV applications → new admin list `/admin/dtv-applications` (status filter, 24h SLA badge on overdue-docs rows), detail `/admin/dtv-applications/[id]`, sidebar + bottom-tab entry, 3 admin API routes (`status` with state machine paid → docs_sent | cancelled | refused_voucher_issued, `notes` using `admin_notes` column, `resend-email`), new components (`DtvStatusBadge`, `DtvActions`, `DtvNotesEditor`).
 
 **Dependencies already in place (from earlier waves):**
-- Stripe products + prices created (Wave 2 — see PROJET-STATUS business info).
+- Stripe products + prices created (Wave 2 — see PROJECT-STATUS business info).
 - `BookingType` enum contains `"dtv"` (Wave 2 — `src/lib/validation/booking.ts`, `admin-booking.ts`, `src/content/pricing.ts`).
 - Resend already integrated for bookings (`src/lib/email/templates/BookingConfirmed.tsx`).
 
@@ -343,7 +343,7 @@ All AUDIT-SEO.md requirements met for every route. `llms.txt` reflects current s
 - [x] **`/performance` audit** — done 2026-04-26. 0 third-party scripts, lucide-react tree-shakable, server-only deps confined to API routes, fonts via next/font/google with display:swap. Three broken asset references found and fixed (default OG image 404, organizationSchema logo 404, articleSchema logo 404). Real logo + favicon set integrated.
 - [x] **`/accessibility` audit** — done 2026-04-26. Skip link added (sr-only -> focus visible), `<main id="main-content" tabIndex={-1}>`, mobile toggle now has `aria-expanded` + `aria-controls` + dynamic aria-label, mobile menu has matching `id`, desktop dropdowns now keyboard-accessible via `group-focus-within` + aria-haspopup, all decorative icons have `aria-hidden="true"`. Already verified: html lang, prefers-reduced-motion globally, ContactForm labels, Image alt text, Footer icon button aria-labels.
 - [x] **`prefers-reduced-motion`** — done. Global rule in `globals.css` neutralises all animations + per-component handling in TeamCircularGallery via `useSyncExternalStore`.
-- [x] **P0 security checklist audit** — done 2026-04-27. All 8 items in `security-checklist.md` validated. Fixes applied: (1) `dtv_applications` RLS tightened from `USING (true)` to `is_admin()` (migration `align_dtv_policies_with_is_admin`); (2) Stripe webhook hardened — `runtime="nodejs"` + explicit `STRIPE_WEBHOOK_SECRET` guard; (3) idempotency table `processed_stripe_events` + dedup logic in webhook handler (migration `processed_stripe_events_dedup`); (4) race-safe `checkout.session.expired` cancellation (only when status='pending'); (5) middleware now gates `/api/admin/*` (JSON 401) in addition to `/admin/*` pages, defense-in-depth on top of per-route `is_admin()` checks. Two non-P0 follow-ups deferred to Phase 9 go-live: permanent Stripe LIVE webhook endpoint + Supabase Leaked Password Protection toggle. See PROJET-STATUS.md 2026-04-27 entry.
+- [x] **P0 security checklist audit** — done 2026-04-27. All 8 items in `security-checklist.md` validated. Fixes applied: (1) `dtv_applications` RLS tightened from `USING (true)` to `is_admin()` (migration `align_dtv_policies_with_is_admin`); (2) Stripe webhook hardened — `runtime="nodejs"` + explicit `STRIPE_WEBHOOK_SECRET` guard; (3) idempotency table `processed_stripe_events` + dedup logic in webhook handler (migration `processed_stripe_events_dedup`); (4) race-safe `checkout.session.expired` cancellation (only when status='pending'); (5) middleware now gates `/api/admin/*` (JSON 401) in addition to `/admin/*` pages, defense-in-depth on top of per-route `is_admin()` checks. Two non-P0 follow-ups deferred to Phase 9 go-live: permanent Stripe LIVE webhook endpoint + Supabase Leaked Password Protection toggle. See PROJECT-STATUS.md 2026-04-27 entry.
 - [ ] **Rate limiting on `/api/*`** — DEFERRED to post-launch. Needs Upstash Redis or Vercel KV; low traffic at launch, security headers + Zod + honeypot mitigate the main spam vectors.
 - [ ] **CORS on `/api/*`** — Next.js defaults to same-origin for API routes; explicit policy not required at this stage.
 - [ ] **Live Lighthouse run** — DEFERRED to Phase 9 staging deployment. Targets: Performance ≥ 90, Accessibility ≥ 95, Best Practices ≥ 90, SEO = 100. Bundle stats hidden by Next 16 Turbopack output; need real preview deploy.

@@ -595,7 +595,7 @@ Phase 3 is DONE when:
 - [ ] `/booking/confirmed` reads the booking via `service_role` and shows a personalized summary
 - [ ] ARCHITECTURE.md reflects all 7 corrections
 - [ ] ROADMAP.md reflects the renumbered phases
-- [ ] PROJET-STATUS.md updated with Phase 3 progress
+- [ ] PROJECT-STATUS.md updated with Phase 3 progress
 - [ ] Commit with descriptive message pushed to main
 
 ---

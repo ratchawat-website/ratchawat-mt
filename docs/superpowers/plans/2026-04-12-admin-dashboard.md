@@ -3498,12 +3498,12 @@ git commit -m "feat(admin): add account page showing user info"
 
 ---
 
-## Task 17: Update Docs — ARCHITECTURE, ROADMAP, PROJET-STATUS
+## Task 17: Update Docs — ARCHITECTURE, ROADMAP, PROJECT-STATUS
 
 **Files:**
 - Modify: `ARCHITECTURE.md`
 - Modify: `ROADMAP.md`
-- Modify: `PROJET-STATUS.md`
+- Modify: `PROJECT-STATUS.md`
 
 - [ ] **Step 1: Update ARCHITECTURE.md**
 
@@ -3520,7 +3520,7 @@ Add new Section 10 (or appropriate number): Capacity Model — document INVENTOR
 Tick all Phase 4 task checkboxes. Update Phase 4 status to COMPLETE.
 Note that pending #56 is resolved (RLS tightening done in Phase 4).
 
-- [ ] **Step 3: Update PROJET-STATUS.md**
+- [ ] **Step 3: Update PROJECT-STATUS.md**
 
 Add Phase 4 completion entry. Update current phase to Phase 5.
 Add correction history entries for: calendar refonte, slot fix, capacity system, admin dashboard.
@@ -3528,8 +3528,8 @@ Add correction history entries for: calendar refonte, slot fix, capacity system,
 - [ ] **Step 4: Commit**
 
 ```bash
-git add ARCHITECTURE.md ROADMAP.md PROJET-STATUS.md
-git commit -m "docs(phase-4): update ARCHITECTURE, ROADMAP, PROJET-STATUS after admin dashboard completion"
+git add ARCHITECTURE.md ROADMAP.md PROJECT-STATUS.md
+git commit -m "docs(phase-4): update ARCHITECTURE, ROADMAP, PROJECT-STATUS after admin dashboard completion"
 ```
 
 ---

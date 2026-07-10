@@ -510,7 +510,7 @@ src/app/api/webhooks/stripe/route.ts                — confirm expired session 
 
 ```
 ARCHITECTURE.md     — Section 4 (slots), Section 5 (profiles table), Section 8 (admin routes)
-PROJET-STATUS.md    — Phase 4 done, known issues updates
+PROJECT-STATUS.md    — Phase 4 done, known issues updates
 ROADMAP.md          — Phase 4 task checkboxes, pending #56 resolved
 ```
 

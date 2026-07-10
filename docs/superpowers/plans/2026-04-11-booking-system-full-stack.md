@@ -2993,12 +2993,12 @@ Create a fix sub-task. Re-run the failing flow until green. Do not proceed to Ta
 
 ---
 
-### Task 27: Update PROJET-STATUS.md and commit phase close
+### Task 27: Update PROJECT-STATUS.md and commit phase close
 
 **Files:**
-- Modify: `PROJET-STATUS.md`
+- Modify: `PROJECT-STATUS.md`
 
-- [ ] **Step 1: Update PROJET-STATUS.md**
+- [ ] **Step 1: Update PROJECT-STATUS.md**
 
 Find the "Known issues" / "Correction history" section and add an entry dated today:
 
@@ -3028,7 +3028,7 @@ If there's a "Current phase" line, update to `Phase 4 — Admin Dashboard`.
 - [ ] **Step 3: Commit and close phase**
 
 ```bash
-git add PROJET-STATUS.md
+git add PROJECT-STATUS.md
 git commit -m "docs(phase-3): close Phase 3 Booking System Full Stack — all 4 flows live end-to-end"
 ```
 
@@ -3058,7 +3058,7 @@ Phase 3 closed.
 - [ ] /booking/confirmed resolves booking via session_id and Stripe
 - [ ] ARCHITECTURE.md contains all 7 corrections
 - [ ] ROADMAP.md renumbered (Phase 4 = Admin, Phase 5 = Security, Phase 6 = Go-live)
-- [ ] PROJET-STATUS.md has Phase 3 correction history entry
+- [ ] PROJECT-STATUS.md has Phase 3 correction history entry
 - [ ] All commits pushed to main
 
 ---

@@ -20,7 +20,7 @@
 ```markdown
 # Ratchawat Muay Thai — Roadmap
 
-> **Source of truth for what to build.** Read this at the start of every session alongside PROJET-STATUS.md.
+> **Source of truth for what to build.** Read this at the start of every session alongside PROJECT-STATUS.md.
 > Update task statuses as work progresses. Never start work without checking the current phase.
 
 **Last updated:** 2026-04-11
@@ -42,7 +42,7 @@
 - [ ] Create `src/content/pricing.ts` — centralized price catalog
 - [ ] Create `ROADMAP.md` (this file)
 - [ ] Create `ARCHITECTURE.md`
-- [ ] Update `PROJET-STATUS.md` — production mode, real prices
+- [ ] Update `PROJECT-STATUS.md` — production mode, real prices
 - [ ] Update `CLAUDE.md` — add /nextjs-security-scan, reference ROADMAP
 - [ ] Update `/pricing` page — complete price restructure (real prices + new sections)
 - [ ] Update `/programs/group-adults` — drop-in 400 THB, pricing links
@@ -419,13 +419,13 @@ Expected: file exists, no error.
 
 ---
 
-## Task 3: Update PROJET-STATUS.md and CLAUDE.md
+## Task 3: Update PROJECT-STATUS.md and CLAUDE.md
 
 **Files:**
-- Modify: `PROJET-STATUS.md` — update last updated date, prices in overview, add correction history entry, add production phase note
+- Modify: `PROJECT-STATUS.md` — update last updated date, prices in overview, add correction history entry, add production phase note
 - Modify: `CLAUDE.md` — update first action instruction, add ROADMAP.md reference, add /nextjs-security-scan to skills table
 
-- [ ] **Step 1: Update PROJET-STATUS.md header and overview section**
+- [ ] **Step 1: Update PROJECT-STATUS.md header and overview section**
 
 Replace the current header block (lines 1-8 area) and the business info drop-in price:
 
@@ -459,19 +459,19 @@ with:
 
 In section 4 (Correction History), add at the end:
 ```markdown
-| 2026-04-11 | Production phase begins. Client accepted project. Created ROADMAP.md, ARCHITECTURE.md, spec + plan. Updated PROJET-STATUS.md, CLAUDE.md. Created src/content/pricing.ts with all real prices. Updated all pages with correct prices. |
+| 2026-04-11 | Production phase begins. Client accepted project. Created ROADMAP.md, ARCHITECTURE.md, spec + plan. Updated PROJECT-STATUS.md, CLAUDE.md. Created src/content/pricing.ts with all real prices. Updated all pages with correct prices. |
 ```
 
 - [ ] **Step 3: Update CLAUDE.md — first action and ROADMAP reference**
 
 Replace:
 ```markdown
-> **First action in every session:** read `PROJET-STATUS.md` at project root to know exactly where the project stands.
+> **First action in every session:** read `PROJECT-STATUS.md` at project root to know exactly where the project stands.
 ```
 With:
 ```markdown
 > **First actions in every session:**
-> 1. Read `PROJET-STATUS.md` — state of the codebase
+> 1. Read `PROJECT-STATUS.md` — state of the codebase
 > 2. Read `ROADMAP.md` — current phase and tasks to do next
 > 3. Read `ARCHITECTURE.md` — before any backend or integration work
 ```
@@ -1655,7 +1655,7 @@ In `ROADMAP.md`, under Phase 1, check off all completed tasks.
 - [ ] **Step 5: Commit**
 
 ```bash
-git add src/content/pricing.ts ROADMAP.md ARCHITECTURE.md PROJET-STATUS.md CLAUDE.md src/app/pricing/page.tsx src/app/programs/group-adults/page.tsx src/app/programs/group-kids/page.tsx src/app/programs/private/page.tsx src/app/programs/fighter/page.tsx src/app/accommodation/page.tsx src/app/page.tsx docs/
+git add src/content/pricing.ts ROADMAP.md ARCHITECTURE.md PROJECT-STATUS.md CLAUDE.md src/app/pricing/page.tsx src/app/programs/group-adults/page.tsx src/app/programs/group-kids/page.tsx src/app/programs/private/page.tsx src/app/programs/fighter/page.tsx src/app/accommodation/page.tsx src/app/page.tsx docs/
 git commit -m "feat: production phase foundation — real prices, pricing catalog, ROADMAP + ARCHITECTURE docs"
 ```
 

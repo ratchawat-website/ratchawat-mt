@@ -1570,10 +1570,10 @@ git commit -m "fix: integration test fixes for booking/availability audit"
 ### Task 14: Update documentation
 
 **Files:**
-- Modify: `PROJET-STATUS.md`
+- Modify: `PROJECT-STATUS.md`
 - Modify: `ARCHITECTURE.md`
 
-- [ ] **Step 1: Update PROJET-STATUS.md**
+- [ ] **Step 1: Update PROJECT-STATUS.md**
 
 Add a correction history entry for the booking/availability audit:
 - Date: 2026-04-12
@@ -1596,8 +1596,8 @@ Update Section 8 (Admin) to document:
 - [ ] **Step 3: Commit**
 
 ```bash
-git add PROJET-STATUS.md ARCHITECTURE.md
-git commit -m "docs: update PROJET-STATUS and ARCHITECTURE after booking/availability audit"
+git add PROJECT-STATUS.md ARCHITECTURE.md
+git commit -m "docs: update PROJECT-STATUS and ARCHITECTURE after booking/availability audit"
 ```
 
 ---

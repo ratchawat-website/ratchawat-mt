@@ -1,7 +1,7 @@
 # Ratchawat Muay Thai -- Project Instructions
 
 > **First actions in every session:**
-> 1. Read `PROJET-STATUS.md` -- state of the codebase (what is built)
+> 1. Read `PROJECT-STATUS.md` -- state of the codebase (what is built)
 > 2. Read `ROADMAP.md` -- current phase and tasks to do next
 > 3. Read `ARCHITECTURE.md` -- before any backend or integration work
 
@@ -205,7 +205,6 @@ Activate the relevant skills systematically when creating or modifying any page:
 | `/context7` | Up-to-date library documentation (Next.js, React, Tailwind, Supabase, Stripe) |
 | `/performance` | Lighthouse optimization, Core Web Vitals, lazy loading, bundle |
 | `/accessibility` | Accessibility audit (target >= 95), ARIA, contrast, keyboard navigation |
-| `/nextjs-app-router-patterns` | Advanced App Router patterns, SSG/SSR, metadata, caching |
 | `/supabase-postgres-best-practices` | Supabase connection, tables, RLS, migrations, queries |
 | `/stripe-best-practices` | Stripe Checkout configuration, webhooks, products/prices |
 | `/prd` | Generate Product Requirements Documents when needed |
@@ -225,20 +224,20 @@ Do not hesitate to use other skills if the situation requires it.
 
 When auditing existing pages, follow this mandatory order:
 
-1. **Read** `PROJET-STATUS.md` (reference facts) + the page to audit
+1. **Read** `PROJECT-STATUS.md` (reference facts) + the page to audit
 2. **Read** `AUDIT-SEO.md` for that page's SEO strategy (keywords, meta, schemas, GEO passage)
 3. **Run `/seo`** (or sub-skills) **BEFORE any modification**. This is mandatory, not optional.
 4. **Fix** section by section (content, schemas, metadata, internal links)
 5. **Run `/humanizer`** on all modified text
 6. **Verify**: `npm run lint` (0 errors) + `npm run build` (0 errors)
-7. **Document**: update `PROJET-STATUS.md` (mark page as Done, add correction history entry)
+7. **Document**: update `PROJECT-STATUS.md` (mark page as Done, add correction history entry)
 8. **Commit** with descriptive message
 
 ### Visual consistency
 
 - **Always study existing pages** before creating new ones. Read 2-3 similar pages to understand the patterns.
 - Reuse existing components (`HeroSection`, `GlassCard`, `CTABanner`, `ImagePlaceholder`, `FAQAccordion`, etc.) -- do not create new ones unless truly necessary.
-- Respect the "Ratchawat Bold" design system: CSS tokens in `src/styles/globals.css`, typography Outfit + Plus Jakarta Sans, no 1px borders, dark mode default.
+- Respect the "Ratchawat Bold" design system: CSS tokens in `src/styles/globals.css`, typography Barlow Condensed (display) + Inter (body), no 1px borders, dark mode default.
 - Mobile-first: test at 375px minimum, use Tailwind breakpoints (`sm:`, `md:`, `lg:`).
 
 ### Page creation checklist
@@ -273,7 +272,7 @@ Each new page MUST include:
 
 **Each agent MUST, after completing a task or significant step:**
 
-1. **Update `PROJET-STATUS.md`** -- mark pages as Done, add correction history entry, update known issues
+1. **Update `PROJECT-STATUS.md`** -- mark pages as Done, add correction history entry, update known issues
 2. **Update `CLAUDE.md`** if workflow, architecture, or conventions changed
 3. **Update `AUDIT-SEO.md`** if SEO strategy was modified
 4. **Commit** with a descriptive message
@@ -299,5 +298,5 @@ Before marking any page as "Done":
 - [ ] `npm run lint` passes (0 errors)
 - [ ] `npm run build` passes (0 errors)
 - [ ] Lighthouse targets met
-- [ ] `PROJET-STATUS.md` updated (page marked Done, history entry added)
+- [ ] `PROJECT-STATUS.md` updated (page marked Done, history entry added)
 - [ ] Committed with descriptive message

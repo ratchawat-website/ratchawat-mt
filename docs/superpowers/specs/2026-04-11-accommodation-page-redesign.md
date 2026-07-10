@@ -259,7 +259,7 @@ Update PAGE 13 in `AUDIT-SEO.md`:
 |------|--------|
 | `src/app/accommodation/page.tsx` | Full rewrite per this spec |
 | `AUDIT-SEO.md` | Update PAGE 13 section |
-| `PROJET-STATUS.md` | Add entry to correction history, mark accommodation redesign done |
+| `PROJECT-STATUS.md` | Add entry to correction history, mark accommodation redesign done |
 
 ### 4.2 New imports needed
 
@@ -350,7 +350,7 @@ The rewrite is complete when:
 8. All 8 amenities render with correct icons
 9. The 3 Camp Stay Packages cards are unchanged in structure and links
 10. `AUDIT-SEO.md` PAGE 13 section reflects the new reality
-11. `PROJET-STATUS.md` has a new correction history entry
+11. `PROJECT-STATUS.md` has a new correction history entry
 
 ---
 

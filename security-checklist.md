@@ -6,7 +6,7 @@
 
 ## ✅ État au 2026-04-29
 
-**P0** (8/8) — voir entrée 2026-04-27 dans `PROJET-STATUS.md` §4.
+**P0** (8/8) — voir entrée 2026-04-27 dans `PROJECT-STATUS.md` §4.
 
 **P1** :
 - ✅ P1.1 Validation Zod : `bookings`, `dtv-application`, `contact`, `availability` (admin), `admin-booking`. Toutes les routes POST publiques + admin couvertes.

@@ -4,7 +4,7 @@
 
 **Goal:** Rewrite `/accommodation` to present only on-site rooms at Plai Laem camp (removing all Bo Phut and external recommendations), with a horizontal photo carousel, room amenities, and Camp Stay Packages.
 
-**Architecture:** Single-file rewrite of `src/app/accommodation/page.tsx`. Three supporting doc updates: `AUDIT-SEO.md` PAGE 13 section, `PROJET-STATUS.md` correction history, and `ROADMAP.md` (insert as new Phase 2, renumber subsequent phases). No new components — uses existing `GlassCard`, `CTABanner`, `Breadcrumbs`, `ImagePlaceholder`, and `JsonLd`. The photo carousel is native `overflow-x-auto` + `snap-x`, no JavaScript needed. Work happens directly on `main` (no worktree).
+**Architecture:** Single-file rewrite of `src/app/accommodation/page.tsx`. Three supporting doc updates: `AUDIT-SEO.md` PAGE 13 section, `PROJECT-STATUS.md` correction history, and `ROADMAP.md` (insert as new Phase 2, renumber subsequent phases). No new components — uses existing `GlassCard`, `CTABanner`, `Breadcrumbs`, `ImagePlaceholder`, and `JsonLd`. The photo carousel is native `overflow-x-auto` + `snap-x`, no JavaScript needed. Work happens directly on `main` (no worktree).
 
 **Tech Stack:** Next.js 16 App Router, React 19, Tailwind CSS v4, lucide-react icons, Schema.org JSON-LD.
 
@@ -18,7 +18,7 @@
 |------|--------|
 | `src/app/accommodation/page.tsx` | Full rewrite |
 | `AUDIT-SEO.md` | Update PAGE 13 section (meta description, H1, GEO passage) |
-| `PROJET-STATUS.md` | Add correction history entry |
+| `PROJECT-STATUS.md` | Add correction history entry |
 | `ROADMAP.md` | Insert as new Phase 2, renumber current Phases 2–6 to 3–7 |
 
 ---
@@ -478,16 +478,16 @@ Expected: no matches (or only matches outside PAGE 13 that are unrelated to lodg
 
 ---
 
-## Task 4: Update `PROJET-STATUS.md`
+## Task 4: Update `PROJECT-STATUS.md`
 
 **Purpose:** Keep the project state document accurate so future agents know the accommodation page was rebuilt.
 
 **Files:**
-- Modify: `PROJET-STATUS.md` (correction history section)
+- Modify: `PROJECT-STATUS.md` (correction history section)
 
 - [ ] **Step 1: Locate the correction history section**
 
-Use the Read tool on `PROJET-STATUS.md` and find the "Correction History" or similar section at the top.
+Use the Read tool on `PROJECT-STATUS.md` and find the "Correction History" or similar section at the top.
 
 - [ ] **Step 2: Add a new entry at the top of the history list**
 
@@ -564,7 +564,7 @@ Use the Edit tool on `ROADMAP.md`. Find the boundary between Phase 1 and Phase 2
 - [x] Update meta description with 8,000 THB price anchor
 - [x] Update GEO passage (on-site at Plai Laem only)
 - [x] Sync `AUDIT-SEO.md` PAGE 13
-- [x] Update `PROJET-STATUS.md` correction history
+- [x] Update `PROJECT-STATUS.md` correction history
 - [x] `/humanizer` pass on visible copy
 - [x] `npm run lint` — 0 errors
 - [x] `npm run build` — 0 errors
@@ -699,14 +699,14 @@ Kill dev server.
 
 - [ ] **Step 6: Ask user for commit approval**
 
-Per project rule: never commit without explicit user instruction. Pause here and ask the user: "All checks pass. Ready to commit the 4 modified files? (`src/app/accommodation/page.tsx`, `AUDIT-SEO.md`, `PROJET-STATUS.md`, `ROADMAP.md`)"
+Per project rule: never commit without explicit user instruction. Pause here and ask the user: "All checks pass. Ready to commit the 4 modified files? (`src/app/accommodation/page.tsx`, `AUDIT-SEO.md`, `PROJECT-STATUS.md`, `ROADMAP.md`)"
 
 Wait for explicit approval before proceeding.
 
 - [ ] **Step 7: Stage changes**
 
 ```bash
-git add src/app/accommodation/page.tsx AUDIT-SEO.md PROJET-STATUS.md ROADMAP.md
+git add src/app/accommodation/page.tsx AUDIT-SEO.md PROJECT-STATUS.md ROADMAP.md
 git status
 ```
 Expected: exactly these 4 files listed as modified.
@@ -725,7 +725,7 @@ feat(accommodation): rebuild page around on-site Plai Laem rooms
 - Update meta description with 8,000 THB price anchor
 - Update GEO passage to reflect on-site accommodation at Plai Laem only
 - Sync AUDIT-SEO.md PAGE 13 section
-- Update PROJET-STATUS.md correction history
+- Update PROJECT-STATUS.md correction history
 - Insert new Phase 2 in ROADMAP.md (renumber subsequent phases)
 EOF
 )"

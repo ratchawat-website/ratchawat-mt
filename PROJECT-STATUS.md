@@ -102,7 +102,7 @@ ratchawat-mt/
 │   ├── llms.txt                       # Brief AI summary
 │   └── llms-full.txt                  # Extended AI summary
 ├── CLAUDE.md                          # Agent instructions
-├── PROJET-STATUS.md                   # THIS FILE
+├── PROJECT-STATUS.md                   # THIS FILE
 ├── AUDIT-SEO.md                       # SEO strategy per page (keywords, schemas, metas, GEO)
 ├── AUDIT-REFONTE-COMPLET.md           # Full technical audit + architecture plan
 ├── .env.local.example                 # Environment variable template
@@ -325,7 +325,7 @@ ratchawat-mt/
 | 2026-04-02 | Typography scale bump: H1 hero +1 step (36/48/60px), H1 pages +1 step (24/30/36px), H2 sections added lg:text-3xl (30px desktop). 22 pages + 2 components updated. |
 | 2026-04-02 | **Component Elegance Redesign** (spec: docs/superpowers/specs/2026-04-02-component-elegance-redesign.md). Full visual refinement of all 12 components + 21 pages. Added: CSS tokens (shadow-card-glow, border-accent, filigree-opacity), btn-ghost/btn-link/badge-underline utilities, scrollbar-hide. GlassCard: top glow line, left border, bottom border, filigree number, hover lift. HeroSection: centered bold+outline, kicker, warm glow gradient, grid overlay, dual buttons, "Est. 2018". CTABanner: warm glow gradient bg, accent lines, kicker, dual buttons. FAQAccordion: numbered, +/- toggle, left border transitions. ProgramCard: underline badges, bottom separator. ContactForm: kicker label, uppercase labels, focus glow. LocationCard: "Open Now" overlay, bottom separator. ScheduleTable: dual render (desktop table + mobile day list). Navigation: diamond logo, Camps dropdown on hover, gradient top line. Footer: brand header row, gradient accent, 4 columns with orange headers. Breadcrumbs: accent line, uppercase, slash separator. All 21 pages: category labels on sections, filigree numbers, underline badges, btn-link/btn-primary, ghost buttons on CTAs, text-xs in cards. Visa steps: timeline vertical with dots. New hook: useScrollAnimation (Intersection Observer). |
 | 2026-04-02 | Navigation: moved Camps first, added hover dropdown (Bo Phut / Plai Laem) instead of direct link. Pricing badges (Most Popular, Save 20%) repositioned inside card flow to avoid top line overlap. |
-| 2026-04-11 | Production phase begins. Client accepted project. Created ROADMAP.md, ARCHITECTURE.md, spec (docs/superpowers/specs/2026-04-11-production-phase-design.md) and plan (docs/superpowers/plans/2026-04-11-phase-1-content-pricing.md). Updated PROJET-STATUS.md, CLAUDE.md with production mode. Created src/content/pricing.ts with all real prices. Updated all pages with correct prices. |
+| 2026-04-11 | Production phase begins. Client accepted project. Created ROADMAP.md, ARCHITECTURE.md, spec (docs/superpowers/specs/2026-04-11-production-phase-design.md) and plan (docs/superpowers/plans/2026-04-11-phase-1-content-pricing.md). Updated PROJECT-STATUS.md, CLAUDE.md with production mode. Created src/content/pricing.ts with all real prices. Updated all pages with correct prices. |
 
 ---
 
@@ -373,7 +373,7 @@ Phase 5 closed 2026-04-26 (commit 661917d). Phase 6 closed 2026-04-26 (real phot
 | Document | Location | Purpose |
 |----------|---------|---------|
 | `CLAUDE.md` | Project root | Agent instructions, coding conventions, workflows |
-| `PROJET-STATUS.md` | Project root | This file -- single source of truth |
+| `PROJECT-STATUS.md` | Project root | This file -- single source of truth |
 | `AUDIT-SEO.md` | Project root | **SEO strategy per page**: keywords, meta, H1, schemas, GEO passages, internal links |
 | `AUDIT-REFONTE-COMPLET.md` | Project root | Full technical audit, architecture, content to migrate, debt inventory |
 | `audit-ratchawat-muaythai.docx` | Project root | Original client-facing audit document |
@@ -383,9 +383,9 @@ Phase 5 closed 2026-04-26 (commit 661917d). Phase 6 closed 2026-04-26 (real phot
 
 ## 8. Contribution Rules
 
-1. **Read** `PROJET-STATUS.md` at the start of every session
+1. **Read** `PROJECT-STATUS.md` at the start of every session
 2. **Read** `AUDIT-SEO.md` before building any page (it has the exact meta, keywords, schemas)
-3. **Update** `PROJET-STATUS.md` after every significant change (mark page as Done, update components, add to correction history)
+3. **Update** `PROJECT-STATUS.md` after every significant change (mark page as Done, update components, add to correction history)
 4. `npm run build` must pass without errors before committing
 5. `npm run lint` must show 0 errors
 6. Never commit API keys or secrets

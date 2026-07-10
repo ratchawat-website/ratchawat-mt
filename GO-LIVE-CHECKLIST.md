@@ -162,7 +162,7 @@ delete from bookings where client_name ilike 'smoke test%';
 - Data migration: the booking table is empty by design (no historical data)
 - The availability_blocks table will need to be seeded with real blocks by the admin via `/admin/availability` once Phase 4 ships
 
-### 4.3 RLS follow-up (issue #5 in PROJET-STATUS.md)
+### 4.3 RLS follow-up (issue #5 in PROJECT-STATUS.md)
 - Investigate why policy `anon_insert_bookings` rejects direct inserts
 - Not blocking for go-live because `/api/checkout` uses `service_role`
 - Either fix the policy or drop it entirely and document that all inserts are server-side
@@ -230,7 +230,7 @@ Exact values will be provided by Vercel and Resend dashboards when you connect t
 
 ## 7. Security hardening (Phase 5/8 items, verify before go-live)
 
-These are tracked in Phase 5 + Phase 8 of the roadmap. The P0 audit was closed 2026-04-27 (see PROJET-STATUS.md). Two items were intentionally deferred to this checklist:
+These are tracked in Phase 5 + Phase 8 of the roadmap. The P0 audit was closed 2026-04-27 (see PROJECT-STATUS.md). Two items were intentionally deferred to this checklist:
 
 ### 7.1 Stripe LIVE webhook endpoint (P0 follow-up)
 
@@ -339,7 +339,7 @@ Keep the Bluehost WordPress site live until at least 48 hours after the Next.js 
 ## References
 
 - `ARCHITECTURE.md` — system design
-- `PROJET-STATUS.md` — correction history and known issues
+- `PROJECT-STATUS.md` — correction history and known issues
 - `ROADMAP.md` — phase sequencing
 - `src/content/pricing.ts` — source of truth for prices and Stripe IDs
 - `src/app/api/checkout/route.ts` — checkout session creation
