@@ -3,10 +3,45 @@
 > **Source of truth for what to build.** Read this at the start of every session alongside PROJECT-STATUS.md.
 > Update task statuses as work progresses. Never start work without checking the current phase.
 
-**Last updated:** 2026-04-28 (site live, post-launch hardening in progress)
-**Current phase:** Phase 9 — Go-live (in progress)
+**Last updated:** 2026-07-14 (vague 1 juillet 2026 implémentée sur branche, attente approval)
+**Current phase:** Post-launch — Brief cliente juillet 2026 (vague 1 done on branch, vagues 2a/2b next)
 
 > **Phase ordering (post-Phase 4 restructure, 2026-04-15):** Before go-live we split the generic "Security & Quality" bucket into 4 sequential phases (5 → 8) so work happens in the right order. Go-live (Phase 9) is the FINAL phase, unblocked only when all content, media, SEO, and security/perf/a11y work is done. Do not skip ahead.
+
+---
+
+## Vague 1 — Fixes & Content, brief cliente juillet 2026
+
+**Status:** IMPLEMENTED 2026-07-14 on branch `feat/fixes-and-content-july` — **awaiting Rd approval + Stripe LIVE seed + merge** (strict order, see handoff below)
+**Spec:** `docs/superpowers/specs/2026-07-10-brief-juillet-design.md` (sections 3 et 6)
+**Plan:** `docs/superpowers/plans/2026-07-10-vague-1-fixes-and-content.md`
+**Next:** vague 2a (privé v2) puis 2b (hébergement par paliers), plans déjà commités dans `docs/superpowers/plans/`.
+
+### Tasks (all done on branch)
+
+- [x] Task 1 — vitest infra (`npm run test`, 11 tests)
+- [x] Task 2 — Bug B1: shared capacity helper `src/lib/booking/capacity.ts`, admin creation respects 6/camp
+- [x] Task 3 — Bug B4: insert-then-verify closes the last-slot race in `/api/checkout`
+- [x] Task 4 — Bug B3: expired payment frees the private slot block
+- [x] Task 5 — Bug B2: WhatsApp box always visible on the private wizard date step
+- [x] Task 6 — `billing: per-person | flat` + shared `computeBookingAmount`/`getStripeQuantity`
+- [x] Task 7 — Private adult rates 2026: solo 1,000 / 10-pack 9,000 flat (new) / group 1,400 flat
+- [x] Task 8 — Stripe seed price-sync pass (old prices kept active, zero-downtime cutover), run in TEST
+- [x] Task 9 — DTV unlimited 35,000 THB + client-verbatim policies (`src/content/policies.ts`) + custom-plan WhatsApp box
+- [x] Task 10 — DTV `date_of_birth` (migration + form + API + webhook + emails + admin)
+- [x] Task 11 — Plai Laem exclusive facilities paragraph, "Standard Room" card titles, policies on 3 wizards + BookingConfirmed email
+- [x] Task 12 — Price dedup: /pricing + /programs/private + schemas + llms read pricing.ts
+- [x] Task 13 — E2E recette (amounts, capacity 409, expired cleanup, DTV dob) + test data purged + docs
+
+### Deployment checklist (STRICT order — nothing merged or pushed yet)
+
+1. [ ] Rd reviews the diff (`git log --oneline main..feat/fixes-and-content-july`)
+2. [ ] Rd runs `npm run stripe:seed` with the LIVE key (creates 10-pack + new prices 1000/1400/35000 live, rewrites live IDs in pricing.ts; OLD prices stay active so prod keeps working) → commit that diff on the branch
+3. [ ] Merge into main + Vercel deploy
+4. [ ] Prod smoke test: /pricing shows 1,000/9,000/1,400/35,000; private wizard up to the Stripe page (do NOT pay) to check the live amount
+5. [ ] POST-deploy only: archive the old LIVE prices (solo 800, group 600, dtv unlimited 33000) in the Stripe dashboard. Non-urgent, cosmetic.
+
+Rollback = revert the PR. Old prices stay active until step 5, so a revert restores a 100% functional site immediately.
 
 ---
 

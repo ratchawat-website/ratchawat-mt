@@ -20,6 +20,10 @@ const dropIn = PRICES.find(p => p.id === "drop-in-adult")
 const groupPrices = PRICES.filter(p => p.category === "group")
 ```
 
+**Billing mode (July 2026):** `PriceItem.billing?: "per-person" | "flat"`. Absent means `"per-person"` (historic behavior: amount = price x participants). `"flat"` items (`private-adult-group`, `private-adult-10pack`) charge one price per session regardless of participant count. The shared computation lives in `src/lib/booking/pricing.ts` (`computeBookingAmount`, `getStripeQuantity`) and is consumed by `/api/checkout`, `/api/admin/bookings`, and `PrivateWizard`. Never multiply `price * num_participants` by hand.
+
+**Policy texts:** `src/content/policies.ts` holds client-provided policy strings (private cancellation, room reservation, DTV delivery/refusal, DTV custom-plan WhatsApp note). They are VERBATIM client copy: do not rewrite or run through humanizer. Consumed by the booking wizards, `/visa/dtv`, `/pricing`, `/terms`, and the confirmation emails.
+
 ---
 
 ## 2. Booking System Routes
@@ -248,6 +252,8 @@ The confirmed page is a Server Component that uses `SUPABASE_SERVICE_ROLE_KEY` s
 ### Products
 One Stripe Product per `PriceItem.id`. Store `stripeProductId` and `stripePriceId` in `pricing.ts` once created.
 
+**Price sync (July 2026):** `scripts/stripe-seed-products.ts` now runs a sync pass after seeding. For every already-seeded item whose catalog `price` differs from the active Stripe price, it creates a new Price on the same Product, sets it as `default_price`, refreshes name/description, and rewrites the price ID in `pricing.ts`. The OLD price is deliberately left active (zero-downtime cutover: deployed code keeps referencing it until the next deploy). Archive old prices manually in the Stripe dashboard AFTER the deploy is verified.
+
 Prices with `priceTodo` set (currently `fighter-stay-room-monthly` and `fighter-stay-bungalow-monthly`) are still created as Stripe products using their approximate `price` value. The `priceTodo` note is included in the Stripe product description so the client can update the price in the Stripe dashboard later without code changes.
 
 ---
@@ -271,15 +277,15 @@ Templates live in `src/lib/email/templates/`.
 POST /api/visa/dtv/apply     Zod validation → insert dtv_applications → Stripe Session
 ```
 
-**Table:** `dtv_applications` (separate from `bookings` because of passport + arrival_date + visa-specific fields). RLS mirrors `bookings` — admin `select`/`update`, inserts via service role only. Migration: `supabase/migrations/20260417000001_dtv_applications.sql`.
+**Table:** `dtv_applications` (separate from `bookings` because of passport + arrival_date + visa-specific fields). RLS mirrors `bookings` — admin `select`/`update`, inserts via service role only. Migration: `supabase/migrations/20260417000001_dtv_applications.sql`. Column `date_of_birth date` (nullable, migration `supabase/migrations/20260710000000_dtv_date_of_birth.sql`) added July 2026; applications submitted before it have no value, all surfaces handle `null` with a `-` fallback.
 
-**Packages:** `dtv-6m-2x` (20K THB), `dtv-6m-4x` (25K THB, popular), `dtv-6m-unlimited` (33K THB). Source of truth: `src/content/pricing.ts` `category === 'dtv'`.
+**Packages:** `dtv-6m-2x` (20K THB), `dtv-6m-4x` (25K THB, popular), `dtv-6m-unlimited` (35K THB, unlimited GROUP training, Fighter Program not included). Source of truth: `src/content/pricing.ts` `category === 'dtv'`.
 
 **Stripe metadata:** `{ type: 'dtv', dtv_application_id: <uuid> }` — the webhook branches on `type === 'dtv'` before touching `bookings`.
 
 **Validation highlights:** passport expiry must be at least 6 months out from today; arrival date must be on or before training start date; commitment checkbox must be `true` (Zod literal).
 
-**Refund policy (documented in copy + email):** No refund if visa is refused, training voucher of the same value issued instead.
+**Refund policy (July 2026, client verbatim in `src/content/policies.ts`):** if the visa is refused, 50% refund on request within 3 weeks of payment with official proof of refusal, plus a 50% training voucher of the same value. Documents delivered within 24h of payment on business days.
 
 **Official portal:** All customer-facing surfaces (site + email) link to `https://thaievisa.go.th/` — the Thai e-visa portal where the applicant uploads our documents and pays the 10,000 THB embassy fee.
 
