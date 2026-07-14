@@ -8,7 +8,8 @@ import { calendarClassNames } from "@/components/ui/calendar-tokens";
 
 interface DateRangePickerProps {
   range: DateRange | undefined;
-  onSelect: (range: DateRange | undefined) => void;
+  /** clickedDay is the day that triggered the selection (react-day-picker triggerDate). */
+  onSelect: (range: DateRange | undefined, clickedDay: Date) => void;
   minDate?: Date;
   disabledDays?: Matcher | Matcher[];
 }

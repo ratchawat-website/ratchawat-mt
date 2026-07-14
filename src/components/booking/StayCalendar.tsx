@@ -4,14 +4,8 @@ import { useEffect, useMemo, useState } from "react";
 import type { DateRange } from "react-day-picker";
 import DateRangePicker from "./DateRangePicker";
 import { INVENTORY, type InventoryKey } from "@/lib/admin/inventory";
-import {
-  addDays,
-  differenceInCalendarDays,
-  eachDayOfInterval,
-  format,
-  startOfToday,
-  subDays,
-} from "date-fns";
+import { resolveStayRange } from "@/lib/booking/stay-range";
+import { addDays, format, startOfToday } from "date-fns";
 
 interface Props {
   inventoryKey: InventoryKey;
@@ -59,32 +53,15 @@ export default function StayCalendar({
     [fullNights],
   );
 
-  const handleSelect = (next: DateRange | undefined) => {
-    setRangeError(null);
-    if (next?.from && next?.to) {
-      const nights = differenceInCalendarDays(next.to, next.from);
-      if (nights < minNights) {
-        setRangeError(`Minimum stay is ${minNights} nights.`);
-        onRangeChange({ from: next.from, to: undefined });
-        return;
-      }
-      // Every night of the stay must have a free unit (checkout night excluded).
-      const nightsList = eachDayOfInterval({
-        start: next.from,
-        end: subDays(next.to, 1),
-      });
-      const conflict = nightsList.find((n) =>
-        fullNights.has(format(n, "yyyy-MM-dd")),
-      );
-      if (conflict) {
-        setRangeError(
-          `Sold out on ${format(conflict, "MMM d, yyyy")}. Pick different dates.`,
-        );
-        onRangeChange({ from: next.from, to: undefined });
-        return;
-      }
-    }
-    onRangeChange(next);
+  const handleSelect = (next: DateRange | undefined, clickedDay: Date) => {
+    const { range: resolved, error } = resolveStayRange(
+      next,
+      clickedDay,
+      fullNights,
+      minNights,
+    );
+    setRangeError(error);
+    onRangeChange(resolved);
   };
 
   if (loading) {
