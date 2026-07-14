@@ -14,6 +14,7 @@ interface AvailabilityBlock {
   time_slot: string | null;
   type: string;
   camp: string | null;
+  units: number | null;
 }
 
 interface Props {
@@ -29,6 +30,12 @@ interface Props {
    * computed per camp. Required once the user has picked a camp upstream.
    */
   camp?: "bo-phut" | "plai-laem";
+  /**
+   * Trainer units the booking under construction will consume (1-on-1 with
+   * N participants needs N trainers). A slot greys out when its remaining
+   * capacity cannot host this request.
+   */
+  unitsRequested?: number;
 }
 
 export default function AvailabilityCalendar({
@@ -39,6 +46,7 @@ export default function AvailabilityCalendar({
   inventoryKey,
   stayDurationDays,
   camp,
+  unitsRequested = 1,
 }: Props) {
   const [blocks, setBlocks] = useState<AvailabilityBlock[]>([]);
   const [occupancy, setOccupancy] = useState<Record<string, number>>({});
@@ -59,7 +67,7 @@ export default function AvailabilityCalendar({
         : ["full"];
     const blocksPromise = supabase
       .from("availability_blocks")
-      .select("date, time_slot, type, camp")
+      .select("date, time_slot, type, camp, units")
       .in("type", blockTypes)
       .eq("is_blocked", true)
       .then(({ data, error }) => {
@@ -118,7 +126,10 @@ export default function AvailabilityCalendar({
           dateSlotCampCount.set(block.date, new Map());
         }
         const slotMap = dateSlotCampCount.get(block.date)!;
-        slotMap.set(block.time_slot, (slotMap.get(block.time_slot) ?? 0) + 1);
+        slotMap.set(
+          block.time_slot,
+          (slotMap.get(block.time_slot) ?? 0) + (block.units ?? 1),
+        );
       }
     }
 
@@ -134,7 +145,9 @@ export default function AvailabilityCalendar({
         const closedSet = dateHardClosedSlots.get(date) ?? new Set<string>();
         const unavailableSlots = new Set<string>(closedSet);
         for (const [slot, n] of slotMap.entries()) {
-          if (n >= PRIVATE_SLOT_CAPACITY) unavailableSlots.add(slot);
+          if (n + unitsRequested > PRIVATE_SLOT_CAPACITY) {
+            unavailableSlots.add(slot);
+          }
         }
         if (unavailableSlots.size >= PRIVATE_SLOTS.length) {
           blockedDates.add(date);
@@ -172,7 +185,7 @@ export default function AvailabilityCalendar({
     }
 
     return Array.from(blockedDates).map((d) => new Date(d + "T00:00:00"));
-  }, [blocks, type, occupancy, inventoryKey, stayDurationDays, camp]);
+  }, [blocks, type, occupancy, inventoryKey, stayDurationDays, camp, unitsRequested]);
 
   useEffect(() => {
     if (!selected || type !== "private" || !onAvailableSlotsChange) return;
@@ -194,15 +207,18 @@ export default function AvailabilityCalendar({
       }
       if (b.type !== "private-slot") continue;
       if (camp && b.camp && b.camp !== camp) continue;
-      slotCounts.set(b.time_slot, (slotCounts.get(b.time_slot) ?? 0) + 1);
+      slotCounts.set(
+        b.time_slot,
+        (slotCounts.get(b.time_slot) ?? 0) + (b.units ?? 1),
+      );
     }
     const available = PRIVATE_SLOTS.filter(
       (s) =>
         !hardClosedSlots.has(s) &&
-        (slotCounts.get(s) ?? 0) < PRIVATE_SLOT_CAPACITY,
+        (slotCounts.get(s) ?? 0) + unitsRequested <= PRIVATE_SLOT_CAPACITY,
     );
     onAvailableSlotsChange(available);
-  }, [selected, blocks, type, onAvailableSlotsChange, camp]);
+  }, [selected, blocks, type, onAvailableSlotsChange, camp, unitsRequested]);
 
   // Private sessions can be booked same-day: the per-slot cutoff (2h, or 12h
   // for early-morning slots) handles which slots are still bookable today, so the

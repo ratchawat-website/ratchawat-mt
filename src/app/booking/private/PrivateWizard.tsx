@@ -25,6 +25,7 @@ import { formatDateLong } from "@/lib/utils/date-format";
 import {
   computeBookingAmount,
   getParticipantBounds,
+  getCapacityUnits,
 } from "@/lib/booking/pricing";
 import { PRIVATE_CANCELLATION_POLICY } from "@/content/policies";
 import { format } from "date-fns";
@@ -64,7 +65,9 @@ export default function PrivateWizard() {
   const [priceId, setPriceId] = useState<string | null>(null);
   const [camp, setCamp] = useState<"bo-phut" | "plai-laem" | null>(null);
   const [date, setDate] = useState<Date | undefined>();
-  const [timeSlot, setTimeSlot] = useState<string | null>(null);
+  const [sessions, setSessions] = useState<{ date: string; slot: string }[]>(
+    [],
+  );
   const [availableSlots, setAvailableSlots] = useState<string[]>([...PRIVATE_SLOTS]);
   const [contact, setContact] = useState<ContactInfo>(DEFAULT_CONTACT);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -88,6 +91,16 @@ export default function PrivateWizard() {
   const bounds = selectedPackage
     ? getParticipantBounds(selectedPackage)
     : { min: 1, max: 1 };
+  const isPack = priceId === "private-adult-10pack";
+  const maxSessions = isPack ? 1 : 10;
+  const units = selectedPackage
+    ? getCapacityUnits(selectedPackage, contact.numParticipants)
+    : 1;
+
+  // Package or camp change invalidates the cart (price and capacity change).
+  useEffect(() => {
+    setSessions([]);
+  }, [priceId, camp]);
 
   // Keep num_participants inside the selected package's allowed range.
   useEffect(() => {
@@ -103,23 +116,30 @@ export default function PrivateWizard() {
   }, [bounds.min, bounds.max]);
 
   const totalAmount = selectedPackage
-    ? computeBookingAmount(selectedPackage, contact.numParticipants)
+    ? computeBookingAmount(selectedPackage, contact.numParticipants) *
+      Math.max(sessions.length, 1)
     : 0;
 
   const canProceed = () => {
     if (step === 0) return !!priceId;
     if (step === 1) return !!camp;
-    if (step === 2) return !!date && !!timeSlot;
+    if (step === 2) return sessions.length >= 1;
     if (step === 3) return isContactInfoValid(contact);
     if (step === 4) return isContactInfoValid(contact) && captcha.ready;
     return false;
   };
 
+  const sortedSessions = () =>
+    sessions
+      .slice()
+      .sort((a, b) => `${a.date}${a.slot}`.localeCompare(`${b.date}${b.slot}`));
+
   const handleSubmit = async () => {
-    if (!selectedPackage || !camp || !date || !timeSlot) return;
+    if (!selectedPackage || !camp || sessions.length === 0) return;
     setIsSubmitting(true);
     setError(null);
     try {
+      const ordered = sortedSessions();
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -127,8 +147,8 @@ export default function PrivateWizard() {
           price_id: selectedPackage.id,
           type: "private",
           camp,
-          start_date: format(date, "yyyy-MM-dd"),
-          time_slot: timeSlot,
+          start_date: ordered[0].date,
+          sessions: ordered.map((s) => ({ date: s.date, time_slot: s.slot })),
           num_participants: contact.numParticipants,
           client_name: contact.name,
           client_email: contact.email,
@@ -286,20 +306,22 @@ export default function PrivateWizard() {
           <AvailabilityCalendar
             type="private"
             selected={date}
-            onSelect={(d) => {
-              setDate(d);
-              setTimeSlot(null);
-            }}
+            onSelect={setDate}
             onAvailableSlotsChange={setAvailableSlots}
             camp={camp ?? undefined}
+            unitsRequested={units}
           />
           {date && (() => {
+            const dateStr = format(date, "yyyy-MM-dd");
             const slotStates = PRIVATE_SLOTS.map((slot) => {
               const withinCutoff = isSlotWithinCutoff(date, slot);
               const cutoffHours = getCutoffHoursForSlot(slot);
+              const inCart = sessions.some(
+                (s) => s.date === dateStr && s.slot === slot,
+              );
               const isAvailable =
-                availableSlots.includes(slot) && !withinCutoff;
-              return { slot, isAvailable, withinCutoff, cutoffHours };
+                availableSlots.includes(slot) && !withinCutoff && !inCart;
+              return { slot, isAvailable, withinCutoff, cutoffHours, inCart };
             });
             const anyCutoffBlocked = slotStates.some((s) => s.withinCutoff);
             const waMessage = `Hi, I would like to book a private session on ${formatDateLong(
@@ -322,19 +344,27 @@ export default function PrivateWizard() {
                           {group.label}
                         </p>
                         <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
-                          {groupStates.map(({ slot, isAvailable, withinCutoff, cutoffHours }) => (
+                          {groupStates.map(({ slot, isAvailable, withinCutoff, cutoffHours, inCart }) => (
                             <button
                               type="button"
                               key={slot}
                               disabled={!isAvailable}
-                              onClick={() => setTimeSlot(slot)}
+                              onClick={() =>
+                                setSessions((prev) =>
+                                  prev.length >= maxSessions
+                                    ? prev
+                                    : [...prev, { date: dateStr, slot }],
+                                )
+                              }
                               aria-label={
-                                withinCutoff
-                                  ? `${slot}, less than ${cutoffHours} hours away, book by WhatsApp`
-                                  : slot
+                                inCart
+                                  ? `${slot}, added to your sessions`
+                                  : withinCutoff
+                                    ? `${slot}, less than ${cutoffHours} hours away, book by WhatsApp`
+                                    : slot
                               }
                               className={`rounded-[var(--radius-input)] py-3 text-sm font-semibold border-2 transition-colors ${
-                                timeSlot === slot
+                                inCart
                                   ? "border-primary bg-primary text-white"
                                   : isAvailable
                                     ? "border-outline-variant bg-surface-lowest text-on-surface hover:border-outline"
@@ -349,6 +379,54 @@ export default function PrivateWizard() {
                     );
                   })}
                 </div>
+                {sessions.length > 0 && (
+                  <div className="mt-4 rounded-[var(--radius-card)] border-2 border-outline-variant bg-surface-lowest p-4">
+                    <p className="text-xs font-semibold uppercase tracking-widest text-on-surface-variant mb-3">
+                      Your sessions ({sessions.length}
+                      {isPack ? "" : ` / ${maxSessions}`})
+                    </p>
+                    <ul className="space-y-2">
+                      {sortedSessions().map((s) => (
+                        <li
+                          key={`${s.date}-${s.slot}`}
+                          className="flex items-center justify-between gap-3 text-sm"
+                        >
+                          <span className="text-on-surface">
+                            {formatDateLong(new Date(`${s.date}T00:00:00`))} at{" "}
+                            {s.slot}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setSessions((prev) =>
+                                prev.filter(
+                                  (x) =>
+                                    !(x.date === s.date && x.slot === s.slot),
+                                ),
+                              )
+                            }
+                            className="text-xs font-semibold text-on-surface-variant hover:text-primary transition-colors"
+                            aria-label={`Remove session on ${s.date} at ${s.slot}`}
+                          >
+                            Remove
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                    {!isPack && sessions.length < maxSessions && (
+                      <p className="text-xs text-on-surface-variant mt-3">
+                        Pick another date or time to add more sessions. One
+                        payment for everything.
+                      </p>
+                    )}
+                  </div>
+                )}
+                {isPack && (
+                  <p className="mt-4 text-xs text-on-surface-variant">
+                    Your pack includes 10 sessions. Book your first one here;
+                    the other nine are scheduled at the camp or on WhatsApp.
+                  </p>
+                )}
                 <div className="mt-4 flex items-start gap-3 rounded-[var(--radius-card)] border-2 border-primary/30 bg-primary/5 p-4">
                   <MessageCircle
                     size={20}
@@ -397,7 +475,7 @@ export default function PrivateWizard() {
       )}
 
       {/* Step 4: Review */}
-      {step === 4 && selectedPackage && camp && date && timeSlot && (
+      {step === 4 && selectedPackage && camp && sessions.length > 0 && (
         <div className="space-y-4">
           <h2 className="font-serif text-xl font-semibold text-on-surface mb-4">
             Confirm & Pay
@@ -409,11 +487,10 @@ export default function PrivateWizard() {
                 label: "Camp",
                 value: CAMPS.find((c) => c.id === camp)!.name,
               },
-              {
-                label: "Date",
-                value: formatDateLong(date),
-              },
-              { label: "Time", value: timeSlot },
+              ...sortedSessions().map((s, i) => ({
+                label: sessions.length > 1 ? `Session ${i + 1}` : "Session",
+                value: `${formatDateLong(new Date(`${s.date}T00:00:00`))} at ${s.slot}`,
+              })),
               ...(bounds.max > 1
                 ? [
                     {
