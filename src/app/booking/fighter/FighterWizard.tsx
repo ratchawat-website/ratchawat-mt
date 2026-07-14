@@ -1,18 +1,21 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
+import type { DateRange } from "react-day-picker";
 import BookingWizard from "@/components/booking/BookingWizard";
 import DatePicker from "@/components/booking/DatePicker";
-import AvailabilityCalendar from "@/components/booking/AvailabilityCalendar";
+import StayCalendar from "@/components/booking/StayCalendar";
 import ContactInfoForm, {
   ContactInfo,
   isContactInfoValid,
 } from "@/components/booking/ContactInfoForm";
 import BookingReview from "@/components/booking/BookingReview";
 import GlassCard from "@/components/ui/GlassCard";
-import { MapPin, Swords, Brain, Shield, Zap, Info } from "lucide-react";
-import { getPricesByBookingType, getPriceById } from "@/content/pricing";
-import type { InventoryKey } from "@/lib/admin/inventory";
+import { MapPin, Swords, Brain, Shield, Zap } from "lucide-react";
+import { getPriceById } from "@/content/pricing";
+import { getRateCard } from "@/content/stay-pricing";
+import { computeStayPrice } from "@/lib/booking/stay";
+import { getStayUnitInventoryKey } from "@/lib/admin/inventory";
 import { formatDateLong } from "@/lib/utils/date-format";
 import { format } from "date-fns";
 import TurnstileWidget from "@/components/security/TurnstileWidget";
@@ -38,24 +41,20 @@ const DEFAULT_CONTACT: ContactInfo = {
   notes: "",
 };
 
-function isStayTier(id: string | null): boolean {
-  return (
-    id === "fighter-stay-room-monthly" || id === "fighter-stay-bungalow-monthly"
-  );
-}
-
-function getStayInventoryKey(id: string | null): InventoryKey {
-  if (id && id.includes("bungalow")) return "bungalows";
-  return "rooms";
-}
+type FighterTier = "only" | "room" | "bungalow";
 
 export default function FighterWizard() {
-  const tiers = getPricesByBookingType("fighter");
+  const fighterOnly = getPriceById("fighter-monthly")!;
+  const stayTiers = [
+    { unit: "room" as const, card: getRateCard("room", "fighter")! },
+    { unit: "bungalow" as const, card: getRateCard("bungalow", "fighter")! },
+  ];
 
   const [step, setStep] = useState(0);
-  const [priceId, setPriceId] = useState<string | null>(null);
+  const [tier, setTier] = useState<FighterTier | null>(null);
   const [camp, setCamp] = useState<"plai-laem" | null>("plai-laem");
   const [date, setDate] = useState<Date | undefined>();
+  const [range, setRange] = useState<DateRange | undefined>();
   const [contact, setContact] = useState<ContactInfo>(DEFAULT_CONTACT);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -64,42 +63,77 @@ export default function FighterWizard() {
   // Fighter program runs at Plai Laem only — camp stays locked to plai-laem.
   useEffect(() => {
     setCamp("plai-laem");
-  }, [priceId]);
+  }, [tier]);
 
-  const selectedTier = priceId ? getPriceById(priceId) : null;
-  const hasStay = isStayTier(priceId);
+  const hasStay = tier === "room" || tier === "bungalow";
+
+  const quote = useMemo(() => {
+    if (tier !== "room" && tier !== "bungalow") return null;
+    if (!range?.from || !range?.to) return null;
+    try {
+      return computeStayPrice(
+        format(range.from, "yyyy-MM-dd"),
+        format(range.to, "yyyy-MM-dd"),
+        tier,
+        "fighter",
+      );
+    } catch {
+      return null;
+    }
+  }, [tier, range]);
 
   const canProceed = () => {
     if (step === 0) return true;
-    if (step === 1) return !!priceId;
-    if (step === 2) return !!camp && !!date;
+    if (step === 1) return !!tier;
+    if (step === 2) return hasStay ? !!quote : !!camp && !!date;
     if (step === 3) return isContactInfoValid(contact);
     if (step === 4) return isContactInfoValid(contact) && captcha.ready;
     return false;
   };
 
   const handleSubmit = async () => {
-    if (!selectedTier || !camp || !date) return;
     setIsSubmitting(true);
     setError(null);
     try {
-      const res = await fetch("/api/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          price_id: selectedTier.id,
-          type: "fighter",
-          camp,
-          start_date: format(date, "yyyy-MM-dd"),
-          num_participants: 1,
-          client_name: contact.name,
-          client_email: contact.email,
-          client_phone: contact.phone,
-          client_nationality: contact.nationality || undefined,
-          notes: contact.notes || undefined,
-          cf_turnstile_token: captcha.token,
-        }),
-      });
+      let res: Response;
+      if ((tier === "room" || tier === "bungalow") && range?.from && range?.to) {
+        res = await fetch("/api/checkout/stay", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            unit: tier,
+            plan: "fighter",
+            check_in: format(range.from, "yyyy-MM-dd"),
+            check_out: format(range.to, "yyyy-MM-dd"),
+            client_name: contact.name,
+            client_email: contact.email,
+            client_phone: contact.phone,
+            client_nationality: contact.nationality || undefined,
+            notes: contact.notes || undefined,
+            cf_turnstile_token: captcha.token,
+          }),
+        });
+      } else if (tier === "only" && camp && date) {
+        res = await fetch("/api/checkout", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            price_id: fighterOnly.id,
+            type: "fighter",
+            camp,
+            start_date: format(date, "yyyy-MM-dd"),
+            num_participants: 1,
+            client_name: contact.name,
+            client_email: contact.email,
+            client_phone: contact.phone,
+            client_nationality: contact.nationality || undefined,
+            notes: contact.notes || undefined,
+            cf_turnstile_token: captcha.token,
+          }),
+        });
+      } else {
+        return;
+      }
       const data = await res.json();
       if (data.url) {
         window.location.href = data.url;
@@ -118,6 +152,14 @@ export default function FighterWizard() {
   const maxDate = new Date();
   maxDate.setDate(maxDate.getDate() + 120);
 
+  const submitLabel = hasStay
+    ? quote
+      ? `Pay ${quote.total.toLocaleString("en-US")} THB`
+      : "Pay"
+    : fighterOnly.price
+      ? `Pay ${fighterOnly.price.toLocaleString("en-US")} THB`
+      : "Pay";
+
   return (
     <BookingWizard
       steps={STEPS}
@@ -126,11 +168,7 @@ export default function FighterWizard() {
       canProceed={canProceed()}
       isFinalStep={step === 4}
       isSubmitting={isSubmitting}
-      submitLabel={
-        selectedTier && selectedTier.price
-          ? `Pay ${selectedTier.price.toLocaleString("en-US")} THB`
-          : "Pay"
-      }
+      submitLabel={submitLabel}
       onSubmit={handleSubmit}
     >
       {/* Step 0: Info */}
@@ -183,59 +221,83 @@ export default function FighterWizard() {
           <h2 className="font-serif text-xl font-semibold text-on-surface mb-4">
             Choose Your Tier
           </h2>
-          {tiers.map((tier) => (
-            <button
-              type="button"
-              key={tier.id}
-              onClick={() => setPriceId(tier.id)}
-              className={`w-full text-left rounded-[var(--radius-card)] p-4 sm:p-5 border-2 transition-all ${
-                priceId === tier.id
-                  ? "border-primary bg-primary/5"
-                  : "border-outline-variant bg-surface-lowest hover:border-outline"
-              }`}
-            >
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 flex-wrap mb-1">
-                    <span className="font-serif text-base font-semibold text-on-surface">
-                      {tier.name}
-                    </span>
-                    {tier.priceTodo && (
-                      <span className="text-[10px] font-bold uppercase tracking-wider bg-on-surface-variant/20 text-on-surface-variant px-2 py-0.5 rounded">
-                        Approximate
-                      </span>
-                    )}
-                    {tier.id === "fighter-stay-bungalow-monthly" && (
-                      <span className="text-[10px] font-bold uppercase tracking-wider bg-primary/20 text-primary px-2 py-0.5 rounded">
-                        Unique - 1 on-site
-                      </span>
-                    )}
-                  </div>
-                  <p className="text-on-surface-variant text-sm">
-                    {tier.description}
-                  </p>
-                </div>
-                <div className="text-right shrink-0">
-                  <span className="font-serif text-lg font-bold text-primary">
-                    {tier.price?.toLocaleString("en-US")} THB
+          <button
+            type="button"
+            onClick={() => setTier("only")}
+            className={`w-full text-left rounded-[var(--radius-card)] p-4 sm:p-5 border-2 transition-all ${
+              tier === "only"
+                ? "border-primary bg-primary/5"
+                : "border-outline-variant bg-surface-lowest hover:border-outline"
+            }`}
+          >
+            <div className="flex items-start justify-between gap-4">
+              <div className="flex-1">
+                <div className="flex items-center gap-2 flex-wrap mb-1">
+                  <span className="font-serif text-base font-semibold text-on-surface">
+                    {fighterOnly.name}
                   </span>
-                  <p className="text-on-surface-variant text-xs">
-                    / {tier.unit}
-                  </p>
                 </div>
+                <p className="text-on-surface-variant text-sm">
+                  {fighterOnly.description}
+                </p>
               </div>
-            </button>
-          ))}
-          {selectedTier?.priceTodo && (
-            <div className="flex items-start gap-2 mt-4 text-xs text-on-surface-variant">
-              <Info size={14} className="shrink-0 mt-0.5" aria-hidden="true" />
-              <p>
-                This is an approximate price. The gym will confirm the final
-                amount before your booking is locked in. You can contact us on
-                WhatsApp if you need clarification.
-              </p>
+              <div className="text-right shrink-0">
+                <span className="font-serif text-lg font-bold text-primary">
+                  {fighterOnly.price?.toLocaleString("en-US")} THB
+                </span>
+                <p className="text-on-surface-variant text-xs">
+                  / {fighterOnly.unit}
+                </p>
+              </div>
             </div>
-          )}
+          </button>
+          {stayTiers.map(({ unit, card }) => {
+            const baseTier = card.tiers[0];
+            return (
+              <button
+                type="button"
+                key={unit}
+                onClick={() => setTier(unit)}
+                className={`w-full text-left rounded-[var(--radius-card)] p-4 sm:p-5 border-2 transition-all ${
+                  tier === unit
+                    ? "border-primary bg-primary/5"
+                    : "border-outline-variant bg-surface-lowest hover:border-outline"
+                }`}
+              >
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 flex-wrap mb-1">
+                      <span className="font-serif text-base font-semibold text-on-surface">
+                        {card.label}
+                      </span>
+                      {unit === "bungalow" && (
+                        <span className="text-[10px] font-bold uppercase tracking-wider bg-primary/20 text-primary px-2 py-0.5 rounded">
+                          Unique - 1 on-site
+                        </span>
+                      )}
+                    </div>
+                    <ul className="text-on-surface-variant text-sm space-y-0.5">
+                      {card.copyNotes.map((n) => (
+                        <li key={n}>{n}</li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className="text-right shrink-0">
+                    <span className="font-serif text-lg font-bold text-primary">
+                      From {baseTier.basePrice.toLocaleString("en-US")} THB
+                    </span>
+                    <p className="text-on-surface-variant text-xs">
+                      / {baseTier.nights} nights
+                    </p>
+                    <p className="text-on-surface-variant text-xs">
+                      +{baseTier.extraNightRate.toLocaleString("en-US")} THB per
+                      extra night
+                    </p>
+                  </div>
+                </div>
+              </button>
+            );
+          })}
         </div>
       )}
 
@@ -243,7 +305,7 @@ export default function FighterWizard() {
       {step === 2 && (
         <div className="space-y-4">
           <h2 className="font-serif text-xl font-semibold text-on-surface mb-4">
-            Camp and Start Date
+            Camp and {hasStay ? "Dates" : "Start Date"}
           </h2>
 
           {hasStay ? (
@@ -304,16 +366,49 @@ export default function FighterWizard() {
 
           <div>
             <p className="text-sm font-medium text-on-surface mb-3">
-              {hasStay ? "Check-in date" : "Start date"}
+              {hasStay ? "Check-in and check-out dates" : "Start date"}
             </p>
-            {hasStay ? (
-              <AvailabilityCalendar
-                type="camp-stay"
-                selected={date}
-                onSelect={setDate}
-                inventoryKey={getStayInventoryKey(priceId)}
-                stayDurationDays={30}
-              />
+            {tier === "room" || tier === "bungalow" ? (
+              <div className="space-y-4">
+                <StayCalendar
+                  inventoryKey={getStayUnitInventoryKey(tier)}
+                  range={range}
+                  onRangeChange={setRange}
+                  minNights={30}
+                />
+                {quote && (
+                  <div className="bg-primary/5 border-2 border-primary/20 rounded-[var(--radius-card)] p-4 space-y-1 text-sm">
+                    <p className="text-on-surface">
+                      <span className="text-on-surface-variant">Stay:</span>{" "}
+                      <strong>{quote.nights} nights</strong> (
+                      {formatDateLong(range!.from!)} to{" "}
+                      {formatDateLong(range!.to!)})
+                    </p>
+                    <p className="text-on-surface">
+                      <span className="text-on-surface-variant">Base:</span>{" "}
+                      {quote.basePrice.toLocaleString("en-US")} THB for{" "}
+                      {quote.tierNights} nights
+                    </p>
+                    {quote.extraNights > 0 && (
+                      <p className="text-on-surface">
+                        <span className="text-on-surface-variant">
+                          Extra nights:
+                        </span>{" "}
+                        {quote.extraNights} x{" "}
+                        {quote.extraNightRate.toLocaleString("en-US")} THB
+                      </p>
+                    )}
+                    <p className="font-serif text-lg font-bold text-primary pt-1">
+                      Total: {quote.total.toLocaleString("en-US")} THB
+                    </p>
+                    <ul className="text-xs text-on-surface-variant pt-2 space-y-0.5">
+                      {quote.copyNotes.map((n) => (
+                        <li key={n}>{n}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
             ) : (
               <DatePicker
                 selected={date}
@@ -338,34 +433,39 @@ export default function FighterWizard() {
       )}
 
       {/* Step 4: Review */}
-      {step === 4 && selectedTier && camp && date && (
+      {step === 4 && (
         <div className="space-y-4">
           <h2 className="font-serif text-xl font-semibold text-on-surface mb-4">
             Confirm & Pay
           </h2>
-          <BookingReview
-            rows={[
-              { label: "Tier", value: selectedTier.name },
-              {
-                label: "Camp",
-                value:
-                  camp === "plai-laem" && hasStay
-                    ? "Plai Laem (with accommodation)"
-                    : CAMPS.find((c) => c.id === camp)?.name ?? camp,
-              },
-              {
-                label: "Start date",
-                value: formatDateLong(date),
-              },
-              { label: "Contact", value: contact.email },
-            ]}
-            totalAmount={selectedTier.price ?? 0}
-            note={
-              selectedTier.priceTodo
-                ? "This price is approximate. The gym will confirm the final amount after you book."
-                : undefined
-            }
-          />
+          {hasStay && quote && range?.from && range?.to ? (
+            <BookingReview
+              rows={[
+                { label: "Tier", value: quote.label },
+                { label: "Check-in", value: formatDateLong(range.from) },
+                { label: "Check-out", value: formatDateLong(range.to) },
+                { label: "Nights", value: String(quote.nights) },
+                { label: "Contact", value: contact.email },
+              ]}
+              totalAmount={quote.total}
+            />
+          ) : (
+            camp &&
+            date && (
+              <BookingReview
+                rows={[
+                  { label: "Tier", value: fighterOnly.name },
+                  {
+                    label: "Camp",
+                    value: CAMPS.find((c) => c.id === camp)?.name ?? camp,
+                  },
+                  { label: "Start date", value: formatDateLong(date) },
+                  { label: "Contact", value: contact.email },
+                ]}
+                totalAmount={fighterOnly.price ?? 0}
+              />
+            )
+          )}
           {hasStay && (
             <p className="text-xs text-on-surface-variant border-l-2 border-primary/40 pl-3">
               {ROOM_RESERVATION_POLICY}
