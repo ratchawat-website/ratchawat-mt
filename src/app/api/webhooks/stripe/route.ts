@@ -102,6 +102,7 @@ export async function POST(request: Request) {
         email: app.email,
         phone: app.phone,
         nationality: app.nationality,
+        date_of_birth: app.date_of_birth,
         passport_number: app.passport_number,
         passport_expiry: app.passport_expiry,
         currently_in_thailand: app.currently_in_thailand,

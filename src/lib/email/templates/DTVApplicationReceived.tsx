@@ -22,6 +22,7 @@ export interface DtvApplicationEmailData {
   email: string;
   phone: string;
   nationality: string;
+  date_of_birth: string | null;
   passport_number: string;
   passport_expiry: string;
   currently_in_thailand: boolean;

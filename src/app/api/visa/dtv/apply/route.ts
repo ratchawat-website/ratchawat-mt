@@ -52,6 +52,7 @@ export async function POST(request: Request) {
         nationality: data.nationality,
         phone: data.phone,
         email: data.email,
+        date_of_birth: data.date_of_birth,
         passport_number: data.passport_number,
         passport_expiry: data.passport_expiry,
         currently_in_thailand: data.currently_in_thailand,

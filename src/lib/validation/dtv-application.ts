@@ -15,6 +15,7 @@ export const DtvApplicationSchema = z
     nationality: z.string().trim().min(2).max(60),
     phone: z.string().trim().min(6).max(30),
     email: z.string().trim().email().max(200),
+    date_of_birth: DateString,
 
     passport_number: z.string().trim().min(4).max(30),
     passport_expiry: DateString,
@@ -40,6 +41,16 @@ export const DtvApplicationSchema = z
         code: z.ZodIssueCode.custom,
         path: ["passport_expiry"],
         message: "Passport must be valid for at least 6 more months.",
+      });
+    }
+
+    const dob = new Date(`${data.date_of_birth}T00:00:00`);
+    const oldest = new Date("1920-01-01T00:00:00");
+    if (Number.isNaN(dob.getTime()) || dob >= today || dob < oldest) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["date_of_birth"],
+        message: "Enter a valid date of birth.",
       });
     }
 

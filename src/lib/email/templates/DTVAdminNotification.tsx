@@ -72,6 +72,9 @@ export function DTVAdminNotification({
           <Text>
             <strong>Nationality:</strong> {application.nationality}
           </Text>
+          <Text>
+            <strong>Date of birth:</strong> {application.date_of_birth ?? "-"}
+          </Text>
 
           <Hr />
 

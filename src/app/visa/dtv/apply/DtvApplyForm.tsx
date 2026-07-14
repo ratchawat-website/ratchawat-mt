@@ -23,6 +23,7 @@ interface FormState {
   nationality: string;
   phone: string;
   email: string;
+  date_of_birth: string;
   passport_number: string;
   passport_expiry: string;
   currently_in_thailand: boolean;
@@ -38,6 +39,7 @@ const INITIAL_STATE: FormState = {
   nationality: "",
   phone: "",
   email: "",
+  date_of_birth: "",
   passport_number: "",
   passport_expiry: "",
   currently_in_thailand: false,
@@ -79,6 +81,18 @@ function validate(form: FormState): Record<string, string> {
   if (form.nationality.trim().length < 2) errors.nationality = "Required.";
   if (form.phone.trim().length < 6) errors.phone = "Enter a valid phone number.";
   if (!/^\S+@\S+\.\S+$/.test(form.email.trim())) errors.email = "Enter a valid email.";
+
+  if (!form.date_of_birth) {
+    errors.date_of_birth = "Required.";
+  } else {
+    const dob = new Date(`${form.date_of_birth}T00:00:00`);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (Number.isNaN(dob.getTime()) || dob >= today) {
+      errors.date_of_birth = "Enter a valid date of birth.";
+    }
+  }
+
   if (form.passport_number.trim().length < 4) errors.passport_number = "Required.";
 
   if (!form.passport_expiry) {
@@ -167,6 +181,7 @@ export default function DtvApplyForm() {
           nationality: form.nationality.trim(),
           phone: form.phone.trim(),
           email: form.email.trim(),
+          date_of_birth: form.date_of_birth,
           passport_number: form.passport_number.trim(),
           passport_expiry: form.passport_expiry,
           currently_in_thailand: form.currently_in_thailand,
@@ -230,6 +245,20 @@ export default function DtvApplyForm() {
               autoComplete="family-name"
             />
             {errors.last_name && <p className="text-primary text-xs mt-1">{errors.last_name}</p>}
+          </div>
+          <div data-field="date_of_birth">
+            <FieldLabel required>Date of birth</FieldLabel>
+            <input
+              type="date"
+              value={form.date_of_birth}
+              onChange={(e) => update("date_of_birth", e.target.value)}
+              className={inputCls}
+              autoComplete="bday"
+              max={new Date().toISOString().split("T")[0]}
+            />
+            {errors.date_of_birth && (
+              <p className="text-primary text-xs mt-1">{errors.date_of_birth}</p>
+            )}
           </div>
           <div data-field="nationality">
             <FieldLabel required>Country of origin / nationality</FieldLabel>

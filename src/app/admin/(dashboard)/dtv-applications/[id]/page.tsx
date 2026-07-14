@@ -147,6 +147,12 @@ export default async function DtvApplicationDetailPage({ params }: PageProps) {
             <Globe size={13} />
             {app.nationality}
           </div>
+          <p className="text-sm text-on-surface-variant">
+            Date of birth:{" "}
+            <span className="text-on-surface font-medium">
+              {app.date_of_birth ? formatDateLong(app.date_of_birth) : "-"}
+            </span>
+          </p>
         </div>
       </section>
 
