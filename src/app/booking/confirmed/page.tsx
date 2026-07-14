@@ -31,6 +31,8 @@ interface BookingSummary {
   camp: string | null;
   amount: number;
   clientName: string;
+  /** Present when the payment covered a multi-session private cart. */
+  sessions: { date: string; timeSlot: string | null }[] | null;
 }
 
 async function resolveBooking(
@@ -41,16 +43,27 @@ async function resolveBooking(
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
     const session = await stripe.checkout.sessions.retrieve(sessionId);
     const bookingId = session.metadata?.booking_id;
+    const groupId = session.metadata?.booking_group_id;
     if (!bookingId) return null;
 
     const supabase = createAdminClient();
-    const { data, error } = await supabase
-      .from("bookings")
-      .select("*")
-      .eq("id", bookingId)
-      .single();
 
-    if (error || !data) return null;
+    // Multi-session carts resolve the whole group in chronological order;
+    // legacy bookings keep the single-row path.
+    const query = groupId
+      ? supabase
+          .from("bookings")
+          .select("*")
+          .eq("booking_group_id", groupId)
+          .order("start_date")
+          .order("time_slot")
+      : supabase.from("bookings").select("*").eq("id", bookingId);
+
+    const { data: rows, error } = await query;
+
+    if (error || !rows || rows.length === 0) return null;
+    const data = rows[0];
+    const totalAmount = rows.reduce((sum, b) => sum + b.price_amount, 0);
 
     const pkg = getPriceById(data.price_id);
     return {
@@ -60,8 +73,12 @@ async function resolveBooking(
       endDate: data.end_date,
       timeSlot: data.time_slot,
       camp: data.camp,
-      amount: data.price_amount,
+      amount: totalAmount,
       clientName: data.client_name,
+      sessions:
+        rows.length > 1
+          ? rows.map((b) => ({ date: b.start_date, timeSlot: b.time_slot }))
+          : null,
     };
   } catch (err) {
     console.error("Failed to resolve booking:", err);
@@ -129,27 +146,54 @@ export default async function BookingConfirmedPage({ searchParams }: Props) {
                     {booking.packageName}
                   </span>
                 </div>
-                <div className="flex justify-between gap-4">
-                  <span className="text-on-surface-variant">Start date</span>
-                  <span className="text-on-surface font-medium">
-                    {formatDateShort(booking.startDate)}
-                  </span>
-                </div>
-                {booking.endDate && (
-                  <div className="flex justify-between gap-4">
-                    <span className="text-on-surface-variant">End date</span>
-                    <span className="text-on-surface font-medium">
-                      {formatDateShort(booking.endDate)}
+                {booking.sessions ? (
+                  <div className="space-y-1.5">
+                    <span className="text-on-surface-variant">
+                      Your sessions ({booking.sessions.length})
                     </span>
+                    {booking.sessions.map((s) => (
+                      <div
+                        key={`${s.date}-${s.timeSlot}`}
+                        className="flex justify-between gap-4"
+                      >
+                        <span className="text-on-surface font-medium">
+                          {formatDateShort(s.date)}
+                        </span>
+                        <span className="text-on-surface font-medium">
+                          {s.timeSlot}
+                        </span>
+                      </div>
+                    ))}
                   </div>
-                )}
-                {booking.timeSlot && (
-                  <div className="flex justify-between gap-4">
-                    <span className="text-on-surface-variant">Time</span>
-                    <span className="text-on-surface font-medium">
-                      {booking.timeSlot}
-                    </span>
-                  </div>
+                ) : (
+                  <>
+                    <div className="flex justify-between gap-4">
+                      <span className="text-on-surface-variant">
+                        Start date
+                      </span>
+                      <span className="text-on-surface font-medium">
+                        {formatDateShort(booking.startDate)}
+                      </span>
+                    </div>
+                    {booking.endDate && (
+                      <div className="flex justify-between gap-4">
+                        <span className="text-on-surface-variant">
+                          End date
+                        </span>
+                        <span className="text-on-surface font-medium">
+                          {formatDateShort(booking.endDate)}
+                        </span>
+                      </div>
+                    )}
+                    {booking.timeSlot && (
+                      <div className="flex justify-between gap-4">
+                        <span className="text-on-surface-variant">Time</span>
+                        <span className="text-on-surface font-medium">
+                          {booking.timeSlot}
+                        </span>
+                      </div>
+                    )}
+                  </>
                 )}
                 {booking.camp && (
                   <div className="flex justify-between gap-4">
