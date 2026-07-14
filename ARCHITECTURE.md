@@ -84,7 +84,9 @@ Note: Fighter+Room confirmed at 20,000 THB (2026-04-12).
 
 **Date formatting** — unified via `src/lib/utils/date-format.ts`. Short format `formatDateShort` (Apr 12, 2026) for tables, cards, lists. Long format `formatDateLong` (Saturday, April 12, 2026) for review steps and detail pages.
 
-**Private lesson time slots:** `07:00, 08:00, 10:00, 11:00, 12:00, 13:00, 14:00, 15:00, 16:00` (9 slots). Source of truth: `src/content/schedule.ts` (`PRIVATE_SLOT_TIMES`), re-exported by `src/lib/config/slots.ts` for consumers.
+**Private lesson time slots (19, client-approved 2026-07-10):** `07:00, 07:30, 08:00, 08:30, 09:00, 10:30, 11:00, 11:30, 12:00, 12:30, 13:00, 13:30, 14:00, 14:30, 15:00, 15:30, 16:00, 18:30, 19:00`. 30-minute starts, sessions of 60 minutes: two consecutive starts overlap, which the client explicitly accepts (capacity is counted per start, not per overlap window). Source of truth: `src/content/schedule.ts` (`PRIVATE_SLOT_TIMES`), re-exported by `src/lib/config/slots.ts`. Display grouping for the wizard: `SLOT_GROUPS` (Morning / Midday / Afternoon / Evening). Booking cutoff: `getCutoffHoursForSlot` returns 12h for slots starting before 09:30 (`EARLY_CUTOFF_BEFORE`), 2h otherwise.
+
+**AvailabilityCalendar units:** the calendar sums `availability_blocks.units` (legacy rows count as 1) and accepts a `unitsRequested` prop; a slot greys out when `occupied + unitsRequested > PRIVATE_SLOT_CAPACITY`.
 
 ---
 
@@ -97,6 +99,8 @@ Fixed inventory constants (physical rooms, not configurable via UI):
 - **Bungalows:** 1 (private bungalow at Plai Laem)
 
 `getInventoryKey(priceId)` maps a price_id to its pool (`"rooms"` or `"bungalows"`). Returns `null` for non-accommodation bookings.
+
+**Trainer capacity (private slots, July 2026 vague 2a):** `PRIVATE_SLOT_CAPACITY = 6` now counts TRAINERS per (date, slot, camp), not bookings. Each `availability_blocks` row of type `private-slot` carries `units`: a 1-on-1 booking for N participants consumes N trainers (`capacity: "per-participant"` on the PriceItem, `getCapacityUnits` in `src/lib/booking/pricing.ts`), a group session or 10-pack consumes 1. `getSlotOccupancy` sums units. Assumed limit (client decision 2026-07-10): 30-minute starts overlap over 60-minute sessions and slots are counted independently; a trainer teaching at 10:30 is not deducted from the 11:00 pool.
 
 **Occupancy helpers:** `src/lib/admin/availability.ts`
 - `getOccupancyMap(key, from, to)` — counts active bookings per night (hotel logic: checkout morning frees the night)
@@ -130,7 +134,8 @@ create table bookings (
   notes text,
   stripe_session_id text,
   stripe_payment_intent_id text,
-  stripe_payment_status text
+  stripe_payment_status text,
+  booking_group_id uuid -- added 2026-07-14 (migration 20260711000000)
 );
 ```
 
@@ -139,6 +144,7 @@ create table bookings (
 - `num_participants` added for Private Group bookings (2-3 people, prices per person)
 - `time_slot` added for Private lessons (see `PRIVATE_SLOT_TIMES` in `src/content/schedule.ts`)
 - `camp` accepts 'both' for Camp Stay bookings (client stays at Plai Laem but trains at either camp)
+- `booking_group_id` (nullable, partial index `idx_bookings_group`) links the N rows of a multi-session private cart paid in ONE Stripe payment. The webhook confirms/cancels the whole group; admin cancellation stays per session. Null for legacy and non-private bookings.
 
 ### Table: availability_blocks
 
@@ -151,7 +157,8 @@ create table availability_blocks (
   time_slot text,
   is_blocked boolean not null default true,
   reason text,
-  created_by uuid references auth.users(id)
+  created_by uuid references auth.users(id),
+  units integer not null default 1 -- added 2026-07-14: trainers consumed by this block
 );
 ```
 
@@ -243,11 +250,11 @@ The confirmed page is a Server Component that uses `SUPABASE_SERVICE_ROLE_KEY` s
 ## 6. Stripe Integration
 
 ### Flow
-1. Client completes wizard — POST `/api/checkout` with `{ price_id, booking_data }`
-2. API creates pending booking in Supabase
-3. API creates Stripe Checkout Session (`success_url=/booking/confirmed?booking_id=X`)
-4. Client redirected to Stripe
-5. Stripe webhook `checkout.session.completed` — update booking to `confirmed` — send emails
+1. Client completes wizard — POST `/api/checkout` with `{ price_id, booking_data }`. Private bookings send `sessions: [{ date, time_slot }]` (1-10 entries, multi-day cart).
+2. API creates pending booking(s) in Supabase. Private: one row per session sharing a `booking_group_id`, one `private-slot` block per session with `units`, full rollback if any insert or the insert-then-verify re-count fails.
+3. API creates ONE Stripe Checkout Session (quantity = Stripe quantity x number of sessions; metadata `booking_id` = first row + `booking_group_id` for carts).
+4. Client redirected to Stripe.
+5. Stripe webhook `checkout.session.completed` — updates the booking (or the whole group when `booking_group_id` is present) to `confirmed` — sends ONE email listing every session (`BookingEmailData.sessions`). `checkout.session.expired` cancels the group and deletes its blocks.
 
 ### Products
 One Stripe Product per `PriceItem.id`. Store `stripeProductId` and `stripePriceId` in `pricing.ts` once created.

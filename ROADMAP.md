@@ -3,8 +3,8 @@
 > **Source of truth for what to build.** Read this at the start of every session alongside PROJECT-STATUS.md.
 > Update task statuses as work progresses. Never start work without checking the current phase.
 
-**Last updated:** 2026-07-14 (vague 1 juillet 2026 implémentée sur branche, attente approval)
-**Current phase:** Post-launch — Brief cliente juillet 2026 (vague 1 done on branch, vagues 2a/2b next)
+**Last updated:** 2026-07-14 (vagues 1 et 2a implémentées sur branches, attente approval)
+**Current phase:** Post-launch — Brief cliente juillet 2026 (vague 1 + 2a done on branches, vague 2b next)
 
 > **Phase ordering (post-Phase 4 restructure, 2026-04-15):** Before go-live we split the generic "Security & Quality" bucket into 4 sequential phases (5 → 8) so work happens in the right order. Go-live (Phase 9) is the FINAL phase, unblocked only when all content, media, SEO, and security/perf/a11y work is done. Do not skip ahead.
 
@@ -15,7 +15,33 @@
 **Status:** IMPLEMENTED 2026-07-14 on branch `feat/fixes-and-content-july` — **awaiting Rd approval + Stripe LIVE seed + merge** (strict order, see handoff below)
 **Spec:** `docs/superpowers/specs/2026-07-10-brief-juillet-design.md` (sections 3 et 6)
 **Plan:** `docs/superpowers/plans/2026-07-10-vague-1-fixes-and-content.md`
-**Next:** vague 2a (privé v2) puis 2b (hébergement par paliers), plans déjà commités dans `docs/superpowers/plans/`.
+**Next:** vague 2b (hébergement par paliers), plan déjà commité dans `docs/superpowers/plans/`.
+
+---
+
+## Vague 2a — Réservation privée v2, brief cliente juillet 2026
+
+**Status:** IMPLEMENTED 2026-07-14 on branch `feat/booking-v2-july` (créée depuis `feat/fixes-and-content-july`, vague 1 non mergée) — **awaiting Rd approval, NE PAS merger**
+**Spec:** `docs/superpowers/specs/2026-07-10-brief-juillet-design.md` (section 4)
+**Plan:** `docs/superpowers/plans/2026-07-10-vague-2a-private-booking-v2.md`
+
+### Tasks (all done on branch)
+
+- [x] Task 1 — Migration additive `booking_group_id` (bookings) + `units` (availability_blocks), MCP + miroir
+- [x] Task 2 — Capacité 6 = coachs: `capacity` sur PriceItem, `getCapacityUnits`, `getSlotOccupancy` somme les units, 3 writers
+- [x] Task 3 — 19 créneaux (pas de 30 min), `SLOT_GROUPS`, cutoff 12h avant 09:30, horaires publiés 20:00
+- [x] Task 4 — Bornes participants par package (solo 1-6, groupe 2-3, pack 1), sélecteur à l'étape Session type, validation partout
+- [x] Task 5 — Checkout multi-sessions (Zod `sessions`, N bookings groupés, rollback, 1 paiement Stripe)
+- [x] Task 6 — Webhook completed/expired par groupe
+- [x] Task 7 — Panier de sessions dans le wizard privé, calendrier en unités (`unitsRequested`)
+- [x] Task 8 — Emails multi-sessions (2 templates)
+- [x] Task 9 — Admin: drawer en unités, sessions sœurs, annulation par session
+- [x] Task 10 — Page /booking/confirmed multi-sessions
+- [x] Task 11 — Recette E2E complète (voir PROJECT-STATUS 2026-07-14) + purge + docs
+
+### Handoff
+
+La branche continue avec le plan 2b (`docs/superpowers/plans/2026-07-10-vague-2b-accommodation-tiers.md`). Rd doit revoir le diff et la recette avant d'enchaîner. Vérification manuelle restante pour Rd: annulation admin d'une session d'un panier en UI (logique vérifiée par code), et rendu visuel du wizard (grille groupée, panier) à 375px.
 
 ### Tasks (all done on branch)
 
