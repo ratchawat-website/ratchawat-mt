@@ -57,10 +57,9 @@ async function main() {
 
   if (toSeed.length === 0) {
     console.log(`Nothing to seed. All products already have ${mode} Stripe IDs.`);
-    return;
+  } else {
+    console.log(`Seeding ${toSeed.length} Stripe products in ${mode} mode...`);
   }
-
-  console.log(`Seeding ${toSeed.length} Stripe products in ${mode} mode...`);
 
   let fileContent = fs.readFileSync(PRICING_FILE, "utf8");
 
@@ -101,6 +100,53 @@ async function main() {
       idPattern,
       `$1\n    ${productField}: "${product.id}",\n    ${priceField}: "${price.id}",`,
     );
+  }
+
+  // Sync pass: items already seeded whose catalog price no longer matches
+  // the active Stripe price. Creates a new Price on the same Product,
+  // makes it the default, refreshes name/description, and rewrites the
+  // price ID in pricing.ts.
+  const seeded = PRICES.filter(
+    (p) =>
+      p.price !== null &&
+      p[priceField as keyof typeof p] &&
+      !p.id.startsWith("bodyweight-"),
+  );
+
+  for (const item of seeded) {
+    const currentPriceId = item[priceField as keyof typeof item] as string;
+    const current = await stripe.prices.retrieve(currentPriceId);
+    const expected = item.price! * 100;
+    if (current.unit_amount === expected) continue;
+
+    console.log(
+      `  ~ ${item.id}: ${current.unit_amount} -> ${expected} satang (new price)`,
+    );
+
+    const productId =
+      typeof current.product === "string" ? current.product : current.product.id;
+
+    const description = [item.description, item.notes]
+      .filter(Boolean)
+      .join(" - ");
+
+    const newPrice = await stripe.prices.create({
+      product: productId,
+      unit_amount: expected,
+      currency: "thb",
+    });
+    await stripe.products.update(productId, {
+      name: item.name,
+      description,
+      default_price: newPrice.id,
+    });
+    // Deliberately NOT deactivating the old price here: in LIVE mode the
+    // currently deployed code still references it until the new deploy is
+    // out. Deactivating it during that window would break live checkouts.
+    // Old prices are archived AFTER the deploy (see handoff checklist).
+    console.log(`    old price kept active for zero-downtime cutover: ${currentPriceId}`);
+
+    fileContent = fileContent.replace(currentPriceId, newPrice.id);
   }
 
   fs.writeFileSync(PRICING_FILE, fileContent, "utf8");
