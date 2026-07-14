@@ -171,6 +171,12 @@ export default function PlaiLaemCampPage() {
               <p className="text-on-surface-variant text-base sm:text-lg leading-relaxed mb-4">
                 There is a full Muay Thai training area with a ring, heavy bags, and pads, plus a bodyweight section with pull-up bars, dip bars, and open floor. Good for anyone who wants to mix striking with strength and conditioning work.
               </p>
+              <p className="text-on-surface-variant text-base sm:text-lg leading-relaxed mb-4">
+                Plai Laem is also the only camp where you can sleep on site:
+                7 standard rooms and a private bungalow a few steps from the
+                ring. There is an ice bath for recovery too. Roll out of bed,
+                walk to training.
+              </p>
               <p className="text-on-surface-variant text-base sm:text-lg leading-relaxed">
                 Want something smaller? Our original{" "}
                 <Link

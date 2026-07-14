@@ -22,6 +22,7 @@ import TurnstileWidget from "@/components/security/TurnstileWidget";
 import { useTurnstile } from "@/components/security/use-turnstile";
 import { formatDateLong } from "@/lib/utils/date-format";
 import { computeBookingAmount } from "@/lib/booking/pricing";
+import { PRIVATE_CANCELLATION_POLICY } from "@/content/policies";
 import { format } from "date-fns";
 
 const STEPS = ["Session type", "Camp", "Date & Time", "Contact", "Review"];
@@ -377,6 +378,9 @@ export default function PrivateWizard() {
                 : undefined
             }
           />
+          <p className="text-xs text-on-surface-variant border-l-2 border-primary/40 pl-3">
+            {PRIVATE_CANCELLATION_POLICY}
+          </p>
           <TurnstileWidget
             onVerify={captcha.onVerify}
             onExpire={captcha.onExpire}

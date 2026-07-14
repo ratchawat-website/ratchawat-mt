@@ -15,6 +15,7 @@ import { formatDateLong } from "@/lib/utils/date-format";
 import { format } from "date-fns";
 import TurnstileWidget from "@/components/security/TurnstileWidget";
 import { useTurnstile } from "@/components/security/use-turnstile";
+import { ROOM_RESERVATION_POLICY } from "@/content/policies";
 
 const STEPS = ["Package", "Check-in", "Contact", "Review"];
 
@@ -249,6 +250,9 @@ export default function CampStayWizard() {
             totalAmount={selectedPackage.price ?? 0}
             note={selectedPackage.notes ?? undefined}
           />
+          <p className="text-xs text-on-surface-variant border-l-2 border-primary/40 pl-3">
+            {ROOM_RESERVATION_POLICY}
+          </p>
           <TurnstileWidget
             onVerify={captcha.onVerify}
             onExpire={captcha.onExpire}

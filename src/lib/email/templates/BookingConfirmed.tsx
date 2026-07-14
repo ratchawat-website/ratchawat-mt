@@ -11,6 +11,10 @@ import {
   Hr,
 } from "@react-email/components";
 import type { BookingEmailData } from "../types";
+import {
+  PRIVATE_CANCELLATION_POLICY,
+  ROOM_RESERVATION_POLICY,
+} from "@/content/policies";
 
 interface Props {
   booking: BookingEmailData;
@@ -24,6 +28,9 @@ const CAMP_LABEL: Record<string, string> = {
 };
 
 export function BookingConfirmed({ booking, packageName }: Props) {
+  const includesAccommodation =
+    booking.type === "camp-stay" || booking.price_id.includes("stay");
+
   return (
     <Html>
       <Head />
@@ -72,6 +79,17 @@ export function BookingConfirmed({ booking, packageName }: Props) {
               {booking.price_amount.toLocaleString("en-US")} THB
             </Text>
           </Section>
+
+          {booking.type === "private" && (
+            <Text style={{ fontSize: 12, color: "#999" }}>
+              {PRIVATE_CANCELLATION_POLICY}
+            </Text>
+          )}
+          {includesAccommodation && (
+            <Text style={{ fontSize: 12, color: "#999" }}>
+              {ROOM_RESERVATION_POLICY}
+            </Text>
+          )}
 
           <Hr />
 

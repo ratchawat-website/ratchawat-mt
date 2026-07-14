@@ -344,7 +344,7 @@ export default function AccommodationPage() {
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
             <GlassCard>
-              <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-3">1 Week</h3>
+              <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-3">1 Week · Standard Room</h3>
               <div className="mb-4">
                 <span className="font-serif text-4xl font-bold text-primary">8,000</span>
                 <span className="text-on-surface-variant text-sm ml-1">THB</span>
@@ -361,7 +361,7 @@ export default function AccommodationPage() {
             </GlassCard>
             <GlassCard className="ring-2 ring-primary">
               <div className="mb-2"><span className="badge-underline badge-orange">Best Value</span></div>
-              <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-3">2 Weeks</h3>
+              <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-3">2 Weeks · Standard Room</h3>
               <div className="mb-4">
                 <span className="font-serif text-4xl font-bold text-primary">15,000</span>
                 <span className="text-on-surface-variant text-sm ml-1">THB</span>
