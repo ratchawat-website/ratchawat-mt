@@ -3,8 +3,8 @@
 > **Source of truth for what to build.** Read this at the start of every session alongside PROJECT-STATUS.md.
 > Update task statuses as work progresses. Never start work without checking the current phase.
 
-**Last updated:** 2026-07-14 (vagues 1 et 2a implémentées sur branches, attente approval)
-**Current phase:** Post-launch — Brief cliente juillet 2026 (vague 1 + 2a done on branches, vague 2b next)
+**Last updated:** 2026-07-14 (vagues 1, 2a et 2b implémentées sur branches, attente approval)
+**Current phase:** Post-launch — Brief cliente juillet 2026 (vagues 1 + 2a + 2b done on branches — awaiting Rd approval + Stripe LIVE seed + merge)
 
 > **Phase ordering (post-Phase 4 restructure, 2026-04-15):** Before go-live we split the generic "Security & Quality" bucket into 4 sequential phases (5 → 8) so work happens in the right order. Go-live (Phase 9) is the FINAL phase, unblocked only when all content, media, SEO, and security/perf/a11y work is done. Do not skip ahead.
 
@@ -15,7 +15,6 @@
 **Status:** IMPLEMENTED 2026-07-14 on branch `feat/fixes-and-content-july` — **awaiting Rd approval + Stripe LIVE seed + merge** (strict order, see handoff below)
 **Spec:** `docs/superpowers/specs/2026-07-10-brief-juillet-design.md` (sections 3 et 6)
 **Plan:** `docs/superpowers/plans/2026-07-10-vague-1-fixes-and-content.md`
-**Next:** vague 2b (hébergement par paliers), plan déjà commité dans `docs/superpowers/plans/`.
 
 ---
 
@@ -41,7 +40,37 @@
 
 ### Handoff
 
-La branche continue avec le plan 2b (`docs/superpowers/plans/2026-07-10-vague-2b-accommodation-tiers.md`). Rd doit revoir le diff et la recette avant d'enchaîner. Vérification manuelle restante pour Rd: annulation admin d'une session d'un panier en UI (logique vérifiée par code), et rendu visuel du wizard (grille groupée, panier) à 375px.
+Vérification manuelle restante pour Rd: annulation admin d'une session d'un panier en UI (logique vérifiée par code), et rendu visuel du wizard (grille groupée, panier) à 375px.
+
+---
+
+## Vague 2b — Hébergement par paliers à dates libres, brief cliente juillet 2026
+
+**Status:** IMPLEMENTED 2026-07-14 on branch `feat/booking-v2-july` (après la 2a) — **awaiting Rd approval + Stripe LIVE seed + merge, NE PAS merger**
+**Spec:** `docs/superpowers/specs/2026-07-10-brief-juillet-design.md` (section 5)
+**Plan:** `docs/superpowers/plans/2026-07-10-vague-2b-accommodation-tiers.md`
+
+### Tasks (all done on branch)
+
+- [x] Task 1 — Grille tarifaire `src/content/stay-pricing.ts` (4 rate cards, paliers, source unique)
+- [x] Task 2 — `computeStayPrice` par paliers (TDD, matrice spec §5.2, anomalie 29/30 nuits assumée)
+- [x] Task 3 — Inventaire: mapping `stay-*` + ids historiques conservés (tests)
+- [x] Task 4 — Endpoint `/api/checkout/stay` (Zod, recalcul serveur, Stripe `price_data`, fallback `stayLabelFromPriceId` emails/confirmed/admin)
+- [x] Task 5 — `DateRangePicker` + `StayCalendar` (mode range, occupation 180j, minNights, nuits pleines)
+- [x] Task 6 — Product Stripe permanent « Accommodation Stay » (TEST seedé) + 6 forfaits `archived: true`
+- [x] Task 7 — CampStayWizard à dates libres avec devis live
+- [x] Task 8 — FighterWizard: tiers stay à dates libres, Fighter Only inchangé
+- [x] Task 9 — Admin: type « Accommodation Stay » (unit/plan/dates, prix auto éditable), API revalide
+- [x] Task 10 — /accommodation, /pricing, /booking, llms lisent la grille (0 montant séjour en dur)
+- [x] Task 11 — Recette API (montants Stripe vérifiés, 409, minimums), purge, nettoyage AvailabilityCalendar, docs
+
+### Deployment checklist vague 2b (STRICT order — rien mergé ni pushé)
+
+1. [ ] Rd reviews the diff (`git log --oneline main..feat/booking-v2-july` — contient 2a + 2b, et la branche repose sur la vague 1)
+2. [ ] Rd runs `npm run stripe:seed` with the LIVE key (creates the LIVE "Accommodation Stay" product, fills `STAY_STRIPE_PRODUCT_LIVE` in `stay-pricing.ts`) → commit that diff on the branch
+3. [ ] Merge + Vercel deploy
+4. [ ] Prod smoke test: camp-stay wizard room 10 nights → quote 11,420 and Stripe page shows the same amount (do NOT pay); private wizard 2-session cart up to the Stripe page (do NOT pay); admin drawer in units
+5. [ ] Rappels post-merge: les 4 confirmations cliente du spec §7 restent ouvertes (prix groupe 2 vs 3, groupe kids, délai DTV, tarif nuit supp bungalow) — chaque réponse = simple édition de `stay-pricing.ts`/config + redéploiement
 
 ### Tasks (all done on branch)
 

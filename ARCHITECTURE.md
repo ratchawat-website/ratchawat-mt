@@ -24,6 +24,10 @@ const groupPrices = PRICES.filter(p => p.category === "group")
 
 **Policy texts:** `src/content/policies.ts` holds client-provided policy strings (private cancellation, room reservation, DTV delivery/refusal, DTV custom-plan WhatsApp note). They are VERBATIM client copy: do not rewrite or run through humanizer. Consumed by the booking wizards, `/visa/dtv`, `/pricing`, `/terms`, and the confirmation emails.
 
+**Stay rate cards (July 2026 vague 2b):** `src/content/stay-pricing.ts` is the single source of truth for accommodation prices (4 `StayRateCard`s: room/bungalow x normal/fighter, each with tiered `{ nights, basePrice, extraNightRate }`). `computeStayPrice(checkIn, checkOut, unit, plan)` in `src/lib/booking/stay.ts` picks the largest tier `<= nights` and adds extra nights at that tier's rate (hotel-night logic, server-side only; the client never sends an amount). Consumed by the camp-stay and fighter wizards (live quote), `/api/checkout/stay`, `/api/admin/bookings`, and the display pages (`/accommodation`, `/pricing`, `/booking`). Editing the grid + redeploying is enough to change rates (Stripe amounts are computed per checkout via `price_data`).
+
+**Archived packages:** `PriceItem.archived?: boolean` marks superseded items (the 6 fixed-duration stay packages: `camp-stay-1week/2weeks/1month`, `camp-stay-bungalow-monthly`, `fighter-stay-room-monthly`, `fighter-stay-bungalow-monthly`). `getPricesByCategory`/`getPricesByBookingType` exclude them (wizards and pages no longer see them); `getPriceById` still resolves them so historic bookings keep a readable name. New stay bookings use synthetic `price_id`s (`stay-room-normal`, `stay-bungalow-fighter`, ...) labeled via `stayLabelFromPriceId`.
+
 ---
 
 ## 2. Booking System Routes
@@ -57,22 +61,20 @@ All "Book Now" links pass `?package=<price-id>` so wizards pre-select the packag
 4. Contact info
 5. Review + Stripe Checkout
 
-### Camp Stay (training + accommodation, Plai Laem only)
-1. Package — 1 week / 2 weeks / 1 month Room / 1 month Bungalow
-2. Check-in date — AvailabilityCalendar (reads availability_blocks, type IN ('full') + occupancy API)
+### Camp Stay (training + accommodation, Plai Laem only — free dates since vague 2b)
+1. Accommodation — Standard Room or Private Bungalow (cards built from `getRateCard`)
+2. Dates — StayCalendar (range picker + occupancy API); live quote below the calendar (`computeStayPrice`: base tier + extra nights)
 3. Contact info
-4. Review + Stripe Checkout
+4. Review + POST `/api/checkout/stay` (server recomputes the amount, Stripe `price_data`)
 
-Note: Clients stay at Plai Laem but can train at either camp (Bo Phut or Plai Laem). Booking record uses camp='both'.
+Notes: room minimum 7 nights, bungalow minimum 30 nights. Legacy `?package=` links map to a unit (bungalow/room). Clients stay at Plai Laem but can train at either camp; booking record uses camp='both'.
 
 ### Fighter Program
 1. Info screen — what is included in the Fighter Program
-2. Tier selection — Fighter Only (9,500 THB) / Fighter + Room (20,000 THB) / Fighter + Bungalow (25,500 THB)
-3. Camp + start date — Bo Phut or Plai Laem for Fighter Only, auto-locked to Plai Laem with AvailabilityCalendar for stay tiers
+2. Tier selection — Fighter Only (9,500 THB/month, classic Stripe price) / Fighter + Room (from 20,000 THB per 30 nights) / Fighter + Bungalow (from 25,500 THB per 30 nights)
+3. Camp + dates — Fighter Only keeps the single DatePicker; stay tiers use StayCalendar (30-night minimum) with the live quote, auto-locked to Plai Laem
 4. Contact info
-5. Review + Stripe Checkout
-
-Note: Fighter+Room confirmed at 20,000 THB (2026-04-12).
+5. Review + Stripe Checkout — Fighter Only posts to `/api/checkout` (price_id `fighter-monthly`), stay tiers post to `/api/checkout/stay` with `plan: "fighter"`
 
 ---
 
@@ -80,7 +82,9 @@ Note: Fighter+Room confirmed at 20,000 THB (2026-04-12).
 
 **DatePicker** — used for training start date, fighter start date. react-day-picker v9 with full Tailwind dark theme (shared tokens in `src/components/ui/calendar-tokens.ts`). No Supabase.
 
-**AvailabilityCalendar** — used for private and camp-stay flows. Fetches `availability_blocks` from Supabase + occupancy data from `/api/availability/occupancy`. Block type filter depends on booking type: private fetches `('full','private','private-slot')`, camp-stay/fighter fetches only `('full')`. Blocked dates (manual blocks OR capacity full) = greyed out, unselectable. For multi-day stays, a check-in date is blocked if ANY night in the resulting range is at capacity. Private bookings auto-create `availability_blocks` rows (type='private-slot') on checkout, deleted on cancellation.
+**AvailabilityCalendar** — private flow only (since vague 2b). Fetches `availability_blocks` from Supabase, types `('full','private','private-slot','private-slot-closure')`. Blocked dates greyed out. Private bookings auto-create `availability_blocks` rows (type='private-slot') on checkout, deleted on cancellation.
+
+**DateRangePicker + StayCalendar** — stay flows (camp-stay wizard, fighter stay tiers). `DateRangePicker` is the react-day-picker `mode="range"` twin of DatePicker (same tokens + range_start/middle/end styles). `StayCalendar` loads 180 days of occupancy from `/api/availability/occupancy`, greys out full nights, and rejects a selected range that is shorter than `minNights` or contains a full night (inline error + selection reset, checkout night excluded per hotel logic).
 
 **Date formatting** — unified via `src/lib/utils/date-format.ts`. Short format `formatDateShort` (Apr 12, 2026) for tables, cards, lists. Long format `formatDateLong` (Saturday, April 12, 2026) for review steps and detail pages.
 
@@ -98,7 +102,7 @@ Fixed inventory constants (physical rooms, not configurable via UI):
 - **Rooms:** 7 (standard rooms at Plai Laem)
 - **Bungalows:** 1 (private bungalow at Plai Laem)
 
-`getInventoryKey(priceId)` maps a price_id to its pool (`"rooms"` or `"bungalows"`). Returns `null` for non-accommodation bookings.
+`getInventoryKey(priceId)` maps a price_id to its pool (`"rooms"` or `"bungalows"`). Returns `null` for non-accommodation bookings. It recognizes both the new stay ids (`stay-room-*` -> rooms, `stay-bungalow-*` -> bungalows) and the historic package ids (live bookings still carry them). `getStayUnitInventoryKey(unit)` is the direct mapping for stay checkouts. Unit-tested in `src/lib/admin/inventory.test.ts`.
 
 **Trainer capacity (private slots, July 2026 vague 2a):** `PRIVATE_SLOT_CAPACITY = 6` now counts TRAINERS per (date, slot, camp), not bookings. Each `availability_blocks` row of type `private-slot` carries `units`: a 1-on-1 booking for N participants consumes N trainers (`capacity: "per-participant"` on the PriceItem, `getCapacityUnits` in `src/lib/booking/pricing.ts`), a group session or 10-pack consumes 1. `getSlotOccupancy` sums units. Assumed limit (client decision 2026-07-10): 30-minute starts overlap over 60-minute sessions and slots are counted independently; a trainer teaching at 10:30 is not deducted from the 11:00 pool.
 
@@ -259,9 +263,9 @@ The confirmed page is a Server Component that uses `SUPABASE_SERVICE_ROLE_KEY` s
 ### Products
 One Stripe Product per `PriceItem.id`. Store `stripeProductId` and `stripePriceId` in `pricing.ts` once created.
 
-**Price sync (July 2026):** `scripts/stripe-seed-products.ts` now runs a sync pass after seeding. For every already-seeded item whose catalog `price` differs from the active Stripe price, it creates a new Price on the same Product, sets it as `default_price`, refreshes name/description, and rewrites the price ID in `pricing.ts`. The OLD price is deliberately left active (zero-downtime cutover: deployed code keeps referencing it until the next deploy). Archive old prices manually in the Stripe dashboard AFTER the deploy is verified.
+**Price sync (July 2026):** `scripts/stripe-seed-products.ts` now runs a sync pass after seeding. For every already-seeded item whose catalog `price` differs from the active Stripe price, it creates a new Price on the same Product, sets it as `default_price`, refreshes name/description, and rewrites the price ID in `pricing.ts`. The OLD price is deliberately left active (zero-downtime cutover: deployed code keeps referencing it until the next deploy). Archive old prices manually in the Stripe dashboard AFTER the deploy is verified. Both seed passes skip `archived` items.
 
-Prices with `priceTodo` set (currently `fighter-stay-room-monthly` and `fighter-stay-bungalow-monthly`) are still created as Stripe products using their approximate `price` value. The `priceTodo` note is included in the Stripe product description so the client can update the price in the Stripe dashboard later without code changes.
+**Accommodation Stay (July 2026 vague 2b):** stays are charged via `price_data` (computed amount in satang) attached to ONE permanent Stripe Product "Accommodation Stay" (`STAY_STRIPE_PRODUCT_TEST/LIVE` in `stay-pricing.ts`, created by the seed script when the field is empty). `/api/checkout/stay` recomputes the amount server-side (`computeStayPrice`), inserts the pending booking (type `camp-stay` or `fighter`, `price_id = stay-<unit>-<plan>`, real check-in/check-out dates), and passes `metadata.booking_id` — the existing webhook confirms/cancels without modification.
 
 ---
 
