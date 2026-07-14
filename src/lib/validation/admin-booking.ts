@@ -15,6 +15,10 @@ export const AdminBookingSchema = z.object({
   client_nationality: z.string().trim().max(60).optional().or(z.literal("")),
   notes: z.string().trim().max(1000).optional().or(z.literal("")),
   price_amount: z.number().int().min(0).optional(),
+  // Stay bookings only (price_id starting with "stay-"): unit + plan drive
+  // the server-side tiered price computation.
+  stay_unit: z.enum(["room", "bungalow"]).optional(),
+  stay_plan: z.enum(["normal", "fighter"]).optional(),
 });
 
 export type AdminBookingRequest = z.infer<typeof AdminBookingSchema>;

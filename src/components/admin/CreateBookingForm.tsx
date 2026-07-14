@@ -4,6 +4,13 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { X } from "lucide-react";
 import { PRICES, type PriceItem } from "@/content/pricing";
+import {
+  getRateCard,
+  stayPriceId,
+  type StayPlan,
+  type StayUnit,
+} from "@/content/stay-pricing";
+import { computeStayPrice } from "@/lib/booking/stay";
 import { PRIVATE_SLOTS } from "@/lib/config/slots";
 import {
   computeBookingAmount,
@@ -11,12 +18,24 @@ import {
 } from "@/lib/booking/pricing";
 import { addDays, format } from "date-fns";
 
+// "stay" is a UI-only type: the POST maps it to camp-stay/fighter + stay fields.
 const BOOKING_TYPES = [
   { value: "training", label: "Training" },
   { value: "private", label: "Private Lesson" },
+  { value: "stay", label: "Accommodation Stay" },
   { value: "camp-stay", label: "Camp Stay" },
   { value: "fighter", label: "Fighter Program" },
 ] as const;
+
+const STAY_UNITS: { value: StayUnit; label: string }[] = [
+  { value: "room", label: "Room" },
+  { value: "bungalow", label: "Bungalow" },
+];
+
+const STAY_PLANS: { value: StayPlan; label: string }[] = [
+  { value: "normal", label: "Normal" },
+  { value: "fighter", label: "Fighter Program" },
+];
 
 const CAMPS = [
   { value: "bo-phut", label: "Bo Phut" },
@@ -30,26 +49,19 @@ interface Props {
 }
 
 function getPackagesForType(type: string): PriceItem[] {
-  return PRICES.filter((p) => p.bookingType === type);
+  return PRICES.filter((p) => p.bookingType === type && !p.archived);
 }
 
 function needsEndDate(type: string): boolean {
-  return type === "camp-stay" || type === "fighter";
+  return type === "stay" || type === "camp-stay" || type === "fighter";
 }
 
 function needsTimeSlot(type: string): boolean {
   return type === "private";
 }
 
-function getStayDurationDays(priceId: string): number | null {
-  if (priceId.includes("1week")) return 7;
-  if (priceId.includes("2weeks")) return 14;
-  if (priceId.includes("1month") || priceId.includes("monthly")) return 30;
-  if (priceId.includes("bungalow")) return 30;
-  return null;
-}
-
 function getDefaultCamp(priceId: string | null, type: string): string {
+  if (type === "stay") return "both";
   if (!priceId) return "bo-phut";
   if (priceId.includes("stay") || priceId.includes("bungalow")) return "plai-laem";
   if (type === "camp-stay") return "both";
@@ -60,6 +72,8 @@ export default function CreateBookingForm({ defaultDate, onClose }: Props) {
   const router = useRouter();
   const [type, setType] = useState("training");
   const [priceId, setPriceId] = useState("");
+  const [stayUnit, setStayUnit] = useState<StayUnit | "">("");
+  const [stayPlan, setStayPlan] = useState<StayPlan | "">("");
   const [camp, setCamp] = useState("bo-phut");
   const [startDate, setStartDate] = useState(defaultDate ?? "");
   const [endDate, setEndDate] = useState("");
@@ -100,36 +114,68 @@ export default function CreateBookingForm({ defaultDate, onClose }: Props) {
   // Reset package when type changes
   useEffect(() => {
     setPriceId("");
+    setStayUnit("");
+    setStayPlan("");
     setTimeSlot("");
     setEndDate("");
   }, [type]);
 
-  // Auto-calculate end_date from start_date + package duration
+  // Stay: auto-fill the amount from the tiered grid (manual override kept:
+  // the admin can still edit the field afterwards).
   useEffect(() => {
-    if (!startDate || !priceId) return;
-    const duration = getStayDurationDays(priceId);
-    if (duration) {
-      const start = new Date(startDate + "T00:00:00");
-      const end = addDays(start, duration);
-      setEndDate(format(end, "yyyy-MM-dd"));
+    if (type !== "stay" || !stayUnit || !stayPlan || !startDate || !endDate)
+      return;
+    try {
+      setPriceAmount(computeStayPrice(startDate, endDate, stayUnit, stayPlan).total);
+    } catch {
+      setPriceAmount("");
     }
-  }, [startDate, priceId]);
+  }, [type, stayUnit, stayPlan, startDate, endDate]);
+
+  // Stay convenience: when the end date is still empty, suggest the minimum
+  // stay. The field stays fully editable.
+  useEffect(() => {
+    if (type !== "stay" || !stayUnit || !stayPlan || !startDate || endDate)
+      return;
+    const card = getRateCard(stayUnit, stayPlan);
+    if (!card) return;
+    setEndDate(
+      format(
+        addDays(new Date(startDate + "T00:00:00"), card.minNights),
+        "yyyy-MM-dd",
+      ),
+    );
+  }, [type, stayUnit, stayPlan, startDate, endDate]);
+
+  const isStay = type === "stay";
+  const canSubmit = isStay
+    ? !!stayUnit && !!stayPlan && !!startDate && !!endDate && !!clientName
+    : !!priceId && !!startDate && !!clientName;
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!priceId || !startDate || !clientName) return;
+    if (!canSubmit) return;
 
     setSubmitting(true);
     setError(null);
+
+    const stayBody =
+      isStay && stayUnit && stayPlan
+        ? {
+            type: stayPlan === "fighter" ? "fighter" : "camp-stay",
+            price_id: stayPriceId(stayUnit, stayPlan),
+            stay_unit: stayUnit,
+            stay_plan: stayPlan,
+            camp: stayPlan === "fighter" ? "plai-laem" : "both",
+          }
+        : { type, price_id: priceId, camp };
 
     try {
       const res = await fetch("/api/admin/bookings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          type,
-          price_id: priceId,
-          camp,
+          ...stayBody,
           start_date: startDate,
           end_date: endDate || undefined,
           time_slot: timeSlot || undefined,
@@ -196,40 +242,79 @@ export default function CreateBookingForm({ defaultDate, onClose }: Props) {
               ))}
             </select>
           </div>
-          <div>
-            <label className={labelClass}>Package</label>
-            <select
-              value={priceId}
-              onChange={(e) => setPriceId(e.target.value)}
-              className={selectClass}
-              required
-            >
-              <option value="">Select package...</option>
-              {packages.map((pkg) => (
-                <option key={pkg.id} value={pkg.id}>
-                  {pkg.nameShort} — {pkg.price?.toLocaleString("en-US") ?? "?"} THB
-                </option>
-              ))}
-            </select>
-          </div>
+          {isStay ? (
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className={labelClass}>Unit</label>
+                <select
+                  value={stayUnit}
+                  onChange={(e) => setStayUnit(e.target.value as StayUnit | "")}
+                  className={selectClass}
+                  required
+                >
+                  <option value="">Select unit...</option>
+                  {STAY_UNITS.map((u) => (
+                    <option key={u.value} value={u.value}>
+                      {u.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className={labelClass}>Plan</label>
+                <select
+                  value={stayPlan}
+                  onChange={(e) => setStayPlan(e.target.value as StayPlan | "")}
+                  className={selectClass}
+                  required
+                >
+                  <option value="">Select plan...</option>
+                  {STAY_PLANS.map((p) => (
+                    <option key={p.value} value={p.value}>
+                      {p.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          ) : (
+            <div>
+              <label className={labelClass}>Package</label>
+              <select
+                value={priceId}
+                onChange={(e) => setPriceId(e.target.value)}
+                className={selectClass}
+                required
+              >
+                <option value="">Select package...</option>
+                {packages.map((pkg) => (
+                  <option key={pkg.id} value={pkg.id}>
+                    {pkg.nameShort} — {pkg.price?.toLocaleString("en-US") ?? "?"} THB
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
         </div>
 
         {/* Row 2: Camp + Dates */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div>
-            <label className={labelClass}>Camp</label>
-            <select
-              value={camp}
-              onChange={(e) => setCamp(e.target.value)}
-              className={selectClass}
-            >
-              {CAMPS.map((c) => (
-                <option key={c.value} value={c.value}>
-                  {c.label}
-                </option>
-              ))}
-            </select>
-          </div>
+          {!isStay && (
+            <div>
+              <label className={labelClass}>Camp</label>
+              <select
+                value={camp}
+                onChange={(e) => setCamp(e.target.value)}
+                className={selectClass}
+              >
+                {CAMPS.map((c) => (
+                  <option key={c.value} value={c.value}>
+                    {c.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
           <div>
             <label className={labelClass}>Start Date</label>
             <input
@@ -376,7 +461,7 @@ export default function CreateBookingForm({ defaultDate, onClose }: Props) {
         <div className="flex items-center gap-3 pt-2">
           <button
             type="submit"
-            disabled={submitting || !priceId || !startDate || !clientName}
+            disabled={submitting || !canSubmit}
             className="px-6 py-2.5 rounded-lg bg-primary text-white text-sm font-semibold hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface"
           >
             {submitting ? "Creating..." : "Create Booking"}

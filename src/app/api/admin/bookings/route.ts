@@ -3,9 +3,10 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { AdminBookingSchema } from "@/lib/validation/admin-booking";
 import { getPriceById } from "@/content/pricing";
-import { getInventoryKey } from "@/lib/admin/inventory";
+import { stayPriceId } from "@/content/stay-pricing";
+import { computeStayPrice, StayPricingError } from "@/lib/booking/stay";
+import { getInventoryKey, getStayUnitInventoryKey } from "@/lib/admin/inventory";
 import { checkRangeAvailability } from "@/lib/admin/availability";
-import { addDays, format } from "date-fns";
 import {
   hasSlotCapacity,
   isSlotClosed,
@@ -16,16 +17,6 @@ import {
   getCapacityUnits,
   getParticipantBounds,
 } from "@/lib/booking/pricing";
-
-function computeEndDate(priceId: string, startDate: string): string | null {
-  let days: number | null = null;
-  if (priceId.includes("1week")) days = 7;
-  else if (priceId.includes("2weeks")) days = 14;
-  else if (priceId.includes("1month") || priceId.includes("monthly")) days = 30;
-  else if (priceId.includes("bungalow")) days = 30;
-  if (!days) return null;
-  return format(addDays(new Date(startDate + "T00:00:00"), days), "yyyy-MM-dd");
-}
 
 export async function POST(request: Request) {
   // Auth check
@@ -45,6 +36,75 @@ export async function POST(request: Request) {
   }
 
   const data = parsed.data;
+
+  // Stay bookings: tiered price computed from dates, no catalog package.
+  const isStay = data.price_id.startsWith("stay-");
+  if (isStay) {
+    if (!data.stay_unit || !data.stay_plan || !data.end_date) {
+      return NextResponse.json(
+        { error: "Stay bookings need unit, plan, and end date." },
+        { status: 400 },
+      );
+    }
+    let quote;
+    try {
+      quote = computeStayPrice(
+        data.start_date,
+        data.end_date,
+        data.stay_unit,
+        data.stay_plan,
+      );
+    } catch (err) {
+      if (err instanceof StayPricingError) {
+        return NextResponse.json({ error: err.message }, { status: 400 });
+      }
+      throw err;
+    }
+    const stayInventoryKey = getStayUnitInventoryKey(data.stay_unit);
+    const check = await checkRangeAvailability(
+      stayInventoryKey,
+      data.start_date,
+      data.end_date,
+    );
+    if (!check.ok) {
+      return NextResponse.json(
+        {
+          error: `No availability on ${check.conflictDate}. Choose different dates.`,
+        },
+        { status: 409 },
+      );
+    }
+    const adminClient = createAdminClient();
+    const { data: stayBooking, error: stayError } = await adminClient
+      .from("bookings")
+      .insert({
+        type: data.stay_plan === "fighter" ? "fighter" : "camp-stay",
+        status: "confirmed",
+        price_id: stayPriceId(data.stay_unit, data.stay_plan),
+        price_amount: data.price_amount ?? quote.total,
+        num_participants: data.num_participants,
+        start_date: data.start_date,
+        end_date: data.end_date,
+        time_slot: null,
+        camp: data.stay_plan === "fighter" ? "plai-laem" : "both",
+        client_name: data.client_name,
+        client_email: data.client_email || "",
+        client_phone: data.client_phone || "",
+        client_nationality: data.client_nationality || null,
+        notes: data.notes || null,
+      })
+      .select("id")
+      .single();
+    if (stayError || !stayBooking) {
+      console.error("Admin stay booking insert error:", stayError);
+      return NextResponse.json(
+        { error: "Failed to create booking" },
+        { status: 500 },
+      );
+    }
+    return NextResponse.json({ ok: true, id: stayBooking.id });
+  }
+
   const pkg = getPriceById(data.price_id);
   if (!pkg) {
     return NextResponse.json({ error: "Unknown price_id" }, { status: 400 });
@@ -67,9 +127,8 @@ export async function POST(request: Request) {
   const priceAmount =
     data.price_amount ?? computeBookingAmount(pkg, data.num_participants);
 
-  // Compute end_date from package duration if not provided
-  const endDate =
-    data.end_date || computeEndDate(data.price_id, data.start_date);
+  // Non-stay types: end_date comes from the form (or stays null).
+  const endDate = data.end_date || null;
 
   // Capacity check for accommodation types
   const inventoryKey = getInventoryKey(data.price_id);

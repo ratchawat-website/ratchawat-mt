@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowLeft, ExternalLink, Mail, Phone, Globe } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { getPriceById } from "@/content/pricing";
+import { stayLabelFromPriceId } from "@/lib/booking/stay";
 import StatusBadge from "@/components/admin/StatusBadge";
 import TypeBadge from "@/components/admin/TypeBadge";
 import BookingActions from "@/components/admin/BookingActions";
@@ -62,8 +63,10 @@ export default async function BookingDetailPage({ params }: PageProps) {
         .order("start_date")
     : { data: null };
 
-  const pkg = getPriceById(booking.price_id);
-  const packageName = pkg?.name ?? booking.price_id;
+  const packageName =
+    getPriceById(booking.price_id)?.name ??
+    stayLabelFromPriceId(booking.price_id) ??
+    booking.price_id;
   const shortId = booking.id.replace(/-/g, "").slice(0, 8).toUpperCase();
 
   return (
