@@ -17,6 +17,7 @@ import {
   isSlotClosed,
   getSlotOccupancy,
 } from "@/lib/booking/capacity";
+import { computeBookingAmount, getStripeQuantity } from "@/lib/booking/pricing";
 
 function getStripe(): Stripe {
   if (!process.env.STRIPE_SECRET_KEY) {
@@ -113,7 +114,7 @@ export async function POST(request: Request) {
       }
     }
 
-    const totalAmount = pkg.price * data.num_participants;
+    const totalAmount = computeBookingAmount(pkg, data.num_participants);
 
     // Capacity check for accommodation bookings
     const inventoryKey = getInventoryKey(data.price_id);
@@ -217,7 +218,7 @@ export async function POST(request: Request) {
       line_items: [
         {
           price: stripePriceId,
-          quantity: data.num_participants,
+          quantity: getStripeQuantity(pkg, data.num_participants),
         },
       ],
       metadata: {

@@ -21,6 +21,7 @@ import {
 import TurnstileWidget from "@/components/security/TurnstileWidget";
 import { useTurnstile } from "@/components/security/use-turnstile";
 import { formatDateLong } from "@/lib/utils/date-format";
+import { computeBookingAmount } from "@/lib/booking/pricing";
 import { format } from "date-fns";
 
 const STEPS = ["Session type", "Camp", "Date & Time", "Contact", "Review"];
@@ -95,10 +96,9 @@ export default function PrivateWizard() {
     }
   }, [isGroup, contact.numParticipants]);
 
-  const totalAmount =
-    selectedPackage && selectedPackage.price
-      ? selectedPackage.price * contact.numParticipants
-      : 0;
+  const totalAmount = selectedPackage
+    ? computeBookingAmount(selectedPackage, contact.numParticipants)
+    : 0;
 
   const canProceed = () => {
     if (step === 0) return !!priceId;
@@ -369,7 +369,13 @@ export default function PrivateWizard() {
               { label: "Contact", value: contact.email },
             ]}
             totalAmount={totalAmount}
-            note={isGroup ? "Price per person for group sessions." : undefined}
+            note={
+              isGroup
+                ? selectedPackage.billing === "flat"
+                  ? "One price per session, whether 2 or 3 people join."
+                  : "Price per person for group sessions."
+                : undefined
+            }
           />
           <TurnstileWidget
             onVerify={captcha.onVerify}

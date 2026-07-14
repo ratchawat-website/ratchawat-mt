@@ -11,6 +11,7 @@ import {
   isSlotClosed,
   getSlotOccupancy,
 } from "@/lib/booking/capacity";
+import { computeBookingAmount } from "@/lib/booking/pricing";
 
 function computeEndDate(priceId: string, startDate: string): string | null {
   let days: number | null = null;
@@ -45,9 +46,9 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Unknown price_id" }, { status: 400 });
   }
 
-  // Calculate amount: admin override > catalog price * participants
+  // Calculate amount: admin override > shared catalog computation
   const priceAmount =
-    data.price_amount ?? (pkg.price ?? 0) * data.num_participants;
+    data.price_amount ?? computeBookingAmount(pkg, data.num_participants);
 
   // Compute end_date from package duration if not provided
   const endDate =

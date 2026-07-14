@@ -31,6 +31,8 @@ export interface PriceItem {
   notes?: string;
   popular?: boolean;
   bookingType: BookingType;
+  /** How the amount scales with participants. Absent = "per-person". */
+  billing?: "per-person" | "flat";
   stripeProductIdTest?: string;
   stripePriceIdTest?: string;
   stripeProductIdLive?: string;
