@@ -214,11 +214,23 @@ export async function POST(request: Request) {
         .eq("id", meta.dtv_application_id)
         .eq("status", "pending");
     } else if (meta.booking_id) {
-      await supabase
+      const { data: cancelled } = await supabase
         .from("bookings")
         .update({ status: "cancelled" })
         .eq("id", meta.booking_id)
-        .eq("status", "pending");
+        .eq("status", "pending")
+        .select("id, type, time_slot")
+        .maybeSingle();
+
+      // Free the private slot held by this abandoned booking. Only when the
+      // update actually cancelled something: an out-of-order `expired` after
+      // `completed` matches no row and must not delete a paid booking's block.
+      if (cancelled && cancelled.type === "private" && cancelled.time_slot) {
+        await supabase
+          .from("availability_blocks")
+          .delete()
+          .eq("reason", `Booking ${cancelled.id}`);
+      }
     }
   }
 
