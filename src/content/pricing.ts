@@ -290,7 +290,7 @@ export const PRICES: PriceItem[] = [
   {
     id: "private-adult-solo",
     stripeProductIdLive: "prod_UQ39owOxBWuLAA",
-    stripePriceIdLive: "price_1TRD3JRu1Uc6NzUv2pbpGHgY",
+    stripePriceIdLive: "price_1TszRlRu1Uc6NzUvhreCsHyX",
     stripeProductIdTest: "prod_UJh4kc75JQna2q",
     stripePriceIdTest: "price_1Tsuv3Ru1Uc6NzUv3yUmmw5J",
     name: "Private Lesson 1-on-1 (Adult)",
@@ -311,6 +311,8 @@ export const PRICES: PriceItem[] = [
   },
   {
     id: "private-adult-10pack",
+    stripeProductIdLive: "prod_UskxlV53bJjgOj",
+    stripePriceIdLive: "price_1TszRfRu1Uc6NzUvJJVa6LhQ",
     stripeProductIdTest: "prod_UsgH6FYQQEyA7Z",
     stripePriceIdTest: "price_1TsuuzRu1Uc6NzUvsbdwntFf",
     name: "Private 1-on-1 Pack, 10 Sessions (Adult)",
@@ -333,7 +335,7 @@ export const PRICES: PriceItem[] = [
   {
     id: "private-adult-group",
     stripeProductIdLive: "prod_UQ39nAneq8uwpM",
-    stripePriceIdLive: "price_1TRD3KRu1Uc6NzUvE8ttkuuK",
+    stripePriceIdLive: "price_1TszRmRu1Uc6NzUvlxJBnJPS",
     stripeProductIdTest: "prod_UJh47v38QjpAfA",
     stripePriceIdTest: "price_1Tsuv4Ru1Uc6NzUvxpmMPTcU",
     name: "Private Group 2-3 (Adult)",
@@ -647,7 +649,7 @@ export const PRICES: PriceItem[] = [
   {
     id: "dtv-6m-unlimited",
     stripeProductIdLive: "prod_UQ39BLXafzsVyT",
-    stripePriceIdLive: "price_1TRD3URu1Uc6NzUvaPrTe8nb",
+    stripePriceIdLive: "price_1TszRpRu1Uc6NzUvLyCZLn4m",
     stripeProductIdTest: "prod_ULq6MBRnzz8Fe7",
     stripePriceIdTest: "price_1TsuyVRu1Uc6NzUvClUrQmKo",
     name: "DTV 6-Month Training — Unlimited",
