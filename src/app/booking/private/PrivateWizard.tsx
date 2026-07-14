@@ -262,7 +262,7 @@ export default function PrivateWizard() {
             const anyCutoffBlocked = slotStates.some((s) => s.withinCutoff);
             const waMessage = `Hi, I would like to book a private session on ${formatDateLong(
               date,
-            )} but it is too close for online booking. Can you confirm availability?`;
+            )} but my preferred time slot is not available online. Can you help?`;
             return (
               <div>
                 <p className="text-sm font-medium text-on-surface mb-3">
@@ -292,32 +292,33 @@ export default function PrivateWizard() {
                     </button>
                   ))}
                 </div>
-                {anyCutoffBlocked && (
-                  <div className="mt-4 flex items-start gap-3 rounded-[var(--radius-card)] border-2 border-primary/30 bg-primary/5 p-4">
-                    <MessageCircle
-                      size={20}
-                      className="text-primary shrink-0 mt-0.5"
-                      aria-hidden="true"
-                    />
-                    <div className="text-sm">
-                      <p className="font-semibold text-on-surface mb-1">
-                        Need to book last-minute?
-                      </p>
+                <div className="mt-4 flex items-start gap-3 rounded-[var(--radius-card)] border-2 border-primary/30 bg-primary/5 p-4">
+                  <MessageCircle
+                    size={20}
+                    className="text-primary shrink-0 mt-0.5"
+                    aria-hidden="true"
+                  />
+                  <div className="text-sm">
+                    <p className="font-semibold text-on-surface mb-1">
+                      If your preferred time slot is not available, please
+                      leave us a message.
+                    </p>
+                    {anyCutoffBlocked && (
                       <p className="text-on-surface-variant mb-2">
                         {PRIVATE_BOOKING_WHATSAPP_FALLBACK}
                       </p>
-                      <a
-                        href={buildWhatsAppUrl(waMessage)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-primary hover:text-primary-dim font-semibold inline-flex items-center gap-1"
-                      >
-                        Message us on WhatsApp
-                        <span aria-hidden="true">&rarr;</span>
-                      </a>
-                    </div>
+                    )}
+                    <a
+                      href={buildWhatsAppUrl(waMessage)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-primary hover:text-primary-dim font-semibold inline-flex items-center gap-1"
+                    >
+                      Message us on WhatsApp
+                      <span aria-hidden="true">&rarr;</span>
+                    </a>
                   </div>
-                )}
+                </div>
               </div>
             );
           })()}
