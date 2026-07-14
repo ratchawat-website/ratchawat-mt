@@ -16,6 +16,33 @@ describe("resolveStayRange", () => {
     expect(res.range).toEqual({ from: d("2026-08-20"), to: d("2026-08-30") });
   });
 
+  it("starts a new selection when a complete range already exists", () => {
+    // The user picked Aug 20 -> Sep 19, then clicks Aug 25 to change the
+    // check-in. react-day-picker would only shrink the checkout; we restart
+    // the selection at the clicked day instead.
+    const res = resolveStayRange(
+      { from: d("2026-08-20"), to: d("2026-08-25") },
+      d("2026-08-25"),
+      FULL,
+      7,
+      { from: d("2026-08-20"), to: d("2026-09-19") },
+    );
+    expect(res.error).toBeNull();
+    expect(res.range).toEqual({ from: d("2026-08-25"), to: undefined });
+  });
+
+  it("does not restart when the previous selection was incomplete", () => {
+    const res = resolveStayRange(
+      { from: d("2026-08-20"), to: d("2026-08-30") },
+      d("2026-08-30"),
+      FULL,
+      7,
+      { from: d("2026-08-20"), to: undefined },
+    );
+    expect(res.error).toBeNull();
+    expect(res.range).toEqual({ from: d("2026-08-20"), to: d("2026-08-30") });
+  });
+
   it("passes through an incomplete selection", () => {
     const res = resolveStayRange(
       { from: d("2026-08-20"), to: undefined },

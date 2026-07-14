@@ -23,7 +23,15 @@ export function resolveStayRange(
   clickedDay: Date,
   fullNights: Set<string>,
   minNights: number,
+  current?: DateRange,
 ): StayRangeResult {
+  // A click while a complete range is already selected starts a NEW
+  // selection at the clicked day. react-day-picker's default only moves the
+  // checkout date, which makes changing the check-in impossible.
+  if (current?.from && current?.to) {
+    return { range: { from: clickedDay, to: undefined }, error: null };
+  }
+
   if (!next?.from || !next?.to) {
     return { range: next, error: null };
   }

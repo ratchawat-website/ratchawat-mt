@@ -59,6 +59,7 @@ export default function StayCalendar({
       clickedDay,
       fullNights,
       minNights,
+      range,
     );
     setRangeError(error);
     onRangeChange(resolved);
