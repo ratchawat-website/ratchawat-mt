@@ -22,7 +22,10 @@ import {
 import TurnstileWidget from "@/components/security/TurnstileWidget";
 import { useTurnstile } from "@/components/security/use-turnstile";
 import { formatDateLong } from "@/lib/utils/date-format";
-import { computeBookingAmount } from "@/lib/booking/pricing";
+import {
+  computeBookingAmount,
+  getParticipantBounds,
+} from "@/lib/booking/pricing";
 import { PRIVATE_CANCELLATION_POLICY } from "@/content/policies";
 import { format } from "date-fns";
 
@@ -53,10 +56,6 @@ const DEFAULT_CONTACT: ContactInfo = {
   notes: "",
 };
 
-function isGroupPrice(id: string): boolean {
-  return id === "private-adult-group" || id === "private-kids-group";
-}
-
 export default function PrivateWizard() {
   const searchParams = useSearchParams();
   const packages = PRIVATE_PACKAGES;
@@ -86,17 +85,22 @@ export default function PrivateWizard() {
   }, [searchParams]);
 
   const selectedPackage = priceId ? getPriceById(priceId) : null;
-  const isGroup = priceId ? isGroupPrice(priceId) : false;
+  const bounds = selectedPackage
+    ? getParticipantBounds(selectedPackage)
+    : { min: 1, max: 1 };
 
-  // Reset num_participants to 1 when switching from group to solo
+  // Keep num_participants inside the selected package's allowed range.
   useEffect(() => {
-    if (!isGroup && contact.numParticipants !== 1) {
-      setContact((c) => ({ ...c, numParticipants: 1 }));
-    }
-    if (isGroup && contact.numParticipants < 2) {
-      setContact((c) => ({ ...c, numParticipants: 2 }));
-    }
-  }, [isGroup, contact.numParticipants]);
+    setContact((c) => {
+      const clamped = Math.min(
+        Math.max(c.numParticipants, bounds.min),
+        bounds.max,
+      );
+      return clamped === c.numParticipants
+        ? c
+        : { ...c, numParticipants: clamped };
+    });
+  }, [bounds.min, bounds.max]);
 
   const totalAmount = selectedPackage
     ? computeBookingAmount(selectedPackage, contact.numParticipants)
@@ -195,6 +199,42 @@ export default function PrivateWizard() {
               </div>
             </button>
           ))}
+          {selectedPackage && bounds.max > 1 && (
+            <div className="mt-4">
+              <label className="block text-sm font-medium text-on-surface-variant mb-2">
+                Number of participants
+              </label>
+              <select
+                value={contact.numParticipants}
+                onChange={(e) =>
+                  setContact((c) => ({
+                    ...c,
+                    numParticipants: parseInt(e.target.value, 10),
+                  }))
+                }
+                className="w-full bg-surface border-2 border-outline-variant rounded-[var(--radius-input)] px-4 py-3 text-on-surface focus:border-primary focus:outline-none transition-colors"
+              >
+                {Array.from(
+                  { length: bounds.max - bounds.min + 1 },
+                  (_, i) => i + bounds.min,
+                ).map((n) => (
+                  <option key={n} value={n}>
+                    {n} {n === 1 ? "person" : "people"}
+                  </option>
+                ))}
+              </select>
+              {selectedPackage.capacity === "per-participant" && (
+                <p className="text-xs text-on-surface-variant mt-1.5">
+                  Each participant trains with their own trainer (
+                  {computeBookingAmount(
+                    selectedPackage,
+                    contact.numParticipants,
+                  ).toLocaleString("en-US")}{" "}
+                  THB total per session).
+                </p>
+              )}
+            </div>
+          )}
         </div>
       )}
 
@@ -351,8 +391,7 @@ export default function PrivateWizard() {
           <ContactInfoForm
             value={contact}
             onChange={setContact}
-            showParticipants={isGroup}
-            maxParticipants={3}
+            showParticipants={false}
           />
         </div>
       )}
@@ -375,7 +414,7 @@ export default function PrivateWizard() {
                 value: formatDateLong(date),
               },
               { label: "Time", value: timeSlot },
-              ...(isGroup
+              ...(bounds.max > 1
                 ? [
                     {
                       label: "Participants",
@@ -387,10 +426,10 @@ export default function PrivateWizard() {
             ]}
             totalAmount={totalAmount}
             note={
-              isGroup
+              bounds.max > 1 && contact.numParticipants > 1
                 ? selectedPackage.billing === "flat"
                   ? "One price per session, whether 2 or 3 people join."
-                  : "Price per person for group sessions."
+                  : "Price per person."
                 : undefined
             }
           />

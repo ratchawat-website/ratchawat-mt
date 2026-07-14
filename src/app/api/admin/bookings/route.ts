@@ -14,6 +14,7 @@ import {
 import {
   computeBookingAmount,
   getCapacityUnits,
+  getParticipantBounds,
 } from "@/lib/booking/pricing";
 
 function computeEndDate(priceId: string, startDate: string): string | null {
@@ -47,6 +48,19 @@ export async function POST(request: Request) {
   const pkg = getPriceById(data.price_id);
   if (!pkg) {
     return NextResponse.json({ error: "Unknown price_id" }, { status: 400 });
+  }
+
+  const participantBounds = getParticipantBounds(pkg);
+  if (
+    data.num_participants < participantBounds.min ||
+    data.num_participants > participantBounds.max
+  ) {
+    return NextResponse.json(
+      {
+        error: `This package accepts ${participantBounds.min} to ${participantBounds.max} participant(s).`,
+      },
+      { status: 400 },
+    );
   }
 
   // Calculate amount: admin override > shared catalog computation

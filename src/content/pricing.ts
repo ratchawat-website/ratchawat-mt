@@ -35,6 +35,8 @@ export interface PriceItem {
   billing?: "per-person" | "flat";
   /** Trainer capacity consumed per booking. Absent = "per-session" (1 trainer). */
   capacity?: "per-participant" | "per-session";
+  /** Allowed participant range for the booking form. Absent = exactly 1. */
+  participants?: { min: number; max: number };
   stripeProductIdTest?: string;
   stripePriceIdTest?: string;
   stripeProductIdLive?: string;
@@ -301,6 +303,7 @@ export const PRICES: PriceItem[] = [
       "All equipment provided",
     ],
     capacity: "per-participant",
+    participants: { min: 1, max: 6 },
     bookingType: "private",
   },
   {
@@ -344,6 +347,7 @@ export const PRICES: PriceItem[] = [
     ],
     notes: "One price per session, whether 2 or 3 people join. Minimum 2, maximum 3 participants.",
     billing: "flat",
+    participants: { min: 2, max: 3 },
     bookingType: "private",
   },
 
@@ -367,6 +371,7 @@ export const PRICES: PriceItem[] = [
       "All equipment provided",
     ],
     capacity: "per-participant",
+    participants: { min: 1, max: 6 },
     bookingType: "private",
   },
   {
@@ -388,6 +393,7 @@ export const PRICES: PriceItem[] = [
       "All equipment provided",
     ],
     notes: "Price per kid. Minimum 2, maximum 3 participants. Under 8, private only.",
+    participants: { min: 2, max: 3 },
     bookingType: "private",
   },
 

@@ -21,6 +21,7 @@ import {
   computeBookingAmount,
   getStripeQuantity,
   getCapacityUnits,
+  getParticipantBounds,
 } from "@/lib/booking/pricing";
 
 function getStripe(): Stripe {
@@ -66,6 +67,19 @@ export async function POST(request: Request) {
       return NextResponse.json(
         { error: "Price not yet set for this item" },
         { status: 500 },
+      );
+    }
+
+    const bounds = getParticipantBounds(pkg);
+    if (
+      data.num_participants < bounds.min ||
+      data.num_participants > bounds.max
+    ) {
+      return NextResponse.json(
+        {
+          error: `This package accepts ${bounds.min} to ${bounds.max} participant(s).`,
+        },
+        { status: 400 },
       );
     }
 

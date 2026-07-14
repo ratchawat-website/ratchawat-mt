@@ -23,7 +23,7 @@ export const BookingRequestSchema = z.object({
     .regex(/^\d{4}-\d{2}-\d{2}$/)
     .optional(),
   time_slot: TimeSlotSchema.optional(),
-  num_participants: z.number().int().min(1).max(3).default(1),
+  num_participants: z.number().int().min(1).max(6).default(1),
   client_name: z.string().trim().min(2).max(100),
   client_email: z.string().trim().email().max(200),
   client_phone: z.string().trim().min(6).max(30),

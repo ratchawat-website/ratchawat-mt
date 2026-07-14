@@ -3,6 +3,7 @@ import {
   computeBookingAmount,
   getStripeQuantity,
   getCapacityUnits,
+  getParticipantBounds,
 } from "./pricing";
 
 describe("computeBookingAmount", () => {
@@ -35,6 +36,16 @@ describe("getCapacityUnits", () => {
 
   it("defaults to per-session when capacity is undefined", () => {
     expect(getCapacityUnits({}, 3)).toBe(1);
+  });
+});
+
+describe("getParticipantBounds", () => {
+  it("returns the item bounds when present", () => {
+    expect(getParticipantBounds({ participants: { min: 2, max: 3 } })).toEqual({ min: 2, max: 3 });
+  });
+
+  it("defaults to exactly one participant", () => {
+    expect(getParticipantBounds({})).toEqual({ min: 1, max: 1 });
   });
 });
 

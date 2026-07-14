@@ -29,6 +29,16 @@ export function getCapacityUnits(
 }
 
 /**
+ * Participant range the booking form should allow for an item.
+ * Items without explicit bounds are single-participant (1-on-1 default).
+ */
+export function getParticipantBounds(
+  item: Pick<PriceItem, "participants">,
+): { min: number; max: number } {
+  return item.participants ?? { min: 1, max: 1 };
+}
+
+/**
  * Stripe line item quantity matching computeBookingAmount: the Stripe price
  * is the unit price, so flat items always bill quantity 1.
  */

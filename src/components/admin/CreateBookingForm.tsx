@@ -5,6 +5,10 @@ import { useRouter } from "next/navigation";
 import { X } from "lucide-react";
 import { PRICES, type PriceItem } from "@/content/pricing";
 import { PRIVATE_SLOTS } from "@/lib/config/slots";
+import {
+  computeBookingAmount,
+  getParticipantBounds,
+} from "@/lib/booking/pricing";
 import { addDays, format } from "date-fns";
 
 const BOOKING_TYPES = [
@@ -72,13 +76,21 @@ export default function CreateBookingForm({ defaultDate, onClose }: Props) {
 
   const packages = getPackagesForType(type);
   const selectedPkg = PRICES.find((p) => p.id === priceId);
+  const bounds = selectedPkg
+    ? getParticipantBounds(selectedPkg)
+    : { min: 1, max: 1 };
 
   // Auto-calculate price when package or participants change
   useEffect(() => {
     if (selectedPkg?.price) {
-      setPriceAmount(selectedPkg.price * numParticipants);
+      setPriceAmount(computeBookingAmount(selectedPkg, numParticipants));
     }
   }, [selectedPkg, numParticipants]);
+
+  // Re-clamp participants when the selected package changes its bounds
+  useEffect(() => {
+    setNumParticipants((n) => Math.min(Math.max(n, bounds.min), bounds.max));
+  }, [bounds.min, bounds.max]);
 
   // Auto-set camp when package changes
   useEffect(() => {
@@ -310,11 +322,14 @@ export default function CreateBookingForm({ defaultDate, onClose }: Props) {
             <input
               type="number"
               value={numParticipants}
-              onChange={(e) =>
-                setNumParticipants(Math.max(1, parseInt(e.target.value) || 1))
-              }
-              min={1}
-              max={10}
+              onChange={(e) => {
+                const parsed = parseInt(e.target.value) || bounds.min;
+                setNumParticipants(
+                  Math.min(Math.max(parsed, bounds.min), bounds.max),
+                );
+              }}
+              min={bounds.min}
+              max={bounds.max}
               className={inputClass}
             />
           </div>

@@ -13,6 +13,7 @@ interface Props {
   value: ContactInfo;
   onChange: (value: ContactInfo) => void;
   showParticipants?: boolean;
+  minParticipants?: number;
   maxParticipants?: number;
 }
 
@@ -20,6 +21,7 @@ export default function ContactInfoForm({
   value,
   onChange,
   showParticipants = false,
+  minParticipants = 1,
   maxParticipants = 3,
 }: Props) {
   const update = (patch: Partial<ContactInfo>) =>
@@ -70,13 +72,14 @@ export default function ContactInfoForm({
             }
             className="w-full bg-surface border-2 border-outline-variant rounded-[var(--radius-input)] px-4 py-3 text-on-surface focus:border-primary focus:outline-none transition-colors"
           >
-            {Array.from({ length: maxParticipants }, (_, i) => i + 1).map(
-              (n) => (
-                <option key={n} value={n}>
-                  {n} {n === 1 ? "person" : "people"}
-                </option>
-              ),
-            )}
+            {Array.from(
+              { length: maxParticipants - minParticipants + 1 },
+              (_, i) => i + minParticipants,
+            ).map((n) => (
+              <option key={n} value={n}>
+                {n} {n === 1 ? "person" : "people"}
+              </option>
+            ))}
           </select>
         </div>
       )}

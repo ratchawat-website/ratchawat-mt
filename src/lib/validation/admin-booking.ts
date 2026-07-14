@@ -8,7 +8,7 @@ export const AdminBookingSchema = z.object({
   start_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Invalid date format"),
   end_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
   time_slot: z.enum(PRIVATE_SLOTS).optional(),
-  num_participants: z.number().int().min(1).max(10).default(1),
+  num_participants: z.number().int().min(1).max(6).default(1),
   client_name: z.string().trim().min(1).max(100),
   client_email: z.string().trim().email().max(200).optional().or(z.literal("")),
   client_phone: z.string().trim().max(30).optional().or(z.literal("")),
