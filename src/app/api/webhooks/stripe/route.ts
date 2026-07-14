@@ -127,37 +127,53 @@ export async function POST(request: Request) {
     }
 
     const bookingId = meta.booking_id;
+    const groupId = meta.booking_group_id;
 
     if (!bookingId) {
       console.error("Missing booking_id in session metadata");
       return NextResponse.json({ received: true });
     }
 
-    const { data: updated, error } = await supabase
-      .from("bookings")
-      .update({
-        status: "confirmed",
-        stripe_session_id: session.id,
-        stripe_payment_intent_id:
-          typeof session.payment_intent === "string"
-            ? session.payment_intent
-            : null,
-        stripe_payment_status: session.payment_status,
-      })
-      .eq("id", bookingId)
-      .select("*")
-      .single();
+    const updatePayload = {
+      status: "confirmed" as const,
+      stripe_session_id: session.id,
+      stripe_payment_intent_id:
+        typeof session.payment_intent === "string"
+          ? session.payment_intent
+          : null,
+      stripe_payment_status: session.payment_status,
+    };
 
-    if (error || !updated) {
-      console.error("Failed to update booking:", error);
+    // Multi-session carts confirm the whole group; legacy bookings and
+    // other types keep the single-row path.
+    const query = groupId
+      ? supabase
+          .from("bookings")
+          .update(updatePayload)
+          .eq("booking_group_id", groupId)
+      : supabase.from("bookings").update(updatePayload).eq("id", bookingId);
+
+    const { data: updatedRows, error } = await query.select("*");
+
+    if (error || !updatedRows || updatedRows.length === 0) {
+      console.error("Failed to update booking(s):", error);
       return NextResponse.json({ received: true });
     }
+
+    // Sort sessions chronologically; the first row feeds the email header.
+    const sorted = [...updatedRows].sort((a, b) =>
+      `${a.start_date}${a.time_slot ?? ""}`.localeCompare(
+        `${b.start_date}${b.time_slot ?? ""}`,
+      ),
+    );
+    const updated = sorted[0];
+    const totalAmount = sorted.reduce((sum, b) => sum + b.price_amount, 0);
 
     const bookingData: BookingEmailData = {
       id: updated.id,
       type: updated.type,
       price_id: updated.price_id,
-      price_amount: updated.price_amount,
+      price_amount: totalAmount,
       start_date: updated.start_date,
       end_date: updated.end_date,
       time_slot: updated.time_slot,
@@ -168,6 +184,13 @@ export async function POST(request: Request) {
       client_phone: updated.client_phone,
       client_nationality: updated.client_nationality,
       notes: updated.notes,
+      sessions:
+        sorted.length > 1
+          ? sorted.map((b) => ({
+              date: b.start_date,
+              time_slot: b.time_slot ?? "",
+            }))
+          : undefined,
     };
 
     try {
@@ -179,32 +202,33 @@ export async function POST(request: Request) {
       console.error("Email send failed:", emailErr);
     }
 
-    // Ensure a private-slot block exists for confirmed private sessions
-    // (idempotent: checkout route creates it on booking insert, this is a safety net)
-    if (updated.type === "private" && updated.time_slot) {
-      // Check by reason (tied to this booking) so duplicate inserts for
-      // the same booking are avoided while still allowing up to
-      // PRIVATE_SLOT_CAPACITY distinct bookings per (date, slot, camp).
+    // Ensure a private-slot block exists for every confirmed private session
+    // (idempotent: checkout route creates them on booking insert, this is a
+    // safety net). Check by reason (tied to each booking) so duplicate
+    // inserts are avoided while still allowing up to PRIVATE_SLOT_CAPACITY
+    // units per (date, slot, camp).
+    for (const b of sorted) {
+      if (b.type !== "private" || !b.time_slot) continue;
       const { data: existingBlock } = await supabase
         .from("availability_blocks")
         .select("id")
-        .eq("reason", `Booking ${bookingId}`)
+        .eq("reason", `Booking ${b.id}`)
         .maybeSingle();
 
       if (!existingBlock) {
         await supabase
           .from("availability_blocks")
           .insert({
-            date: updated.start_date,
+            date: b.start_date,
             type: "private-slot",
-            time_slot: updated.time_slot,
-            camp: updated.camp,
+            time_slot: b.time_slot,
+            camp: b.camp,
             units: getCapacityUnits(
-              getPriceById(updated.price_id) ?? {},
-              updated.num_participants,
+              getPriceById(b.price_id) ?? {},
+              b.num_participants,
             ),
             is_blocked: true,
-            reason: `Booking ${bookingId}`,
+            reason: `Booking ${b.id}`,
           });
       }
     }
@@ -221,22 +245,33 @@ export async function POST(request: Request) {
         .eq("id", meta.dtv_application_id)
         .eq("status", "pending");
     } else if (meta.booking_id) {
-      const { data: cancelled } = await supabase
-        .from("bookings")
-        .update({ status: "cancelled" })
-        .eq("id", meta.booking_id)
-        .eq("status", "pending")
-        .select("id, type, time_slot")
-        .maybeSingle();
+      // Multi-session carts cancel the whole group; legacy bookings keep
+      // the single-row path. Only rows still pending are cancelled: an
+      // out-of-order `expired` after `completed` matches no row and must
+      // not delete a paid booking's block.
+      const groupId = meta.booking_group_id;
+      const query = groupId
+        ? supabase
+            .from("bookings")
+            .update({ status: "cancelled" })
+            .eq("booking_group_id", groupId)
+            .eq("status", "pending")
+        : supabase
+            .from("bookings")
+            .update({ status: "cancelled" })
+            .eq("id", meta.booking_id)
+            .eq("status", "pending");
 
-      // Free the private slot held by this abandoned booking. Only when the
-      // update actually cancelled something: an out-of-order `expired` after
-      // `completed` matches no row and must not delete a paid booking's block.
-      if (cancelled && cancelled.type === "private" && cancelled.time_slot) {
+      const { data: cancelledRows } = await query.select("id, type, time_slot");
+
+      const blockReasons = (cancelledRows ?? [])
+        .filter((b) => b.type === "private" && b.time_slot)
+        .map((b) => `Booking ${b.id}`);
+      if (blockReasons.length > 0) {
         await supabase
           .from("availability_blocks")
           .delete()
-          .eq("reason", `Booking ${cancelled.id}`);
+          .in("reason", blockReasons);
       }
     }
   }

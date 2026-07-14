@@ -13,4 +13,6 @@ export interface BookingEmailData {
   client_phone: string;
   client_nationality: string | null;
   notes: string | null;
+  /** Present when the booking is a multi-session private cart (sorted). */
+  sessions?: { date: string; time_slot: string }[];
 }
