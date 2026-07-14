@@ -11,7 +11,10 @@ import {
   isSlotClosed,
   getSlotOccupancy,
 } from "@/lib/booking/capacity";
-import { computeBookingAmount } from "@/lib/booking/pricing";
+import {
+  computeBookingAmount,
+  getCapacityUnits,
+} from "@/lib/booking/pricing";
 
 function computeEndDate(priceId: string, startDate: string): string | null {
   let days: number | null = null;
@@ -75,6 +78,7 @@ export async function POST(request: Request) {
   // Check private slot availability: same rules as the public checkout
   // (hard closure + per-camp trainer capacity), NOT "one booking blocks all".
   const admin = createAdminClient();
+  const units = getCapacityUnits(pkg, data.num_participants);
   if (data.type === "private" && data.time_slot && data.camp !== "both") {
     try {
       if (await isSlotClosed(admin, data.start_date, data.time_slot)) {
@@ -90,7 +94,7 @@ export async function POST(request: Request) {
         timeSlot: data.time_slot,
         camp: data.camp,
       });
-      if (!hasSlotCapacity(occupied)) {
+      if (!hasSlotCapacity(occupied, units)) {
         return NextResponse.json(
           {
             error: `Time slot ${data.time_slot} is fully booked at ${data.camp} on ${data.start_date} (${occupied}/6).`,
@@ -146,6 +150,7 @@ export async function POST(request: Request) {
         type: "private-slot",
         time_slot: data.time_slot,
         camp: data.camp,
+        units,
         is_blocked: true,
         reason: `Booking ${booking.id}`,
       });

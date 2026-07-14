@@ -17,7 +17,11 @@ import {
   isSlotClosed,
   getSlotOccupancy,
 } from "@/lib/booking/capacity";
-import { computeBookingAmount, getStripeQuantity } from "@/lib/booking/pricing";
+import {
+  computeBookingAmount,
+  getStripeQuantity,
+  getCapacityUnits,
+} from "@/lib/booking/pricing";
 
 function getStripe(): Stripe {
   if (!process.env.STRIPE_SECRET_KEY) {
@@ -67,6 +71,7 @@ export async function POST(request: Request) {
 
     // Private bookings: enforce slot-aware lead time (12h for 7:00/8:00,
     // 2h otherwise) + per-camp slot capacity.
+    const units = getCapacityUnits(pkg, data.num_participants);
     if (data.type === "private" && data.time_slot) {
       const slotDate = new Date(`${data.start_date}T00:00:00`);
       if (isSlotWithinCutoff(slotDate, data.time_slot)) {
@@ -96,7 +101,7 @@ export async function POST(request: Request) {
           timeSlot: data.time_slot,
           camp: data.camp as "bo-phut" | "plai-laem",
         });
-        if (!hasSlotCapacity(occupied)) {
+        if (!hasSlotCapacity(occupied, units)) {
           return NextResponse.json(
             {
               error:
@@ -176,6 +181,7 @@ export async function POST(request: Request) {
           type: "private-slot",
           time_slot: data.time_slot,
           camp: data.camp,
+          units,
           is_blocked: true,
           reason: `Booking ${booking.id}`,
         });

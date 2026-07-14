@@ -38,15 +38,16 @@ export async function isSlotClosed(
 }
 
 /**
- * Number of private sessions already booked on (date, timeSlot, camp).
+ * Trainer units already booked on (date, timeSlot, camp). Each private
+ * block consumes `units` trainers (legacy rows without units count as 1).
  */
 export async function getSlotOccupancy(
   client: SupabaseClient,
   q: SlotQuery,
 ): Promise<number> {
-  const { count, error } = await client
+  const { data, error } = await client
     .from("availability_blocks")
-    .select("id", { count: "exact", head: true })
+    .select("units")
     .eq("type", "private-slot")
     .eq("is_blocked", true)
     .eq("date", q.date)
@@ -55,5 +56,8 @@ export async function getSlotOccupancy(
   if (error) {
     throw new Error(`Slot capacity check failed: ${error.message}`);
   }
-  return count ?? 0;
+  return (data ?? []).reduce(
+    (sum, row) => sum + ((row as { units: number | null }).units ?? 1),
+    0,
+  );
 }

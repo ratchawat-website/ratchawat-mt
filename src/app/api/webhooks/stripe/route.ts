@@ -9,6 +9,8 @@ import {
 } from "@/lib/email/send";
 import type { BookingEmailData } from "@/lib/email/types";
 import type { DtvApplicationEmailData } from "@/lib/email/templates/DTVApplicationReceived";
+import { getPriceById } from "@/content/pricing";
+import { getCapacityUnits } from "@/lib/booking/pricing";
 
 // Stripe.webhooks.constructEvent uses Node crypto and is not Edge-safe.
 export const runtime = "nodejs";
@@ -197,6 +199,10 @@ export async function POST(request: Request) {
             type: "private-slot",
             time_slot: updated.time_slot,
             camp: updated.camp,
+            units: getCapacityUnits(
+              getPriceById(updated.price_id) ?? {},
+              updated.num_participants,
+            ),
             is_blocked: true,
             reason: `Booking ${bookingId}`,
           });

@@ -18,6 +18,17 @@ export function computeBookingAmount(
 }
 
 /**
+ * Trainers consumed by one booking on its slot. 1-on-1 sessions need one
+ * trainer per participant; group sessions and packs need a single trainer.
+ */
+export function getCapacityUnits(
+  item: Pick<PriceItem, "capacity">,
+  numParticipants: number,
+): number {
+  return item.capacity === "per-participant" ? numParticipants : 1;
+}
+
+/**
  * Stripe line item quantity matching computeBookingAmount: the Stripe price
  * is the unit price, so flat items always bill quantity 1.
  */

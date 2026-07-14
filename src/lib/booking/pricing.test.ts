@@ -1,5 +1,9 @@
 import { describe, it, expect } from "vitest";
-import { computeBookingAmount, getStripeQuantity } from "./pricing";
+import {
+  computeBookingAmount,
+  getStripeQuantity,
+  getCapacityUnits,
+} from "./pricing";
 
 describe("computeBookingAmount", () => {
   it("multiplies per-person items by participants (historic behavior)", () => {
@@ -17,6 +21,20 @@ describe("computeBookingAmount", () => {
 
   it("returns 0 for null price", () => {
     expect(computeBookingAmount({ price: null }, 2)).toBe(0);
+  });
+});
+
+describe("getCapacityUnits", () => {
+  it("per-participant items consume one trainer per participant", () => {
+    expect(getCapacityUnits({ capacity: "per-participant" }, 4)).toBe(4);
+  });
+
+  it("per-session items consume one trainer regardless of participants", () => {
+    expect(getCapacityUnits({ capacity: "per-session" }, 3)).toBe(1);
+  });
+
+  it("defaults to per-session when capacity is undefined", () => {
+    expect(getCapacityUnits({}, 3)).toBe(1);
   });
 });
 

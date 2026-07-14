@@ -33,6 +33,8 @@ export interface PriceItem {
   bookingType: BookingType;
   /** How the amount scales with participants. Absent = "per-person". */
   billing?: "per-person" | "flat";
+  /** Trainer capacity consumed per booking. Absent = "per-session" (1 trainer). */
+  capacity?: "per-participant" | "per-session";
   stripeProductIdTest?: string;
   stripePriceIdTest?: string;
   stripeProductIdLive?: string;
@@ -298,6 +300,7 @@ export const PRICES: PriceItem[] = [
       "Tailored to your level and goals",
       "All equipment provided",
     ],
+    capacity: "per-participant",
     bookingType: "private",
   },
   {
@@ -363,6 +366,7 @@ export const PRICES: PriceItem[] = [
       "Kids-specific training",
       "All equipment provided",
     ],
+    capacity: "per-participant",
     bookingType: "private",
   },
   {
