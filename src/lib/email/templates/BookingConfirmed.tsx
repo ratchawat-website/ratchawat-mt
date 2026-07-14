@@ -56,17 +56,35 @@ export function BookingConfirmed({ booking, packageName }: Props) {
             <Text>
               <strong>Package:</strong> {packageName}
             </Text>
-            <Text>
-              <strong>Start date:</strong> {booking.start_date}
-            </Text>
+            {booking.sessions && booking.sessions.length > 1 ? (
+              <>
+                <Text>
+                  <strong>Your sessions:</strong>
+                </Text>
+                {booking.sessions.map((s) => (
+                  <Text
+                    key={`${s.date}-${s.time_slot}`}
+                    style={{ marginLeft: 12 }}
+                  >
+                    {s.date} at {s.time_slot}
+                  </Text>
+                ))}
+              </>
+            ) : (
+              <>
+                <Text>
+                  <strong>Start date:</strong> {booking.start_date}
+                </Text>
+                {booking.time_slot && (
+                  <Text>
+                    <strong>Time:</strong> {booking.time_slot}
+                  </Text>
+                )}
+              </>
+            )}
             {booking.end_date && (
               <Text>
                 <strong>End date:</strong> {booking.end_date}
-              </Text>
-            )}
-            {booking.time_slot && (
-              <Text>
-                <strong>Time:</strong> {booking.time_slot}
               </Text>
             )}
             {booking.camp && (

@@ -46,17 +46,35 @@ export function BookingNotification({ booking, packageName }: Props) {
           <Hr />
 
           <Heading as="h2">Dates</Heading>
-          <Text>
-            <strong>Start:</strong> {booking.start_date}
-          </Text>
+          {booking.sessions && booking.sessions.length > 1 ? (
+            <>
+              <Text>
+                <strong>Sessions ({booking.sessions.length}):</strong>
+              </Text>
+              {booking.sessions.map((s) => (
+                <Text
+                  key={`${s.date}-${s.time_slot}`}
+                  style={{ marginLeft: 12 }}
+                >
+                  {s.date} at {s.time_slot}
+                </Text>
+              ))}
+            </>
+          ) : (
+            <>
+              <Text>
+                <strong>Start:</strong> {booking.start_date}
+              </Text>
+              {booking.time_slot && (
+                <Text>
+                  <strong>Time slot:</strong> {booking.time_slot}
+                </Text>
+              )}
+            </>
+          )}
           {booking.end_date && (
             <Text>
               <strong>End:</strong> {booking.end_date}
-            </Text>
-          )}
-          {booking.time_slot && (
-            <Text>
-              <strong>Time slot:</strong> {booking.time_slot}
             </Text>
           )}
           {booking.camp && (
