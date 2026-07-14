@@ -38,7 +38,7 @@ export default function AdminAvailabilityPage() {
     const supabase = createClient();
     const { data: blockRows } = await supabase
       .from("availability_blocks")
-      .select("id, date, type, time_slot, reason, camp, is_blocked")
+      .select("id, date, type, time_slot, reason, camp, is_blocked, units")
       .gte("date", from)
       .lte("date", to);
 
@@ -50,6 +50,7 @@ export default function AdminAvailabilityPage() {
       reason: b.reason ? String(b.reason) : null,
       camp: (b.camp as "bo-phut" | "plai-laem" | null) ?? null,
       is_blocked: b.is_blocked !== false,
+      units: typeof b.units === "number" ? b.units : null,
     }));
 
     setBlocks(blockList);

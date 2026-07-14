@@ -15,6 +15,7 @@ export interface BlockRecord {
   reason: string | null;
   camp: "bo-phut" | "plai-laem" | null;
   is_blocked: boolean;
+  units: number | null;
 }
 
 interface Props {
@@ -254,20 +255,18 @@ export default function AdminDayDrawer({
                 const existing = hasExactBlock("private-slot-closure", slot);
                 const key = `slot-${slot}`;
                 const isLoading = loading === key;
-                const boPhutCount = blocks.filter(
-                  (b) =>
-                    b.type === "private-slot" &&
-                    b.time_slot === slot &&
-                    b.is_blocked &&
-                    b.camp === "bo-phut",
-                ).length;
-                const plaiLaemCount = blocks.filter(
-                  (b) =>
-                    b.type === "private-slot" &&
-                    b.time_slot === slot &&
-                    b.is_blocked &&
-                    b.camp === "plai-laem",
-                ).length;
+                const sumUnits = (campId: "bo-phut" | "plai-laem") =>
+                  blocks
+                    .filter(
+                      (b) =>
+                        b.type === "private-slot" &&
+                        b.time_slot === slot &&
+                        b.is_blocked &&
+                        b.camp === campId,
+                    )
+                    .reduce((sum, b) => sum + (b.units ?? 1), 0);
+                const boPhutCount = sumUnits("bo-phut");
+                const plaiLaemCount = sumUnits("plai-laem");
                 const boPhutFull = boPhutCount >= PRIVATE_SLOT_CAPACITY;
                 const plaiLaemFull = plaiLaemCount >= PRIVATE_SLOT_CAPACITY;
 

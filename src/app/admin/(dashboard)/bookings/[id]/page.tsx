@@ -52,6 +52,16 @@ export default async function BookingDetailPage({ params }: PageProps) {
 
   if (!booking) notFound();
 
+  // Sibling sessions paid in the same cart (same booking_group_id).
+  const { data: siblings } = booking.booking_group_id
+    ? await supabase
+        .from("bookings")
+        .select("id, start_date, time_slot, status")
+        .eq("booking_group_id", booking.booking_group_id)
+        .neq("id", booking.id)
+        .order("start_date")
+    : { data: null };
+
   const pkg = getPriceById(booking.price_id);
   const packageName = pkg?.name ?? booking.price_id;
   const shortId = booking.id.replace(/-/g, "").slice(0, 8).toUpperCase();
@@ -183,6 +193,34 @@ export default async function BookingDetailPage({ params }: PageProps) {
           </div>
         </dl>
       </section>
+
+      {/* Sibling sessions from the same cart */}
+      {siblings && siblings.length > 0 && (
+        <section className="bg-surface-lowest border-2 border-outline-variant rounded-lg p-4">
+          <p className="text-xs font-semibold uppercase tracking-widest text-on-surface-variant mb-3">
+            Same cart ({siblings.length} other{" "}
+            {siblings.length === 1 ? "session" : "sessions"})
+          </p>
+          <ul className="space-y-2">
+            {siblings.map((s) => (
+              <li key={s.id}>
+                <Link
+                  href={`/admin/bookings/${s.id}`}
+                  className="inline-flex items-center gap-2 text-sm text-on-surface hover:text-primary transition-colors"
+                >
+                  <span className="font-medium">
+                    {formatDate(s.start_date)}
+                    {s.time_slot ? ` at ${s.time_slot}` : ""}
+                  </span>
+                  <span className="text-xs text-on-surface-variant capitalize">
+                    · {s.status}
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       {/* Stripe */}
       <section className="bg-surface-lowest border-2 border-outline-variant rounded-lg p-4">
