@@ -5,6 +5,7 @@ import GlassCard from "@/components/ui/GlassCard";
 import JsonLd from "@/components/seo/JsonLd";
 import { organizationSchema } from "@/components/seo/SchemaOrg";
 import { Users, User, Swords, Home } from "lucide-react";
+import { getRateCard } from "@/content/stay-pricing";
 
 export const metadata = generatePageMeta({
   title: "Book Muay Thai Training Online | Ratchawat Koh Samui",
@@ -72,7 +73,7 @@ const bookingTypes = [
     id: "camp-stay",
     icon: Home,
     title: "Camp Stay",
-    from: "From 8,000 THB / week",
+    from: `From ${getRateCard("room", "normal")!.tiers[0].basePrice.toLocaleString("en-US")} THB / week`,
     badge: "Stay Plai Laem, train any camp",
     description:
       "All-inclusive training and accommodation at Plai Laem. Standard rooms and private bungalows. Train at either camp while staying on site.",

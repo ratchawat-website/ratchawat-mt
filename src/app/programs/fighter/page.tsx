@@ -297,10 +297,10 @@ export default function FighterProgramPage() {
             </p>
             <ul className="ml-4 space-y-2 text-base">
               <li>
-                <strong className="text-on-surface">Fighter + Standard Room:</strong> approximately 20,000 THB per month (electricity separate). Pending final price confirmation.
+                <strong className="text-on-surface">Fighter + Standard Room:</strong> 20,000 THB for 30 nights, then 670 THB per extra night (electricity separate).
               </li>
               <li>
-                <strong className="text-on-surface">Fighter + Private Bungalow:</strong> 25,500 THB per month (electricity separate). Premium tier with king bed, kitchenette, and private terrace. Only 1 bungalow on-site.
+                <strong className="text-on-surface">Fighter + Private Bungalow:</strong> 25,500 THB for 30 nights, then 670 THB per extra night (electricity separate). Premium tier with king bed, kitchenette, and private terrace. Only 1 bungalow on-site.
               </li>
             </ul>
             <p>

@@ -11,6 +11,7 @@ import {
 import { Check } from "lucide-react";
 import Link from "next/link";
 import { getPriceById } from "@/content/pricing";
+import { getRateCard } from "@/content/stay-pricing";
 import { DTV_POLICY_REFUSAL } from "@/content/policies";
 
 const dtv2x = getPriceById("dtv-6m-2x")!;
@@ -21,6 +22,14 @@ const privateAdult10 = getPriceById("private-adult-10pack")!;
 const privateAdultGroup = getPriceById("private-adult-group")!;
 const privateKidsSolo = getPriceById("private-kids-solo")!;
 const privateKidsGroup = getPriceById("private-kids-group")!;
+
+// Stay prices come from the tiered rate cards; nothing hard-coded below.
+const roomNormal = getRateCard("room", "normal")!;
+const bungalowNormal = getRateCard("bungalow", "normal")!;
+const roomFighter = getRateCard("room", "fighter")!;
+const bungalowFighter = getRateCard("bungalow", "fighter")!;
+
+const fmt = (n: number) => n.toLocaleString("en-US");
 
 export const metadata = generatePageMeta({
   title: "Muay Thai Prices Koh Samui | Ratchawat - From 400 THB",
@@ -76,6 +85,11 @@ export default function PricingPage() {
               { name: "DTV 6-Month Training, Unlimited", price: dtvUnlimited.price!, description: "DTV visa package, unlimited group training for 6 months (Fighter Program not included)" },
               { name: "Bodyweight Area Drop-in", price: 100, description: "Single-day access to bodyweight area" },
               { name: "Bodyweight Area Monthly", price: 900, description: "Monthly access to bodyweight area" },
+              { name: "Camp Stay Room, 7 nights", price: roomNormal.tiers[0].basePrice, description: "7 nights in a standard room at Plai Laem with unlimited group training, flexible dates" },
+              { name: "Camp Stay Room, 1 month", price: roomNormal.tiers[2].basePrice, description: "30 nights in a standard room at Plai Laem with unlimited group training, flexible dates" },
+              { name: "Camp Stay Bungalow, 1 month", price: bungalowNormal.tiers[0].basePrice, description: "30 nights in the private bungalow at Plai Laem with unlimited group training, flexible dates" },
+              { name: "Fighter Program + Room, 1 month", price: roomFighter.tiers[0].basePrice, description: "Fighter program plus 30 nights in a standard room at Plai Laem" },
+              { name: "Fighter Program + Bungalow, 1 month", price: bungalowFighter.tiers[0].basePrice, description: "Fighter program plus 30 nights in the private bungalow at Plai Laem" },
             ],
           }),
         ]}
@@ -540,73 +554,77 @@ export default function PricingPage() {
           </h2>
           <p className="text-center text-on-surface-variant text-sm mb-10 max-w-2xl mx-auto">
             Training and on-site accommodation at our Plai Laem camp. Rooms and bungalows available.
-            Electricity is included for 1-week and 2-week stays.
+            Electricity is included for stays under 1 month. Pick your own check-in and check-out dates.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
             <GlassCard>
               <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-3">1 Week</h3>
-              <div className="mb-4">
-                <span className="font-serif text-4xl font-bold text-primary">8,000 THB</span>
+              <div className="mb-1">
+                <span className="font-serif text-4xl font-bold text-primary">{fmt(roomNormal.tiers[0].basePrice)} THB</span>
               </div>
+              <p className="text-on-surface-variant text-xs mb-4">+{fmt(roomNormal.tiers[0].extraNightRate)} THB per extra night</p>
               <ul className="space-y-2 text-sm text-on-surface-variant mb-6">
                 <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> 7 nights in a standard room</li>
                 <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> Unlimited group training</li>
                 <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> Electricity + Wi-Fi included</li>
               </ul>
-              <Link href="/booking/camp-stay?package=camp-stay-1week" className="btn-primary w-full justify-center">
-                Book 1 Week <span className="btn-arrow">&rarr;</span>
+              <Link href="/booking/camp-stay" className="btn-primary w-full justify-center">
+                Book a Room <span className="btn-arrow">&rarr;</span>
               </Link>
             </GlassCard>
             <GlassCard className="ring-2 ring-primary">
               <div className="mb-2"><span className="badge-underline badge-orange">Best Value</span></div>
               <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-3">2 Weeks</h3>
-              <div className="mb-4">
-                <span className="font-serif text-4xl font-bold text-primary">15,000 THB</span>
+              <div className="mb-1">
+                <span className="font-serif text-4xl font-bold text-primary">{fmt(roomNormal.tiers[1].basePrice)} THB</span>
               </div>
+              <p className="text-on-surface-variant text-xs mb-4">+{fmt(roomNormal.tiers[1].extraNightRate)} THB per extra night</p>
               <ul className="space-y-2 text-sm text-on-surface-variant mb-6">
                 <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> 14 nights in a standard room</li>
                 <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> Unlimited group training</li>
                 <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> Electricity + Wi-Fi included</li>
               </ul>
-              <Link href="/booking/camp-stay?package=camp-stay-2weeks" className="btn-primary w-full justify-center">
-                Book 2 Weeks <span className="btn-arrow">&rarr;</span>
+              <Link href="/booking/camp-stay" className="btn-primary w-full justify-center">
+                Book a Room <span className="btn-arrow">&rarr;</span>
               </Link>
             </GlassCard>
             <GlassCard>
               <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-3">1 Month - Room</h3>
-              <div className="mb-4">
-                <span className="font-serif text-4xl font-bold text-primary">18,000 THB</span>
+              <div className="mb-1">
+                <span className="font-serif text-4xl font-bold text-primary">{fmt(roomNormal.tiers[2].basePrice)} THB</span>
               </div>
+              <p className="text-on-surface-variant text-xs mb-4">+{fmt(roomNormal.tiers[2].extraNightRate)} THB per extra day</p>
               <ul className="space-y-2 text-sm text-on-surface-variant mb-6">
                 <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> 30 nights in a standard room</li>
                 <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> Unlimited group training</li>
                 <li className="flex items-center gap-2 opacity-50"><Check size={16} className="shrink-0" aria-hidden="true" /> Electricity charged separately</li>
               </ul>
-              <Link href="/booking/camp-stay?package=camp-stay-1month" className="btn-primary w-full justify-center">
-                Book Room <span className="btn-arrow">&rarr;</span>
+              <Link href="/booking/camp-stay" className="btn-primary w-full justify-center">
+                Book a Room <span className="btn-arrow">&rarr;</span>
               </Link>
             </GlassCard>
             <GlassCard>
               <div className="mb-2"><span className="badge-underline badge-orange">Unique - 1 on-site</span></div>
               <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-3">1 Month - Bungalow</h3>
-              <div className="mb-4">
-                <span className="font-serif text-4xl font-bold text-primary">23,000 THB</span>
+              <div className="mb-1">
+                <span className="font-serif text-4xl font-bold text-primary">{fmt(bungalowNormal.tiers[0].basePrice)} THB</span>
               </div>
+              <p className="text-on-surface-variant text-xs mb-4">+{fmt(bungalowNormal.tiers[0].extraNightRate)} THB per extra night · 1 month minimum</p>
               <ul className="space-y-2 text-sm text-on-surface-variant mb-6">
                 <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> 30 nights in the private bungalow</li>
                 <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> King bed, kitchenette, private terrace</li>
                 <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" aria-hidden="true" /> Unlimited group training</li>
                 <li className="flex items-center gap-2 opacity-50"><Check size={16} className="shrink-0" aria-hidden="true" /> Electricity charged separately</li>
               </ul>
-              <Link href="/booking/camp-stay?package=camp-stay-bungalow-monthly" className="btn-primary w-full justify-center">
-                Book Bungalow <span className="btn-arrow">&rarr;</span>
+              <Link href="/booking/camp-stay" className="btn-primary w-full justify-center">
+                Book the Bungalow <span className="btn-arrow">&rarr;</span>
               </Link>
             </GlassCard>
           </div>
           <p className="text-center mt-8 text-on-surface-variant text-sm">
             Looking for Fighter Program with accommodation? See the{" "}
             <Link href="/accommodation" className="btn-link">full accommodation options <span className="btn-arrow">&rarr;</span></Link>
-            {" "}(approximately 20,000 THB/month with a room, 25,500 THB/month with the bungalow).
+            {" "}({fmt(roomFighter.tiers[0].basePrice)} THB/month with a room, {fmt(bungalowFighter.tiers[0].basePrice)} THB/month with the bungalow).
           </p>
         </div>
       </section>

@@ -26,12 +26,12 @@ Group sessions six days a week at both camps. Morning 9:00 to 10:30 and evening 
 Group classes for children ages 8-13 at both camps. Younger children (ages 3-7) train through private sessions, either 1-on-1 or in small groups of up to 3 kids. Focus on discipline, coordination, basic Muay Thai technique, and fitness in a safe, encouraging environment.
 
 ### Fighter Program
-9,500 THB per month at Plai Laem camp only. Structured month-long preparation built around your fight date. Strict schedule: morning run from 7:30 into technique and pad work until 10:00, afternoon sparring and conditioning from 16:00 to 18:30. Includes advanced pad work, sparring, clinch work, kettlebell and conditioning two to three times per week, fight strategy, fight matchmaking, and a corner on fight night. Fighters keep 100% of the fight purse with no camp commission. Fighter + Standard Room: 20,000 THB per month. Fighter + Private Bungalow: 25,500 THB per month (electricity billed separately at 8 THB per unit).
+9,500 THB per month at Plai Laem camp only. Structured month-long preparation built around your fight date. Strict schedule: morning run from 7:30 into technique and pad work until 10:00, afternoon sparring and conditioning from 16:00 to 18:30. Includes advanced pad work, sparring, clinch work, kettlebell and conditioning two to three times per week, fight strategy, fight matchmaking, and a corner on fight night. Fighters keep 100% of the fight purse with no camp commission. Fighter + Standard Room: 20,000 THB for 30 nights plus 670 THB per extra night. Fighter + Private Bungalow: 25,500 THB for 30 nights plus 670 THB per extra night (electricity billed separately at 8 THB per unit). Both combos have a 1-month minimum with flexible check-in and check-out dates.
 
 ## Services
 
 ### Accommodation
-On-site at our Plai Laem camp: 7 standard rooms and 1 private bungalow. Rooms include water and Wi-Fi. The bungalow is metered for electricity. Standard check-in 14:00, check-out 11:00. Booked as part of a Camp Stay package or directly for special requests via WhatsApp (extended stays, group bookings, bank transfer payments).
+On-site at our Plai Laem camp: 7 standard rooms and 1 private bungalow. Rooms include water and Wi-Fi. The bungalow is metered for electricity. Standard check-in 14:00, check-out 11:00. Guests pick their own check-in and check-out dates; the price is a base rate for the stay length plus extra nights. Standard room with unlimited group training: 8,000 THB for 7 nights or 15,000 THB for 14 nights, plus 1,140 THB per extra night; 18,000 THB for 1 month plus 600 THB per extra day (electricity billed separately for monthly stays). Private bungalow: 23,000 THB per month plus 600 THB per extra night, 1 month minimum. Rooms require a 7-night minimum. Special requests via WhatsApp (extended stays, group bookings, bank transfer payments).
 
 ### DTV Visa Support
 6-month Destination Thailand Visa (DTV) support. We provide official documentation and the enrollment letter required by the Thai e-visa portal. The 10,000 THB embassy fee is paid separately on thaievisa.go.th. Three packages: 20,000 THB (2 sessions/week), 25,000 THB (4 sessions/week), 35,000 THB (unlimited group training, Fighter Program not included). Documents are delivered within 24 hours of receiving payment (on business days). If the visa application is refused, a 50% refund can be requested within 3 weeks of payment with official proof of refusal; the remaining 50% is issued as a training voucher of the same value, valid at the gym.
@@ -77,8 +77,18 @@ All prices in Thai Baht (THB).
 | Package | Price |
 |---|---|
 | Fighter Program (1 month) | 9,500 THB |
-| Fighter + Standard Room (1 month) | 20,000 THB |
-| Fighter + Private Bungalow (1 month) | 25,500 THB (electricity separate) |
+| Fighter + Standard Room (30 nights) | 20,000 THB + 670 THB per extra night |
+| Fighter + Private Bungalow (30 nights) | 25,500 THB + 670 THB per extra night (electricity separate) |
+
+### Camp Stay (Plai Laem, flexible check-in and check-out dates)
+| Stay | Price |
+|---|---|
+| Standard room, 7 nights (minimum) | 8,000 THB + 1,140 THB per extra night |
+| Standard room, 14 nights | 15,000 THB + 1,140 THB per extra night |
+| Standard room, 1 month | 18,000 THB + 600 THB per extra day (electricity separate) |
+| Private bungalow, 1 month (minimum) | 23,000 THB + 600 THB per extra night (electricity separate) |
+
+All camp stays include unlimited group training (2 sessions per day) and Wi-Fi. Electricity is included for room stays under 1 month.
 
 Payment accepted: card via Stripe (online), cash on the day, bank transfer (Wise or international wire) on request via WhatsApp.
 
