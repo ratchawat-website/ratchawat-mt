@@ -16,11 +16,16 @@ import { DTV_POLICY_REFUSAL } from "@/content/policies";
 const dtv2x = getPriceById("dtv-6m-2x")!;
 const dtv4x = getPriceById("dtv-6m-4x")!;
 const dtvUnlimited = getPriceById("dtv-6m-unlimited")!;
+const privateAdultSolo = getPriceById("private-adult-solo")!;
+const privateAdult10 = getPriceById("private-adult-10pack")!;
+const privateAdultGroup = getPriceById("private-adult-group")!;
+const privateKidsSolo = getPriceById("private-kids-solo")!;
+const privateKidsGroup = getPriceById("private-kids-group")!;
 
 export const metadata = generatePageMeta({
   title: "Muay Thai Prices Koh Samui | Ratchawat - From 400 THB",
   description:
-    "Muay Thai prices at Ratchawat Koh Samui. Drop-in 400 THB, weekly and monthly packages, private 800 THB, fighter 9,500 THB. No hidden fees.",
+    "Muay Thai prices at Ratchawat Koh Samui. Drop-in 400 THB, weekly and monthly packages, private 1,000 THB, fighter 9,500 THB. No hidden fees.",
   path: "/pricing",
 });
 
@@ -59,10 +64,11 @@ export default function PricingPage() {
               { name: "Weekly Package 2x/day", price: 3000, description: "2 sessions per day for one week" },
               { name: "Monthly Package 1x/day", price: 5500, description: "1 session per day for one month" },
               { name: "Monthly Package 2x/day", price: 7000, description: "2 sessions per day for one month" },
-              { name: "Private Lesson Adult 1-on-1", price: 800, description: "60-minute solo private session" },
-              { name: "Private Lesson Adult Group", price: 600, description: "60-minute group private session" },
-              { name: "Private Lesson Kids 1-on-1", price: 600, description: "60-minute solo private session for kids" },
-              { name: "Private Lesson Kids Group", price: 400, description: "60-minute group private session for kids" },
+              { name: "Private Lesson Adult 1-on-1", price: privateAdultSolo.price!, description: "60-minute solo private session" },
+              { name: "Private 10-Session Pack Adult 1-on-1", price: privateAdult10.price!, description: "Ten 60-minute solo private sessions" },
+              { name: "Private Lesson Adult Group", price: privateAdultGroup.price!, description: "60-minute private session for 2-3 people, one price per session" },
+              { name: "Private Lesson Kids 1-on-1", price: privateKidsSolo.price!, description: "60-minute solo private session for kids" },
+              { name: "Private Lesson Kids Group", price: privateKidsGroup.price!, description: "60-minute group private session for kids, price per kid" },
               { name: "Fighter Program Monthly", price: 9500, description: "Full fighter prep: 2x/day training, yoga, ice bath, fight organisation and corner support" },
               { name: "Resident Monthly (1x/day)", price: 3000, description: "Monthly 1 session per day for Koh Samui residents" },
               { name: "DTV 6-Month Training, 2 sessions/week", price: dtv2x.price!, description: "DTV visa package, 2 sessions/week for 6 months" },
@@ -348,14 +354,21 @@ export default function PricingPage() {
                     <Check size={16} className="text-primary shrink-0 mt-0.5" />
                     <span>1-on-1 private session (60 min)</span>
                   </div>
-                  <span className="font-bold text-primary shrink-0">800 THB</span>
+                  <span className="font-bold text-primary shrink-0">{privateAdultSolo.price!.toLocaleString("en-US")} THB</span>
                 </li>
                 <li className="flex items-start justify-between gap-4">
                   <div className="flex items-start gap-2 text-on-surface-variant">
                     <Check size={16} className="text-primary shrink-0 mt-0.5" />
-                    <span>Small group private session (60 min, 3 people max)</span>
+                    <span>10-session pack, 1-on-1 (60 min each)</span>
                   </div>
-                  <span className="font-bold text-primary shrink-0">600 THB</span>
+                  <span className="font-bold text-primary shrink-0">{privateAdult10.price!.toLocaleString("en-US")} THB</span>
+                </li>
+                <li className="flex items-start justify-between gap-4">
+                  <div className="flex items-start gap-2 text-on-surface-variant">
+                    <Check size={16} className="text-primary shrink-0 mt-0.5" />
+                    <span>Small group private session (60 min, 2-3 people, one price per session)</span>
+                  </div>
+                  <span className="font-bold text-primary shrink-0">{privateAdultGroup.price!.toLocaleString("en-US")} THB</span>
                 </li>
               </ul>
               <Link
@@ -377,14 +390,14 @@ export default function PricingPage() {
                     <Check size={16} className="text-primary shrink-0 mt-0.5" />
                     <span>1-on-1 private session (60 min)</span>
                   </div>
-                  <span className="font-bold text-primary shrink-0">600 THB</span>
+                  <span className="font-bold text-primary shrink-0">{privateKidsSolo.price!.toLocaleString("en-US")} THB</span>
                 </li>
                 <li className="flex items-start justify-between gap-4">
                   <div className="flex items-start gap-2 text-on-surface-variant">
                     <Check size={16} className="text-primary shrink-0 mt-0.5" />
-                    <span>Small group private session (60 min, 3 kids max)</span>
+                    <span>Small group private session (60 min, 3 kids max, price per kid)</span>
                   </div>
-                  <span className="font-bold text-primary shrink-0">400 THB</span>
+                  <span className="font-bold text-primary shrink-0">{privateKidsGroup.price!.toLocaleString("en-US")} THB</span>
                 </li>
               </ul>
               <Link

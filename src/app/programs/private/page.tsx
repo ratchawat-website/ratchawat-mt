@@ -10,6 +10,13 @@ import {
 } from "@/components/seo/SchemaOrg";
 import { UserCheck, Target, Clock, Flame } from "lucide-react";
 import Link from "next/link";
+import { getPriceById } from "@/content/pricing";
+
+const privateAdultSolo = getPriceById("private-adult-solo")!;
+const privateAdult10 = getPriceById("private-adult-10pack")!;
+const privateAdultGroup = getPriceById("private-adult-group")!;
+const privateKidsSolo = getPriceById("private-kids-solo")!;
+const privateKidsGroup = getPriceById("private-kids-group")!;
 
 export const metadata = generatePageMeta({
   title: "Private Muay Thai Lessons Koh Samui | 1-on-1 - Ratchawat",
@@ -26,7 +33,7 @@ const privateCourse = courseSchema({
   description:
     "One-on-one Muay Thai training with experienced Thai trainers at Ratchawat Koh Samui. Fully personalized sessions.",
   url: `${SITE_URL}/programs/private`,
-  offers: { price: 800, priceCurrency: "THB" },
+  offers: { price: privateAdultSolo.price!, priceCurrency: "THB" },
 });
 
 const trainers = [
@@ -185,7 +192,7 @@ export default function PrivateLessonsPage() {
           </h2>
           <div className="space-y-4 text-on-surface-variant text-base sm:text-lg leading-relaxed">
             <p>
-              Private sessions start at 800 THB per hour.{" "}
+              Private sessions start at {privateAdultSolo.price!.toLocaleString("en-US")} THB per hour.{" "}
               <Link href="/pricing" className="text-primary hover:text-primary-dim transition-colors font-medium">See full pricing</Link>.
             </p>
             <p>
@@ -195,19 +202,23 @@ export default function PrivateLessonsPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
             <div className="flex items-center justify-between p-4 bg-surface-lowest rounded-lg">
               <span className="text-on-surface text-sm font-medium">1-on-1 adult</span>
-              <span className="font-serif text-2xl font-bold text-primary">800 <span className="text-xs font-normal text-on-surface-variant">THB</span></span>
+              <span className="font-serif text-2xl font-bold text-primary">{privateAdultSolo.price!.toLocaleString("en-US")} <span className="text-xs font-normal text-on-surface-variant">THB</span></span>
+            </div>
+            <div className="flex items-center justify-between p-4 bg-surface-lowest rounded-lg">
+              <span className="text-on-surface text-sm font-medium">10-session pack</span>
+              <span className="font-serif text-2xl font-bold text-primary">{privateAdult10.price!.toLocaleString("en-US")} <span className="text-xs font-normal text-on-surface-variant">THB</span></span>
             </div>
             <div className="flex items-center justify-between p-4 bg-surface-lowest rounded-lg">
               <span className="text-on-surface text-sm font-medium">Group 2-3 adults</span>
-              <span className="font-serif text-2xl font-bold text-primary">600 <span className="text-xs font-normal text-on-surface-variant">THB/person</span></span>
+              <span className="font-serif text-2xl font-bold text-primary">{privateAdultGroup.price!.toLocaleString("en-US")} <span className="text-xs font-normal text-on-surface-variant">THB per session</span></span>
             </div>
             <div className="flex items-center justify-between p-4 bg-surface-lowest rounded-lg">
               <span className="text-on-surface text-sm font-medium">1-on-1 kids</span>
-              <span className="font-serif text-2xl font-bold text-primary">600 <span className="text-xs font-normal text-on-surface-variant">THB</span></span>
+              <span className="font-serif text-2xl font-bold text-primary">{privateKidsSolo.price!.toLocaleString("en-US")} <span className="text-xs font-normal text-on-surface-variant">THB</span></span>
             </div>
             <div className="flex items-center justify-between p-4 bg-surface-lowest rounded-lg">
               <span className="text-on-surface text-sm font-medium">Group 2-3 kids</span>
-              <span className="font-serif text-2xl font-bold text-primary">400 <span className="text-xs font-normal text-on-surface-variant">THB/kid</span></span>
+              <span className="font-serif text-2xl font-bold text-primary">{privateKidsGroup.price!.toLocaleString("en-US")} <span className="text-xs font-normal text-on-surface-variant">THB/kid</span></span>
             </div>
           </div>
         </div>
@@ -217,14 +228,14 @@ export default function PrivateLessonsPage() {
       <section className="py-12 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-3xl mx-auto">
           <p className="text-on-surface-variant text-base leading-relaxed text-center">
-            Private 1-on-1 Muay Thai lessons at Chor Ratchawat in Koh Samui run 60 minutes for 800 THB per session. Available with experienced Thai trainers including Kru Ratchawat (Founder), Kru Kuan (Head Trainer Bo Phut), and Kru Mam (Southern Thailand Champion). Slots run between 7:00 and 17:00, Monday to Saturday, at both Bo Phut and Plai Laem. Booking cutoff is 12 hours before the 7:00 and 8:00 slots, 2 hours before any other slot.
+            Private 1-on-1 Muay Thai lessons at Chor Ratchawat in Koh Samui run 60 minutes for 1,000 THB per session, with a 10-session pack at 9,000 THB. Available with experienced Thai trainers including Kru Ratchawat (Founder), Kru Kuan (Head Trainer Bo Phut), and Kru Mam (Southern Thailand Champion). Slots run between 7:00 and 17:00, Monday to Saturday, at both Bo Phut and Plai Laem. Booking cutoff is 12 hours before the 7:00 and 8:00 slots, 2 hours before any other slot.
           </p>
         </div>
       </section>
 
       <CTABanner
         title="Book a Private Session"
-        description="From 800 THB per hour. Fully personalized, your pace."
+        description="From 1,000 THB per hour. Fully personalized, your pace."
         buttonText="Book Now"
         href="/booking/private?package=private-adult-solo"
         ghostText="View Pricing"
