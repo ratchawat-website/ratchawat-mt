@@ -3,6 +3,10 @@ import Breadcrumbs from "@/components/layout/Breadcrumbs";
 import JsonLd from "@/components/seo/JsonLd";
 import { organizationSchema } from "@/components/seo/SchemaOrg";
 import Link from "next/link";
+import {
+  DTV_POLICY_DELIVERY,
+  DTV_POLICY_REFUSAL,
+} from "@/content/policies";
 
 export const metadata = generatePageMeta({
   title: "Terms of Service | Ratchawat Muay Thai Koh Samui",
@@ -118,13 +122,8 @@ export default function TermsPage() {
                 THB embassy fee is paid separately on the Thai e-visa portal
                 (thaievisa.go.th) and is set by the Thai government, not by us.
               </p>
-              <p className="mt-3">
-                If your visa application is refused by the embassy, the
-                voucher policy described above applies: we issue a training
-                voucher of the same value as the package fee, valid for 12
-                months at either of our camps, covering training and
-                accommodation (not the embassy fee).
-              </p>
+              <p className="mt-3">{DTV_POLICY_DELIVERY}</p>
+              <p className="mt-3">{DTV_POLICY_REFUSAL}</p>
             </div>
 
             <div>

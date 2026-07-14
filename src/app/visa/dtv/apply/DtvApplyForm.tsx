@@ -6,6 +6,7 @@ import Link from "next/link";
 import { MessageCircle } from "lucide-react";
 import { getPricesByCategory, getPriceById } from "@/content/pricing";
 import { buildWhatsAppUrl } from "@/content/schedule";
+import { DTV_POLICY_DELIVERY, DTV_POLICY_REFUSAL } from "@/content/policies";
 import TurnstileWidget from "@/components/security/TurnstileWidget";
 import {
   TURNSTILE_ENABLED,
@@ -399,9 +400,8 @@ export default function DtvApplyForm() {
             className="mt-1 w-4 h-4 accent-primary"
           />
           <span className="text-on-surface-variant text-sm leading-relaxed">
-            I understand that documents are delivered within 24 hours after payment. No
-            refund if the visa is refused, but a training voucher of the same value will be
-            issued. I commit to this training package.
+            {DTV_POLICY_DELIVERY} {DTV_POLICY_REFUSAL} I understand these terms
+            and commit to this training package.
           </span>
         </label>
         {errors.committed && <p className="text-primary text-xs mt-1">{errors.committed}</p>}

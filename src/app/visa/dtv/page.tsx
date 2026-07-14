@@ -26,6 +26,12 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { getPricesByCategory } from "@/content/pricing";
+import {
+  DTV_POLICY_DELIVERY,
+  DTV_POLICY_REFUSAL,
+  DTV_WHATSAPP_CUSTOM_PLAN,
+} from "@/content/policies";
+import { buildWhatsAppUrl } from "@/content/schedule";
 
 function SectionLabel({ label }: { label: string }) {
   return (
@@ -95,7 +101,7 @@ const steps = [
     icon: Mail,
     step: "3",
     title: "Receive your docs in 24h",
-    description: "We email the official enrollment letter and supporting documents within 24 hours.",
+    description: "We email the official enrollment letter and supporting documents within 24 hours of payment (on business days).",
   },
   {
     icon: Send,
@@ -125,8 +131,7 @@ const faqs = [
   },
   {
     question: "What happens if my visa is refused?",
-    answer:
-      "No refund, but we offer a training voucher of the same value so you can train with us if you come to Thailand another way. This is covered in our terms before you pay.",
+    answer: `${DTV_POLICY_DELIVERY} ${DTV_POLICY_REFUSAL}`,
   },
   {
     question: "Do I need 500,000 THB in cash?",
@@ -323,9 +328,29 @@ export default function DTVVisaPage() {
             })}
           </div>
           <p className="mt-8 text-center text-on-surface-variant text-sm max-w-2xl mx-auto">
-            No refund if the visa is refused, but we issue a training voucher of the same
-            value. Documents are delivered within 24 hours of payment.
+            {DTV_POLICY_REFUSAL}
           </p>
+          <div className="mt-8 max-w-2xl mx-auto flex items-start gap-3 rounded-[var(--radius-card)] border-2 border-primary/30 bg-primary/5 p-4">
+            <MessageCircle
+              size={20}
+              className="text-primary shrink-0 mt-0.5"
+              aria-hidden="true"
+            />
+            <div className="text-sm">
+              <p className="text-on-surface mb-2">{DTV_WHATSAPP_CUSTOM_PLAN}</p>
+              <a
+                href={buildWhatsAppUrl(
+                  "Hi, I am interested in a custom DTV training plan (9-12 months or personalized program).",
+                )}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary hover:text-primary-dim font-semibold inline-flex items-center gap-1"
+              >
+                Message us on WhatsApp
+                <span aria-hidden="true">&rarr;</span>
+              </a>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -387,8 +412,9 @@ export default function DTVVisaPage() {
             <div className="flex items-center gap-3">
               <Clock size={18} className="text-primary" aria-hidden="true" />
               <span>
-                Documents delivered within 24 hours. Embassy processing time
-                varies between 5 and 15 business days.
+                Documents delivered within 24 hours of payment (on business
+                days). Embassy processing time varies between 5 and 15 business
+                days.
               </span>
             </div>
             <div className="flex items-center gap-3">

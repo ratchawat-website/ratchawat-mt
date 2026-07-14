@@ -10,6 +10,10 @@ import {
   Link,
   Hr,
 } from "@react-email/components";
+import {
+  DTV_POLICY_DELIVERY,
+  DTV_POLICY_REFUSAL,
+} from "@/content/policies";
 
 export interface DtvApplicationEmailData {
   id: string;
@@ -118,10 +122,7 @@ export function DTVApplicationReceived({ application, packageName }: Props) {
 
           <Heading as="h3">Important notice</Heading>
           <Text style={{ fontSize: 13, color: "#cccccc" }}>
-            If your DTV visa is refused, we do not refund the training package,
-            but we issue a training voucher of the same value (25,000 THB for
-            the 4x/week package, for example). You can use this voucher any
-            time you come to train with us.
+            {DTV_POLICY_DELIVERY} {DTV_POLICY_REFUSAL}
           </Text>
 
           <Hr />

@@ -10,6 +10,12 @@ import {
 } from "@/components/seo/SchemaOrg";
 import { Check } from "lucide-react";
 import Link from "next/link";
+import { getPriceById } from "@/content/pricing";
+import { DTV_POLICY_REFUSAL } from "@/content/policies";
+
+const dtv2x = getPriceById("dtv-6m-2x")!;
+const dtv4x = getPriceById("dtv-6m-4x")!;
+const dtvUnlimited = getPriceById("dtv-6m-unlimited")!;
 
 export const metadata = generatePageMeta({
   title: "Muay Thai Prices Koh Samui | Ratchawat - From 400 THB",
@@ -59,9 +65,9 @@ export default function PricingPage() {
               { name: "Private Lesson Kids Group", price: 400, description: "60-minute group private session for kids" },
               { name: "Fighter Program Monthly", price: 9500, description: "Full fighter prep: 2x/day training, yoga, ice bath, fight organisation and corner support" },
               { name: "Resident Monthly (1x/day)", price: 3000, description: "Monthly 1 session per day for Koh Samui residents" },
-              { name: "DTV 6-Month Training, 2 sessions/week", price: 20000, description: "DTV visa package, 2 sessions/week for 6 months" },
-              { name: "DTV 6-Month Training, 4 sessions/week", price: 25000, description: "DTV visa package, 4 sessions/week for 6 months" },
-              { name: "DTV 6-Month Training, Unlimited", price: 33000, description: "DTV visa package, unlimited training for 6 months" },
+              { name: "DTV 6-Month Training, 2 sessions/week", price: dtv2x.price!, description: "DTV visa package, 2 sessions/week for 6 months" },
+              { name: "DTV 6-Month Training, 4 sessions/week", price: dtv4x.price!, description: "DTV visa package, 4 sessions/week for 6 months" },
+              { name: "DTV 6-Month Training, Unlimited", price: dtvUnlimited.price!, description: "DTV visa package, unlimited group training for 6 months (Fighter Program not included)" },
               { name: "Bodyweight Area Drop-in", price: 100, description: "Single-day access to bodyweight area" },
               { name: "Bodyweight Area Monthly", price: 900, description: "Monthly access to bodyweight area" },
             ],
@@ -663,7 +669,7 @@ export default function PricingPage() {
             <GlassCard>
               <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-3">2 sessions/week</h3>
               <div className="mb-4">
-                <span className="font-serif text-3xl lg:text-4xl font-bold text-primary">20,000 THB</span>
+                <span className="font-serif text-3xl lg:text-4xl font-bold text-primary">{dtv2x.price!.toLocaleString("en-US")} THB</span>
                 <span className="text-on-surface-variant text-sm ml-2">/ 6 months</span>
               </div>
               <ul className="space-y-2 text-sm text-on-surface-variant mb-6">
@@ -683,7 +689,7 @@ export default function PricingPage() {
                 <span className="badge-underline badge-orange">Popular</span>
               </div>
               <div className="mb-4">
-                <span className="font-serif text-3xl lg:text-4xl font-bold text-primary">25,000 THB</span>
+                <span className="font-serif text-3xl lg:text-4xl font-bold text-primary">{dtv4x.price!.toLocaleString("en-US")} THB</span>
                 <span className="text-on-surface-variant text-sm ml-2">/ 6 months</span>
               </div>
               <ul className="space-y-2 text-sm text-on-surface-variant mb-6">
@@ -700,14 +706,15 @@ export default function PricingPage() {
             <GlassCard>
               <h3 className="font-serif text-lg font-bold text-on-surface uppercase mb-3">Unlimited</h3>
               <div className="mb-4">
-                <span className="font-serif text-3xl lg:text-4xl font-bold text-primary">33,000 THB</span>
+                <span className="font-serif text-3xl lg:text-4xl font-bold text-primary">{dtvUnlimited.price!.toLocaleString("en-US")} THB</span>
                 <span className="text-on-surface-variant text-sm ml-2">/ 6 months</span>
               </div>
               <ul className="space-y-2 text-sm text-on-surface-variant mb-6">
-                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" /> Unlimited training (1-2 sessions/day)</li>
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" /> Unlimited group training (1-2 sessions/day)</li>
                 <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" /> Both camps (Bo Phut + Plai Laem)</li>
                 <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" /> Bodyweight area access</li>
                 <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" /> Full DTV documents assistance</li>
+                <li className="flex items-center gap-2"><Check size={16} className="text-primary shrink-0" /> Fighter Program not included</li>
               </ul>
               <Link href="/visa/dtv" className="btn-primary w-full justify-center">
                 Apply <span className="btn-arrow">&rarr;</span>
@@ -715,7 +722,7 @@ export default function PricingPage() {
             </GlassCard>
           </div>
           <p className="text-center mt-6 text-on-surface-variant text-xs max-w-2xl mx-auto">
-            No refund if the visa is refused, but a training voucher at our camp is provided instead.
+            {DTV_POLICY_REFUSAL}{" "}
             See <Link href="/visa/dtv" className="text-primary hover:text-primary-dim">the DTV page</Link> for the full process.
           </p>
         </div>
