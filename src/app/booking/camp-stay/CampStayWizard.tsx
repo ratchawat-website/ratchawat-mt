@@ -1,26 +1,25 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { useSearchParams } from "next/navigation";
+import type { DateRange } from "react-day-picker";
 import BookingWizard from "@/components/booking/BookingWizard";
-import AvailabilityCalendar from "@/components/booking/AvailabilityCalendar";
-import type { InventoryKey } from "@/lib/admin/inventory";
+import StayCalendar from "@/components/booking/StayCalendar";
 import ContactInfoForm, {
   ContactInfo,
   isContactInfoValid,
 } from "@/components/booking/ContactInfoForm";
 import BookingReview from "@/components/booking/BookingReview";
-import { getPricesByBookingType, getPriceById } from "@/content/pricing";
+import { getRateCard, type StayUnit } from "@/content/stay-pricing";
+import { computeStayPrice } from "@/lib/booking/stay";
+import { getStayUnitInventoryKey } from "@/lib/admin/inventory";
 import { formatDateLong } from "@/lib/utils/date-format";
 import { format } from "date-fns";
 import TurnstileWidget from "@/components/security/TurnstileWidget";
 import { useTurnstile } from "@/components/security/use-turnstile";
 import { ROOM_RESERVATION_POLICY } from "@/content/policies";
 
-const STEPS = ["Package", "Check-in", "Contact", "Review"];
-
-// Computed once at module load; reference stays stable across re-renders.
-const CAMP_STAY_PACKAGES = getPricesByBookingType("camp-stay");
+const STEPS = ["Accommodation", "Dates", "Contact", "Review"];
 
 const DEFAULT_CONTACT: ContactInfo = {
   name: "",
@@ -31,83 +30,68 @@ const DEFAULT_CONTACT: ContactInfo = {
   notes: "",
 };
 
-function getDurationDays(id: string): number {
-  if (id === "camp-stay-1week") return 7;
-  if (id === "camp-stay-2weeks") return 14;
-  if (id === "camp-stay-1month") return 30;
-  if (id === "camp-stay-bungalow-monthly") return 30;
-  return 7;
-}
-
-function getStayDuration(priceId: string | null): number {
-  if (!priceId) return 7;
-  if (priceId.includes("1week")) return 7;
-  if (priceId.includes("2weeks")) return 14;
-  if (priceId.includes("1month") || priceId.includes("monthly")) return 30;
-  return 7;
-}
-
-function getInventoryKeyForPackage(priceId: string | null): InventoryKey {
-  if (priceId && priceId.includes("bungalow")) return "bungalows";
-  return "rooms";
-}
-
+const UNIT_CARDS: { unit: StayUnit }[] = [{ unit: "room" }, { unit: "bungalow" }];
 
 export default function CampStayWizard() {
   const searchParams = useSearchParams();
-  const packages = CAMP_STAY_PACKAGES;
 
   const [step, setStep] = useState(0);
-  const [priceId, setPriceId] = useState<string | null>(null);
-  const [checkIn, setCheckIn] = useState<Date | undefined>();
+  const [unit, setUnit] = useState<StayUnit | null>(null);
+  const [range, setRange] = useState<DateRange | undefined>();
   const [contact, setContact] = useState<ContactInfo>(DEFAULT_CONTACT);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const captcha = useTurnstile();
+  const plan = "normal" as const;
 
-  // Consume `?package=` on mount only. Running once prevents the effect from
-  // re-firing later and snapping the step back when the user clicks Continue.
+  // Consume `?package=` on mount only. Legacy package ids from old links map
+  // to a unit; dates are now always chosen freely.
   const initializedRef = useRef(false);
   useEffect(() => {
     if (initializedRef.current) return;
     initializedRef.current = true;
     const pkg = searchParams.get("package");
-    if (pkg && CAMP_STAY_PACKAGES.some((p) => p.id === pkg)) {
-      setPriceId(pkg);
+    if (pkg) {
+      setUnit(pkg.includes("bungalow") ? "bungalow" : "room");
       setStep(1);
     }
   }, [searchParams]);
 
-  const selectedPackage = priceId ? getPriceById(priceId) : null;
-
-  const checkOut =
-    checkIn && priceId
-      ? new Date(checkIn.getTime() + getDurationDays(priceId) * 86400000)
-      : null;
+  const quote = useMemo(() => {
+    if (!unit || !range?.from || !range?.to) return null;
+    try {
+      return computeStayPrice(
+        format(range.from, "yyyy-MM-dd"),
+        format(range.to, "yyyy-MM-dd"),
+        unit,
+        plan,
+      );
+    } catch {
+      return null;
+    }
+  }, [unit, range, plan]);
 
   const canProceed = () => {
-    if (step === 0) return !!priceId;
-    if (step === 1) return !!checkIn;
+    if (step === 0) return !!unit;
+    if (step === 1) return !!quote;
     if (step === 2) return isContactInfoValid(contact);
     if (step === 3) return isContactInfoValid(contact) && captcha.ready;
     return false;
   };
 
   const handleSubmit = async () => {
-    if (!selectedPackage || !checkIn || !checkOut) return;
+    if (!unit || !quote || !range?.from || !range?.to) return;
     setIsSubmitting(true);
     setError(null);
     try {
-      const res = await fetch("/api/checkout", {
+      const res = await fetch("/api/checkout/stay", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          price_id: selectedPackage.id,
-          type: "camp-stay",
-          camp: "both",
-          start_date: format(checkIn, "yyyy-MM-dd"),
-          end_date: format(checkOut, "yyyy-MM-dd"),
-          num_participants: 1,
+          unit,
+          plan,
+          check_in: format(range.from, "yyyy-MM-dd"),
+          check_out: format(range.to, "yyyy-MM-dd"),
           client_name: contact.name,
           client_email: contact.email,
           client_phone: contact.phone,
@@ -138,83 +122,104 @@ export default function CampStayWizard() {
       isFinalStep={step === 3}
       isSubmitting={isSubmitting}
       submitLabel={
-        selectedPackage && selectedPackage.price
-          ? `Pay ${selectedPackage.price.toLocaleString("en-US")} THB`
-          : "Pay"
+        quote ? `Pay ${quote.total.toLocaleString("en-US")} THB` : "Pay"
       }
       onSubmit={handleSubmit}
     >
-      {/* Step 0: Package */}
+      {/* Step 0: Accommodation */}
       {step === 0 && (
         <div>
           <h2 className="font-serif text-xl font-semibold text-on-surface mb-4">
-            Select Your Package
+            Select Your Accommodation
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {packages.map((pkg) => (
-              <button
-                type="button"
-                key={pkg.id}
-                onClick={() => setPriceId(pkg.id)}
-                className={`text-left rounded-[var(--radius-card)] p-4 sm:p-5 border-2 transition-all ${
-                  priceId === pkg.id
-                    ? "border-primary bg-primary/5"
-                    : "border-outline-variant bg-surface-lowest hover:border-outline"
-                }`}
-              >
-                <div className="flex items-center gap-2 flex-wrap mb-2">
-                  <span className="font-serif text-base font-semibold text-on-surface">
-                    {pkg.nameShort}
-                  </span>
-                  {pkg.popular && (
-                    <span className="text-[10px] font-bold uppercase tracking-wider bg-primary text-white px-2 py-0.5 rounded">
-                      Popular
+            {UNIT_CARDS.map(({ unit: u }) => {
+              const card = getRateCard(u, plan)!;
+              const baseTier = card.tiers[0];
+              const topTier = card.tiers[card.tiers.length - 1];
+              return (
+                <button
+                  type="button"
+                  key={u}
+                  onClick={() => setUnit(u)}
+                  className={`text-left rounded-[var(--radius-card)] p-4 sm:p-5 border-2 transition-all ${
+                    unit === u
+                      ? "border-primary bg-primary/5"
+                      : "border-outline-variant bg-surface-lowest hover:border-outline"
+                  }`}
+                >
+                  <div className="flex items-center gap-2 flex-wrap mb-2">
+                    <span className="font-serif text-base font-semibold text-on-surface">
+                      {card.label}
                     </span>
-                  )}
-                  {pkg.id === "camp-stay-bungalow-monthly" && (
-                    <span className="text-[10px] font-bold uppercase tracking-wider bg-primary/20 text-primary px-2 py-0.5 rounded">
-                      Unique - 1 on-site
-                    </span>
-                  )}
-                </div>
-                <p className="font-serif text-xl font-bold text-primary mb-2">
-                  {pkg.price?.toLocaleString("en-US")} THB
-                </p>
-                <p className="text-on-surface-variant text-xs leading-relaxed">
-                  {pkg.description}
-                </p>
-                <p className="text-on-surface-variant text-[10px] mt-2 uppercase tracking-wider">
-                  Stay Plai Laem, train either camp
-                </p>
-              </button>
-            ))}
+                    {u === "bungalow" && (
+                      <span className="text-[10px] font-bold uppercase tracking-wider bg-primary/20 text-primary px-2 py-0.5 rounded">
+                        Unique - 1 on-site
+                      </span>
+                    )}
+                  </div>
+                  <p className="font-serif text-xl font-bold text-primary mb-1">
+                    From {baseTier.basePrice.toLocaleString("en-US")} THB /{" "}
+                    {baseTier.nights} nights
+                  </p>
+                  <p className="text-on-surface-variant text-xs mb-2">
+                    +{topTier.extraNightRate.toLocaleString("en-US")} THB per
+                    extra night
+                  </p>
+                  <ul className="text-on-surface-variant text-xs leading-relaxed space-y-0.5">
+                    {card.copyNotes.map((n) => (
+                      <li key={n}>{n}</li>
+                    ))}
+                  </ul>
+                  <p className="text-on-surface-variant text-[10px] mt-2 uppercase tracking-wider">
+                    Stay Plai Laem, train either camp
+                  </p>
+                </button>
+              );
+            })}
           </div>
         </div>
       )}
 
-      {/* Step 1: Check-in */}
-      {step === 1 && (
+      {/* Step 1: Dates */}
+      {step === 1 && unit && (
         <div className="space-y-4">
           <h2 className="font-serif text-xl font-semibold text-on-surface mb-4">
-            Pick Your Check-in Date
+            Pick Your Check-in and Check-out Dates
           </h2>
-          <AvailabilityCalendar
-            type="camp-stay"
-            selected={checkIn}
-            onSelect={setCheckIn}
-            inventoryKey={getInventoryKeyForPackage(priceId)}
-            stayDurationDays={getStayDuration(priceId)}
+          <StayCalendar
+            inventoryKey={getStayUnitInventoryKey(unit)}
+            range={range}
+            onRangeChange={setRange}
+            minNights={getRateCard(unit, plan)!.minNights}
           />
-          {checkIn && checkOut && (
-            <div className="bg-primary/5 border-2 border-primary/20 rounded-[var(--radius-card)] p-4">
-              <p className="text-on-surface text-sm">
-                <span className="text-on-surface-variant">Check-in:</span>{" "}
-                <strong>{formatDateLong(checkIn)}</strong>
+          {quote && (
+            <div className="bg-primary/5 border-2 border-primary/20 rounded-[var(--radius-card)] p-4 space-y-1 text-sm">
+              <p className="text-on-surface">
+                <span className="text-on-surface-variant">Stay:</span>{" "}
+                <strong>{quote.nights} nights</strong> (
+                {formatDateLong(range!.from!)} to {formatDateLong(range!.to!)})
               </p>
-              <p className="text-on-surface text-sm mt-1">
-                <span className="text-on-surface-variant">Check-out:</span>{" "}
-                <strong>{formatDateLong(checkOut)}</strong>
+              <p className="text-on-surface">
+                <span className="text-on-surface-variant">Base:</span>{" "}
+                {quote.basePrice.toLocaleString("en-US")} THB for{" "}
+                {quote.tierNights} nights
               </p>
+              {quote.extraNights > 0 && (
+                <p className="text-on-surface">
+                  <span className="text-on-surface-variant">Extra nights:</span>{" "}
+                  {quote.extraNights} x{" "}
+                  {quote.extraNightRate.toLocaleString("en-US")} THB
+                </p>
+              )}
+              <p className="font-serif text-lg font-bold text-primary pt-1">
+                Total: {quote.total.toLocaleString("en-US")} THB
+              </p>
+              <ul className="text-xs text-on-surface-variant pt-2 space-y-0.5">
+                {quote.copyNotes.map((n) => (
+                  <li key={n}>{n}</li>
+                ))}
+              </ul>
             </div>
           )}
         </div>
@@ -231,24 +236,24 @@ export default function CampStayWizard() {
       )}
 
       {/* Step 3: Review */}
-      {step === 3 && selectedPackage && checkIn && checkOut && (
+      {step === 3 && quote && range?.from && range?.to && (
         <div className="space-y-4">
           <h2 className="font-serif text-xl font-semibold text-on-surface mb-4">
             Confirm & Pay
           </h2>
           <BookingReview
             rows={[
-              { label: "Package", value: selectedPackage.name },
-              { label: "Check-in", value: formatDateLong(checkIn) },
-              { label: "Check-out", value: formatDateLong(checkOut) },
+              { label: "Accommodation", value: quote.label },
+              { label: "Check-in", value: formatDateLong(range.from) },
+              { label: "Check-out", value: formatDateLong(range.to) },
+              { label: "Nights", value: String(quote.nights) },
               {
                 label: "Access",
                 value: "Stay Plai Laem, train any camp",
               },
               { label: "Contact", value: contact.email },
             ]}
-            totalAmount={selectedPackage.price ?? 0}
-            note={selectedPackage.notes ?? undefined}
+            totalAmount={quote.total}
           />
           <p className="text-xs text-on-surface-variant border-l-2 border-primary/40 pl-3">
             {ROOM_RESERVATION_POLICY}
