@@ -7,7 +7,11 @@ import { getInventoryKey } from "@/lib/admin/inventory";
 import { checkRangeAvailability } from "@/lib/admin/availability";
 import { getCheckoutOrigin } from "@/lib/utils/origin";
 import { verifyTurnstile } from "@/lib/security/turnstile";
-import { isSlotWithinCutoff, getCutoffHoursForSlot } from "@/content/schedule";
+import {
+  PRIVATE_SLOT_CAPACITY,
+  isSlotWithinCutoff,
+  getCutoffHoursForSlot,
+} from "@/content/schedule";
 import {
   hasSlotCapacity,
   isSlotClosed,
@@ -159,9 +163,12 @@ export async function POST(request: Request) {
       );
     }
 
-    // If this is a private session, create an availability block for the slot
+    // If this is a private session, create an availability block for the slot.
+    // Insert-then-verify: two concurrent checkouts can both pass the capacity
+    // pre-check, so we re-count AFTER inserting our own block and roll back
+    // if the slot overflowed.
     if (data.type === "private" && data.time_slot) {
-      await supabase
+      const { error: blockErr } = await supabase
         .from("availability_blocks")
         .insert({
           date: data.start_date,
@@ -171,6 +178,34 @@ export async function POST(request: Request) {
           is_blocked: true,
           reason: `Booking ${booking.id}`,
         });
+      if (blockErr) {
+        console.error("Slot block insert failed:", blockErr);
+        await supabase.from("bookings").delete().eq("id", booking.id);
+        return NextResponse.json(
+          { error: "Could not reserve the slot. Please try again." },
+          { status: 500 },
+        );
+      }
+
+      const occupiedAfter = await getSlotOccupancy(supabase, {
+        date: data.start_date,
+        timeSlot: data.time_slot,
+        camp: data.camp as "bo-phut" | "plai-laem",
+      });
+      if (occupiedAfter > PRIVATE_SLOT_CAPACITY) {
+        await supabase
+          .from("availability_blocks")
+          .delete()
+          .eq("reason", `Booking ${booking.id}`);
+        await supabase.from("bookings").delete().eq("id", booking.id);
+        return NextResponse.json(
+          {
+            error:
+              "This slot just filled up at the selected camp. Please pick another time or camp.",
+          },
+          { status: 409 },
+        );
+      }
     }
 
     const origin = getCheckoutOrigin(request);
