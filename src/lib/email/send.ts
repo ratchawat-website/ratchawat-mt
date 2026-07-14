@@ -9,6 +9,7 @@ import {
 import { DTVAdminNotification } from "./templates/DTVAdminNotification";
 import type { BookingEmailData } from "./types";
 import { getPriceById } from "@/content/pricing";
+import { stayLabelFromPriceId } from "@/lib/booking/stay";
 
 function getResend(): Resend {
   if (!process.env.RESEND_API_KEY) {
@@ -30,8 +31,10 @@ function getFromAddress(): string {
 
 export async function sendBookingConfirmationEmail(booking: BookingEmailData) {
   const resend = getResend();
-  const pkg = getPriceById(booking.price_id);
-  const packageName = pkg?.name ?? booking.price_id;
+  const packageName =
+    getPriceById(booking.price_id)?.name ??
+    stayLabelFromPriceId(booking.price_id) ??
+    booking.price_id;
 
   const html = await render(BookingConfirmed({ booking, packageName }));
 
@@ -45,8 +48,10 @@ export async function sendBookingConfirmationEmail(booking: BookingEmailData) {
 
 export async function sendAdminNotificationEmail(booking: BookingEmailData) {
   const resend = getResend();
-  const pkg = getPriceById(booking.price_id);
-  const packageName = pkg?.name ?? booking.price_id;
+  const packageName =
+    getPriceById(booking.price_id)?.name ??
+    stayLabelFromPriceId(booking.price_id) ??
+    booking.price_id;
 
   const html = await render(BookingNotification({ booking, packageName }));
 

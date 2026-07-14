@@ -1,5 +1,21 @@
 import { describe, it, expect } from "vitest";
-import { computeStayPrice, stayNights, StayPricingError } from "./stay";
+import {
+  computeStayPrice,
+  stayNights,
+  stayLabelFromPriceId,
+  StayPricingError,
+} from "./stay";
+
+describe("stayLabelFromPriceId", () => {
+  it("labels stay ids", () => {
+    expect(stayLabelFromPriceId("stay-room-normal")).toBe("Standard Room");
+    expect(stayLabelFromPriceId("stay-bungalow-fighter")).toBe("Fighter Program + Private Bungalow");
+  });
+
+  it("returns null for non-stay ids", () => {
+    expect(stayLabelFromPriceId("private-adult-solo")).toBeNull();
+  });
+});
 
 describe("stayNights", () => {
   it("counts hotel nights (checkout morning frees the night)", () => {

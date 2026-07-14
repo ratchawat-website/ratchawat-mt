@@ -7,6 +7,7 @@ import JsonLd from "@/components/seo/JsonLd";
 import { organizationSchema } from "@/components/seo/SchemaOrg";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getPriceById } from "@/content/pricing";
+import { stayLabelFromPriceId } from "@/lib/booking/stay";
 import { CheckCircle, Mail, MapPin, Clock } from "lucide-react";
 import { formatDateShort } from "@/lib/utils/date-format";
 
@@ -65,10 +66,12 @@ async function resolveBooking(
     const data = rows[0];
     const totalAmount = rows.reduce((sum, b) => sum + b.price_amount, 0);
 
-    const pkg = getPriceById(data.price_id);
     return {
       id: data.id,
-      packageName: pkg?.name ?? data.price_id,
+      packageName:
+        getPriceById(data.price_id)?.name ??
+        stayLabelFromPriceId(data.price_id) ??
+        data.price_id,
       startDate: data.start_date,
       endDate: data.end_date,
       timeSlot: data.time_slot,

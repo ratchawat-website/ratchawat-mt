@@ -7,6 +7,13 @@ import {
 
 export class StayPricingError extends Error {}
 
+/** Human label for a stay price_id ("stay-room-normal" -> "Standard Room"). */
+export function stayLabelFromPriceId(priceId: string): string | null {
+  const match = priceId.match(/^stay-(room|bungalow)-(normal|fighter)$/);
+  if (!match) return null;
+  return getRateCard(match[1] as StayUnit, match[2] as StayPlan)?.label ?? null;
+}
+
 export interface StayQuote {
   total: number;
   nights: number;
