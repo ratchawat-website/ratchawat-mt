@@ -77,6 +77,7 @@ export async function POST(request: Request) {
     const stripe = getStripe();
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
+      locale: "en",
       payment_method_types: ["card"],
       line_items: [{ price: stripePriceId, quantity: 1 }],
       metadata: {
