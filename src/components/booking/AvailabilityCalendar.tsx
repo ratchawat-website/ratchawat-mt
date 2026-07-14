@@ -6,8 +6,7 @@ import { createClient } from "@/lib/supabase/browser";
 import { Matcher } from "react-day-picker";
 import { PRIVATE_SLOTS } from "@/lib/config/slots";
 import { PRIVATE_SLOT_CAPACITY } from "@/content/schedule";
-import { INVENTORY, type InventoryKey } from "@/lib/admin/inventory";
-import { addDays, format, startOfToday } from "date-fns";
+import { format, startOfToday } from "date-fns";
 
 interface AvailabilityBlock {
   date: string;
@@ -18,12 +17,10 @@ interface AvailabilityBlock {
 }
 
 interface Props {
-  type: "private" | "camp-stay";
+  type: "private";
   selected: Date | undefined;
   onSelect: (date: Date | undefined) => void;
   onAvailableSlotsChange?: (slots: string[]) => void;
-  inventoryKey?: InventoryKey;
-  stayDurationDays?: number;
   /**
    * Camp filter for private bookings. Per-slot blocks only count toward
    * capacity for the camp they belong to, so availability must be
@@ -43,68 +40,37 @@ export default function AvailabilityCalendar({
   selected,
   onSelect,
   onAvailableSlotsChange,
-  inventoryKey,
-  stayDurationDays,
   camp,
   unitsRequested = 1,
 }: Props) {
   const [blocks, setBlocks] = useState<AvailabilityBlock[]>([]);
-  const [occupancy, setOccupancy] = useState<Record<string, number>>({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const today = new Date();
-    const from = format(today, "yyyy-MM-dd");
-    const to = format(addDays(today, 180), "yyyy-MM-dd");
-
     const supabase = createClient();
-    // Compute block types to fetch based on booking type:
-    // - private sessions are blocked by full closures, full-day private blocks, and per-slot blocks
-    // - camp-stay / fighter are only blocked by full closures
-    const blockTypes =
-      type === "private"
-        ? ["full", "private", "private-slot", "private-slot-closure"]
-        : ["full"];
-    const blocksPromise = supabase
+    // Private sessions are blocked by full closures, full-day private
+    // blocks, and per-slot blocks. (Stays use StayCalendar instead.)
+    supabase
       .from("availability_blocks")
       .select("date, time_slot, type, camp, units")
-      .in("type", blockTypes)
+      .in("type", ["full", "private", "private-slot", "private-slot-closure"])
       .eq("is_blocked", true)
       .then(({ data, error }) => {
         if (error) {
           console.error("Failed to load availability:", error);
-          return [];
+          setBlocks([]);
+        } else {
+          setBlocks((data ?? []) as AvailabilityBlock[]);
         }
-        return data ?? [];
-      });
-
-    const occupancyPromise = inventoryKey
-      ? fetch(
-          `/api/availability/occupancy?key=${inventoryKey}&from=${from}&to=${to}`,
-        )
-          .then((r) => r.json())
-          .then((json) => (json.occupancy ?? {}) as Record<string, number>)
-          .catch((err) => {
-            console.error("Failed to load occupancy:", err);
-            return {};
-          })
-      : Promise.resolve({});
-
-    Promise.all([blocksPromise, occupancyPromise]).then(
-      ([blocksData, occupancyData]) => {
-        setBlocks(blocksData as AvailabilityBlock[]);
-        setOccupancy(occupancyData);
         setLoading(false);
-      },
-    );
-  }, [type, inventoryKey]);
+      });
+  }, [type]);
 
   const disabledDays: Matcher[] = useMemo(() => {
     const blockedDates = new Set<string>();
-    // For private bookings we track occupancy per slot per camp so we can
-    // tell whether an entire day is saturated (every slot × relevant
-    // camps at capacity). For simple full-day blocks we just flag the
-    // date.
+    // We track occupancy per slot per camp so we can tell whether an
+    // entire day is saturated (every slot × relevant camps at capacity).
+    // For simple full-day blocks we just flag the date.
     const dateSlotCampCount = new Map<string, Map<string, number>>();
     // Hard closures (admin "block this slot for everyone"): one row is
     // enough to disable the slot regardless of trainer capacity.
@@ -133,62 +99,31 @@ export default function AvailabilityCalendar({
       }
     }
 
-    if (type === "private") {
-      // A day is fully blocked when every slot is either at capacity or
-      // hard-closed by admin.
-      const allDates = new Set<string>([
-        ...dateSlotCampCount.keys(),
-        ...dateHardClosedSlots.keys(),
-      ]);
-      for (const date of allDates) {
-        const slotMap = dateSlotCampCount.get(date) ?? new Map<string, number>();
-        const closedSet = dateHardClosedSlots.get(date) ?? new Set<string>();
-        const unavailableSlots = new Set<string>(closedSet);
-        for (const [slot, n] of slotMap.entries()) {
-          if (n + unitsRequested > PRIVATE_SLOT_CAPACITY) {
-            unavailableSlots.add(slot);
-          }
-        }
-        if (unavailableSlots.size >= PRIVATE_SLOTS.length) {
-          blockedDates.add(date);
+    // A day is fully blocked when every slot is either at capacity or
+    // hard-closed by admin.
+    const allDates = new Set<string>([
+      ...dateSlotCampCount.keys(),
+      ...dateHardClosedSlots.keys(),
+    ]);
+    for (const date of allDates) {
+      const slotMap = dateSlotCampCount.get(date) ?? new Map<string, number>();
+      const closedSet = dateHardClosedSlots.get(date) ?? new Set<string>();
+      const unavailableSlots = new Set<string>(closedSet);
+      for (const [slot, n] of slotMap.entries()) {
+        if (n + unitsRequested > PRIVATE_SLOT_CAPACITY) {
+          unavailableSlots.add(slot);
         }
       }
-    }
-
-    // Capacity-based blocking
-    if (inventoryKey) {
-      const capacity = INVENTORY[inventoryKey];
-      const duration = stayDurationDays ?? 1;
-
-      // For multi-night stays, block check-in date if ANY night during the stay is at capacity
-      // For single-day, block any day at capacity
-      if (duration > 1) {
-        // Iterate all possible check-in dates in the occupancy window
-        for (const [dateStr, count] of Object.entries(occupancy)) {
-          if (count < capacity) continue;
-          // This night is full — find all check-in dates whose stay overlaps this night.
-          // A check-in on D occupies nights D, D+1, ..., D+(duration-1).
-          // Night N is blocked if D <= N <= D+(duration-1), i.e. N-(duration-1) <= D <= N.
-          const nightDate = new Date(dateStr + "T00:00:00");
-          for (let offset = 0; offset < duration; offset++) {
-            const checkInDate = new Date(
-              nightDate.getTime() - offset * 86400000,
-            );
-            blockedDates.add(format(checkInDate, "yyyy-MM-dd"));
-          }
-        }
-      } else {
-        for (const [dateStr, count] of Object.entries(occupancy)) {
-          if (count >= capacity) blockedDates.add(dateStr);
-        }
+      if (unavailableSlots.size >= PRIVATE_SLOTS.length) {
+        blockedDates.add(date);
       }
     }
 
     return Array.from(blockedDates).map((d) => new Date(d + "T00:00:00"));
-  }, [blocks, type, occupancy, inventoryKey, stayDurationDays, camp, unitsRequested]);
+  }, [blocks, camp, unitsRequested]);
 
   useEffect(() => {
-    if (!selected || type !== "private" || !onAvailableSlotsChange) return;
+    if (!selected || !onAvailableSlotsChange) return;
     // Use date-fns `format` (local time) rather than toISOString() which
     // shifts to UTC and can silently skip a day in timezones ahead of UTC.
     const dateStr = format(selected, "yyyy-MM-dd");
@@ -218,12 +153,7 @@ export default function AvailabilityCalendar({
         (slotCounts.get(s) ?? 0) + unitsRequested <= PRIVATE_SLOT_CAPACITY,
     );
     onAvailableSlotsChange(available);
-  }, [selected, blocks, type, onAvailableSlotsChange, camp, unitsRequested]);
-
-  // Private sessions can be booked same-day: the per-slot cutoff (2h, or 12h
-  // for early-morning slots) handles which slots are still bookable today, so the
-  // calendar must keep today selectable. Camp stays remain next-day-onward.
-  const minDate = type === "private" ? startOfToday() : addDays(startOfToday(), 1);
+  }, [selected, blocks, onAvailableSlotsChange, camp, unitsRequested]);
 
   if (loading) {
     return (
@@ -231,11 +161,14 @@ export default function AvailabilityCalendar({
     );
   }
 
+  // Private sessions can be booked same-day: the per-slot cutoff (2h, or 12h
+  // for early-morning slots) handles which slots are still bookable today, so
+  // the calendar must keep today selectable.
   return (
     <DatePicker
       selected={selected}
       onSelect={onSelect}
-      minDate={minDate}
+      minDate={startOfToday()}
       disabledDays={disabledDays}
     />
   );
