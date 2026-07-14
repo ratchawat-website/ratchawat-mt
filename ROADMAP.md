@@ -3,8 +3,8 @@
 > **Source of truth for what to build.** Read this at the start of every session alongside PROJECT-STATUS.md.
 > Update task statuses as work progresses. Never start work without checking the current phase.
 
-**Last updated:** 2026-07-14 (vagues 1, 2a et 2b implémentées sur branches, attente approval)
-**Current phase:** Post-launch — Brief cliente juillet 2026 (vagues 1 + 2a + 2b done on branches — awaiting Rd approval + Stripe LIVE seed + merge)
+**Last updated:** 2026-07-14 (vagues 1 + 2a + 2b MERGÉES et DÉPLOYÉES en prod, seed Stripe LIVE fait)
+**Current phase:** Post-launch — Brief cliente juillet 2026 **SHIPPED** (reste : archivage des anciens prix Stripe live + 4 confirmations cliente spec §7)
 
 > **Phase ordering (post-Phase 4 restructure, 2026-04-15):** Before go-live we split the generic "Security & Quality" bucket into 4 sequential phases (5 → 8) so work happens in the right order. Go-live (Phase 9) is the FINAL phase, unblocked only when all content, media, SEO, and security/perf/a11y work is done. Do not skip ahead.
 
@@ -12,7 +12,7 @@
 
 ## Vague 1 — Fixes & Content, brief cliente juillet 2026
 
-**Status:** IMPLEMENTED 2026-07-14 on branch `feat/fixes-and-content-july` — **awaiting Rd approval + Stripe LIVE seed + merge** (strict order, see handoff below)
+**Status:** SHIPPED 2026-07-14 — merged into main (via `feat/booking-v2-july`) and deployed to production
 **Spec:** `docs/superpowers/specs/2026-07-10-brief-juillet-design.md` (sections 3 et 6)
 **Plan:** `docs/superpowers/plans/2026-07-10-vague-1-fixes-and-content.md`
 
@@ -20,7 +20,7 @@
 
 ## Vague 2a — Réservation privée v2, brief cliente juillet 2026
 
-**Status:** IMPLEMENTED 2026-07-14 on branch `feat/booking-v2-july` (créée depuis `feat/fixes-and-content-july`, vague 1 non mergée) — **awaiting Rd approval, NE PAS merger**
+**Status:** SHIPPED 2026-07-14 — merged into main and deployed to production (recette Rd faite : paiement réel test rejoué, emails reçus, 3 bugs trouvés et corrigés)
 **Spec:** `docs/superpowers/specs/2026-07-10-brief-juillet-design.md` (section 4)
 **Plan:** `docs/superpowers/plans/2026-07-10-vague-2a-private-booking-v2.md`
 
@@ -46,7 +46,7 @@ Vérification manuelle restante pour Rd: annulation admin d'une session d'un pan
 
 ## Vague 2b — Hébergement par paliers à dates libres, brief cliente juillet 2026
 
-**Status:** IMPLEMENTED 2026-07-14 on branch `feat/booking-v2-july` (après la 2a) — **awaiting Rd approval + Stripe LIVE seed + merge, NE PAS merger**
+**Status:** SHIPPED 2026-07-14 — merged into main and deployed to production. Seed LIVE done (Accommodation Stay `prod_UskxQSrmezEJNQ`, 10-pack, prix syncés). Smoke prod auto vérifié (montants /pricing, /accommodation, /booking + route stay protégée par Turnstile).
 **Spec:** `docs/superpowers/specs/2026-07-10-brief-juillet-design.md` (section 5)
 **Plan:** `docs/superpowers/plans/2026-07-10-vague-2b-accommodation-tiers.md`
 
@@ -66,10 +66,10 @@ Vérification manuelle restante pour Rd: annulation admin d'une session d'un pan
 
 ### Deployment checklist vague 2b (STRICT order — rien mergé ni pushé)
 
-1. [ ] Rd reviews the diff (`git log --oneline main..feat/booking-v2-july` — contient 2a + 2b, et la branche repose sur la vague 1)
-2. [ ] Rd runs `npm run stripe:seed` with the LIVE key (creates the LIVE "Accommodation Stay" product, fills `STAY_STRIPE_PRODUCT_LIVE` in `stay-pricing.ts`) → commit that diff on the branch
-3. [ ] Merge + Vercel deploy
-4. [ ] Prod smoke test: camp-stay wizard room 10 nights → quote 11,420 and Stripe page shows the same amount (do NOT pay); private wizard 2-session cart up to the Stripe page (do NOT pay); admin drawer in units
+1. [x] Rd reviews the diff (recette manuelle Rd 2026-07-14, 3 bugs corrigés)
+2. [x] Seed LIVE done 2026-07-14 (`prod_UskxQSrmezEJNQ`), diff commité (`5367d0d`)
+3. [x] Merged + deployed 2026-07-14 (fast-forward `1004ca4..5367d0d`)
+4. [ ] Prod smoke test visuel (Rd): camp-stay wizard room 10 nights → quote 11,420 and Stripe page shows the same amount (do NOT pay); private wizard 2-session cart up to the Stripe page (do NOT pay); admin drawer in units. (Montants des pages + route stay déjà vérifiés automatiquement.)
 5. [ ] Rappels post-merge: les 4 confirmations cliente du spec §7 restent ouvertes (prix groupe 2 vs 3, groupe kids, délai DTV, tarif nuit supp bungalow) — chaque réponse = simple édition de `stay-pricing.ts`/config + redéploiement
 
 ### Tasks (all done on branch)
@@ -90,10 +90,10 @@ Vérification manuelle restante pour Rd: annulation admin d'une session d'un pan
 
 ### Deployment checklist (STRICT order — nothing merged or pushed yet)
 
-1. [ ] Rd reviews the diff (`git log --oneline main..feat/fixes-and-content-july`)
-2. [ ] Rd runs `npm run stripe:seed` with the LIVE key (creates 10-pack + new prices 1000/1400/35000 live, rewrites live IDs in pricing.ts; OLD prices stay active so prod keeps working) → commit that diff on the branch
-3. [ ] Merge into main + Vercel deploy
-4. [ ] Prod smoke test: /pricing shows 1,000/9,000/1,400/35,000; private wizard up to the Stripe page (do NOT pay) to check the live amount
+1. [x] Diff reviewed (recette Rd 2026-07-14)
+2. [x] Seed LIVE done 2026-07-14 (10-pack + prices 1000/1400/35000, old prices kept active)
+3. [x] Merged + deployed 2026-07-14
+4. [x] Prod smoke test 2026-07-14: /pricing serves 1,000/9,000/1,400/35,000 (auto-vérifié)
 5. [ ] POST-deploy only: archive the old LIVE prices (solo 800, group 600, dtv unlimited 33000) in the Stripe dashboard. Non-urgent, cosmetic.
 
 Rollback = revert the PR. Old prices stay active until step 5, so a revert restores a 100% functional site immediately.
