@@ -37,6 +37,9 @@ export interface PriceItem {
   capacity?: "per-participant" | "per-session";
   /** Allowed participant range for the booking form. Absent = exactly 1. */
   participants?: { min: number; max: number };
+  /** Superseded item: hidden from wizards, pages, and Stripe seed. Kept so
+   * historic bookings still resolve via getPriceById. */
+  archived?: boolean;
   stripeProductIdTest?: string;
   stripePriceIdTest?: string;
   stripeProductIdLive?: string;
@@ -476,6 +479,7 @@ export const PRICES: PriceItem[] = [
     ],
     notes: "Plai Laem camp only. Electricity included for weekly stays.",
     bookingType: "camp-stay",
+    archived: true,
   },
   {
     id: "camp-stay-2weeks",
@@ -499,6 +503,7 @@ export const PRICES: PriceItem[] = [
     notes: "Plai Laem camp only. Electricity included for weekly stays.",
     popular: true,
     bookingType: "camp-stay",
+    archived: true,
   },
   {
     id: "camp-stay-1month",
@@ -520,6 +525,7 @@ export const PRICES: PriceItem[] = [
     ],
     notes: "Plai Laem camp only. Electricity charged separately for monthly stays.",
     bookingType: "camp-stay",
+    archived: true,
   },
   {
     id: "camp-stay-bungalow-monthly",
@@ -541,6 +547,7 @@ export const PRICES: PriceItem[] = [
     ],
     notes: "Plai Laem camp only. Electricity charged separately. Only 1 bungalow available.",
     bookingType: "camp-stay",
+    archived: true,
   },
 
   // --- FIGHTER PROGRAM + ACCOMMODATION ---
@@ -564,6 +571,7 @@ export const PRICES: PriceItem[] = [
     ],
     notes: "Plai Laem camp only. Electricity charged separately.",
     bookingType: "fighter",
+    archived: true,
   },
   {
     id: "fighter-stay-bungalow-monthly",
@@ -585,6 +593,7 @@ export const PRICES: PriceItem[] = [
     ],
     notes: "Plai Laem camp only. Electricity charged separately. Only 1 bungalow available on-site.",
     bookingType: "fighter",
+    archived: true,
   },
 
   // --- DTV (DESTINATION THAILAND VISA) ---
@@ -666,10 +675,10 @@ export const getPriceById = (id: string): PriceItem | undefined =>
   PRICES.find((p) => p.id === id);
 
 export const getPricesByCategory = (category: PriceCategory): PriceItem[] =>
-  PRICES.filter((p) => p.category === category);
+  PRICES.filter((p) => p.category === category && !p.archived);
 
 export const getPricesByBookingType = (type: BookingType): PriceItem[] =>
-  PRICES.filter((p) => p.bookingType === type);
+  PRICES.filter((p) => p.bookingType === type && !p.archived);
 
 export const formatPrice = (item: PriceItem): string =>
   item.price !== null

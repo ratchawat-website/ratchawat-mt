@@ -51,6 +51,7 @@ async function main() {
   const toSeed = PRICES.filter(
     (p) =>
       p.price !== null &&
+      !p.archived &&
       !p[productField as keyof typeof p] &&
       !p.id.startsWith("bodyweight-"),
   );
@@ -109,6 +110,7 @@ async function main() {
   const seeded = PRICES.filter(
     (p) =>
       p.price !== null &&
+      !p.archived &&
       p[priceField as keyof typeof p] &&
       !p.id.startsWith("bodyweight-"),
   );
@@ -153,6 +155,29 @@ async function main() {
   console.log(
     `\nDone. Updated src/content/pricing.ts with ${mode} Stripe IDs.`,
   );
+
+  // Permanent "Accommodation Stay" product: stay checkouts attach a computed
+  // price_data amount to it (tiered pricing, no pre-created Price).
+  const STAY_FILE = path.resolve(process.cwd(), "src/content/stay-pricing.ts");
+  const stayField = isLive ? "STAY_STRIPE_PRODUCT_LIVE" : "STAY_STRIPE_PRODUCT_TEST";
+  let stayContent = fs.readFileSync(STAY_FILE, "utf8");
+  const stayFieldRegex = new RegExp(`export const ${stayField} = "([^"]*)";`);
+  const currentStayId = stayContent.match(stayFieldRegex)?.[1] ?? "";
+
+  if (!currentStayId) {
+    const stayProduct = await stripe.products.create({
+      name: "Accommodation Stay",
+      description:
+        "Room or bungalow stay at Plai Laem camp, training included. Amount computed from the tiered rate card at checkout.",
+      metadata: { price_id: "stay-dynamic", category: "camp-stay", booking_type: "camp-stay" },
+    });
+    stayContent = stayContent.replace(
+      stayFieldRegex,
+      `export const ${stayField} = "${stayProduct.id}";`,
+    );
+    fs.writeFileSync(STAY_FILE, stayContent);
+    console.log(`  + Accommodation Stay product: ${stayProduct.id} (${mode})`);
+  }
 }
 
 main().catch((err) => {

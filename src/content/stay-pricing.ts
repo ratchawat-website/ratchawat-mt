@@ -98,7 +98,7 @@ export function stayPriceId(unit: StayUnit, plan: StayPlan): string {
 
 // Written by scripts/stripe-seed-products.ts (one permanent Product; each
 // checkout attaches a computed price_data amount to it).
-export const STAY_STRIPE_PRODUCT_TEST = "";
+export const STAY_STRIPE_PRODUCT_TEST = "prod_UshsAgdTqyTiT1";
 export const STAY_STRIPE_PRODUCT_LIVE = "";
 
 export function getStayStripeProduct(): string {
