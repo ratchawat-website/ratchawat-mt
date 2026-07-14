@@ -14,6 +14,7 @@ import { getPricesByBookingType, getPriceById } from "@/content/pricing";
 import { PRIVATE_SLOTS } from "@/lib/config/slots";
 import {
   PRIVATE_BOOKING_WHATSAPP_FALLBACK,
+  SLOT_GROUPS,
   getCutoffHoursForSlot,
   buildWhatsAppUrl,
   isSlotWithinCutoff,
@@ -269,29 +270,44 @@ export default function PrivateWizard() {
                 <p className="text-sm font-medium text-on-surface mb-3">
                   Available time slots
                 </p>
-                <div className="grid grid-cols-4 gap-2">
-                  {slotStates.map(({ slot, isAvailable, withinCutoff, cutoffHours }) => (
-                    <button
-                      type="button"
-                      key={slot}
-                      disabled={!isAvailable}
-                      onClick={() => setTimeSlot(slot)}
-                      aria-label={
-                        withinCutoff
-                          ? `${slot}, less than ${cutoffHours} hours away, book by WhatsApp`
-                          : slot
-                      }
-                      className={`rounded-[var(--radius-input)] py-3 text-sm font-semibold border-2 transition-colors ${
-                        timeSlot === slot
-                          ? "border-primary bg-primary text-white"
-                          : isAvailable
-                            ? "border-outline-variant bg-surface-lowest text-on-surface hover:border-outline"
-                            : "border-outline-variant bg-surface-lowest text-on-surface-variant/30 line-through cursor-not-allowed"
-                      }`}
-                    >
-                      {slot}
-                    </button>
-                  ))}
+                <div className="space-y-4">
+                  {SLOT_GROUPS.map((group) => {
+                    const groupStates = slotStates.filter((s) =>
+                      (group.slots as readonly string[]).includes(s.slot),
+                    );
+                    if (groupStates.length === 0) return null;
+                    return (
+                      <div key={group.label}>
+                        <p className="text-xs uppercase tracking-widest text-on-surface-variant mb-2">
+                          {group.label}
+                        </p>
+                        <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+                          {groupStates.map(({ slot, isAvailable, withinCutoff, cutoffHours }) => (
+                            <button
+                              type="button"
+                              key={slot}
+                              disabled={!isAvailable}
+                              onClick={() => setTimeSlot(slot)}
+                              aria-label={
+                                withinCutoff
+                                  ? `${slot}, less than ${cutoffHours} hours away, book by WhatsApp`
+                                  : slot
+                              }
+                              className={`rounded-[var(--radius-input)] py-3 text-sm font-semibold border-2 transition-colors ${
+                                timeSlot === slot
+                                  ? "border-primary bg-primary text-white"
+                                  : isAvailable
+                                    ? "border-outline-variant bg-surface-lowest text-on-surface hover:border-outline"
+                                    : "border-outline-variant bg-surface-lowest text-on-surface-variant/30 line-through cursor-not-allowed"
+                              }`}
+                            >
+                              {slot}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
                 <div className="mt-4 flex items-start gap-3 rounded-[var(--radius-card)] border-2 border-primary/30 bg-primary/5 p-4">
                   <MessageCircle

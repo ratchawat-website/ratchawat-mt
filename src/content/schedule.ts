@@ -17,8 +17,9 @@ export const SCHEDULE = {
     location: "both",
   },
   private: {
-    morning: { start: "7:00", end: "9:00", duration: "1h slots" },
-    afternoon: { start: "11:00", end: "17:00", duration: "1h slots" },
+    morning: { start: "7:00", end: "10:00", duration: "1h slots" },
+    afternoon: { start: "10:30", end: "17:00", duration: "1h slots" },
+    evening: { start: "18:30", end: "20:00", duration: "1h slots" },
     location: "both",
   },
   fighter: {
@@ -28,37 +29,60 @@ export const SCHEDULE = {
   },
 } as const;
 
-// Private session slots (hourly). Derived to stay aligned with SCHEDULE.private.
-// Morning: 7:00, 8:00 (before group class at 9:00).
-// Afternoon: 11:00 through 16:00 (before group class at 17:00).
+// Private session start times, client-approved 2026-07-10.
+// 30-minute starts, sessions last 60 minutes: two consecutive starts overlap,
+// which the client accepts (capacity is counted per start, not per overlap).
 export const PRIVATE_SLOT_TIMES = [
   "07:00",
+  "07:30",
   "08:00",
+  "08:30",
+  "09:00",
+  "10:30",
   "11:00",
+  "11:30",
   "12:00",
+  "12:30",
   "13:00",
+  "13:30",
   "14:00",
+  "14:30",
   "15:00",
+  "15:30",
   "16:00",
+  "18:30",
+  "19:00",
 ] as const;
 
 /**
  * Online private-session booking cutoffs.
- * Default slots: 2 hours notice. Early-morning slots (7:00, 8:00): 12 hours
- * notice, since trainers and admin commute before the session starts.
+ * Default slots: 2 hours notice. Early slots: 12 hours notice, since
+ * trainers and admin commute before the session starts.
  */
 export const PRIVATE_BOOKING_CUTOFF_HOURS_DEFAULT = 2;
 export const PRIVATE_BOOKING_CUTOFF_HOURS_EARLY = 12;
-export const EARLY_MORNING_SLOTS = ["07:00", "08:00"] as const;
+/** Slots starting before 09:30 need 12h notice (trainers commute early). */
+export const EARLY_CUTOFF_BEFORE = "09:30";
 
 export function getCutoffHoursForSlot(slot: string): number {
-  return (EARLY_MORNING_SLOTS as readonly string[]).includes(slot)
+  return slot < EARLY_CUTOFF_BEFORE
     ? PRIVATE_BOOKING_CUTOFF_HOURS_EARLY
     : PRIVATE_BOOKING_CUTOFF_HOURS_DEFAULT;
 }
 
 export const PRIVATE_BOOKING_WHATSAPP_FALLBACK =
-  "Slot too close for online booking? Send us a WhatsApp message and we will get back to you. Note: 7:00 and 8:00 sessions need 12 hours notice; later slots only need 2 hours.";
+  "Slot too close for online booking? Send us a WhatsApp message and we will get back to you. Note: sessions starting before 9:30 need 12 hours notice; later slots only need 2 hours.";
+
+/** Display groups for the private-slot picker. Must cover every slot once. */
+export const SLOT_GROUPS = [
+  { label: "Morning", slots: ["07:00", "07:30", "08:00", "08:30", "09:00"] },
+  { label: "Midday", slots: ["10:30", "11:00", "11:30", "12:00", "12:30"] },
+  {
+    label: "Afternoon",
+    slots: ["13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00"],
+  },
+  { label: "Evening", slots: ["18:30", "19:00"] },
+] as const;
 
 /**
  * Maximum simultaneous private sessions the camp can run per time slot,
@@ -81,7 +105,7 @@ export function buildWhatsAppUrl(message?: string): string {
 
 /**
  * Returns true when the given slot (HH:mm) on `date` starts in less than the
- * cutoff that applies to that slot (12h for 7:00 and 8:00, 2h for the rest).
+ * cutoff that applies to that slot (12h before 09:30, 2h for the rest).
  * Below the cutoff the client must reach out on WhatsApp instead of booking
  * online.
  */

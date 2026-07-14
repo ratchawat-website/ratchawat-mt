@@ -69,7 +69,7 @@ export async function POST(request: Request) {
       );
     }
 
-    // Private bookings: enforce slot-aware lead time (12h for 7:00/8:00,
+    // Private bookings: enforce slot-aware lead time (12h before 09:30,
     // 2h otherwise) + per-camp slot capacity.
     const units = getCapacityUnits(pkg, data.num_participants);
     if (data.type === "private" && data.time_slot) {

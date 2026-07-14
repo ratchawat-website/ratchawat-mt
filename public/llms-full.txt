@@ -10,7 +10,7 @@ We operate two camps:
 - **Bo Phut Camp**: Intimate, authentic street gym in Fisherman's Village, Bo Phut. Ideal for focused 1-on-1 training and small groups.
 - **Plai Laem Camp**: Larger, fully equipped facility near Big Buddha. Full-size ring, heavy bags, conditioning area, on-site rooms and a private bungalow. The Fighter Program runs here only.
 
-Ten Thai trainers teach at the camp. Most have professional fight records, several hold Thailand Boxing Sport Authority C-licences, and a few have competed at Rajadamnern Stadium, One Lumpinee, and Channel 7. Training runs six days a week (closed Sunday for training; the Plai Laem accommodation is bookable on Sundays). Group classes run 9:00 to 10:30 and 17:00 to 18:30. Private sessions are 60-minute slots between 7:00 and 17:00. The Fighter Program runs morning 7:30 to 10:00 and afternoon 16:00 to 18:30, six days a week, at Plai Laem only.
+Ten Thai trainers teach at the camp. Most have professional fight records, several hold Thailand Boxing Sport Authority C-licences, and a few have competed at Rajadamnern Stadium, One Lumpinee, and Channel 7. Training runs six days a week (closed Sunday for training; the Plai Laem accommodation is bookable on Sundays). Group classes run 9:00 to 10:30 and 17:00 to 18:30. Private sessions are 60 minutes, with start times every 30 minutes from 7:00 to 19:00 (last session ends 20:00). The Fighter Program runs morning 7:30 to 10:00 and afternoon 16:00 to 18:30, six days a week, at Plai Laem only.
 
 We hold a 5.0 out of 5 star rating on Google at both camps: 400+ verified reviews across Bo Phut and Plai Laem. Students mention patient trainers, beginner-friendly classes, clean facilities, and a welcoming international community.
 
@@ -20,7 +20,7 @@ We hold a 5.0 out of 5 star rating on Google at both camps: 400+ verified review
 Group sessions six days a week at both camps. Morning 9:00 to 10:30 and evening 17:00 to 18:30. Each class covers pad work, bag work, clinch technique, conditioning, and sparring. All levels welcome. Trainers walk the room and adjust intensity for each student.
 
 ### Private 1-on-1 Training
-60-minute private sessions with a dedicated trainer. Fully customised to your level and goals (technique refinement, fight preparation, fitness). Slots available between 7:00 and 17:00 by appointment. Booking cutoff: 12 hours before for the 7:00 and 8:00 slots, 2 hours before for any other slot. Six concurrent slots per camp; capacity is camp-wide rather than tied to a specific trainer.
+60-minute private sessions with a dedicated trainer. Fully customised to your level and goals (technique refinement, fight preparation, fitness). Sessions start every 30 minutes between 7:00 and 19:00 by appointment (last session ends 20:00). Booking cutoff: 12 hours before slots starting before 9:30, 2 hours before for any other slot. Six concurrent slots per camp; capacity is camp-wide rather than tied to a specific trainer.
 
 ### Kids Muay Thai
 Group classes for children ages 8-13 at both camps. Younger children (ages 3-7) train through private sessions, either 1-on-1 or in small groups of up to 3 kids. Focus on discipline, coordination, basic Muay Thai technique, and fitness in a safe, encouraging environment.
@@ -116,7 +116,7 @@ Payment accepted: card via Stripe (online), cash on the day, bank transfer (Wise
 - **Address**: Soi Sunday, Tambon Bo Put, Ko Samui District, Surat Thani 84320, Thailand
 - **Area**: Bo Phut, Fisherman's Village
 - **Character**: Intimate street gym, authentic atmosphere
-- **Hours**: Monday to Saturday (closed Sunday). Group: 9:00 to 10:30 and 17:00 to 18:30. Private: 60-minute slots between 7:00 and 17:00.
+- **Hours**: Monday to Saturday (closed Sunday), 7:00 to 20:00. Group: 9:00 to 10:30 and 17:00 to 18:30. Private: 60-minute sessions starting every 30 minutes from 7:00 to 19:00.
 
 ### Plai Laem Camp
 - **Address**: 20, 33 หมู่ที่ 5 ปลายแหลม ซอย 13, Tambon Bo Put, Amphoe Ko Samui, Surat Thani 84320, Thailand

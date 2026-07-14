@@ -228,7 +228,7 @@ export default function PrivateLessonsPage() {
       <section className="py-12 px-6 sm:px-10 md:px-16 lg:px-20">
         <div className="max-w-3xl mx-auto">
           <p className="text-on-surface-variant text-base leading-relaxed text-center">
-            Private 1-on-1 Muay Thai lessons at Chor Ratchawat in Koh Samui run 60 minutes for 1,000 THB per session, with a 10-session pack at 9,000 THB. Available with experienced Thai trainers including Kru Ratchawat (Founder), Kru Kuan (Head Trainer Bo Phut), and Kru Mam (Southern Thailand Champion). Slots run between 7:00 and 17:00, Monday to Saturday, at both Bo Phut and Plai Laem. Booking cutoff is 12 hours before the 7:00 and 8:00 slots, 2 hours before any other slot.
+            Private 1-on-1 Muay Thai lessons at Chor Ratchawat in Koh Samui run 60 minutes for 1,000 THB per session, with a 10-session pack at 9,000 THB. Available with experienced Thai trainers including Kru Ratchawat (Founder), Kru Kuan (Head Trainer Bo Phut), and Kru Mam (Southern Thailand Champion). Sessions start every 30 minutes between 7:00 and 19:00, Monday to Saturday, at both Bo Phut and Plai Laem. Booking cutoff is 12 hours before slots starting before 9:30, 2 hours before any other slot.
           </p>
         </div>
       </section>

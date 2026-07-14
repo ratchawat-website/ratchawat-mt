@@ -205,7 +205,7 @@ export default function AvailabilityCalendar({
   }, [selected, blocks, type, onAvailableSlotsChange, camp]);
 
   // Private sessions can be booked same-day: the per-slot cutoff (2h, or 12h
-  // for 7:00/8:00 slots) handles which slots are still bookable today, so the
+  // for early-morning slots) handles which slots are still bookable today, so the
   // calendar must keep today selectable. Camp stays remain next-day-onward.
   const minDate = type === "private" ? startOfToday() : addDays(startOfToday(), 1);
 
