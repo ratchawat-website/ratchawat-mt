@@ -7,11 +7,12 @@ import { getInventoryKey } from "@/lib/admin/inventory";
 import { checkRangeAvailability } from "@/lib/admin/availability";
 import { getCheckoutOrigin } from "@/lib/utils/origin";
 import { verifyTurnstile } from "@/lib/security/turnstile";
+import { isSlotWithinCutoff, getCutoffHoursForSlot } from "@/content/schedule";
 import {
-  PRIVATE_SLOT_CAPACITY,
-  isSlotWithinCutoff,
-  getCutoffHoursForSlot,
-} from "@/content/schedule";
+  hasSlotCapacity,
+  isSlotClosed,
+  getSlotOccupancy,
+} from "@/lib/booking/capacity";
 
 function getStripe(): Stripe {
   if (!process.env.STRIPE_SECRET_KEY) {
@@ -75,54 +76,35 @@ export async function POST(request: Request) {
 
       const supabaseCheck = createAdminClient();
 
-      // Hard closure: admin toggled the slot off for everyone, regardless
-      // of the per-camp trainer capacity. One row is enough to refuse.
-      const { count: closureCount, error: closureError } = await supabaseCheck
-        .from("availability_blocks")
-        .select("id", { count: "exact", head: true })
-        .eq("type", "private-slot-closure")
-        .eq("is_blocked", true)
-        .eq("date", data.start_date)
-        .eq("time_slot", data.time_slot);
-      if (closureError) {
-        console.error("Closure check failed:", closureError);
+      try {
+        if (await isSlotClosed(supabaseCheck, data.start_date, data.time_slot)) {
+          return NextResponse.json(
+            {
+              error:
+                "This slot is closed on the selected date. Please pick another time.",
+            },
+            { status: 409 },
+          );
+        }
+        const occupied = await getSlotOccupancy(supabaseCheck, {
+          date: data.start_date,
+          timeSlot: data.time_slot,
+          camp: data.camp as "bo-phut" | "plai-laem",
+        });
+        if (!hasSlotCapacity(occupied)) {
+          return NextResponse.json(
+            {
+              error:
+                "This slot is fully booked at the selected camp. Please pick another time or camp.",
+            },
+            { status: 409 },
+          );
+        }
+      } catch (checkErr) {
+        console.error("Slot availability check failed:", checkErr);
         return NextResponse.json(
           { error: "Could not verify slot availability. Please try again." },
           { status: 500 },
-        );
-      }
-      if ((closureCount ?? 0) > 0) {
-        return NextResponse.json(
-          {
-            error:
-              "This slot is closed on the selected date. Please pick another time.",
-          },
-          { status: 409 },
-        );
-      }
-
-      const { count, error: countError } = await supabaseCheck
-        .from("availability_blocks")
-        .select("id", { count: "exact", head: true })
-        .eq("type", "private-slot")
-        .eq("is_blocked", true)
-        .eq("date", data.start_date)
-        .eq("time_slot", data.time_slot)
-        .eq("camp", data.camp);
-      if (countError) {
-        console.error("Capacity check failed:", countError);
-        return NextResponse.json(
-          { error: "Could not verify slot availability. Please try again." },
-          { status: 500 },
-        );
-      }
-      if ((count ?? 0) >= PRIVATE_SLOT_CAPACITY) {
-        return NextResponse.json(
-          {
-            error:
-              "This slot is fully booked at the selected camp. Please pick another time or camp.",
-          },
-          { status: 409 },
         );
       }
     }

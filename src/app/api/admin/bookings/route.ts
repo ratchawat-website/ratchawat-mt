@@ -6,6 +6,11 @@ import { getPriceById } from "@/content/pricing";
 import { getInventoryKey } from "@/lib/admin/inventory";
 import { checkRangeAvailability } from "@/lib/admin/availability";
 import { addDays, format } from "date-fns";
+import {
+  hasSlotCapacity,
+  isSlotClosed,
+  getSlotOccupancy,
+} from "@/lib/booking/capacity";
 
 function computeEndDate(priceId: string, startDate: string): string | null {
   let days: number | null = null;
@@ -66,23 +71,37 @@ export async function POST(request: Request) {
     }
   }
 
-  // Check private slot availability
+  // Check private slot availability: same rules as the public checkout
+  // (hard closure + per-camp trainer capacity), NOT "one booking blocks all".
   const admin = createAdminClient();
-  if (data.type === "private" && data.time_slot) {
-    const { data: existingBlock } = await admin
-      .from("availability_blocks")
-      .select("id")
-      .eq("date", data.start_date)
-      .eq("time_slot", data.time_slot)
-      .in("type", ["private-slot", "private", "full"])
-      .maybeSingle();
-
-    if (existingBlock) {
+  if (data.type === "private" && data.time_slot && data.camp !== "both") {
+    try {
+      if (await isSlotClosed(admin, data.start_date, data.time_slot)) {
+        return NextResponse.json(
+          {
+            error: `Time slot ${data.time_slot} is closed on ${data.start_date}.`,
+          },
+          { status: 409 },
+        );
+      }
+      const occupied = await getSlotOccupancy(admin, {
+        date: data.start_date,
+        timeSlot: data.time_slot,
+        camp: data.camp,
+      });
+      if (!hasSlotCapacity(occupied)) {
+        return NextResponse.json(
+          {
+            error: `Time slot ${data.time_slot} is fully booked at ${data.camp} on ${data.start_date} (${occupied}/6).`,
+          },
+          { status: 409 },
+        );
+      }
+    } catch (checkErr) {
+      console.error("Admin slot availability check failed:", checkErr);
       return NextResponse.json(
-        {
-          error: `Time slot ${data.time_slot} is already blocked on ${data.start_date}.`,
-        },
-        { status: 409 },
+        { error: "Could not verify slot availability. Please try again." },
+        { status: 500 },
       );
     }
   }
