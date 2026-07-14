@@ -911,7 +911,11 @@ Dans `main()`, après la boucle `for (const item of toSeed) { ... }` et avant l'
       description,
       default_price: newPrice.id,
     });
-    await stripe.prices.update(currentPriceId, { active: false });
+    // Deliberately NOT deactivating the old price here: in LIVE mode the
+    // currently deployed code still references it until the new deploy is
+    // out. Deactivating it during that window would break live checkouts.
+    // Old prices are archived AFTER the deploy (see handoff checklist).
+    console.log(`    old price kept active for zero-downtime cutover: ${currentPriceId}`);
 
     fileContent = fileContent.replace(currentPriceId, newPrice.id);
   }
@@ -929,7 +933,7 @@ Expected:
 
 - [ ] **Step 3: Vérifier dans le dashboard Stripe (TEST)**
 
-Les produits solo/group montrent le nouveau prix par défaut, l'ancien price est inactif, le produit groupe affiche la nouvelle description « One price per session ».
+Les produits solo/group montrent le nouveau prix par défaut (l'ancien price reste actif : il sera archivé en post-déploiement, voir Task 13), le produit groupe affiche la nouvelle description « One price per session ».
 
 - [ ] **Step 4: Checkout E2E de contrôle**
 
@@ -1422,8 +1426,9 @@ git commit -m "docs: cloture vague 1 juillet 2026 (bugs resa, tarifs, DTV, polic
 
 Présenter à Rd : le diff complet (`git log --oneline main..HEAD` + résumé), les résultats de la recette E2E, et la checklist de déploiement dans l'ordre STRICT :
 1. Approval du diff par Rd.
-2. Rd lance `npm run stripe:seed` avec la clé LIVE (crée le 10-pack + sync 1000/1400/35000 en live, réécrit les IDs live dans pricing.ts) ; committer ce diff sur la branche.
+2. Rd lance `npm run stripe:seed` avec la clé LIVE (crée le 10-pack + les nouveaux prices 1000/1400/35000 en live, réécrit les IDs live dans pricing.ts ; les ANCIENS prices restent actifs, donc la prod continue de tourner normalement) ; committer ce diff sur la branche. Cette étape peut se faire à n'importe quel moment avant le merge, sans fenêtre de risque.
 3. Merge dans main + déploiement Vercel.
 4. Smoke test prod : /pricing affiche 1,000/9,000/1,400/35,000 ; wizard privé jusqu'à la page Stripe (SANS payer) pour vérifier le montant live ; retour arrière.
+5. POST-DÉPLOIEMENT (une fois le smoke test validé) : archiver les anciens prices dans le dashboard Stripe LIVE (private-adult-solo 800, private-adult-group 600, dtv-6m-unlimited 33000) pour l'hygiène du catalogue. Non urgent, aucun impact fonctionnel.
 
-Rappel : le rollback = revert de la PR ; les anciens prices Stripe désactivés peuvent être réactivés depuis le dashboard si besoin.
+Rappel : le rollback = revert de la PR ; comme les anciens prices restent actifs jusqu'à l'étape 5, un revert redonne un site 100 % fonctionnel immédiatement.
