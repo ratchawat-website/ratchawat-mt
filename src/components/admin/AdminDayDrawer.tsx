@@ -349,6 +349,12 @@ export default function AdminDayDrawer({
                     </div>
                     <button
                       onClick={async () => {
+                        const linkedToBooking =
+                          block.reason?.startsWith("Booking ");
+                        const message = linkedToBooking
+                          ? "This block reserves a paid booking's slot. Removing it frees the slot for new customers while the booking stays active. Remove anyway?"
+                          : "Remove this block?";
+                        if (!window.confirm(message)) return;
                         setLoading(`del-${block.id}`);
                         await removeBlock(block.id);
                         onRefresh();
