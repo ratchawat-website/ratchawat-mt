@@ -343,23 +343,35 @@ export async function POST(request: Request) {
     const origin = getCheckoutOrigin(request);
 
     const stripe = getStripe();
-    const session = await stripe.checkout.sessions.create({
-      mode: "payment",
-      locale: "en",
-      payment_method_types: ["card"],
-      line_items: [
-        {
-          price: stripePriceId,
-          quantity: getStripeQuantity(pkg, data.num_participants),
+    let session: Stripe.Checkout.Session;
+    try {
+      session = await stripe.checkout.sessions.create({
+        mode: "payment",
+        locale: "en",
+        payment_method_types: ["card"],
+        line_items: [
+          {
+            price: stripePriceId,
+            quantity: getStripeQuantity(pkg, data.num_participants),
+          },
+        ],
+        metadata: {
+          booking_id: booking.id,
         },
-      ],
-      metadata: {
-        booking_id: booking.id,
-      },
-      customer_email: data.client_email,
-      success_url: `${origin}/booking/confirmed?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${origin}/booking?cancelled=1`,
-    });
+        customer_email: data.client_email,
+        success_url: `${origin}/booking/confirmed?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${origin}/booking?cancelled=1`,
+      });
+    } catch (stripeErr) {
+      // No Stripe session means no expired-webhook cleanup will ever come:
+      // remove the pending row so it stops consuming inventory.
+      console.error("Stripe session creation failed:", stripeErr);
+      await supabase.from("bookings").delete().eq("id", booking.id);
+      return NextResponse.json(
+        { error: "Payment provider error. Please try again." },
+        { status: 500 },
+      );
+    }
 
     return NextResponse.json({ url: session.url });
   } catch (err) {
