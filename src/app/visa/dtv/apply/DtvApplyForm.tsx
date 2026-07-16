@@ -88,7 +88,8 @@ function validate(form: FormState): Record<string, string> {
     const dob = new Date(`${form.date_of_birth}T00:00:00`);
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    if (Number.isNaN(dob.getTime()) || dob >= today) {
+    const oldest = new Date("1920-01-01T00:00:00");
+    if (Number.isNaN(dob.getTime()) || dob >= today || dob < oldest) {
       errors.date_of_birth = "Enter a valid date of birth.";
     }
   }
@@ -195,6 +196,29 @@ export default function DtvApplyForm() {
       const data = await res.json();
       if (data.url) {
         window.location.href = data.url;
+      } else if (res.status === 400 && Array.isArray(data.issues)) {
+        // Surface the server-side Zod messages on their fields instead of
+        // a generic error the user cannot act on.
+        const fieldErrors: Record<string, string> = {};
+        for (const issue of data.issues as {
+          path?: (string | number)[];
+          message?: string;
+        }[]) {
+          const key = issue.path?.[0];
+          if (typeof key === "string" && !(key in fieldErrors)) {
+            fieldErrors[key] = issue.message ?? "Invalid value.";
+          }
+        }
+        if (Object.keys(fieldErrors).length > 0) {
+          setErrors(fieldErrors);
+          const firstKey = Object.keys(fieldErrors)[0];
+          const el = document.querySelector<HTMLElement>(
+            `[data-field="${firstKey}"]`,
+          );
+          el?.scrollIntoView({ behavior: "smooth", block: "center" });
+        } else {
+          setApiError(data.error ?? "Something went wrong.");
+        }
       } else {
         setApiError(data.error ?? "Something went wrong.");
       }
