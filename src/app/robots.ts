@@ -15,8 +15,6 @@ export default function robots(): MetadataRoute.Robots {
           "/auth/",
           "/booking/confirmed",
           "/visa/dtv/confirmed",
-          "/privacy",
-          "/terms",
           // Legacy WordPress paths (no longer served, but block crawlers
           // from probing them just in case anything ever leaks).
           "/wp-admin/",

@@ -102,7 +102,7 @@ export default function ScheduleTable({
           </div>
           {hasFighter && (
             <div className="flex items-center gap-2 text-xs text-on-surface-variant">
-              <span className="w-2 h-2 rounded-full bg-red-500" />
+              <span className="w-2 h-2 rounded-full bg-blue-500" />
               Fighter Program
             </div>
           )}

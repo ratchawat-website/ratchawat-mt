@@ -63,7 +63,7 @@ const bookingTypes = [
     icon: Swords,
     title: "Fighter Program",
     from: "From 9,500 THB / month",
-    badge: "Bo Phut or Plai Laem",
+    badge: "Plai Laem only",
     description:
       "For athletes who want to compete. Two sessions a day, six days a week, with fight organization and corner support.",
     href: "/booking/fighter",

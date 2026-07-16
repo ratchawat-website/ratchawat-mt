@@ -428,7 +428,7 @@ export default function HomePage() {
             >
               fighter program
             </Link>
-            . Open 6 days a week from 8 AM to 8 PM. Drop-in sessions start at
+            . Open 6 days a week from 7 AM to 8 PM. Drop-in sessions start at
             400 THB.
           </p>
         </div>
