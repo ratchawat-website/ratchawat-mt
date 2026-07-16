@@ -12,6 +12,7 @@ import {
   isSlotClosed,
   getSlotOccupancy,
 } from "@/lib/booking/capacity";
+import { PRIVATE_SLOT_CAPACITY } from "@/content/schedule";
 import {
   computeBookingAmount,
   getCapacityUnits,
@@ -226,7 +227,7 @@ export async function POST(request: Request) {
 
   // Create private-slot block if private session
   if (data.type === "private" && data.time_slot) {
-    await admin
+    const { error: blockErr } = await admin
       .from("availability_blocks")
       .insert({
         date: data.start_date,
@@ -237,6 +238,37 @@ export async function POST(request: Request) {
         is_blocked: true,
         reason: `Booking ${booking.id}`,
       });
+    if (blockErr) {
+      console.error("Admin slot block insert failed:", blockErr);
+      await admin.from("bookings").delete().eq("id", booking.id);
+      return NextResponse.json(
+        { error: "Could not reserve the slot. Please try again." },
+        { status: 500 },
+      );
+    }
+
+    // Insert-then-verify, same as the public checkout: a concurrent
+    // customer booking can land between our check and our insert.
+    if (data.camp !== "both") {
+      const occupiedAfter = await getSlotOccupancy(admin, {
+        date: data.start_date,
+        timeSlot: data.time_slot,
+        camp: data.camp,
+      });
+      if (occupiedAfter > PRIVATE_SLOT_CAPACITY) {
+        await admin
+          .from("availability_blocks")
+          .delete()
+          .eq("reason", `Booking ${booking.id}`);
+        await admin.from("bookings").delete().eq("id", booking.id);
+        return NextResponse.json(
+          {
+            error: `Time slot ${data.time_slot} just filled up on ${data.start_date}. Pick another time.`,
+          },
+          { status: 409 },
+        );
+      }
+    }
   }
 
   return NextResponse.json({ ok: true, id: booking.id });
