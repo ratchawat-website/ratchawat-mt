@@ -36,16 +36,24 @@ interface BookingSummary {
   sessions: { date: string; timeSlot: string | null }[] | null;
 }
 
+type BookingResolution =
+  | { state: "paid"; booking: BookingSummary }
+  | { state: "unpaid" }
+  | { state: "unknown" };
+
 async function resolveBooking(
   sessionId: string,
-): Promise<BookingSummary | null> {
+): Promise<BookingResolution> {
   try {
-    if (!process.env.STRIPE_SECRET_KEY) return null;
+    if (!process.env.STRIPE_SECRET_KEY) return { state: "unknown" };
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
     const session = await stripe.checkout.sessions.retrieve(sessionId);
+    // The success URL is guessable; never show "confirmed" copy for a
+    // session whose payment did not actually complete.
+    if (session.payment_status === "unpaid") return { state: "unpaid" };
     const bookingId = session.metadata?.booking_id;
     const groupId = session.metadata?.booking_group_id;
-    if (!bookingId) return null;
+    if (!bookingId) return { state: "unknown" };
 
     const supabase = createAdminClient();
 
@@ -62,30 +70,33 @@ async function resolveBooking(
 
     const { data: rows, error } = await query;
 
-    if (error || !rows || rows.length === 0) return null;
+    if (error || !rows || rows.length === 0) return { state: "unknown" };
     const data = rows[0];
     const totalAmount = rows.reduce((sum, b) => sum + b.price_amount, 0);
 
     return {
-      id: data.id,
-      packageName:
-        getPriceById(data.price_id)?.name ??
-        stayLabelFromPriceId(data.price_id) ??
-        data.price_id,
-      startDate: data.start_date,
-      endDate: data.end_date,
-      timeSlot: data.time_slot,
-      camp: data.camp,
-      amount: totalAmount,
-      clientName: data.client_name,
-      sessions:
-        rows.length > 1
-          ? rows.map((b) => ({ date: b.start_date, timeSlot: b.time_slot }))
-          : null,
+      state: "paid",
+      booking: {
+        id: data.id,
+        packageName:
+          getPriceById(data.price_id)?.name ??
+          stayLabelFromPriceId(data.price_id) ??
+          data.price_id,
+        startDate: data.start_date,
+        endDate: data.end_date,
+        timeSlot: data.time_slot,
+        camp: data.camp,
+        amount: totalAmount,
+        clientName: data.client_name,
+        sessions:
+          rows.length > 1
+            ? rows.map((b) => ({ date: b.start_date, timeSlot: b.time_slot }))
+            : null,
+      },
     };
   } catch (err) {
     console.error("Failed to resolve booking:", err);
-    return null;
+    return { state: "unknown" };
   }
 }
 
@@ -97,9 +108,39 @@ const CAMP_LABEL: Record<string, string> = {
 
 export default async function BookingConfirmedPage({ searchParams }: Props) {
   const params = await searchParams;
-  const booking = params.session_id
+  const resolution = params.session_id
     ? await resolveBooking(params.session_id)
     : null;
+  const booking = resolution?.state === "paid" ? resolution.booking : null;
+
+  if (resolution?.state === "unpaid") {
+    return (
+      <>
+        <JsonLd data={[organizationSchema()]} />
+        <Breadcrumbs
+          items={[
+            { label: "Home", href: "/" },
+            { label: "Book", href: "/booking" },
+          ]}
+        />
+        <section className="py-16 sm:py-24 px-6 sm:px-10 md:px-16 lg:px-20">
+          <div className="max-w-2xl mx-auto text-center">
+            <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-on-surface uppercase">
+              Payment not completed
+            </h1>
+            <p className="mt-4 text-on-surface-variant text-lg">
+              This booking has no completed payment yet. If you just paid,
+              give it a minute and refresh this page. Otherwise you can start
+              again from the booking page.
+            </p>
+            <Link href="/booking" className="mt-8 inline-block btn-link">
+              Back to booking
+            </Link>
+          </div>
+        </section>
+      </>
+    );
+  }
 
   return (
     <>

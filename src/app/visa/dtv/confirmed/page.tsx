@@ -31,15 +31,23 @@ interface DtvSummary {
   amount: number;
 }
 
+type DtvResolution =
+  | { state: "paid"; application: DtvSummary }
+  | { state: "unpaid" }
+  | { state: "unknown" };
+
 async function resolveApplication(
   sessionId: string,
-): Promise<DtvSummary | null> {
+): Promise<DtvResolution> {
   try {
-    if (!process.env.STRIPE_SECRET_KEY) return null;
+    if (!process.env.STRIPE_SECRET_KEY) return { state: "unknown" };
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
     const session = await stripe.checkout.sessions.retrieve(sessionId);
+    // The success URL is guessable; never show "confirmed" copy for a
+    // session whose payment did not actually complete.
+    if (session.payment_status === "unpaid") return { state: "unpaid" };
     const applicationId = session.metadata?.dtv_application_id;
-    if (!applicationId) return null;
+    if (!applicationId) return { state: "unknown" };
 
     const supabase = createAdminClient();
     const { data, error } = await supabase
@@ -48,28 +56,62 @@ async function resolveApplication(
       .eq("id", applicationId)
       .single();
 
-    if (error || !data) return null;
+    if (error || !data) return { state: "unknown" };
 
     const pkg = getPriceById(data.price_id);
     return {
-      id: data.id,
-      packageName: pkg?.name ?? data.price_id,
-      firstName: data.first_name,
-      arrivalDate: data.arrival_date,
-      trainingStartDate: data.training_start_date,
-      amount: data.price_amount,
+      state: "paid",
+      application: {
+        id: data.id,
+        packageName: pkg?.name ?? data.price_id,
+        firstName: data.first_name,
+        arrivalDate: data.arrival_date,
+        trainingStartDate: data.training_start_date,
+        amount: data.price_amount,
+      },
     };
   } catch (err) {
     console.error("Failed to resolve DTV application:", err);
-    return null;
+    return { state: "unknown" };
   }
 }
 
 export default async function DtvConfirmedPage({ searchParams }: Props) {
   const params = await searchParams;
-  const application = params.session_id
+  const resolution = params.session_id
     ? await resolveApplication(params.session_id)
     : null;
+  const application =
+    resolution?.state === "paid" ? resolution.application : null;
+
+  if (resolution?.state === "unpaid") {
+    return (
+      <>
+        <JsonLd data={[organizationSchema()]} />
+        <Breadcrumbs
+          items={[
+            { label: "Home", href: "/" },
+            { label: "DTV Visa", href: "/visa/dtv" },
+          ]}
+        />
+        <section className="py-16 sm:py-24 px-6 sm:px-10 md:px-16 lg:px-20">
+          <div className="max-w-2xl mx-auto text-center">
+            <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-on-surface uppercase">
+              Payment not completed
+            </h1>
+            <p className="mt-4 text-on-surface-variant text-lg">
+              Your DTV application is saved but the payment did not go
+              through. You can restart the payment from the application page,
+              or reach out on WhatsApp if you need help.
+            </p>
+            <Link href="/visa/dtv/apply" className="mt-8 inline-block btn-link">
+              Back to the application
+            </Link>
+          </div>
+        </section>
+      </>
+    );
+  }
 
   return (
     <>
