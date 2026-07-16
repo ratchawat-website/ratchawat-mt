@@ -562,7 +562,7 @@ export default function AccommodationPage() {
             >
               Plai Laem camp
             </Link>{" "}
-            in Koh Samui. The camp has 7 standard rooms and 1 private bungalow. Standard rooms include a king-size bed (not splittable into two singles), private bathroom, air conditioning, Wi-Fi, and a private balcony with pool view. The private bungalow adds a king-size bed, a fitted kitchenette, a living and dining area, and a private terrace over the shared pool. Camp stays start at 8,000 THB for 7 nights in a room, 18,000 THB per month, and 23,000 THB per month for the bungalow. Check-in and check-out dates are flexible, and unlimited group training is included. Fighters can combine the{" "}
+            in Koh Samui. The camp has 7 standard rooms and 1 private bungalow. Standard rooms include a king-size bed (it cannot be split into two singles), private bathroom, air conditioning, Wi-Fi, and a private balcony with pool view. The private bungalow adds a king-size bed, a fitted kitchenette, a living and dining area, and a private terrace over the shared pool. Camp stays start at 8,000 THB for 7 nights in a room, 18,000 THB per month, and 23,000 THB per month for the bungalow. Check-in and check-out dates are flexible, and unlimited group training is included. Fighters can combine the{" "}
             <Link
               href="/programs/fighter"
               className="text-primary hover:text-primary-dim transition-colors"
