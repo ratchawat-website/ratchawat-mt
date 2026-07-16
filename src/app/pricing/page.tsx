@@ -75,7 +75,7 @@ export default function PricingPage() {
               { name: "Monthly Package 2x/day", price: 7000, description: "2 sessions per day for one month" },
               { name: "Private Lesson Adult 1-on-1", price: privateAdultSolo.price!, description: "60-minute solo private session" },
               { name: "Private 10-Session Pack Adult 1-on-1", price: privateAdult10.price!, description: "Ten 60-minute solo private sessions" },
-              { name: "Private Lesson Adult Group", price: privateAdultGroup.price!, description: "60-minute private session for 2-3 people, one price per session" },
+              { name: "Private Lesson Adult Group", price: privateAdultGroup.price!, description: "60-minute private session for 2-3 people, price per person" },
               { name: "Private Lesson Kids 1-on-1", price: privateKidsSolo.price!, description: "60-minute solo private session for kids" },
               { name: "Private Lesson Kids Group", price: privateKidsGroup.price!, description: "60-minute group private session for kids, price per kid" },
               { name: "Fighter Program Monthly", price: 9500, description: "Full fighter prep: 2x/day training, yoga, ice bath, fight organisation and corner support" },
@@ -380,7 +380,7 @@ export default function PricingPage() {
                 <li className="flex items-start justify-between gap-4">
                   <div className="flex items-start gap-2 text-on-surface-variant">
                     <Check size={16} className="text-primary shrink-0 mt-0.5" />
-                    <span>Small group private session (60 min, 2-3 people, one price per session)</span>
+                    <span>Small group private session (60 min, 2-3 people, price per person)</span>
                   </div>
                   <span className="font-bold text-primary shrink-0">{privateAdultGroup.price!.toLocaleString("en-US")} THB</span>
                 </li>

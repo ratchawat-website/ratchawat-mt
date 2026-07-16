@@ -210,7 +210,7 @@ export default function PrivateLessonsPage() {
             </div>
             <div className="flex items-center justify-between p-4 bg-surface-lowest rounded-lg">
               <span className="text-on-surface text-sm font-medium">Group 2-3 adults</span>
-              <span className="font-serif text-2xl font-bold text-primary">{privateAdultGroup.price!.toLocaleString("en-US")} <span className="text-xs font-normal text-on-surface-variant">THB per session</span></span>
+              <span className="font-serif text-2xl font-bold text-primary">{privateAdultGroup.price!.toLocaleString("en-US")} <span className="text-xs font-normal text-on-surface-variant">THB per person</span></span>
             </div>
             <div className="flex items-center justify-between p-4 bg-surface-lowest rounded-lg">
               <span className="text-on-surface text-sm font-medium">1-on-1 kids</span>

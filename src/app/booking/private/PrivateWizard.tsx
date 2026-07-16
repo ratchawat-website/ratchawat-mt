@@ -505,7 +505,7 @@ export default function PrivateWizard() {
             note={
               bounds.max > 1 && contact.numParticipants > 1
                 ? selectedPackage.billing === "flat"
-                  ? "One price per session, whether 2 or 3 people join."
+                  ? "One price per session, no matter how many people join."
                   : "Price per person."
                 : undefined
             }
