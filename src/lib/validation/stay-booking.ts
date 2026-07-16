@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { todayInBangkok } from "@/lib/utils/bangkok-time";
 
 const DateString = z
   .string()
@@ -19,6 +20,10 @@ export const StayCheckoutSchema = z
   .refine((d) => d.check_out > d.check_in, {
     path: ["check_out"],
     message: "Check-out must be after check-in.",
+  })
+  .refine((d) => d.check_in >= todayInBangkok(), {
+    path: ["check_in"],
+    message: "Check-in cannot be in the past.",
   });
 
 export type StayCheckoutRequest = z.infer<typeof StayCheckoutSchema>;

@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { PRIVATE_SLOTS } from "@/lib/config/slots";
+import { todayInBangkok } from "@/lib/utils/bangkok-time";
 
 export const BookingTypeSchema = z.enum([
   "training",
@@ -38,6 +39,16 @@ export const BookingRequestSchema = z
     sessions: z.array(SessionSchema).min(1).max(10).optional(),
   })
   .superRefine((data, ctx) => {
+    // Private sessions are covered by the per-slot cutoff (stricter than a
+    // date floor). Everything else must not start in the past, judged on
+    // the Bangkok calendar since server and visitors run in other zones.
+    if (data.type !== "private" && data.start_date < todayInBangkok()) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["start_date"],
+        message: "Start date cannot be in the past.",
+      });
+    }
     if (data.type === "private") {
       if (!data.sessions || data.sessions.length === 0) {
         ctx.addIssue({

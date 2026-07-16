@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { BookingRequestSchema } from "./booking";
 
 const base = {
@@ -12,6 +12,16 @@ const base = {
 };
 
 describe("BookingRequestSchema sessions", () => {
+  // Freeze time so the fixture dates above stay in the future forever
+  // (the schema now rejects past start dates for non-private types).
+  beforeEach(() => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2026-07-16T05:00:00Z"));
+  });
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   it("accepts a private booking with multiple sessions across days", () => {
     const parsed = BookingRequestSchema.safeParse({
       ...base,
@@ -55,5 +65,51 @@ describe("BookingRequestSchema sessions", () => {
       type: "training",
     });
     expect(parsed.success).toBe(true);
+  });
+});
+
+describe("start_date floor (Bangkok calendar)", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+    // 2026-07-16 12:00 Bangkok (05:00 UTC).
+    vi.setSystemTime(new Date("2026-07-16T05:00:00Z"));
+  });
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  const base = {
+    price_id: "training-dropin",
+    type: "training" as const,
+    camp: "bo-phut" as const,
+    client_name: "Test Client",
+    client_email: "test@example.com",
+    client_phone: "0630802876",
+  };
+
+  it("rejects a past start_date for training", () => {
+    const result = BookingRequestSchema.safeParse({
+      ...base,
+      start_date: "2026-07-15",
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it("accepts today (Bangkok) as start_date", () => {
+    const result = BookingRequestSchema.safeParse({
+      ...base,
+      start_date: "2026-07-16",
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it("still accepts past dates for private (cutoff handles those)", () => {
+    const result = BookingRequestSchema.safeParse({
+      ...base,
+      type: "private",
+      start_date: "2026-07-10",
+      sessions: [{ date: "2026-07-10", time_slot: "13:00" }],
+    });
+    expect(result.success).toBe(true);
   });
 });
