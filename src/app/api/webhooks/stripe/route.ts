@@ -22,6 +22,25 @@ function getStripe(): Stripe {
   return new Stripe(process.env.STRIPE_SECRET_KEY);
 }
 
+/**
+ * Un-claim a webhook event so Stripe's retry can reprocess it. Called when
+ * the business logic fails AFTER the dedup insert: without this, the event
+ * would stay marked as processed and a paid booking could stay pending
+ * forever with no retry path.
+ */
+async function releaseEvent(
+  supabase: ReturnType<typeof createAdminClient>,
+  eventId: string,
+): Promise<void> {
+  const { error } = await supabase
+    .from("processed_stripe_events")
+    .delete()
+    .eq("event_id", eventId);
+  if (error) {
+    console.error("Failed to release stripe event for retry:", error);
+  }
+}
+
 export async function POST(request: Request) {
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
   if (!webhookSecret) {
@@ -92,8 +111,17 @@ export async function POST(request: Request) {
         .select("*")
         .single();
 
-      if (dtvErr || !app) {
+      if (dtvErr) {
         console.error("Failed to update DTV application:", dtvErr);
+        await releaseEvent(supabase, event.id);
+        return NextResponse.json(
+          { error: "DTV update failed" },
+          { status: 500 },
+        );
+      }
+      if (!app) {
+        // No matching row: a retry cannot fix this, keep the 200.
+        console.error("DTV application not found:", applicationId);
         return NextResponse.json({ received: true });
       }
 
@@ -155,8 +183,17 @@ export async function POST(request: Request) {
 
     const { data: updatedRows, error } = await query.select("*");
 
-    if (error || !updatedRows || updatedRows.length === 0) {
+    if (error) {
       console.error("Failed to update booking(s):", error);
+      await releaseEvent(supabase, event.id);
+      return NextResponse.json(
+        { error: "Booking update failed" },
+        { status: 500 },
+      );
+    }
+    if (!updatedRows || updatedRows.length === 0) {
+      // No matching row: a retry cannot fix this, keep the 200.
+      console.error("No booking matched webhook metadata:", meta);
       return NextResponse.json({ received: true });
     }
 
@@ -216,7 +253,7 @@ export async function POST(request: Request) {
         .maybeSingle();
 
       if (!existingBlock) {
-        await supabase
+        const { error: safetyErr } = await supabase
           .from("availability_blocks")
           .insert({
             date: b.start_date,
@@ -230,6 +267,9 @@ export async function POST(request: Request) {
             is_blocked: true,
             reason: `Booking ${b.id}`,
           });
+        if (safetyErr) {
+          console.error("Safety-net block insert failed:", safetyErr);
+        }
       }
     }
   } else if (event.type === "checkout.session.expired") {
@@ -239,11 +279,19 @@ export async function POST(request: Request) {
     // Race-safe: only cancel if still pending. Prevents an out-of-order
     // `expired` event from undoing a successful `completed`.
     if (meta.type === "dtv" && meta.dtv_application_id) {
-      await supabase
+      const { error: dtvCancelErr } = await supabase
         .from("dtv_applications")
         .update({ status: "cancelled" })
         .eq("id", meta.dtv_application_id)
         .eq("status", "pending");
+      if (dtvCancelErr) {
+        console.error("Failed to cancel expired DTV application:", dtvCancelErr);
+        await releaseEvent(supabase, event.id);
+        return NextResponse.json(
+          { error: "DTV cancel failed" },
+          { status: 500 },
+        );
+      }
     } else if (meta.booking_id) {
       // Multi-session carts cancel the whole group; legacy bookings keep
       // the single-row path. Only rows still pending are cancelled: an
@@ -262,16 +310,31 @@ export async function POST(request: Request) {
             .eq("id", meta.booking_id)
             .eq("status", "pending");
 
-      const { data: cancelledRows } = await query.select("id, type, time_slot");
+      const { data: cancelledRows, error: cancelErr } =
+        await query.select("id, type, time_slot");
+      if (cancelErr) {
+        console.error("Failed to cancel expired booking(s):", cancelErr);
+        await releaseEvent(supabase, event.id);
+        return NextResponse.json(
+          { error: "Cancel failed" },
+          { status: 500 },
+        );
+      }
 
       const blockReasons = (cancelledRows ?? [])
         .filter((b) => b.type === "private" && b.time_slot)
         .map((b) => `Booking ${b.id}`);
       if (blockReasons.length > 0) {
-        await supabase
+        const { error: blockDelErr } = await supabase
           .from("availability_blocks")
           .delete()
           .in("reason", blockReasons);
+        if (blockDelErr) {
+          // Bookings are already cancelled; a stuck block only leaks
+          // capacity. Log it, do not force a full-event retry that would
+          // re-run nothing useful (the status filter matches 0 rows now).
+          console.error("Failed to delete expired blocks:", blockDelErr);
+        }
       }
     }
   }
