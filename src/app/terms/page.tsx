@@ -6,6 +6,8 @@ import Link from "next/link";
 import {
   DTV_POLICY_DELIVERY,
   DTV_POLICY_REFUSAL,
+  PURCHASE_NO_REFUND_POLICY,
+  ELECTRICITY_BILLING_NOTE,
 } from "@/content/policies";
 
 export const metadata = generatePageMeta({
@@ -78,6 +80,11 @@ export default function TermsPage() {
                 Cancellations, changes, and refunds
               </h2>
               <p>
+                <strong className="text-on-surface">
+                  {PURCHASE_NO_REFUND_POLICY}
+                </strong>
+              </p>
+              <p className="mt-3">
                 Plans change, we get it. Once a booking is paid, we do{" "}
                 <strong className="text-on-surface">
                   not issue cash refunds
@@ -165,6 +172,7 @@ export default function TermsPage() {
                 bungalow. Pets are not allowed. Damage caused beyond normal
                 wear is invoiced at cost.
               </p>
+              <p className="mt-3">{ELECTRICITY_BILLING_NOTE}</p>
               <p className="mt-3">
                 For special requests (extended stays, group bookings, bank
                 transfer payments), see the{" "}

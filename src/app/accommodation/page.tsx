@@ -27,6 +27,7 @@ import {
 import Link from "next/link";
 import { buildWhatsAppUrl, CAMP_WHATSAPP_DISPLAY } from "@/content/schedule";
 import { getRateCard } from "@/content/stay-pricing";
+import { ELECTRICITY_BILLING_NOTE } from "@/content/policies";
 
 // Stay prices come from the tiered rate cards; nothing hard-coded below.
 const roomNormal = getRateCard("room", "normal")!;
@@ -425,7 +426,8 @@ export default function AccommodationPage() {
             </GlassCard>
           </div>
           <p className="text-center text-on-surface-variant text-sm mt-8 max-w-2xl mx-auto">
-            Pick your own check-in and check-out dates. Your price is the base rate for your stay length plus any extra nights. Rooms start at 7 nights, the bungalow at 1 month.
+            Pick your own check-in and check-out dates. Your price is the base rate for your stay length plus any extra nights. Rooms start at 7 nights, the bungalow at 1 month.{" "}
+            {ELECTRICITY_BILLING_NOTE}
           </p>
         </div>
       </section>

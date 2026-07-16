@@ -12,7 +12,11 @@ import { Check } from "lucide-react";
 import Link from "next/link";
 import { getPriceById } from "@/content/pricing";
 import { getRateCard } from "@/content/stay-pricing";
-import { DTV_POLICY_REFUSAL } from "@/content/policies";
+import {
+  DTV_POLICY_REFUSAL,
+  PURCHASE_NO_REFUND_POLICY,
+  ELECTRICITY_BILLING_NOTE,
+} from "@/content/policies";
 
 const dtv2x = getPriceById("dtv-6m-2x")!;
 const dtv4x = getPriceById("dtv-6m-4x")!;
@@ -554,7 +558,8 @@ export default function PricingPage() {
           </h2>
           <p className="text-center text-on-surface-variant text-sm mb-10 max-w-2xl mx-auto">
             Training and on-site accommodation at our Plai Laem camp. Rooms and bungalows available.
-            Electricity is included for stays under 1 month. Pick your own check-in and check-out dates.
+            Electricity is included for stays under 1 month. Pick your own check-in and check-out dates.{" "}
+            {ELECTRICITY_BILLING_NOTE}
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
             <GlassCard>
@@ -825,6 +830,9 @@ export default function PricingPage() {
               accommodation near the camps <span className="btn-arrow">&rarr;</span>
             </Link>
             ?
+          </p>
+          <p className="text-center mt-4 text-on-surface-variant text-xs">
+            {PURCHASE_NO_REFUND_POLICY}
           </p>
         </div>
       </section>

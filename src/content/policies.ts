@@ -17,3 +17,9 @@ export const DTV_POLICY_REFUSAL =
 
 export const DTV_WHATSAPP_CUSTOM_PLAN =
   "Need a 9-month or 12-month training plan? Or a personalized program including private lessons or any other special request? Please contact us via WhatsApp.";
+
+export const PURCHASE_NO_REFUND_POLICY =
+  "Memberships, packages and purchased classes are non-refundable and non-exchangeable.";
+
+export const ELECTRICITY_BILLING_NOTE =
+  "Electricity fees are billed separately and typically range from 500 THB to 3,000 THB per month, depending on usage.";
