@@ -335,7 +335,7 @@ export const PRICES: PriceItem[] = [
   {
     id: "private-adult-group",
     stripeProductIdLive: "prod_UQ39nAneq8uwpM",
-    stripePriceIdLive: "price_1TszRmRu1Uc6NzUvlxJBnJPS",
+    stripePriceIdLive: "price_1Ttm7ORu1Uc6NzUvAavz792d",
     stripeProductIdTest: "prod_UJh47v38QjpAfA",
     stripePriceIdTest: "price_1Ttm2QRu1Uc6NzUvcYVrgzBz",
     name: "Private Group 2-3 (Adult)",
