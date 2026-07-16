@@ -59,11 +59,9 @@ export const STAY_RATE_CARDS: StayRateCard[] = [
   {
     unit: "bungalow",
     plan: "normal",
-    // Extra-night rate is a provisional default pending client confirmation;
-    // adjust here without any code change.
     label: "Private Bungalow",
     minNights: 30,
-    tiers: [{ nights: 30, basePrice: 23000, extraNightRate: 600 }],
+    tiers: [{ nights: 30, basePrice: 23000, extraNightRate: 760 }],
     copyNotes: [
       "Unlimited group training included (2 sessions per day)",
       "Electricity charged separately",
@@ -75,7 +73,7 @@ export const STAY_RATE_CARDS: StayRateCard[] = [
     plan: "fighter",
     label: "Fighter Program + Private Bungalow",
     minNights: 30,
-    tiers: [{ nights: 30, basePrice: 25500, extraNightRate: 670 }],
+    tiers: [{ nights: 30, basePrice: 25500, extraNightRate: 850 }],
     copyNotes: [
       "Full Fighter Program included (2x/day training, yoga, ice bath, fight organization)",
       "Electricity charged separately",

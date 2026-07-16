@@ -47,13 +47,14 @@ describe("computeStayPrice: other cards", () => {
     expect(computeStayPrice("2026-08-01", "2026-09-01", "room", "fighter").total).toBe(20670);
   });
 
-  it("bungalow normal: rejects under 30 nights, 31 nights = 23600 (default rate)", () => {
+  it("bungalow normal: rejects under 30 nights, 31 nights = 23760 (extra night 760)", () => {
     expect(() => computeStayPrice("2026-08-01", "2026-08-30", "bungalow", "normal")).toThrow(StayPricingError);
-    expect(computeStayPrice("2026-08-01", "2026-09-01", "bungalow", "normal").total).toBe(23600);
+    expect(computeStayPrice("2026-08-01", "2026-09-01", "bungalow", "normal").total).toBe(23760);
   });
 
-  it("bungalow fighter: 30 nights = 25500", () => {
+  it("bungalow fighter: 30 nights = 25500, extra night 850", () => {
     expect(computeStayPrice("2026-08-01", "2026-08-31", "bungalow", "fighter").total).toBe(25500);
+    expect(computeStayPrice("2026-08-01", "2026-09-01", "bungalow", "fighter").total).toBe(26350);
   });
 
   it("exposes the breakdown", () => {
