@@ -148,6 +148,16 @@ export async function POST(request: Request) {
     }
   }
 
+  // Mirror of the public checkout rule: a private session must target one
+  // camp. "both" would skip the capacity check below AND create a block
+  // that no per-camp occupancy query ever counts (silent overbooking).
+  if (data.type === "private" && data.camp === "both") {
+    return NextResponse.json(
+      { error: "Private sessions need a specific camp." },
+      { status: 400 },
+    );
+  }
+
   // Check private slot availability: same rules as the public checkout
   // (hard closure + per-camp trainer capacity), NOT "one booking blocks all".
   const admin = createAdminClient();

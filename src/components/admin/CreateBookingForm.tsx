@@ -307,7 +307,9 @@ export default function CreateBookingForm({ defaultDate, onClose }: Props) {
                 onChange={(e) => setCamp(e.target.value)}
                 className={selectClass}
               >
-                {CAMPS.map((c) => (
+                {CAMPS.filter(
+                  (c) => !(type === "private" && c.value === "both"),
+                ).map((c) => (
                   <option key={c.value} value={c.value}>
                     {c.label}
                   </option>
