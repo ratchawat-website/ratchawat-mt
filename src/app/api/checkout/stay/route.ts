@@ -130,6 +130,9 @@ export async function POST(request: Request) {
     try {
       session = await stripe.checkout.sessions.create({
         mode: "payment",
+        // Stripe minimum. Bookings hold real capacity (trainer units or
+        // rooms) from insert time: keep the unpaid-hold window short.
+        expires_at: Math.floor(Date.now() / 1000) + 30 * 60,
         locale: "en",
         payment_method_types: ["card"],
         line_items: [
