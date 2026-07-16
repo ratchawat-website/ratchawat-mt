@@ -96,7 +96,7 @@ const lodgingSchema = {
 
 const roomPhotos = [
   { src: "/images/room/room.jpeg", caption: "Room", alt: "Standard room overview at Ratchawat Plai Laem camp" },
-  { src: "/images/room/room-bed.jpeg", caption: "Bed", alt: "Double bed in standard room" },
+  { src: "/images/room/room-bed.jpeg", caption: "Bed", alt: "King-size bed in standard room" },
   { src: "/images/room/room-bathroom.jpeg", caption: "Bathroom", alt: "Private bathroom in standard room" },
   { src: "/images/room/room-balcony.jpeg", caption: "Balcony", alt: "Pool-view balcony from standard room" },
   { src: "/images/room/room-storage.jpeg", caption: "Storage", alt: "Storage space in standard room" },
@@ -116,7 +116,7 @@ const bungalowPhotos = [
 ];
 
 const amenities = [
-  { icon: BedDouble, label: "Double bed" },
+  { icon: BedDouble, label: "King-size bed" },
   { icon: Bath, label: "Private bathroom" },
   { icon: Wind, label: "Air conditioning" },
   { icon: Wifi, label: "Wi-Fi" },
@@ -214,7 +214,7 @@ export default function AccommodationPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
             <div className="space-y-4 text-on-surface-variant leading-relaxed">
               <p>
-                The rooms are inside the Plai Laem camp. Clean, simple, everything you need after training and nothing you don&apos;t. Each room has a double bed, a private bathroom, air conditioning, and a balcony over the shared pool.
+                The rooms are inside the Plai Laem camp. Clean, simple, everything you need after training and nothing you don&apos;t. Each room has a king-size bed (it cannot be split into two single beds), a private bathroom, air conditioning, and a balcony over the shared pool.
               </p>
               <p>
                 The pool is where fighters cool down between sessions. It is not a resort pool, it is a camp pool, and that is the point. You come here to train, and the water is there when your legs need it.
@@ -560,7 +560,7 @@ export default function AccommodationPage() {
             >
               Plai Laem camp
             </Link>{" "}
-            in Koh Samui. The camp has 7 standard rooms and 1 private bungalow. Standard rooms include a double bed, private bathroom, air conditioning, Wi-Fi, and a private balcony with pool view. The private bungalow adds a king-size bed, a fitted kitchenette, a living and dining area, and a private terrace over the shared pool. Camp stays start at 8,000 THB for 7 nights in a room, 18,000 THB per month, and 23,000 THB per month for the bungalow. Check-in and check-out dates are flexible, and unlimited group training is included. Fighters can combine the{" "}
+            in Koh Samui. The camp has 7 standard rooms and 1 private bungalow. Standard rooms include a king-size bed (not splittable into two singles), private bathroom, air conditioning, Wi-Fi, and a private balcony with pool view. The private bungalow adds a king-size bed, a fitted kitchenette, a living and dining area, and a private terrace over the shared pool. Camp stays start at 8,000 THB for 7 nights in a room, 18,000 THB per month, and 23,000 THB per month for the bungalow. Check-in and check-out dates are flexible, and unlimited group training is included. Fighters can combine the{" "}
             <Link
               href="/programs/fighter"
               className="text-primary hover:text-primary-dim transition-colors"
