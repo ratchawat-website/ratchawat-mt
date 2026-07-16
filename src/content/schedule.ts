@@ -6,6 +6,8 @@
  * (Sunday remains bookable for accommodation.)
  */
 
+import { bangkokSlotInstant } from "@/lib/utils/bangkok-time";
+
 export const OPEN_DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"] as const;
 export const OPEN_DAYS_LABEL = "Monday to Saturday";
 export const DAYS_PER_WEEK = 6;
@@ -104,15 +106,15 @@ export function buildWhatsAppUrl(message?: string): string {
 }
 
 /**
- * Returns true when the given slot (HH:mm) on `date` starts in less than the
- * cutoff that applies to that slot (12h before 09:30, 2h for the rest).
- * Below the cutoff the client must reach out on WhatsApp instead of booking
- * online.
+ * Returns true when the given slot (HH:mm) on `dateStr` (yyyy-MM-dd,
+ * Bangkok calendar) starts in less than the cutoff that applies to that
+ * slot (12h before 09:30, 2h for the rest). Slot instants are anchored to
+ * Asia/Bangkok so the check gives the same answer on the UTC server and
+ * in any visitor's browser. Below the cutoff the client must reach out on
+ * WhatsApp instead of booking online.
  */
-export function isSlotWithinCutoff(date: Date, slot: string): boolean {
-  const [hh, mm] = slot.split(":").map(Number);
-  const slotDate = new Date(date);
-  slotDate.setHours(hh, mm, 0, 0);
+export function isSlotWithinCutoff(dateStr: string, slot: string): boolean {
+  const slotInstant = bangkokSlotInstant(dateStr, slot);
   const cutoffMs = getCutoffHoursForSlot(slot) * 60 * 60 * 1000;
-  return slotDate.getTime() - Date.now() < cutoffMs;
+  return slotInstant - Date.now() < cutoffMs;
 }

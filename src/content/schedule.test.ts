@@ -1,8 +1,9 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import {
   PRIVATE_SLOT_TIMES,
   SLOT_GROUPS,
   getCutoffHoursForSlot,
+  isSlotWithinCutoff,
 } from "./schedule";
 
 describe("PRIVATE_SLOT_TIMES", () => {
@@ -32,5 +33,45 @@ describe("getCutoffHoursForSlot", () => {
     for (const slot of ["10:30", "12:00", "16:00", "18:30", "19:00"]) {
       expect(getCutoffHoursForSlot(slot)).toBe(2);
     }
+  });
+});
+
+describe("isSlotWithinCutoff (Bangkok wall-clock)", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it("blocks a 2h-cutoff slot booked 1h before Bangkok time", () => {
+    // Now: 05:00 UTC = 12:00 Bangkok. Slot 13:00 Bangkok starts in 1h.
+    vi.setSystemTime(new Date("2026-07-16T05:00:00Z"));
+    expect(isSlotWithinCutoff("2026-07-16", "13:00")).toBe(true);
+  });
+
+  it("allows a 2h-cutoff slot booked 3h before Bangkok time", () => {
+    // Now: 05:00 UTC = 12:00 Bangkok. Slot 15:00 Bangkok starts in 3h.
+    vi.setSystemTime(new Date("2026-07-16T05:00:00Z"));
+    expect(isSlotWithinCutoff("2026-07-16", "15:00")).toBe(false);
+  });
+
+  it("blocks a slot that already started", () => {
+    // Now: 08:00 UTC = 15:00 Bangkok. Slot 13:00 Bangkok started 2h ago.
+    vi.setSystemTime(new Date("2026-07-16T08:00:00Z"));
+    expect(isSlotWithinCutoff("2026-07-16", "13:00")).toBe(true);
+  });
+
+  it("blocks an early slot 11h before (12h cutoff)", () => {
+    // Now: 15:00 UTC on the 15th = 22:00 Bangkok. Slot 09:00 Bangkok
+    // on the 16th starts in 11h.
+    vi.setSystemTime(new Date("2026-07-15T15:00:00Z"));
+    expect(isSlotWithinCutoff("2026-07-16", "09:00")).toBe(true);
+  });
+
+  it("allows an early slot 13h before (12h cutoff)", () => {
+    // Now: 13:00 UTC on the 15th = 20:00 Bangkok.
+    vi.setSystemTime(new Date("2026-07-15T13:00:00Z"));
+    expect(isSlotWithinCutoff("2026-07-16", "09:00")).toBe(false);
   });
 });

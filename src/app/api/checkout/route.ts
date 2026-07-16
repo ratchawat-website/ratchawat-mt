@@ -110,12 +110,11 @@ export async function POST(request: Request) {
       // Validate every session before writing anything.
       try {
         for (const s of sessions) {
-          const slotDate = new Date(`${s.date}T00:00:00`);
-          if (isSlotWithinCutoff(slotDate, s.time_slot)) {
+          if (isSlotWithinCutoff(s.date, s.time_slot)) {
             const cutoff = getCutoffHoursForSlot(s.time_slot);
             return NextResponse.json(
               {
-                error: `${formatDateLong(slotDate)} at ${s.time_slot} needs at least ${cutoff}h notice. Please adjust your cart or contact us on WhatsApp.`,
+                error: `${formatDateLong(s.date)} at ${s.time_slot} needs at least ${cutoff}h notice. Please adjust your cart or contact us on WhatsApp.`,
               },
               { status: 400 },
             );
@@ -123,7 +122,7 @@ export async function POST(request: Request) {
           if (await isSlotClosed(supabase, s.date, s.time_slot)) {
             return NextResponse.json(
               {
-                error: `${formatDateLong(slotDate)} at ${s.time_slot} is closed. Please pick another time.`,
+                error: `${formatDateLong(s.date)} at ${s.time_slot} is closed. Please pick another time.`,
               },
               { status: 409 },
             );
@@ -136,7 +135,7 @@ export async function POST(request: Request) {
           if (!hasSlotCapacity(occupied, units)) {
             return NextResponse.json(
               {
-                error: `${formatDateLong(slotDate)} at ${s.time_slot} is fully booked at the selected camp. Please pick another time or camp.`,
+                error: `${formatDateLong(s.date)} at ${s.time_slot} is fully booked at the selected camp. Please pick another time or camp.`,
               },
               { status: 409 },
             );
@@ -229,7 +228,7 @@ export async function POST(request: Request) {
           await rollback();
           return NextResponse.json(
             {
-              error: `${formatDateLong(new Date(`${s.date}T00:00:00`))} at ${s.time_slot} just filled up. Please pick another time.`,
+              error: `${formatDateLong(s.date)} at ${s.time_slot} just filled up. Please pick another time.`,
             },
             { status: 409 },
           );

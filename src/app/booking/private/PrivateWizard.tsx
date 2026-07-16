@@ -314,7 +314,7 @@ export default function PrivateWizard() {
           {date && (() => {
             const dateStr = format(date, "yyyy-MM-dd");
             const slotStates = PRIVATE_SLOTS.map((slot) => {
-              const withinCutoff = isSlotWithinCutoff(date, slot);
+              const withinCutoff = isSlotWithinCutoff(dateStr, slot);
               const cutoffHours = getCutoffHoursForSlot(slot);
               const inCart = sessions.some(
                 (s) => s.date === dateStr && s.slot === slot,
