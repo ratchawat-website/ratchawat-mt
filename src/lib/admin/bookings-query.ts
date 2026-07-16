@@ -32,9 +32,13 @@ export async function queryBookings(params: BookingsQueryParams) {
     query = query.lte("start_date", params.to);
   }
   if (params.q) {
-    query = query.or(
-      `client_name.ilike.%${params.q}%,client_email.ilike.%${params.q}%`,
-    );
+    // Strip PostgREST .or() grammar characters (comma, parens, quotes):
+    // they would break the filter string. Dots and % are safe inside an
+    // ilike pattern and dots are common in emails.
+    const q = params.q.replace(/[,()"\\]/g, " ").trim();
+    if (q) {
+      query = query.or(`client_name.ilike.%${q}%,client_email.ilike.%${q}%`);
+    }
   }
 
   const page = params.page ?? 1;
