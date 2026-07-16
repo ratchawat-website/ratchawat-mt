@@ -60,9 +60,13 @@ export default function FighterWizard() {
   const [error, setError] = useState<string | null>(null);
   const captcha = useTurnstile();
 
-  // Fighter program runs at Plai Laem only — camp stays locked to plai-laem.
+  // Fighter program runs at Plai Laem only: camp stays locked to plai-laem.
+  // Switching tier also resets the picked dates: rooms (7 units) and the
+  // bungalow (1 unit) have different availability, so dates validated
+  // against one pool must not carry over to the other.
   useEffect(() => {
     setCamp("plai-laem");
+    setRange(undefined);
   }, [tier]);
 
   const hasStay = tier === "room" || tier === "bungalow";

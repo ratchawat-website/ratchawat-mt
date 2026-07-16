@@ -57,6 +57,13 @@ export default function CampStayWizard() {
     }
   }, [searchParams]);
 
+  // Switching unit resets the picked dates: rooms (7 units) and the
+  // bungalow (1 unit) have different availability, so dates validated
+  // against one pool must not carry over to the other.
+  useEffect(() => {
+    setRange(undefined);
+  }, [unit]);
+
   const quote = useMemo(() => {
     if (!unit || !range?.from || !range?.to) return null;
     try {
