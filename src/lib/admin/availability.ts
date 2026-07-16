@@ -98,3 +98,42 @@ export async function checkRangeAvailability(
 
   return { ok: true };
 }
+
+/**
+ * Pure core of the insert-then-verify pattern for accommodation: first
+ * night in [startDate, endDate) whose occupancy STRICTLY exceeds capacity.
+ * Called after inserting a booking, so a fully-booked night reads
+ * `capacity` and only a concurrent double-insert reads more.
+ */
+export function firstOverbookedNight(
+  map: Map<string, number>,
+  capacity: number,
+  startDate: string,
+  endDate: string,
+): string | null {
+  const lastNight = format(subDays(parseISO(endDate), 1), "yyyy-MM-dd");
+  const nights = eachDayOfInterval({
+    start: parseISO(startDate),
+    end: parseISO(lastNight),
+  });
+  for (const night of nights) {
+    const key = format(night, "yyyy-MM-dd");
+    if ((map.get(key) ?? 0) > capacity) return key;
+  }
+  return null;
+}
+
+/**
+ * Re-reads occupancy AFTER a booking insert and reports the first
+ * overbooked night, closing the check-then-insert race the same way the
+ * private-slot path does in /api/checkout.
+ */
+export async function findOverbookedNight(
+  inventoryKey: InventoryKey,
+  startDate: string,
+  endDate: string,
+): Promise<string | null> {
+  const lastNight = format(subDays(parseISO(endDate), 1), "yyyy-MM-dd");
+  const map = await getOccupancyMap(inventoryKey, startDate, lastNight);
+  return firstOverbookedNight(map, INVENTORY[inventoryKey], startDate, endDate);
+}

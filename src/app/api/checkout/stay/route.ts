@@ -5,7 +5,7 @@ import { StayCheckoutSchema } from "@/lib/validation/stay-booking";
 import { computeStayPrice, StayPricingError } from "@/lib/booking/stay";
 import { stayPriceId, getStayStripeProduct } from "@/content/stay-pricing";
 import { getStayUnitInventoryKey } from "@/lib/admin/inventory";
-import { checkRangeAvailability } from "@/lib/admin/availability";
+import { checkRangeAvailability, findOverbookedNight } from "@/lib/admin/availability";
 import { getCheckoutOrigin } from "@/lib/utils/origin";
 import { verifyTurnstile } from "@/lib/security/turnstile";
 import { formatDateShort } from "@/lib/utils/date-format";
@@ -104,6 +104,23 @@ export async function POST(request: Request) {
       return NextResponse.json(
         { error: "Failed to create booking" },
         { status: 500 },
+      );
+    }
+
+    // Insert-then-verify: with the booking now counted in occupancy, any
+    // night above capacity means a concurrent request won the last unit.
+    const overbooked = await findOverbookedNight(
+      inventoryKey,
+      data.check_in,
+      data.check_out,
+    );
+    if (overbooked) {
+      await supabase.from("bookings").delete().eq("id", booking.id);
+      return NextResponse.json(
+        {
+          error: `Sold out on ${overbooked}. Please choose different dates.`,
+        },
+        { status: 409 },
       );
     }
 

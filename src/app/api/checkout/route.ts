@@ -4,7 +4,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { BookingRequestSchema } from "@/lib/validation/booking";
 import { getPriceById, getStripePriceId } from "@/content/pricing";
 import { getInventoryKey } from "@/lib/admin/inventory";
-import { checkRangeAvailability } from "@/lib/admin/availability";
+import { checkRangeAvailability, findOverbookedNight } from "@/lib/admin/availability";
 import { getCheckoutOrigin } from "@/lib/utils/origin";
 import { formatDateLong } from "@/lib/utils/date-format";
 import { verifyTurnstile } from "@/lib/security/turnstile";
@@ -319,6 +319,25 @@ export async function POST(request: Request) {
         { error: "Failed to create booking" },
         { status: 500 },
       );
+    }
+
+    // Insert-then-verify for accommodation-consuming packages (same race
+    // closure as the private-slot path above).
+    if (inventoryKey && data.start_date && data.end_date) {
+      const overbooked = await findOverbookedNight(
+        inventoryKey,
+        data.start_date,
+        data.end_date,
+      );
+      if (overbooked) {
+        await supabase.from("bookings").delete().eq("id", booking.id);
+        return NextResponse.json(
+          {
+            error: `Sold out on ${overbooked}. Please choose different dates.`,
+          },
+          { status: 409 },
+        );
+      }
     }
 
     const origin = getCheckoutOrigin(request);
