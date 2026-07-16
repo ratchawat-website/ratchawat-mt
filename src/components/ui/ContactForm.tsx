@@ -72,8 +72,8 @@ export default function ContactForm() {
             Message Sent
           </h3>
           <p className="text-on-surface-variant text-sm max-w-sm">
-            We received your message and will get back to you shortly. Check
-            your email for a confirmation.
+            We received your message and will get back to you shortly,
+            usually within a day.
           </p>
           <button
             onClick={() => setStatus("idle")}
