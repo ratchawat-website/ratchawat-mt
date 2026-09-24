@@ -1,3 +1,5 @@
+@AGENTS.md
+
 # Ratchawat Muay Thai -- Project Instructions
 
 > **First actions in every session:**
@@ -10,10 +12,12 @@
 ## Commands
 
 ```bash
-npm run dev      # Start dev server (http://localhost:3000)
-npm run build    # Production build
-npm run start    # Start production server
-npm run lint     # ESLint + Prettier check
+npm run dev          # Start dev server (http://localhost:3000)
+npm run build        # Production build
+npm run start        # Start production server
+npm run lint         # ESLint (no Prettier in this project)
+npm run test         # Vitest (vitest run)
+npm run stripe:seed  # Seed Stripe products/prices (scripts/stripe-seed-products.ts)
 ```
 
 ---
@@ -41,60 +45,30 @@ npm run lint     # ESLint + Prettier check
 
 ```
 src/
-  app/              # Routes and layouts
+  app/              # Routes and layouts (api/ = admin, availability, checkout, contact, visa, webhooks)
   components/
-    ui/             # Design-system primitives (Button, Card, Badge...)
-    sections/       # Page sections (Hero, Pricing, FAQ...)
-    layout/         # Header, Footer, Nav
-  lib/
-    supabase/       # Supabase client + helpers
-    stripe/         # Stripe client + helpers
-    utils/          # Shared utilities
-  content/          # Static content / copy (JSON or MDX)
+    ui/             # Design-system primitives (HeroSection, GlassCard, CTABanner, FAQAccordion...)
+    sections/       # Page sections (ReviewsGrid, TeamGrid, TeamCircularGallery)
+    layout/         # Navigation, Footer, Breadcrumbs
+    booking/        # Booking wizards, calendars
+    admin/          # Admin dashboard components
+    seo/            # SchemaOrg.tsx, JsonLd.tsx
+  lib/              # supabase/, stripe/, email/, booking/, seo/, validation/, security/, admin/, config/, utils/
+  content/          # Single sources of truth: pricing.ts, stay-pricing.ts, schedule.ts, policies.ts, trainers.ts, reviews.ts
+  styles/           # globals.css (design tokens)
   types/            # Shared TypeScript types
+  proxy.ts          # Next.js 16 proxy (formerly middleware.ts)
 public/
   images/
-  fonts/
+  llms.txt, llms-full.txt
+supabase/migrations/
 ```
 
 ---
 
 ## Design System -- Ratchawat Bold
 
-**Style:** Bold/Modern, dark mode default.
-
-### Colors
-
-| Token      | Value      |
-| ---------- | ---------- |
-| Primary    | `#ff6600`  |
-| Surface    | `#0a0a0a`  |
-| Text       | `#f5f5f5`  |
-
-### Typography
-
-| Role          | Font              | Notes                         |
-| ------------- | ----------------- | ----------------------------- |
-| Display/Titles| Barlow Condensed  | Bold weight, uppercase for hero headings |
-| Body          | Inter             | Regular 400 / Medium 500      |
-
-### Bold/Modern Rules
-
-1. **Dark mode is the default.** Light surfaces are the exception, not the rule.
-2. **No thin 1px borders.** Use 2px minimum or rely on background contrast to separate sections.
-3. **Tight, punchy shadows** -- small offsets, strong opacity. No diffuse, luxe-style shadows.
-4. **Bold typography** -- headings should feel heavy. Use font-bold or font-extrabold for titles.
-5. **High contrast** -- text on dark backgrounds must pass WCAG AAA (7:1 ratio minimum for body text).
-6. **Accent color (#ff6600) for CTAs** -- buttons, links, and interactive elements use primary orange.
-7. **No glass/blur effects.** No backdrop-blur, no frosted glass.
-8. **Generous spacing** -- sections breathe with large padding, but avoid excessive whitespace that feels empty.
-9. **Motion is minimal and purposeful** -- subtle fade-ins and micro-interactions only, no parallax or heavy animation.
-
-### Component conventions
-
-- Every UI component in `src/components/ui/` exports a single default component.
-- Use `className` prop for style overrides (Tailwind merge via `cn()` utility).
-- All interactive components must have visible focus states (outline with primary color).
+Bold/Modern, dark mode default, primary `#ff6600`, Barlow Condensed + Inter. Full rules in `.claude/rules/design-system.md` (loaded when editing `src/**/*.tsx` or `src/styles/`).
 
 ---
 
@@ -102,13 +76,12 @@ public/
 
 - **Primary language:** English (en_US)
 - **Translations:** French (FR) and Spanish (ES) planned
-- **Locale:** `en_US`
 
 ### Writing rules
 
-- Every piece of written copy must pass through `/humanizer` before being committed. No exceptions.
-- Never use em dashes (--). Use commas, periods, or parentheses instead.
-- Never use unicode escape sequences in source files. Write characters directly.
+- Run `/humanizer` on every piece of written copy before committing it.
+- No em dashes. Use commas, periods, or parentheses instead.
+- No unicode escape sequences in source files. Write characters directly.
 - Keep sentences short and direct. This is a Muay Thai camp, not a luxury spa. The tone is energetic, welcoming, and no-nonsense.
 - Use specific numbers whenever possible (prices in THB, class durations, distances).
 
@@ -116,144 +89,100 @@ public/
 
 ## Key Integrations
 
-| Service   | Purpose              | Code location              |
-| --------- | -------------------- | -------------------------- |
-| Supabase  | Database, Auth, Storage | `src/lib/supabase/`     |
-| Stripe    | Payments, Booking    | `src/lib/stripe/`          |
-| Resend    | Transactional email  | `src/app/api/contact/`     |
+| Service   | Purpose                 | Code location                          |
+| --------- | ----------------------- | -------------------------------------- |
+| Supabase  | Database, Auth, Storage | `src/lib/supabase/`                    |
+| Stripe    | Payments, Booking       | `src/lib/stripe/`, `src/app/api/checkout/`, `src/app/api/webhooks/` |
+| Resend    | Transactional email     | `src/lib/email/` (send.ts, templates/) |
 
 ### Authentication (Supabase Auth)
 
-- Auth is enabled. Supabase handles sign-up, login, password reset.
-- Protect booking and account routes with the proxy file (`src/proxy.ts`, Next.js 16 convention, formerly `middleware.ts`).
+- Supabase handles sign-up, login, password reset.
+- Protect booking and account routes with `src/proxy.ts` (Next.js 16 convention, formerly `middleware.ts`).
 - Store the session server-side using Supabase SSR helpers.
 
-### Supabase migrations (mandatory template from 2026-10-30)
+### Supabase migrations (template required from 2026-10-30)
 
-From **2026-10-30**, Supabase removes the default `public` schema grants on all existing projects. Any new table without explicit `GRANT` statements will be invisible to `supabase-js` and PostgREST.
+From **2026-10-30**, Supabase removes the default `public` schema grants. A new table without explicit `GRANT` statements is invisible to `supabase-js` and PostgREST.
 
-**Every new migration that creates a table in `public` MUST include:**
+Every new migration that creates a table in `public` includes:
 1. `create table public.x (...)`
 2. `alter table public.x enable row level security;`
 3. Explicit `grant ...` per role (least privilege, no permissive `grant all to anon`)
 4. RLS policies
 
-Full template + examples: see `ARCHITECTURE.md` section 6, "Migration template (mandatory from 2026-10-30)".
+Full template + examples: `ARCHITECTURE.md` section 6, "Migration template (mandatory from 2026-10-30)".
 
 Existing tables keep their current grants. The 5 production tables (`bookings`, `availability_blocks`, `dtv_applications`, `profiles`, `processed_stripe_events`) are not affected.
 
 ---
 
-## SEO
+## SEO & GEO (project specifics)
 
-### Technical SEO
+Generic SEO/GEO rules come from the global `seo-geo` rule. Project specifics:
 
-- Every page must export `metadata` (or `generateMetadata` for dynamic routes).
-- Mandatory fields: `title`, `description`, `openGraph`, `alternates`.
-- Structured data (JSON-LD) on every page: Organization, LocalBusiness, or specific schema.
-- Sitemap generated automatically via `src/app/sitemap.ts`.
-- Robots.txt via `src/app/robots.ts`.
+- Metadata via `generatePageMeta()` from `src/lib/seo/meta.ts` (title <= 60 chars, description <= 155 chars). Required fields: `title`, `description`, `openGraph`, `alternates`.
+- JSON-LD builders in `src/components/seo/SchemaOrg.tsx`; per-page schema type, keywords, and GEO passage text are in `AUDIT-SEO.md`.
+- Sitemap: `src/app/sitemap.ts`. Robots: `src/app/robots.ts`. LLM files: `public/llms.txt` and `public/llms-full.txt`.
 - All images use `next/image` with explicit `width`, `height`, and `alt`.
-
-### GEO Methodology
-
-Every page must include a "citable passage" for AI search engines. Format:
-
-- 2-3 factual sentences answering a likely search query
-- Include: business name, location, specific numbers (prices, ratings, hours)
-- Place in a visible `<p>` or `<section>`, not hidden
-- Example: "Chor Ratchawat Muay Thai Gym is a training camp in Koh Samui, Thailand, with two locations in Bo Phut and Plai Laem. Drop-in sessions start at 500 THB."
-
-### GEO assets
-
-- `public/llms.txt` -- plain-text summary of the site for LLM crawlers
-- Every page contains at least one citable passage (see format above)
-- Structured data enriched with `sameAs`, `geo`, `areaServed` properties
+- Example citable passage: "Chor Ratchawat Muay Thai Gym is a training camp in Koh Samui, Thailand, with two locations in Bo Phut and Plai Laem. Drop-in sessions start at 500 THB."
 
 ---
 
 ## Blog
 
-Blog is planned for a later phase. The route `/blog` is reserved. Do not build blog infrastructure yet, but keep the architecture flexible enough to add MDX-based blog posts later.
+Blog is planned for a later phase. The route `/blog` is reserved. Don't build blog infrastructure yet, but keep the architecture flexible enough to add MDX-based blog posts later.
 
 ---
 
 ## Workflow: Page creation or modification
 
-### Required skills
-
-Activate the relevant skills systematically when creating or modifying any page:
+### Project skills (`.claude/skills/`)
 
 | Skill | When to use |
 |-------|-------------|
 | `/humanizer` | After writing or modifying any visible text |
-| `/ui-ux-pro-max` | UI/UX design decisions, component choices, layout |
-| `/frontend-design` | Building frontend components and pages |
 | `/tailwindcss-mobile-first` | Responsive design, breakpoints, mobile-first patterns |
-| `/web-design-guidelines` | Accessibility audit, UX review, best practices |
-| `/seo` (and sub-skills) | Technical SEO, schemas, content quality |
-| `/seo-schema` | Detect, validate, generate Schema.org JSON-LD |
-| `/seo-content` | Content quality, E-E-A-T, readability, thin content |
-| `/seo-page` | Deep single-page SEO analysis |
-| `/seo-technical` | Crawlability, indexability, Core Web Vitals |
-| `/seo-geo` | AI Overviews, GEO optimization, llms.txt |
-| `/seo-local` | Local SEO for both gym locations |
-| `/seo-hreflang` | Hreflang validation for EN/FR/ES |
-| `/seo-sitemap` | Sitemap validation and generation |
-| `/seo-images` | Image alt text, sizes, formats, lazy loading |
-| `/seo-performance` | Core Web Vitals measurement |
-| `/context7` | Up-to-date library documentation (Next.js, React, Tailwind, Supabase, Stripe) |
+| `/web-design-guidelines` | UX review, best practices |
+| `/vercel-react-best-practices` | React / Next.js performance patterns |
 | `/performance` | Lighthouse optimization, Core Web Vitals, lazy loading, bundle |
 | `/accessibility` | Accessibility audit (target >= 95), ARIA, contrast, keyboard navigation |
-| `/supabase-postgres-best-practices` | Supabase connection, tables, RLS, migrations, queries |
 | `/stripe-best-practices` | Stripe Checkout configuration, webhooks, products/prices |
-| `/prd` | Generate Product Requirements Documents when needed |
-| `/find-skills` | Search and install new skills from the ecosystem |
-| `/nextjs-security-scan` | Security audit -- run before any deployment, after Phase 5 begins |
+| `/nextjs-security-scan` | Security audit before any deployment |
 
-All skills listed above are pre-installed globally in `~/.claude/skills/`. No per-project installation needed.
-
-**Marketplace plugins** (auto-detected, no installation):
-- `/ui-ux-pro-max` -- UI/UX design intelligence (50+ styles, 161 palettes, 57 font pairings)
-- `/frontend-design` -- Production-grade frontend interfaces
-- `/context7` -- Up-to-date library documentation (MCP server)
-
-Do not hesitate to use other skills if the situation requires it.
+Use other available skills if the situation calls for it.
 
 ### Content audit workflow
 
-When auditing existing pages, follow this mandatory order:
+When auditing existing pages, follow this order:
 
 1. **Read** `PROJECT-STATUS.md` (reference facts) + the page to audit
-2. **Read** `AUDIT-SEO.md` for that page's SEO strategy (keywords, meta, schemas, GEO passage)
-3. **Run `/seo`** (or sub-skills) **BEFORE any modification**. This is mandatory, not optional.
-4. **Fix** section by section (content, schemas, metadata, internal links)
-5. **Run `/humanizer`** on all modified text
-6. **Verify**: `npm run lint` (0 errors) + `npm run build` (0 errors)
-7. **Document**: update `PROJECT-STATUS.md` (mark page as Done, add correction history entry)
-8. **Commit** with descriptive message
+2. **Read** `AUDIT-SEO.md` for that page's SEO strategy (keywords, meta, schemas, GEO passage) before modifying anything
+3. **Fix** section by section (content, schemas, metadata, internal links)
+4. **Run `/humanizer`** on all modified text
+5. **Verify**: `npm run lint` (0 errors) + `npm run build` (0 errors)
+6. **Document**: update `PROJECT-STATUS.md`, and `AUDIT-SEO.md` if the SEO strategy changed
 
 ### Visual consistency
 
-- **Always study existing pages** before creating new ones. Read 2-3 similar pages to understand the patterns.
-- Reuse existing components (`HeroSection`, `GlassCard`, `CTABanner`, `ImagePlaceholder`, `FAQAccordion`, etc.) -- do not create new ones unless truly necessary.
-- Respect the "Ratchawat Bold" design system: CSS tokens in `src/styles/globals.css`, typography Barlow Condensed (display) + Inter (body), no 1px borders, dark mode default.
+- Study 2-3 similar existing pages before creating a new one, to follow their patterns.
+- Reuse existing components (`HeroSection`, `GlassCard`, `CTABanner`, `ImagePlaceholder`, `FAQAccordion`, etc.) rather than creating new ones.
 - Mobile-first: test at 375px minimum, use Tailwind breakpoints (`sm:`, `md:`, `lg:`).
 
-### Page creation checklist
+### Page checklist (before marking a page "Done")
 
-Each new page MUST include:
-
-1. **SEO Metadata** -- via `generatePageMeta()` from `src/lib/seo/meta.ts` (title <= 60 chars, description <= 155 chars, from AUDIT-SEO.md)
-2. **Breadcrumbs** -- `<Breadcrumbs>` component with automatic JSON-LD
-3. **Schema.org JSON-LD** -- at minimum `breadcrumbSchema`, plus relevant schemas (see AUDIT-SEO.md for each page's schema type) via `src/components/seo/SchemaOrg.tsx`
-4. **GEO citable passage** -- exact text provided in AUDIT-SEO.md per page
-5. **Internal linking** -- each page must contain at least 3 links to other site pages (targets specified in AUDIT-SEO.md)
-6. **CTA** -- each page ends with a `<CTABanner>` pushing toward /booking or /pricing
-7. **Sitemap** -- verify the route is included in `src/app/sitemap.ts`
-8. **Navigation** -- add to `Navigation.tsx` and/or `Footer.tsx` if the page is important
-9. **`llms.txt` / `llms-full.txt`** -- update if the page adds significant content
-10. **Images** -- use `ImagePlaceholder` with the correct category if no real image, or place the image in `public/images/`
+1. **SEO metadata** via `generatePageMeta()` (values from AUDIT-SEO.md)
+2. **Breadcrumbs** -- `<Breadcrumbs>` component (adds JSON-LD automatically)
+3. **Schema.org JSON-LD** -- at minimum `breadcrumbSchema`, plus the page's schema type from AUDIT-SEO.md
+4. **GEO citable passage** -- exact text from AUDIT-SEO.md
+5. **Internal linking** -- at least 3 links to other site pages (targets in AUDIT-SEO.md)
+6. **CTA** -- page ends with a `<CTABanner>` pushing toward /booking or /pricing
+7. **Sitemap** -- route included in `src/app/sitemap.ts`
+8. **Navigation** -- added to `Navigation.tsx` and/or `Footer.tsx` if the page is important
+9. **`llms.txt` / `llms-full.txt`** -- updated if the page adds significant content
+10. **Images** -- `next/image` + alt; `ImagePlaceholder` with the correct category if no real image yet, otherwise in `public/images/`
+11. Dark mode and mobile (375px+) render correctly, `/humanizer` run on all text
+12. `npm run lint` and `npm run build` pass, Lighthouse targets met
 
 ---
 
@@ -265,38 +194,3 @@ Each new page MUST include:
 | Accessibility | >= 95 |
 | Best Practices | >= 90 |
 | SEO | = 100 |
-
----
-
-## MANDATORY RULE: Documentation of changes
-
-**Each agent MUST, after completing a task or significant step:**
-
-1. **Update `PROJECT-STATUS.md`** -- mark pages as Done, add correction history entry, update known issues
-2. **Update `CLAUDE.md`** if workflow, architecture, or conventions changed
-3. **Update `AUDIT-SEO.md`** if SEO strategy was modified
-4. **Commit** with a descriptive message
-
-Never consider a task complete until documentation is updated. This allows any future agent to resume work without loss of context.
-
----
-
-## Final Verification
-
-Before marking any page as "Done":
-
-- [ ] Metadata complete (title, description, OG) from AUDIT-SEO.md
-- [ ] JSON-LD present and valid (schema type from AUDIT-SEO.md)
-- [ ] GEO citable passage included (text from AUDIT-SEO.md)
-- [ ] Breadcrumbs component present
-- [ ] Internal links (minimum 3)
-- [ ] CTABanner at page bottom
-- [ ] All images optimized with next/image + alt text
-- [ ] Dark mode renders correctly
-- [ ] Mobile responsive (375px+)
-- [ ] `/humanizer` run on all text
-- [ ] `npm run lint` passes (0 errors)
-- [ ] `npm run build` passes (0 errors)
-- [ ] Lighthouse targets met
-- [ ] `PROJECT-STATUS.md` updated (page marked Done, history entry added)
-- [ ] Committed with descriptive message
