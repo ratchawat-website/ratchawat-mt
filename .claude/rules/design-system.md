@@ -31,8 +31,7 @@ paths:
 4. **Bold typography** -- headings should feel heavy. Use font-bold or font-extrabold for titles.
 5. **High contrast** -- text on dark backgrounds should pass WCAG AAA (7:1 ratio for body text).
 6. **Accent color (#ff6600) for CTAs** -- buttons, links, and interactive elements use primary orange.
-7. **No glass/blur on content surfaces.** `GlassCard` is opaque despite its name, so reuse it freely. Current exceptions in code: the floating `Navigation` bar (deliberate glassmorphism, 2026-04-02) and the cards in `TeamCircularGallery`.
-   <!-- TODO(Rd): confirm whether the backdrop-blur in TeamCircularGallery.tsx is an intended exception or should be removed. -->
+7. **No glass/blur on content surfaces.** `GlassCard` is opaque despite its name, so reuse it freely. Intended exceptions (confirmed by Rd 2026-09-24): the floating `Navigation` bar (glassmorphism, 2026-04-02) and the cards in `TeamCircularGallery`.
 8. **Generous spacing** -- sections breathe with large padding, but avoid excessive whitespace that feels empty.
 9. **Motion is minimal and purposeful** -- subtle fade-ins and micro-interactions only, no parallax or heavy animation.
 
