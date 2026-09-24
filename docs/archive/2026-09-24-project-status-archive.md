@@ -166,3 +166,29 @@ Phase 5 closed 2026-04-26 (commit 661917d). Phase 6 closed 2026-04-26 (real phot
 | Fighter + accommodation final prices | Phase 5 Security & Quality | Confirm with client (currently 20k/25k approximate) |
 | Real photos | Phase 5 Security & Quality | Client delivers photos |
 | Resend domain verification | Phase 6 Go-live | Requires DNS access to ratchawatmuaythai.com (currently using sandbox `onboarding@resend.dev`) |
+
+
+## E. Infos périmées corrigées le 2026-09-24 (texte d'origine)
+
+| Hosting | Vercel (planned) | -- |
+| `/gallery` | Gallery | **Done** | Yes | ImageGallery + Organization | 4 sections (Bo Phut, Plai Laem, Training, Team) with placeholders + social links + CTA |
+| 2 | Medium | All images are placeholders (no real photos) | Pending client content |
+### 2.5 Infrastructure
+
+- [ ] **Supabase project created** -- TO DO LATER
+- [ ] **Supabase Auth configured** -- TO DO LATER
+- [ ] **Supabase tables created** (bookings, schedules, trainers, programs, faq, testimonials) -- TO DO LATER
+- [ ] **Stripe account connected** -- TO DO LATER
+- [ ] **Stripe products/prices created** -- TO DO LATER
+- [ ] **Resend domain verified** (ratchawatmuaythai.com) -- TO DO LATER
+- [ ] **Environment variables set** (.env.local) -- TO DO LATER (see .env.local.example)
+- [ ] **Vercel deployment** -- TO DO LATER
+- [ ] **Domain configured** (ratchawatmuaythai.com migration) -- TO DO LAST
+- [ ] **Google Search Console** -- After deployment
+- [ ] **Google Analytics** (migrate G-SVH7KPWM2S or new) -- After deployment
+- [ ] **Google Business Profile updated** (2 fiches, new URLs) -- After deployment
+
+**Note:** The middleware gracefully skips Supabase auth when keys are not configured. The site works without any API keys for frontend development.
+
+---
+

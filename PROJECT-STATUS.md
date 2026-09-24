@@ -45,7 +45,7 @@
 | Auth + DB | Supabase (@supabase/ssr) | 2.x |
 | Payments | Stripe Checkout | latest |
 | Email | Resend | latest |
-| Hosting | Vercel (planned) | -- |
+| Hosting | Vercel (live since 2026-05-02, DNS on Cloudflare) | -- |
 
 ---
 
@@ -132,7 +132,7 @@ ratchawat-mt/
 | `/visa/dtv/confirmed` | DTV Confirmation | **Done 2026-04-17 (Wave 5g)** | noIndex | Organization | Success page, resolves application via Stripe session_id, summary card, 24h docs reminder, embassy fee reminder |
 | ~~`/visa/90-days`~~ | ~~90-Day Visa~~ | **Deleted 2026-04-17 (Wave 5a)** | - | - | Client dropped ED visa assistance. Route removed, sitemap/links cleaned. |
 | `/team` | Trainers | **Done** | Yes | Person x4 + Organization | 4 trainer profiles (alternating layout) + specialties + GEO + CTA |
-| `/gallery` | Gallery | **Done** | Yes | ImageGallery + Organization | 4 sections (Bo Phut, Plai Laem, Training, Team) with placeholders + social links + CTA |
+| `/gallery` | Gallery | **Removed** | -- | -- | Removed in Phase 5 (`fe59b55`), 301 → `/` in `next.config.ts`; photos now on Instagram/Facebook |
 | `/faq` | FAQ | **Done** | Yes | FAQPage + Organization | 10 Q&A accordion + quick links + GEO |
 | `/reviews` | Reviews | **Done** | Yes | AggregateRating + Review x6 + Organization | 5 score cards + 6 reviews + reviewer tags + GEO + CTA |
 
@@ -194,22 +194,14 @@ ratchawat-mt/
 
 ### 2.5 Infrastructure
 
-- [ ] **Supabase project created** -- TO DO LATER
-- [ ] **Supabase Auth configured** -- TO DO LATER
-- [ ] **Supabase tables created** (bookings, schedules, trainers, programs, faq, testimonials) -- TO DO LATER
-- [ ] **Stripe account connected** -- TO DO LATER
-- [ ] **Stripe products/prices created** -- TO DO LATER
-- [ ] **Resend domain verified** (ratchawatmuaythai.com) -- TO DO LATER
-- [ ] **Environment variables set** (.env.local) -- TO DO LATER (see .env.local.example)
-- [ ] **Vercel deployment** -- TO DO LATER
-- [ ] **Domain configured** (ratchawatmuaythai.com migration) -- TO DO LAST
-- [ ] **Google Search Console** -- After deployment
-- [ ] **Google Analytics** (migrate G-SVH7KPWM2S or new) -- After deployment
-- [ ] **Google Business Profile updated** (2 fiches, new URLs) -- After deployment
+All live since go-live (2026-05-02) — details and dates in `ROADMAP.md` Phase 9 §A/§B.
 
-**Note:** The middleware gracefully skips Supabase auth when keys are not configured. The site works without any API keys for frontend development.
-
----
+- [x] **Supabase project + tables** -- schema via versioned migrations in `supabase/migrations/` (init 2026-04-11; bookings, booking groups/units, availability blocks, admin profiles, DTV applications, processed Stripe events)
+- [x] **Supabase Auth** -- admin login (`admin_profiles`, 2026-04-13)
+- [x] **Stripe LIVE** -- mode activated, webhook endpoint + signing secret, 24 products seeded 2026-04-28
+- [x] **Resend domain verified** (ratchawatmuaythai.com) -- 2026-04-28, DKIM/SPF/DMARC in Cloudflare DNS
+- [x] **Environment variables** -- set in `.env.local` and Vercel Production
+- [x] **Vercel deployment** -- live at https://ratchawatmuaythai.com since 2026-05-02 (domain transferred Bluehost → Cloudflare)
 
 ## 3. Migration Notes (from ratchawatmuaythai.com)
 
@@ -221,6 +213,7 @@ Archivé (redirections 301 livrées dans `next.config.ts`) : voir `docs/archive/
 
 | Date | Description |
 |------|-------------|
+| 2026-09-24 | **Infos périmées corrigées.** §2.5 Infrastructure cochée (tout est live depuis 2026-05-02), ligne Hosting → Vercel live, Known Issue #2 (images placeholder) clos — vraies photos livrées, ligne `/gallery` marquée supprimée (`fe59b55`). Texte d'origine : archive section E. |
 | 2026-09-24 | **§6 Next Steps rafraîchi.** Bloqueurs pré-go-live retirés (tous résolus), Known Issue #3 (clés Stripe TEST) clos : `.env.local` configuré + smoke test 4242 le 2026-04-12, seeds TEST depuis (`0ef0ec0`). Ancien texte archivé (section D de l'archive). |
 | 2026-09-24 | **Ménage des fichiers d'instructions.** `CLAUDE.md` 302 → <200 lignes (doublons des règles globales retirés, skills inexistants retirés, faits périmés corrigés, `@AGENTS.md` importé). Historique ≤ 2026-07-14, issues résolus et notes de migration archivés dans `docs/archive/2026-09-24-project-status-archive.md` ; phases 1-8 de `ROADMAP.md` dans `docs/archive/2026-09-24-roadmap-archive.md`. |
 | 2026-09-17 | **Dependency hygiene.** `npm audit fix` : 5 vulnérabilités (1 high `browserslist`, 4 moderate `baseline-browser-mapping`, `@humanfs/node`, `vitest`/`@vitest/mocker`) → 0, toutes dans l'outillage de dev (ESLint, Babel, vitest), aucune exposée en prod. Next.js 16.3.4 → 16.3.5 (range `package.json` passé à `^16.3.5`). esbuild low plus signalé. Majeures dispo non prises (stripe 22, typescript 7, eslint 10, react-day-picker 10, vitest 5). Vérifs : lint 0 erreur, build 0 erreur, 69/69 tests vitest (TZ locale + TZ=UTC). |
@@ -235,7 +228,6 @@ Archivé (redirections 301 livrées dans `next.config.ts`) : voir `docs/archive/
 
 | # | Severity | Issue | Status |
 |---|----------|-------|--------|
-| 2 | Medium | All images are placeholders (no real photos) | Pending client content |
 | 7 | Low | Blog section not implemented | Planned post-launch |
 | 8 | Low | Multi-language (FR/ES) not implemented yet | Planned post-launch |
 

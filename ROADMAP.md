@@ -3,7 +3,7 @@
 > **Source of truth for what to build.** Read this at the start of every session alongside PROJECT-STATUS.md.
 > Update task statuses as work progresses. Never start work without checking the current phase.
 
-**Last updated:** 2026-07-14 (vagues 1 + 2a + 2b MERGÉES et DÉPLOYÉES en prod, seed Stripe LIVE fait)
+**Last updated:** 2026-09-24 (passe d'hygiène : Phases 1-8 archivées ; dernier changement produit : 2026-07-14, vagues 1 + 2a + 2b MERGÉES et DÉPLOYÉES en prod, seed Stripe LIVE fait)
 **Current phase:** Post-launch — Brief cliente juillet 2026 **SHIPPED** (reste : archivage des anciens prix Stripe live + 4 confirmations cliente spec §7)
 
 > **Phase ordering (post-Phase 4 restructure, 2026-04-15):** Before go-live we split the generic "Security & Quality" bucket into 4 sequential phases (5 → 8) so work happens in the right order. Go-live (Phase 9) is the FINAL phase, unblocked only when all content, media, SEO, and security/perf/a11y work is done. Do not skip ahead.
