@@ -221,6 +221,7 @@ Archivé (redirections 301 livrées dans `next.config.ts`) : voir `docs/archive/
 
 | Date | Description |
 |------|-------------|
+| 2026-09-24 | **§6 Next Steps rafraîchi.** Bloqueurs pré-go-live retirés (tous résolus), Known Issue #3 (clés Stripe TEST) clos : `.env.local` configuré + smoke test 4242 le 2026-04-12, seeds TEST depuis (`0ef0ec0`). Ancien texte archivé (section D de l'archive). |
 | 2026-09-24 | **Ménage des fichiers d'instructions.** `CLAUDE.md` 302 → <200 lignes (doublons des règles globales retirés, skills inexistants retirés, faits périmés corrigés, `@AGENTS.md` importé). Historique ≤ 2026-07-14, issues résolus et notes de migration archivés dans `docs/archive/2026-09-24-project-status-archive.md` ; phases 1-8 de `ROADMAP.md` dans `docs/archive/2026-09-24-roadmap-archive.md`. |
 | 2026-09-17 | **Dependency hygiene.** `npm audit fix` : 5 vulnérabilités (1 high `browserslist`, 4 moderate `baseline-browser-mapping`, `@humanfs/node`, `vitest`/`@vitest/mocker`) → 0, toutes dans l'outillage de dev (ESLint, Babel, vitest), aucune exposée en prod. Next.js 16.3.4 → 16.3.5 (range `package.json` passé à `^16.3.5`). esbuild low plus signalé. Majeures dispo non prises (stripe 22, typescript 7, eslint 10, react-day-picker 10, vitest 5). Vérifs : lint 0 erreur, build 0 erreur, 69/69 tests vitest (TZ locale + TZ=UTC). |
 | 2026-09-01 | **Dependency hygiene.** `npm audit fix` : 7 vulnérabilités (6 high, 1 low) → 0. Next.js 16.2.10 → 16.3.4 (9 advisories corrigées, dont bypass proxy/middleware App Router, SSRF Server Actions, cache confusion), plus postcss, sharp, nanoid, js-yaml, brace-expansion, esbuild. Les 2 moderates postcss « acceptées » de juin sont désormais corrigées (Next 16.3.4 embarque un postcss patché) — plus d'exception à maintenir. Seul `package-lock.json` a changé (ranges semver de `package.json` déjà compatibles). Vérifs : lint 0 erreur, build 0 erreur (proxy détecté), 69/69 tests vitest sous TZ=UTC. |
@@ -235,7 +236,6 @@ Archivé (redirections 301 livrées dans `next.config.ts`) : voir `docs/archive/
 | # | Severity | Issue | Status |
 |---|----------|-------|--------|
 | 2 | Medium | All images are placeholders (no real photos) | Pending client content |
-| 3 | High | Stripe TEST keys not in .env.local (waiting for client dashboard credentials) | Blocks full E2E smoke test of payment flow |
 | 7 | Low | Blog section not implemented | Planned post-launch |
 | 8 | Low | Multi-language (FR/ES) not implemented yet | Planned post-launch |
 
@@ -245,25 +245,20 @@ Issues résolus archivés dans `docs/archive/2026-09-24-project-status-archive.m
 
 ## 6. Next Steps
 
-<!-- TODO(Rd): section likely stale (written before go-live 2026-05-02): the Phase 9 heading and several blockers below (Stripe keys, Bluehost domain, real photos) are marked done elsewhere. Please refresh. -->
+> Read `ROADMAP.md` for the full task list. Site is live since 2026-05-02; all pre-launch blockers (Stripe keys, Bluehost domain, real photos, Resend domain, fighter+stay prices) are closed. Old section archived in `docs/archive/2026-09-24-project-status-archive.md` (section D).
 
-> Read `ROADMAP.md` for the full phased plan and current task list.
+### Open items
 
-### Current phase: Phase 9 -- Go-live (pending client OG/Twitter share + staging validation)
-
-Phase 5 closed 2026-04-26 (commit 661917d). Phase 6 closed 2026-04-26 (real photos + image audit + provisional legal content). Phase 7 closed 2026-04-26 (SEO + GEO + schemas). Phase 8 closed 2026-04-26: security scan via /nextjs-security-scan (1 HIGH CVE resolved = next 16.2.4, 2 moderate accepted risk), /api/contact hardened (Zod + escape + honeypot), security headers in next.config.ts (X-Frame-Options, nosniff, Referrer-Policy, Permissions-Policy, HSTS), 3 broken asset 404s fixed (OG default, logo refs), real logo + favicon set integrated, OG/Twitter images via Next file convention, accessibility (skip link, nav ARIA, dropdown keyboard, prefers-reduced-motion). Live Lighthouse + cross-browser + screen reader testing deferred to Phase 9 staging. Phase 9 starts: GO-LIVE-CHECKLIST.md execution (DNS, env vars, Stripe live mode, Resend domain, Supabase test data cleanup).
-
-**Pre-go-live config:** Read `GO-LIVE-CHECKLIST.md` before any production deployment. It documents all env var switches, Resend domain verification, Stripe LIVE mode toggle, Supabase test data cleanup, DNS records, and rollback plan.
-
-### External blockers (actions required from RD)
-
-| Blocker | Needed for | Action |
-|---------|-----------|--------|
-| **Stripe TEST keys from client dashboard** | Finish Phase 3 Task 25 (Stripe seed + webhook listener) | Client must share access to Stripe dashboard in TEST mode |
-| Bluehost domain access | Phase 6 Go-live | Analyze + transfer domain |
-| Fighter + accommodation final prices | Phase 5 Security & Quality | Confirm with client (currently 20k/25k approximate) |
-| Real photos | Phase 5 Security & Quality | Client delivers photos |
-| Resend domain verification | Phase 6 Go-live | Requires DNS access to ratchawatmuaythai.com (currently using sandbox `onboarding@resend.dev`) |
+| Item | Source | Notes |
+|------|--------|-------|
+| Rate limiting on `/api/*` | ROADMAP, carried over from Phase 8 | Deferred post-launch (needs Upstash Redis or Vercel KV) |
+| Explicit CORS policy on `/api/*` | ROADMAP, carried over from Phase 8 | Same-origin by default, low priority |
+| Live Lighthouse + cross-browser + screen reader passes on prod | ROADMAP Phase 9 §G | Internal hygiene |
+| Rollback plan write-up | ROADMAP Phase 9 §J, `GO-LIVE-CHECKLIST.md` §10 | Internal hygiene |
+| Archive old LIVE Stripe prices (solo 800, group 600, group 1,400, DTV unlimited 33,000) | ROADMAP deployment checklist step 5 + 2026-07-16 history | Cosmetic, Stripe dashboard (à vérifier par Rd) |
+| Prod visual smoke test of vague 2b (camp-stay quote vs Stripe page, 2-session private cart, admin drawer in units) | ROADMAP vague 2b checklist step 4 | Do not pay (à vérifier par Rd) |
+| Real-card smoke tests for private, fighter, camp-stay, DTV, contact form, admin login | ROADMAP Phase 9 §F (unchecked) | ROADMAP "Current state" says all flows were validated with real cards: checkboxes likely stale (à vérifier par Rd) |
+| Remaining client confirmations from spec §7 (group 2 vs 3 price, kids group, DTV delay, bungalow extra night) | ROADMAP vague 2b checklist step 5 | Adult group price (700/person) and bungalow extra night (760/850) settled 2026-07-16; others à vérifier par Rd |
 
 ### Open client questions
 

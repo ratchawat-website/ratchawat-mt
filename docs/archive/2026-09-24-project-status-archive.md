@@ -133,3 +133,36 @@
 | `/blognews/` | `/blog` |
 | `/category/news/` | `/blog` |
 
+## D. Ex-§6 Next Steps + Known Issue #3 (archivés 2026-09-24)
+
+> Texte d'origine, écrit avant le go-live du 2026-05-02. Remplacé par une liste à jour dans `PROJECT-STATUS.md` §6.
+
+### Known Issue #3 (retiré de la table §5, résolu)
+
+| # | Severity | Issue | Status |
+|---|----------|-------|--------|
+| 3 | High | Stripe TEST keys not in .env.local (waiting for client dashboard credentials) | Blocks full E2E smoke test of payment flow |
+
+### Ancienne section 6
+
+## 6. Next Steps
+
+<!-- TODO(Rd): section likely stale (written before go-live 2026-05-02): the Phase 9 heading and several blockers below (Stripe keys, Bluehost domain, real photos) are marked done elsewhere. Please refresh. -->
+
+> Read `ROADMAP.md` for the full phased plan and current task list.
+
+### Current phase: Phase 9 -- Go-live (pending client OG/Twitter share + staging validation)
+
+Phase 5 closed 2026-04-26 (commit 661917d). Phase 6 closed 2026-04-26 (real photos + image audit + provisional legal content). Phase 7 closed 2026-04-26 (SEO + GEO + schemas). Phase 8 closed 2026-04-26: security scan via /nextjs-security-scan (1 HIGH CVE resolved = next 16.2.4, 2 moderate accepted risk), /api/contact hardened (Zod + escape + honeypot), security headers in next.config.ts (X-Frame-Options, nosniff, Referrer-Policy, Permissions-Policy, HSTS), 3 broken asset 404s fixed (OG default, logo refs), real logo + favicon set integrated, OG/Twitter images via Next file convention, accessibility (skip link, nav ARIA, dropdown keyboard, prefers-reduced-motion). Live Lighthouse + cross-browser + screen reader testing deferred to Phase 9 staging. Phase 9 starts: GO-LIVE-CHECKLIST.md execution (DNS, env vars, Stripe live mode, Resend domain, Supabase test data cleanup).
+
+**Pre-go-live config:** Read `GO-LIVE-CHECKLIST.md` before any production deployment. It documents all env var switches, Resend domain verification, Stripe LIVE mode toggle, Supabase test data cleanup, DNS records, and rollback plan.
+
+### External blockers (actions required from RD)
+
+| Blocker | Needed for | Action |
+|---------|-----------|--------|
+| **Stripe TEST keys from client dashboard** | Finish Phase 3 Task 25 (Stripe seed + webhook listener) | Client must share access to Stripe dashboard in TEST mode |
+| Bluehost domain access | Phase 6 Go-live | Analyze + transfer domain |
+| Fighter + accommodation final prices | Phase 5 Security & Quality | Confirm with client (currently 20k/25k approximate) |
+| Real photos | Phase 5 Security & Quality | Client delivers photos |
+| Resend domain verification | Phase 6 Go-live | Requires DNS access to ratchawatmuaythai.com (currently using sandbox `onboarding@resend.dev`) |
