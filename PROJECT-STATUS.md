@@ -213,6 +213,7 @@ Archivé (redirections 301 livrées dans `next.config.ts`) : voir `docs/archive/
 
 | Date | Description |
 |------|-------------|
+| 2026-10-05 | **Dependency hygiene.** `npm audit` : 7 vulnérabilités (1 critical, 6 high). Next.js 16.3.5 → 16.3.8 (critical RCE `next/og` ImageResponse, GHSA-vcvr-r3jv-pc5j ; non exploitable ici, le projet n'utilise pas `next/og`) + `brace-expansion` via `npm audit fix`. `eslint-config-next` 16.2.2 → 16.3.8 (pin exact conservé), range `next` passé à `^16.3.8`. **5 high restantes acceptées** : chaîne `eslint-config-next` → `fast-glob` → `micromatch` → `braces` (DoS, toutes versions de `braces`, aucun correctif publié), outillage de lint uniquement, rien en prod ; `--force` rétrograderait eslint-config-next en 14.2.35, refusé. Vérifs : lint 0 erreur, build 0 erreur, 69/69 tests vitest (TZ locale + TZ=UTC). |
 | 2026-09-24 | **Infos périmées corrigées.** §2.5 Infrastructure cochée (tout est live depuis 2026-05-02), ligne Hosting → Vercel live, Known Issue #2 (images placeholder) clos — vraies photos livrées, ligne `/gallery` marquée supprimée (`fe59b55`). Texte d'origine : archive section E. |
 | 2026-09-24 | **§6 Next Steps rafraîchi.** Bloqueurs pré-go-live retirés (tous résolus), Known Issue #3 (clés Stripe TEST) clos : `.env.local` configuré + smoke test 4242 le 2026-04-12, seeds TEST depuis (`0ef0ec0`). Ancien texte archivé (section D de l'archive). |
 | 2026-09-24 | **Ménage des fichiers d'instructions.** `CLAUDE.md` 302 → <200 lignes (doublons des règles globales retirés, skills inexistants retirés, faits périmés corrigés, `@AGENTS.md` importé). Historique ≤ 2026-07-14, issues résolus et notes de migration archivés dans `docs/archive/2026-09-24-project-status-archive.md` ; phases 1-8 de `ROADMAP.md` dans `docs/archive/2026-09-24-roadmap-archive.md`. |
@@ -230,6 +231,7 @@ Archivé (redirections 301 livrées dans `next.config.ts`) : voir `docs/archive/
 |---|----------|-------|--------|
 | 7 | Low | Blog section not implemented | Planned post-launch |
 | 8 | Low | Multi-language (FR/ES) not implemented yet | Planned post-launch |
+| 9 | Low | 5 high `npm audit` dans l'outillage lint (`braces`, aucun correctif amont) | Accepté 2026-10-05, re-vérifier à chaque passe |
 
 Issues résolus archivés dans `docs/archive/2026-09-24-project-status-archive.md` (section B).
 
