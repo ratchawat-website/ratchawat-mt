@@ -134,7 +134,7 @@ export async function POST(request: Request) {
         // rooms) from insert time: keep the unpaid-hold window short.
         expires_at: Math.floor(Date.now() / 1000) + 30 * 60,
         locale: "en",
-        payment_method_types: ["card"],
+        allowed_payment_method_types: ["card"],
         line_items: [
           {
             price_data: {
