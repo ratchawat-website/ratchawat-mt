@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { X } from "lucide-react";
 import { PRICES, type PriceItem } from "@/content/pricing";
@@ -94,58 +94,78 @@ export default function CreateBookingForm({ defaultDate, onClose }: Props) {
     ? getParticipantBounds(selectedPkg)
     : { min: 1, max: 1 };
 
-  // Auto-calculate price when package or participants change
-  useEffect(() => {
-    if (selectedPkg?.price) {
-      setPriceAmount(computeBookingAmount(selectedPkg, numParticipants));
-    }
-  }, [selectedPkg, numParticipants]);
-
-  // Re-clamp participants when the selected package changes its bounds
-  useEffect(() => {
-    setNumParticipants((n) => Math.min(Math.max(n, bounds.min), bounds.max));
-  }, [bounds.min, bounds.max]);
-
-  // Auto-set camp when package changes
-  useEffect(() => {
-    setCamp(getDefaultCamp(priceId, type));
-  }, [priceId, type]);
-
-  // Reset package when type changes
-  useEffect(() => {
+  // Changing type resets everything package-specific and re-picks the camp.
+  const handleTypeChange = (next: string) => {
+    setType(next);
     setPriceId("");
     setStayUnit("");
     setStayPlan("");
     setTimeSlot("");
     setEndDate("");
-  }, [type]);
+    setNumParticipants(1);
+    setCamp(getDefaultCamp("", next));
+  };
 
-  // Stay: auto-fill the amount from the tiered grid (manual override kept:
-  // the admin can still edit the field afterwards).
-  useEffect(() => {
-    if (type !== "stay" || !stayUnit || !stayPlan || !startDate || !endDate)
+  // Changing package re-clamps participants to its bounds, re-picks the camp
+  // and auto-fills the amount (the admin can still override it afterwards).
+  const handlePackageChange = (next: string) => {
+    setPriceId(next);
+    setCamp(getDefaultCamp(next, type));
+    const pkg = PRICES.find((p) => p.id === next);
+    const { min, max } = pkg ? getParticipantBounds(pkg) : { min: 1, max: 1 };
+    const n = Math.min(Math.max(numParticipants, min), max);
+    setNumParticipants(n);
+    if (pkg?.price) setPriceAmount(computeBookingAmount(pkg, n));
+  };
+
+  const handleParticipantsChange = (next: number) => {
+    if (next === numParticipants) return;
+    setNumParticipants(next);
+    if (selectedPkg?.price) {
+      setPriceAmount(computeBookingAmount(selectedPkg, next));
+    }
+  };
+
+  // Stay fields: suggest the minimum stay while the end date is empty, then
+  // auto-fill the amount from the tiered grid. Both stay editable.
+  const handleStayChange = (
+    patch: Partial<{
+      unit: StayUnit | "";
+      plan: StayPlan | "";
+      start: string;
+      end: string;
+    }>,
+  ) => {
+    const next = {
+      unit: stayUnit,
+      plan: stayPlan,
+      start: startDate,
+      end: endDate,
+      ...patch,
+    };
+    if (type === "stay" && next.unit && next.plan && next.start && !next.end) {
+      const card = getRateCard(next.unit, next.plan);
+      if (card) {
+        next.end = format(
+          addDays(new Date(next.start + "T00:00:00"), card.minNights),
+          "yyyy-MM-dd",
+        );
+      }
+    }
+    setStayUnit(next.unit);
+    setStayPlan(next.plan);
+    setStartDate(next.start);
+    setEndDate(next.end);
+    if (type !== "stay" || !next.unit || !next.plan || !next.start || !next.end)
       return;
     try {
-      setPriceAmount(computeStayPrice(startDate, endDate, stayUnit, stayPlan).total);
+      setPriceAmount(
+        computeStayPrice(next.start, next.end, next.unit, next.plan).total,
+      );
     } catch {
       setPriceAmount("");
     }
-  }, [type, stayUnit, stayPlan, startDate, endDate]);
-
-  // Stay convenience: when the end date is still empty, suggest the minimum
-  // stay. The field stays fully editable.
-  useEffect(() => {
-    if (type !== "stay" || !stayUnit || !stayPlan || !startDate || endDate)
-      return;
-    const card = getRateCard(stayUnit, stayPlan);
-    if (!card) return;
-    setEndDate(
-      format(
-        addDays(new Date(startDate + "T00:00:00"), card.minNights),
-        "yyyy-MM-dd",
-      ),
-    );
-  }, [type, stayUnit, stayPlan, startDate, endDate]);
+  };
 
   const isStay = type === "stay";
   const canSubmit = isStay
@@ -232,7 +252,7 @@ export default function CreateBookingForm({ defaultDate, onClose }: Props) {
             <label className={labelClass}>Type</label>
             <select
               value={type}
-              onChange={(e) => setType(e.target.value)}
+              onChange={(e) => handleTypeChange(e.target.value)}
               className={selectClass}
             >
               {BOOKING_TYPES.map((t) => (
@@ -248,7 +268,9 @@ export default function CreateBookingForm({ defaultDate, onClose }: Props) {
                 <label className={labelClass}>Unit</label>
                 <select
                   value={stayUnit}
-                  onChange={(e) => setStayUnit(e.target.value as StayUnit | "")}
+                  onChange={(e) =>
+                    handleStayChange({ unit: e.target.value as StayUnit | "" })
+                  }
                   className={selectClass}
                   required
                 >
@@ -264,7 +286,9 @@ export default function CreateBookingForm({ defaultDate, onClose }: Props) {
                 <label className={labelClass}>Plan</label>
                 <select
                   value={stayPlan}
-                  onChange={(e) => setStayPlan(e.target.value as StayPlan | "")}
+                  onChange={(e) =>
+                    handleStayChange({ plan: e.target.value as StayPlan | "" })
+                  }
                   className={selectClass}
                   required
                 >
@@ -282,7 +306,7 @@ export default function CreateBookingForm({ defaultDate, onClose }: Props) {
               <label className={labelClass}>Package</label>
               <select
                 value={priceId}
-                onChange={(e) => setPriceId(e.target.value)}
+                onChange={(e) => handlePackageChange(e.target.value)}
                 className={selectClass}
                 required
               >
@@ -322,7 +346,7 @@ export default function CreateBookingForm({ defaultDate, onClose }: Props) {
             <input
               type="date"
               value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
+              onChange={(e) => handleStayChange({ start: e.target.value })}
               className={inputClass}
               required
             />
@@ -333,7 +357,7 @@ export default function CreateBookingForm({ defaultDate, onClose }: Props) {
               <input
                 type="date"
                 value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
+                onChange={(e) => handleStayChange({ end: e.target.value })}
                 className={inputClass}
               />
             </div>
@@ -411,7 +435,7 @@ export default function CreateBookingForm({ defaultDate, onClose }: Props) {
               value={numParticipants}
               onChange={(e) => {
                 const parsed = parseInt(e.target.value) || bounds.min;
-                setNumParticipants(
+                handleParticipantsChange(
                   Math.min(Math.max(parsed, bounds.min), bounds.max),
                 );
               }}

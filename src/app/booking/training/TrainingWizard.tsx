@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import BookingWizard from "@/components/booking/BookingWizard";
 import DatePicker from "@/components/booking/DatePicker";
@@ -48,27 +48,20 @@ export default function TrainingWizard() {
   const searchParams = useSearchParams();
   const packages = TRAINING_PACKAGES;
 
-  const [step, setStep] = useState(0);
-  const [priceId, setPriceId] = useState<string | null>(null);
+  // Consume `?package=` on mount only, so a later URL change cannot snap the
+  // step back while the user is moving through the wizard.
+  const [initialPkg] = useState(() => {
+    const pkg = searchParams.get("package");
+    return pkg && TRAINING_PACKAGES.some((p) => p.id === pkg) ? pkg : null;
+  });
+  const [step, setStep] = useState(initialPkg ? 1 : 0);
+  const [priceId, setPriceId] = useState<string | null>(initialPkg);
   const [camp, setCamp] = useState<"bo-phut" | "plai-laem" | null>(null);
   const [date, setDate] = useState<Date | undefined>();
   const [contact, setContact] = useState<ContactInfo>(DEFAULT_CONTACT);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const captcha = useTurnstile();
-
-  // Consume `?package=` on mount only. Running once prevents the effect from
-  // re-firing later and snapping the step back when the user clicks Continue.
-  const initializedRef = useRef(false);
-  useEffect(() => {
-    if (initializedRef.current) return;
-    initializedRef.current = true;
-    const pkg = searchParams.get("package");
-    if (pkg && TRAINING_PACKAGES.some((p) => p.id === pkg)) {
-      setPriceId(pkg);
-      setStep(1);
-    }
-  }, [searchParams]);
 
   const selectedPackage = priceId ? getPriceById(priceId) : null;
 
@@ -105,7 +98,7 @@ export default function TrainingWizard() {
       });
       const data = await res.json();
       if (data.url) {
-        window.location.href = data.url;
+        window.location.assign(data.url);
       } else {
         setError(data.error ?? "Failed to start checkout");
       }

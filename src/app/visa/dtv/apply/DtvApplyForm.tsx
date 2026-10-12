@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { MessageCircle } from "lucide-react";
@@ -126,22 +126,18 @@ function validate(form: FormState): Record<string, string> {
 
 export default function DtvApplyForm() {
   const searchParams = useSearchParams();
-  const [form, setForm] = useState<FormState>(INITIAL_STATE);
+  // `?package=` preselects a package, `?cancelled=1` is Stripe's cancel_url.
+  const [form, setForm] = useState<FormState>(() => {
+    const pkg = searchParams.get("package");
+    return pkg && DTV_PACKAGES.some((p) => p.id === pkg)
+      ? { ...INITIAL_STATE, price_id: pkg as DtvPriceId }
+      : INITIAL_STATE;
+  });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [apiError, setApiError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
-  const [cancelled, setCancelled] = useState(false);
+  const [cancelled] = useState(() => searchParams.get("cancelled") === "1");
   const captcha = useTurnstile();
-
-  useEffect(() => {
-    const pkg = searchParams.get("package");
-    if (pkg && DTV_PACKAGES.some((p) => p.id === pkg)) {
-      setForm((f) => ({ ...f, price_id: pkg as DtvPriceId }));
-    }
-    if (searchParams.get("cancelled") === "1") {
-      setCancelled(true);
-    }
-  }, [searchParams]);
 
   const update = <K extends keyof FormState>(key: K, value: FormState[K]) => {
     setForm((f) => ({ ...f, [key]: value }));
@@ -195,7 +191,7 @@ export default function DtvApplyForm() {
       });
       const data = await res.json();
       if (data.url) {
-        window.location.href = data.url;
+        window.location.assign(data.url);
       } else if (res.status === 400 && Array.isArray(data.issues)) {
         // Surface the server-side Zod messages on their fields instead of
         // a generic error the user cannot act on.

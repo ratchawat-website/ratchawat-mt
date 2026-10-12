@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo, useRef } from "react";
+import { useState, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 import type { DateRange } from "react-day-picker";
 import BookingWizard from "@/components/booking/BookingWizard";
@@ -35,8 +35,13 @@ const UNIT_CARDS: { unit: StayUnit }[] = [{ unit: "room" }, { unit: "bungalow" }
 export default function CampStayWizard() {
   const searchParams = useSearchParams();
 
-  const [step, setStep] = useState(0);
-  const [unit, setUnit] = useState<StayUnit | null>(null);
+  // Consume `?package=` on mount only. Legacy package ids from old links map
+  // to a unit; dates are now always chosen freely.
+  const [initialPkg] = useState(() => searchParams.get("package"));
+  const [step, setStep] = useState(initialPkg ? 1 : 0);
+  const [unit, setUnit] = useState<StayUnit | null>(
+    initialPkg ? (initialPkg.includes("bungalow") ? "bungalow" : "room") : null,
+  );
   const [range, setRange] = useState<DateRange | undefined>();
   const [contact, setContact] = useState<ContactInfo>(DEFAULT_CONTACT);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -44,25 +49,14 @@ export default function CampStayWizard() {
   const captcha = useTurnstile();
   const plan = "normal" as const;
 
-  // Consume `?package=` on mount only. Legacy package ids from old links map
-  // to a unit; dates are now always chosen freely.
-  const initializedRef = useRef(false);
-  useEffect(() => {
-    if (initializedRef.current) return;
-    initializedRef.current = true;
-    const pkg = searchParams.get("package");
-    if (pkg) {
-      setUnit(pkg.includes("bungalow") ? "bungalow" : "room");
-      setStep(1);
-    }
-  }, [searchParams]);
-
   // Switching unit resets the picked dates: rooms (7 units) and the
   // bungalow (1 unit) have different availability, so dates validated
   // against one pool must not carry over to the other.
-  useEffect(() => {
+  const selectUnit = (next: StayUnit) => {
+    if (next === unit) return;
+    setUnit(next);
     setRange(undefined);
-  }, [unit]);
+  };
 
   const quote = useMemo(() => {
     if (!unit || !range?.from || !range?.to) return null;
@@ -109,7 +103,7 @@ export default function CampStayWizard() {
       });
       const data = await res.json();
       if (data.url) {
-        window.location.href = data.url;
+        window.location.assign(data.url);
       } else {
         setError(data.error ?? "Failed to start checkout");
       }
@@ -148,7 +142,7 @@ export default function CampStayWizard() {
                 <button
                   type="button"
                   key={u}
-                  onClick={() => setUnit(u)}
+                  onClick={() => selectUnit(u)}
                   className={`text-left rounded-[var(--radius-card)] p-4 sm:p-5 border-2 transition-all ${
                     unit === u
                       ? "border-primary bg-primary/5"

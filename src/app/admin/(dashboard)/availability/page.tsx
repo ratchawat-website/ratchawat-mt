@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { format, startOfMonth, endOfMonth, addMonths, subMonths } from "date-fns";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { createClient } from "@/lib/supabase/browser";
@@ -9,104 +9,112 @@ import AdminDayDrawer, {
   type BlockRecord,
 } from "@/components/admin/AdminDayDrawer";
 
+interface MonthData {
+  blocks: BlockRecord[];
+  dayDataMap: Record<string, DayData>;
+}
+
+async function fetchMonthData(month: Date): Promise<MonthData> {
+  const from = format(startOfMonth(month), "yyyy-MM-dd");
+  const to = format(endOfMonth(month), "yyyy-MM-dd");
+
+  // Fetch occupancy for rooms + bungalows in parallel
+  const [roomsRes, bungalowsRes] = await Promise.all([
+    fetch(`/api/availability/occupancy?key=rooms&from=${from}&to=${to}`),
+    fetch(`/api/availability/occupancy?key=bungalows&from=${from}&to=${to}`),
+  ]);
+
+  const roomsData = roomsRes.ok ? await roomsRes.json() : { occupancy: {} };
+  const bungalowsData = bungalowsRes.ok
+    ? await bungalowsRes.json()
+    : { occupancy: {} };
+
+  const roomsOcc: Record<string, number> = roomsData.occupancy ?? {};
+  const bungalowsOcc: Record<string, number> = bungalowsData.occupancy ?? {};
+
+  // Fetch availability blocks from Supabase (public read)
+  const supabase = createClient();
+  const { data: blockRows } = await supabase
+    .from("availability_blocks")
+    .select("id, date, type, time_slot, reason, camp, is_blocked, units")
+    .gte("date", from)
+    .lte("date", to);
+
+  const blockList: BlockRecord[] = (blockRows ?? []).map((b) => ({
+    id: String(b.id),
+    date: String(b.date),
+    type: String(b.type),
+    time_slot: b.time_slot ? String(b.time_slot) : null,
+    reason: b.reason ? String(b.reason) : null,
+    camp: (b.camp as "bo-phut" | "plai-laem" | null) ?? null,
+    is_blocked: b.is_blocked !== false,
+    units: typeof b.units === "number" ? b.units : null,
+  }));
+
+  // Build dayDataMap
+  const allDates = new Set([
+    ...Object.keys(roomsOcc),
+    ...Object.keys(bungalowsOcc),
+    ...blockList.map((b) => b.date),
+  ]);
+
+  const map: Record<string, DayData> = {};
+  for (const d of allDates) {
+    const hasBlock = blockList.some(
+      (b) =>
+        b.date === d &&
+        (b.type === "full" || b.type === "private"),
+    );
+    map[d] = {
+      rooms: roomsOcc[d] ?? 0,
+      bungalows: bungalowsOcc[d] ?? 0,
+      hasBlock,
+    };
+  }
+
+  return { blocks: blockList, dayDataMap: map };
+}
+
 export default function AdminAvailabilityPage() {
   const [month, setMonth] = useState<Date>(() => startOfMonth(new Date()));
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [dayDataMap, setDayDataMap] = useState<Record<string, DayData>>({});
   const [blocks, setBlocks] = useState<BlockRecord[]>([]);
-  const [drawerBlocks, setDrawerBlocks] = useState<BlockRecord[]>([]);
-
-  const loadData = useCallback(async () => {
-    const from = format(startOfMonth(month), "yyyy-MM-dd");
-    const to = format(endOfMonth(month), "yyyy-MM-dd");
-
-    // Fetch occupancy for rooms + bungalows in parallel
-    const [roomsRes, bungalowsRes] = await Promise.all([
-      fetch(`/api/availability/occupancy?key=rooms&from=${from}&to=${to}`),
-      fetch(`/api/availability/occupancy?key=bungalows&from=${from}&to=${to}`),
-    ]);
-
-    const roomsData = roomsRes.ok ? await roomsRes.json() : { occupancy: {} };
-    const bungalowsData = bungalowsRes.ok
-      ? await bungalowsRes.json()
-      : { occupancy: {} };
-
-    const roomsOcc: Record<string, number> = roomsData.occupancy ?? {};
-    const bungalowsOcc: Record<string, number> = bungalowsData.occupancy ?? {};
-
-    // Fetch availability blocks from Supabase (public read)
-    const supabase = createClient();
-    const { data: blockRows } = await supabase
-      .from("availability_blocks")
-      .select("id, date, type, time_slot, reason, camp, is_blocked, units")
-      .gte("date", from)
-      .lte("date", to);
-
-    const blockList: BlockRecord[] = (blockRows ?? []).map((b) => ({
-      id: String(b.id),
-      date: String(b.date),
-      type: String(b.type),
-      time_slot: b.time_slot ? String(b.time_slot) : null,
-      reason: b.reason ? String(b.reason) : null,
-      camp: (b.camp as "bo-phut" | "plai-laem" | null) ?? null,
-      is_blocked: b.is_blocked !== false,
-      units: typeof b.units === "number" ? b.units : null,
-    }));
-
-    setBlocks(blockList);
-
-    // Build dayDataMap
-    const allDates = new Set([
-      ...Object.keys(roomsOcc),
-      ...Object.keys(bungalowsOcc),
-      ...blockList.map((b) => b.date),
-    ]);
-
-    const map: Record<string, DayData> = {};
-    for (const d of allDates) {
-      const hasBlock = blockList.some(
-        (b) =>
-          b.date === d &&
-          (b.type === "full" || b.type === "private"),
-      );
-      map[d] = {
-        rooms: roomsOcc[d] ?? 0,
-        bungalows: bungalowsOcc[d] ?? 0,
-        hasBlock,
-      };
-    }
-
-    setDayDataMap(map);
-
-    // Refresh drawer blocks if a date is selected
-    if (selectedDate) {
-      const selKey = format(selectedDate, "yyyy-MM-dd");
-      setDrawerBlocks(blockList.filter((b) => b.date === selKey));
-    }
-  }, [month, selectedDate]);
 
   useEffect(() => {
-    loadData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // Ignore a slow response for a month the admin already navigated away from.
+    let stale = false;
+    async function load() {
+      const data = await fetchMonthData(month);
+      if (stale) return;
+      setBlocks(data.blocks);
+      setDayDataMap(data.dayDataMap);
+    }
+    load();
+    return () => {
+      stale = true;
+    };
   }, [month]);
 
   function handleDayClick(date: Date) {
-    const key = format(date, "yyyy-MM-dd");
-    setDrawerBlocks(blocks.filter((b) => b.date === key));
     setSelectedDate(date);
   }
 
   function handleClose() {
     setSelectedDate(null);
-    setDrawerBlocks([]);
   }
 
   async function handleRefresh() {
-    await loadData();
+    const data = await fetchMonthData(month);
+    setBlocks(data.blocks);
+    setDayDataMap(data.dayDataMap);
   }
 
   const selectedKey = selectedDate ? format(selectedDate, "yyyy-MM-dd") : null;
   const selectedData = selectedKey ? dayDataMap[selectedKey] : null;
+  const drawerBlocks = selectedKey
+    ? blocks.filter((b) => b.date === selectedKey)
+    : [];
 
   return (
     <div className="space-y-6">

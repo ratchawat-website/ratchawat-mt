@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
 import type { DateRange } from "react-day-picker";
 import BookingWizard from "@/components/booking/BookingWizard";
 import DatePicker from "@/components/booking/DatePicker";
@@ -64,10 +64,12 @@ export default function FighterWizard() {
   // Switching tier also resets the picked dates: rooms (7 units) and the
   // bungalow (1 unit) have different availability, so dates validated
   // against one pool must not carry over to the other.
-  useEffect(() => {
+  const selectTier = (next: FighterTier) => {
+    if (next === tier) return;
+    setTier(next);
     setCamp("plai-laem");
     setRange(undefined);
-  }, [tier]);
+  };
 
   const hasStay = tier === "room" || tier === "bungalow";
 
@@ -140,7 +142,7 @@ export default function FighterWizard() {
       }
       const data = await res.json();
       if (data.url) {
-        window.location.href = data.url;
+        window.location.assign(data.url);
       } else {
         setError(data.error ?? "Failed to start checkout");
       }
@@ -227,7 +229,7 @@ export default function FighterWizard() {
           </h2>
           <button
             type="button"
-            onClick={() => setTier("only")}
+            onClick={() => selectTier("only")}
             className={`w-full text-left rounded-[var(--radius-card)] p-4 sm:p-5 border-2 transition-all ${
               tier === "only"
                 ? "border-primary bg-primary/5"
@@ -261,7 +263,7 @@ export default function FighterWizard() {
               <button
                 type="button"
                 key={unit}
-                onClick={() => setTier(unit)}
+                onClick={() => selectTier(unit)}
                 className={`w-full text-left rounded-[var(--radius-card)] p-4 sm:p-5 border-2 transition-all ${
                   tier === unit
                     ? "border-primary bg-primary/5"

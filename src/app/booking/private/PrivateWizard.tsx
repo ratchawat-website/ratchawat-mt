@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import BookingWizard from "@/components/booking/BookingWizard";
 import AvailabilityCalendar from "@/components/booking/AvailabilityCalendar";
@@ -57,35 +57,60 @@ const DEFAULT_CONTACT: ContactInfo = {
   notes: "",
 };
 
+function clampParticipants(n: number, priceId: string | null): number {
+  const pkg = priceId ? getPriceById(priceId) : null;
+  const { min, max } = pkg ? getParticipantBounds(pkg) : { min: 1, max: 1 };
+  return Math.min(Math.max(n, min), max);
+}
+
 export default function PrivateWizard() {
   const searchParams = useSearchParams();
   const packages = PRIVATE_PACKAGES;
 
-  const [step, setStep] = useState(0);
-  const [priceId, setPriceId] = useState<string | null>(null);
+  // Consume `?package=` on mount only, so a later URL change cannot snap the
+  // step back while the user is moving through the wizard.
+  const [initialPkg] = useState(() => {
+    const pkg = searchParams.get("package");
+    return pkg && PRIVATE_PACKAGES.some((p) => p.id === pkg) ? pkg : null;
+  });
+  const [step, setStep] = useState(initialPkg ? 1 : 0);
+  const [priceId, setPriceId] = useState<string | null>(initialPkg);
   const [camp, setCamp] = useState<"bo-phut" | "plai-laem" | null>(null);
   const [date, setDate] = useState<Date | undefined>();
   const [sessions, setSessions] = useState<{ date: string; slot: string }[]>(
     [],
   );
   const [availableSlots, setAvailableSlots] = useState<string[]>([...PRIVATE_SLOTS]);
-  const [contact, setContact] = useState<ContactInfo>(DEFAULT_CONTACT);
+  const [contact, setContact] = useState<ContactInfo>(() => ({
+    ...DEFAULT_CONTACT,
+    numParticipants: clampParticipants(
+      DEFAULT_CONTACT.numParticipants,
+      initialPkg,
+    ),
+  }));
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const captcha = useTurnstile();
 
-  // Consume `?package=` on mount only. Running once prevents the effect from
-  // re-firing later and snapping the step back when the user clicks Continue.
-  const initializedRef = useRef(false);
-  useEffect(() => {
-    if (initializedRef.current) return;
-    initializedRef.current = true;
-    const pkg = searchParams.get("package");
-    if (pkg && PRIVATE_PACKAGES.some((p) => p.id === pkg)) {
-      setPriceId(pkg);
-      setStep(1);
-    }
-  }, [searchParams]);
+  // Package or camp change invalidates the cart (price and capacity change).
+  // A package change also keeps num_participants inside its allowed range.
+  const selectPackage = (next: string) => {
+    if (next === priceId) return;
+    setPriceId(next);
+    setSessions([]);
+    setContact((c) => {
+      const clamped = clampParticipants(c.numParticipants, next);
+      return clamped === c.numParticipants
+        ? c
+        : { ...c, numParticipants: clamped };
+    });
+  };
+
+  const selectCamp = (next: "bo-phut" | "plai-laem") => {
+    if (next === camp) return;
+    setCamp(next);
+    setSessions([]);
+  };
 
   const selectedPackage = priceId ? getPriceById(priceId) : null;
   const bounds = selectedPackage
@@ -96,24 +121,6 @@ export default function PrivateWizard() {
   const units = selectedPackage
     ? getCapacityUnits(selectedPackage, contact.numParticipants)
     : 1;
-
-  // Package or camp change invalidates the cart (price and capacity change).
-  useEffect(() => {
-    setSessions([]);
-  }, [priceId, camp]);
-
-  // Keep num_participants inside the selected package's allowed range.
-  useEffect(() => {
-    setContact((c) => {
-      const clamped = Math.min(
-        Math.max(c.numParticipants, bounds.min),
-        bounds.max,
-      );
-      return clamped === c.numParticipants
-        ? c
-        : { ...c, numParticipants: clamped };
-    });
-  }, [bounds.min, bounds.max]);
 
   const totalAmount = selectedPackage
     ? computeBookingAmount(selectedPackage, contact.numParticipants) *
@@ -160,7 +167,7 @@ export default function PrivateWizard() {
       });
       const data = await res.json();
       if (data.url) {
-        window.location.href = data.url;
+        window.location.assign(data.url);
       } else {
         setError(data.error ?? "Failed to start checkout");
       }
@@ -192,7 +199,7 @@ export default function PrivateWizard() {
             <button
               type="button"
               key={pkg.id}
-              onClick={() => setPriceId(pkg.id)}
+              onClick={() => selectPackage(pkg.id)}
               className={`w-full text-left rounded-[var(--radius-card)] p-4 sm:p-5 border-2 transition-all ${
                 priceId === pkg.id
                   ? "border-primary bg-primary/5"
@@ -268,7 +275,7 @@ export default function PrivateWizard() {
             <button
               type="button"
               key={c.id}
-              onClick={() => setCamp(c.id)}
+              onClick={() => selectCamp(c.id)}
               className={`w-full text-left rounded-[var(--radius-card)] p-4 sm:p-5 border-2 transition-all ${
                 camp === c.id
                   ? "border-primary bg-primary/5"
