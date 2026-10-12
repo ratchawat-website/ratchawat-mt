@@ -13,15 +13,22 @@ import { NextResponse, type NextRequest } from "next/server";
 function propagateAuthCookies(
   from: NextResponse,
   to: NextResponse,
+  authHeaders: Record<string, string>,
 ): NextResponse {
   for (const cookie of from.cookies.getAll()) {
     to.cookies.set(cookie);
+  }
+  for (const [key, value] of Object.entries(authHeaders)) {
+    to.headers.set(key, value);
   }
   return to;
 }
 
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });
+  // Cache headers sent by @supabase/ssr with refreshed auth cookies, so a CDN
+  // never stores one user's session and serves it to another.
+  let authHeaders: Record<string, string> = {};
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -31,7 +38,7 @@ export async function updateSession(request: NextRequest) {
         getAll() {
           return request.cookies.getAll();
         },
-        setAll(cookiesToSet) {
+        setAll(cookiesToSet, headers) {
           cookiesToSet.forEach(({ name, value }) =>
             request.cookies.set(name, value),
           );
@@ -39,6 +46,10 @@ export async function updateSession(request: NextRequest) {
           cookiesToSet.forEach(({ name, value, options }) =>
             supabaseResponse.cookies.set(name, value, options),
           );
+          authHeaders = { ...authHeaders, ...headers };
+          for (const [key, value] of Object.entries(authHeaders)) {
+            supabaseResponse.headers.set(key, value);
+          }
         },
       },
     },
@@ -65,7 +76,11 @@ export async function updateSession(request: NextRequest) {
       const url = request.nextUrl.clone();
       url.pathname = "/admin/login";
       url.searchParams.set("redirect", pathname);
-      return propagateAuthCookies(supabaseResponse, NextResponse.redirect(url));
+      return propagateAuthCookies(
+        supabaseResponse,
+        NextResponse.redirect(url),
+        authHeaders,
+      );
     }
 
     const { data: isAdmin } = await supabase.rpc("is_admin");
@@ -74,7 +89,11 @@ export async function updateSession(request: NextRequest) {
       const url = request.nextUrl.clone();
       url.pathname = "/admin/login";
       url.searchParams.set("error", "not_admin");
-      return propagateAuthCookies(supabaseResponse, NextResponse.redirect(url));
+      return propagateAuthCookies(
+        supabaseResponse,
+        NextResponse.redirect(url),
+        authHeaders,
+      );
     }
   }
 
@@ -85,6 +104,7 @@ export async function updateSession(request: NextRequest) {
       return propagateAuthCookies(
         supabaseResponse,
         NextResponse.json({ error: "Unauthorized" }, { status: 401 }),
+        authHeaders,
       );
     }
     const { data: isAdmin } = await supabase.rpc("is_admin");
@@ -92,6 +112,7 @@ export async function updateSession(request: NextRequest) {
       return propagateAuthCookies(
         supabaseResponse,
         NextResponse.json({ error: "Unauthorized" }, { status: 401 }),
+        authHeaders,
       );
     }
   }
@@ -104,7 +125,11 @@ export async function updateSession(request: NextRequest) {
       const url = request.nextUrl.clone();
       url.pathname = redirectTo ?? "/admin/bookings";
       url.search = "";
-      return propagateAuthCookies(supabaseResponse, NextResponse.redirect(url));
+      return propagateAuthCookies(
+        supabaseResponse,
+        NextResponse.redirect(url),
+        authHeaders,
+      );
     }
   }
 
